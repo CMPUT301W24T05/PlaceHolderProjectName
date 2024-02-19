@@ -39,6 +39,8 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.10.2")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
+    // Import the QR Code scanning library
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
