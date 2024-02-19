@@ -2,9 +2,11 @@ package ca.cmput301t05.placeholder.database;
 
 import android.content.Context;
 import android.net.Uri;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageMetadata;
@@ -18,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
@@ -151,13 +154,46 @@ public class ImageTable extends Table {
     }
 
     //will save a picture to the storage
-    public void getProfilePicture(Profile profile){
+    public void getProfilePicture(Profile profile, ImageView imageView){
 
+        StorageReference storageReference = rootStorageRef.child(profile.getProfileID().toString());
+
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //Load your image here
+                Glide.with(imageView.getContext())
+                        .load(uri)
+                        .into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //implement some error checking
+            }
+        });
 
     }
 
-    public void getPosterPicture(Event event){
+    public void getPosterPicture(Event event, ImageView imageView){
 
+        StorageReference storageReference = rootStorageRef.child(event.getEventPosterID().toString());
+
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //Load your image here need to have error images and such
+
+                Glide.with(imageView.getContext())
+                        .load(uri)
+                        .into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //implement some error checking
+            }
+        });
 
     }
 
