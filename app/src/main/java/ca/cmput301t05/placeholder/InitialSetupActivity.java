@@ -9,23 +9,23 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
+import ca.cmput301t05.placeholder.database.ProfileTable;
+import ca.cmput301t05.placeholder.profile.Profile;
 
 public class InitialSetupActivity extends AppCompatActivity {
     private EditText nameEdit;
     private FloatingActionButton submitButton;
     private DeviceIDManager idManager;
+    private PlaceholderApp app;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.name_prompt);
 
+        app = (PlaceholderApp) getApplicationContext();
         idManager = new DeviceIDManager(this);
 
         nameEdit = findViewById(R.id.intro_name_edit);
@@ -36,23 +36,24 @@ public class InitialSetupActivity extends AppCompatActivity {
 
     private void submitName(View view) {
         String name = nameEdit.getText().toString();
-        if(!name.isEmpty()){
-          String deviceId = String.valueOf(idManager.getDeviceID());
-            // Upload to Firestore
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            Map<String, Object> user = new HashMap<>();
-            user.put("name", name);
-            user.put("deviceId", deviceId);
+        if (!name.isEmpty()) {
+            String deviceId = String.valueOf(idManager.getDeviceID());
+            Profile userProfile = new Profile(name, deviceId);
+            app.getProfileTable().pushProfile(userProfile, new ProfileTable.ProfileCallback() {
+                @Override
+                public void onSuccess(Profile profile) {
+                    app.setUserProfile(userProfile);
+                    // Transition to MainActivity
+                    Intent intent = new Intent(InitialSetupActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
 
-            db.collection("profiles").document(deviceId)
-                    .set(user)
-                    .addOnSuccessListener(aVoid -> {
-                        // Transition to MainActivity
-                        Intent intent = new Intent(InitialSetupActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    })
-                    .addOnFailureListener(Throwable::printStackTrace);
+                @Override
+                public void onFailure(Exception e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 }
