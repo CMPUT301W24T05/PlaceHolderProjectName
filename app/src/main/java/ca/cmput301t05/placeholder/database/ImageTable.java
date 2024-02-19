@@ -18,22 +18,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class ImageTable extends  DatabaseManager{
-
-    //extends database manager which holds everything
-
-    private Context context;
+public class ImageTable extends Table {
 
     public ImageTable(Context context){
-        this.context = context;
-
+        super(context);
     }
 
     //https://firebase.google.com/docs/storage/android/upload-files#java_2
 
     public void uploadFile(Uri file){
 
-        StorageReference rootStorageRef = storage.getReference();
+        StorageReference rootStorageRef = databaseManager.storage.getReference();
 
         String filename = "images/" + UUID.randomUUID().toString() + ".jpg";
         StorageReference storageRef = rootStorageRef.child(filename);
