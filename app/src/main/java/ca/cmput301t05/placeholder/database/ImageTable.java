@@ -150,5 +150,16 @@ public class ImageTable extends Table {
         event.setEventPosterID(posterID);
     }
 
+    //will save a picture to the storage
+    public void getProfilePicture(Profile profile){
+
+
+    }
+
+    public void getPosterPicture(Event event){
+
+
+    }
+
 
 }
