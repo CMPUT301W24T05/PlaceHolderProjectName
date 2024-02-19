@@ -37,6 +37,7 @@ dependencies {
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-firestore:24.10.2")
+    implementation("com.google.firebase:firebase-storage")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     // Import the QR Code scanning library
