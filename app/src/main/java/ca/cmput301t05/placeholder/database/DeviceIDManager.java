@@ -21,6 +21,11 @@ public class DeviceIDManager {
         return deviceIDString != null;
     }
 
+    public void deleteDeviceID() {
+        SharedPreferences sharedPrefs = context.getSharedPreferences(SHARED_PREFS_FILE_NAME, Context.MODE_PRIVATE);
+        sharedPrefs.edit().remove(DEV_ID_KEY).apply();
+    }
+
     public UUID getDeviceID() {
         SharedPreferences sharedPrefs = context.getSharedPreferences(SHARED_PREFS_FILE_NAME, Context.MODE_PRIVATE);
 
