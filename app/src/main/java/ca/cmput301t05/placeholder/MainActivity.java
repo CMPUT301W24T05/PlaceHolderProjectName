@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -11,6 +12,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import ca.cmput301t05.placeholder.database.DeviceIDManager;
 import ca.cmput301t05.placeholder.database.ImageTable;
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
 
@@ -23,7 +25,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        db = FirebaseFirestore.getInstance();
+        DeviceIDManager idManager = new DeviceIDManager(getApplicationContext());
+        if(idManager.deviceHasIDStored()){
+            Log.i("DevID", "Device has an ID stored in shared prefs");
+        } else {
+            Log.i("DevID", "Device does not have an ID stored in shared prefs");
+        }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
