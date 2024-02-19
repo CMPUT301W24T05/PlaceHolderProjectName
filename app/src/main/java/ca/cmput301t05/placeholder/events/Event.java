@@ -3,6 +3,7 @@ package ca.cmput301t05.placeholder.events;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import ca.cmput301t05.placeholder.profile.Profile;
 
@@ -14,6 +15,8 @@ public class Event {
 
     String eventInfo;
 
+    UUID eventID;
+
 
     HashMap<Profile,Integer> attendees; //stores all attendees and how many times they have checked in
 
@@ -21,6 +24,7 @@ public class Event {
 
         this.eventName = name;
         this.eventInfo = eventInfo;
+        this.eventID = UUID.randomUUID();
 
     }
 
