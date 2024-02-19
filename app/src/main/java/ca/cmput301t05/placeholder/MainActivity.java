@@ -14,6 +14,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
 import ca.cmput301t05.placeholder.database.ImageTable;
+import ca.cmput301t05.placeholder.database.DeviceIDManager;
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
