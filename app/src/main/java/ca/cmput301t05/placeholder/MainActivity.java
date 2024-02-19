@@ -13,7 +13,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
+import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
+import ca.cmput301t05.placeholder.profile.Profile;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,17 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
         app = (PlaceholderApp) getApplicationContext();
 
-        DeviceIDManager idManager = new DeviceIDManager(getApplicationContext());
-        if(idManager.deviceHasIDStored()){
-            Log.i("DevID", "Device has an ID stored in shared prefs");
-        } else {
-            Log.i("DevID", "Device does not have an ID stored in shared prefs");
-            // This is the first launch of the app!
-            Intent intent = new Intent(this, InitialSetupActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -51,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        app.getImageTable().uploadResource(R.raw.yeet_yah);
+//        app.getImageTable().uploadResource(R.raw.yeet_yah);
     }
 
 }
