@@ -129,5 +129,10 @@ public class Profile {
         this.profilePictureID = profilePictureID;
     }
 
+    public void updateDatabase(){
+        //will update itself in the database
+
+    }
+
     
 }
