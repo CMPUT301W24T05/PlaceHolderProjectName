@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -30,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
             Log.i("DevID", "Device has an ID stored in shared prefs");
         } else {
             Log.i("DevID", "Device does not have an ID stored in shared prefs");
+            // This is the first launch of the app!
+            Intent intent = new Intent(this, InitialSetupActivity.class);
+            startActivity(intent);
+            finish();
+            return;
         }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
