@@ -91,7 +91,7 @@ public class ImageTable extends Table {
 
         UUID profileID = UUID.randomUUID();
 
-        String filename = "posters/" + profileID.toString() + ".jpg";
+        String filename = "profiles/" + profileID.toString() + ".jpg";
         StorageReference storageRef = rootStorageRef.child(filename);
 
         StorageMetadata metadata = new StorageMetadata.Builder()
