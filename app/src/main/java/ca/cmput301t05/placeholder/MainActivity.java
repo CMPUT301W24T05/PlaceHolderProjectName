@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        ImageTable i = new ImageTable();
+        ImageTable i = new ImageTable(this);
+        i.uploadResource(R.raw.yeet_yah);
     }
 
 }
