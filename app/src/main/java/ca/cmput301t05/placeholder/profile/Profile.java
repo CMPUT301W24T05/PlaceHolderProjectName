@@ -8,29 +8,26 @@ import ca.cmput301t05.placeholder.notifications.UserNotification;
 
 public class Profile {
 
-    UUID profileID;
-    String name, homePage, contactInfo;
-
-    String profilePictureID; //this will point to the collection in firebase storage
-
-    List<Event> hostedEvents;
-
-    List<Event> joinedEvents;
-
-    List<UserNotification> notifications;
-
+    private String profileID;
+    private String name;
+    private String homePage;
+    private String contactInfo;
+    private String profilePictureID;
+//    private List<Event> hostedEvents;
+//    private List<Event> joinedEvents;
+//    private List<UserNotification> notifications;
     boolean isAdmin = false;
 
-    public Profile(String name){
-
-        this.name = name;
-
-        this.profileID = UUID.randomUUID();
-
+    public Profile(){
 
     }
 
-    public void joinEvent(Event event){
+    public Profile(String name, String profileID){
+        this.name = name;
+        this.profileID = profileID;
+    }
+
+/*    public void joinEvent(Event event){
 
         joinedEvents.add(event);
 
@@ -71,7 +68,7 @@ public class Profile {
 
     public List<UserNotification> getNotifications() {
         return notifications;
-    }
+    }*/
 
     public String getContactInfo() {
         return contactInfo;
@@ -89,7 +86,7 @@ public class Profile {
         return profilePictureID;
     }
 
-    public UUID getProfileID() {
+    public String getProfileID() {
         return profileID;
     }
 
@@ -105,23 +102,23 @@ public class Profile {
         this.contactInfo = contactInfo;
     }
 
-    public void setHostedEvents(List<Event> hostedEvents) {
+   /* public void setHostedEvents(List<Event> hostedEvents) {
         this.hostedEvents = hostedEvents;
     }
 
     public void setJoinedEvents(List<Event> joinedEvents) {
         this.joinedEvents = joinedEvents;
     }
-
+*/
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setNotifications(List<UserNotification> notifications) {
+/*    public void setNotifications(List<UserNotification> notifications) {
         this.notifications = notifications;
-    }
+    }*/
 
-    public void setProfileID(UUID profileID) {
+    public void setProfileID(String profileID) {
         this.profileID = profileID;
     }
 
