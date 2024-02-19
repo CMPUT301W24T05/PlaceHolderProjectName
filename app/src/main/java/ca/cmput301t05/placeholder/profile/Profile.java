@@ -11,7 +11,7 @@ public class Profile {
     UUID profileID;
     String name, homePage, contactInfo;
 
-    String profilePictureID; //this will point to the collection in firebase storage
+    UUID profilePictureID; //this will point to the collection in firebase storage
 
     List<Event> hostedEvents;
 
@@ -85,7 +85,7 @@ public class Profile {
         return name;
     }
 
-    public String getProfilePictureID() {
+    public UUID getProfilePictureID() {
         return profilePictureID;
     }
 
@@ -121,11 +121,8 @@ public class Profile {
         this.notifications = notifications;
     }
 
-    public void setProfileID(UUID profileID) {
-        this.profileID = profileID;
-    }
 
-    public void setProfilePictureID(String profilePictureID) {
+    public void setProfilePictureID(UUID profilePictureID) {
         this.profilePictureID = profilePictureID;
     }
 

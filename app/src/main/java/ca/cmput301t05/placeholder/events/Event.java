@@ -11,7 +11,7 @@ public class Event {
 
     String eventName;
 
-    String eventPosterID;
+    UUID eventPosterID;
 
     String eventInfo;
 
@@ -71,9 +71,6 @@ public class Event {
         this.eventName = eventName;
     }
 
-    public void setEventPosterID(String eventPosterID) {
-        this.eventPosterID = eventPosterID;
-    }
 
     public String getEventInfo() {
         return eventInfo;
@@ -83,7 +80,15 @@ public class Event {
         return eventName;
     }
 
-    public String getEventPosterID() {
+    public UUID getEventPosterID() {
         return eventPosterID;
+    }
+
+    public UUID getEventID(){
+        return  eventID;
+    }
+
+    public void setEventPosterID(UUID id){
+        this.eventPosterID = id;
     }
 }

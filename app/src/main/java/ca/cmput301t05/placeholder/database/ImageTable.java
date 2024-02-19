@@ -18,7 +18,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.profile.Profile;
+
 public class ImageTable extends Table {
+
+    StorageReference rootStorageRef = databaseManager.storage.getReference();
 
     public ImageTable(Context context){
         super(context);
@@ -28,7 +33,6 @@ public class ImageTable extends Table {
 
     public void uploadFile(Uri file){
 
-        StorageReference rootStorageRef = databaseManager.storage.getReference();
 
         String filename = "images/" + UUID.randomUUID().toString() + ".jpg";
         StorageReference storageRef = rootStorageRef.child(filename);
@@ -81,6 +85,69 @@ public class ImageTable extends Table {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void uploadProfilePicture(Uri file, Profile profile){
+
+        UUID profileID = UUID.randomUUID();
+
+        String filename = "posters/" + profileID.toString() + ".jpg";
+        StorageReference storageRef = rootStorageRef.child(filename);
+
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setCustomMetadata("Profile", profile.getProfileID().toString())
+                .setContentType("image/jpg")
+                .build();
+
+        UploadTask uploadTask = storageRef.putFile(file);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+
+        profile.setProfilePictureID(profileID);
+
+    }
+
+    //allows us to upload a poster to the database
+    public void uploadPoster(Uri file, Event event){
+        //uploads a poster and sets the poster id of the event
+
+        UUID posterID = UUID.randomUUID();
+
+        String filename = "posters/" + posterID.toString() + ".jpg";
+        StorageReference storageRef = rootStorageRef.child(filename);
+
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setCustomMetadata("Event", event.getEventID().toString())
+                .setContentType("image/jpg")
+                .build();
+
+        UploadTask uploadTask = storageRef.putFile(file);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+
+        event.setEventPosterID(posterID);
     }
 
 
