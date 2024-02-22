@@ -15,7 +15,13 @@ public class Event {
 
     String eventInfo;
 
+    QRCode infoQRCode;
+
+    QRCodeManager QRCM = new QRCodeManager();
+
     UUID eventID;
+
+
 
 
     HashMap<Profile,Integer> attendees; //stores all attendees and how many times they have checked in
@@ -26,6 +32,7 @@ public class Event {
         this.eventInfo = eventInfo;
         this.eventID = UUID.randomUUID();
 
+        infoQRCode = QRCM.generateQRCode(this);
     }
 
     //checks in a attendee
@@ -85,5 +92,9 @@ public class Event {
 
     public String getEventPosterID() {
         return eventPosterID;
+    }
+
+    public UUID getEventID() {
+        return eventID;
     }
 }

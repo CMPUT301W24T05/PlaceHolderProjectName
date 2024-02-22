@@ -39,6 +39,10 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.10.2")
     implementation("com.google.firebase:firebase-storage")
 
+    //Import the Zxing library for the QRcode generator
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+
+
     implementation("androidx.appcompat:appcompat:1.6.1")
     // Import the QR Code scanning library
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
