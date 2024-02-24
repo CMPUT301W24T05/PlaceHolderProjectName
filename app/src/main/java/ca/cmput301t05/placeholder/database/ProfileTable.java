@@ -12,11 +12,13 @@ public class ProfileTable extends Table{
 
     public boolean deviceHasProfile(){
         if(idManager.deviceHasIDStored()){
-
+            return true;
         }
+
+        return false;
     }
 
     public boolean profileExistsOnDatabase(String deviceId){
-
+        return false;
     }
 }

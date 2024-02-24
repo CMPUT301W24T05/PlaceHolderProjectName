@@ -3,6 +3,8 @@ package ca.cmput301t05.placeholder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -14,12 +16,14 @@ import androidx.navigation.ui.NavigationUI;
 
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
+import ca.cmput301t05.placeholder.database.ImageTable;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private PlaceholderApp app;
 
+    private ImageView picTest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        //test image view here
+        ImageTable i = new ImageTable(app);
+
+        i.testImage("5e7acd28-10c6-45c9-aa91-23b050286fa7", findViewById(R.id.imageTest));
+
+
 
         app.getImageTable().uploadResource(R.raw.yeet_yah);
     }

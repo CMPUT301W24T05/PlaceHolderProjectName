@@ -197,5 +197,29 @@ public class ImageTable extends Table {
 
     }
 
+    public void testImage(String filename, ImageView imageView){
+
+        String f = "images/" + filename + ".jpg";
+        StorageReference storageReference = rootStorageRef.child(f);
+
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //Load your image here need to have error images and such
+
+                Glide.with(imageView.getContext())
+                        .load(uri)
+                        .into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //implement some error checking
+            }
+        });
+    }
+
+
+
 
 }
