@@ -56,7 +56,7 @@
         android:layout_weight="1"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="@string/enter_event_capacity"
+        android:hint="@string/enter_event_description"
         android:inputType="textMultiLine" />
 
     <Button

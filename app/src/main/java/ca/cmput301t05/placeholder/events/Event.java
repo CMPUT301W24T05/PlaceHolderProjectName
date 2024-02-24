@@ -22,6 +22,8 @@ public class Event {
 
     public Event(String name, String eventInfo){
 
+        //need to make creation of event automatically go to database
+
         this.eventName = name;
         this.eventInfo = eventInfo;
         this.eventID = UUID.randomUUID();
