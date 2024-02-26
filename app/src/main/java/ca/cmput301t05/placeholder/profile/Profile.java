@@ -20,9 +20,11 @@ public class Profile {
     }
 
     public void joinEvent(Event event){
-
         joinedEvents.add(event);
+    }
 
+    public boolean isAdmin() {
+        return isAdmin;
     }
 
     public void leaveEvent(Event event){
