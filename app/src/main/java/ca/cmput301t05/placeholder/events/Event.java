@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.events;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,21 +18,32 @@ public class Event {
 
     UUID eventID;
 
+    Calendar eventDate;
+
+    int maxAttendees;
+
 
     HashMap<Profile,Integer> attendees; //stores all attendees and how many times they have checked in
 
-    public Event(String name, String eventInfo){
+    public Event(String name, String eventInfo, int maxAttendees){
 
         //need to make creation of event automatically go to database
 
         this.eventName = name;
         this.eventInfo = eventInfo;
         this.eventID = UUID.randomUUID();
+        this.maxAttendees = maxAttendees;
 
     }
 
     //checks in a attendee
-    public void checkIn(Profile profile){
+    public boolean checkIn(Profile profile){
+
+        //returns false if attendee can't check in, true if can
+
+        if(attendees.size() == maxAttendees){
+            return false;
+        }
 
         if (attendees.containsKey(profile)) {
 
@@ -43,6 +55,8 @@ public class Event {
 
             attendees.put(profile, 1);
         }
+
+        return true;
 
     }
 
@@ -93,4 +107,14 @@ public class Event {
     public void setEventPosterID(UUID id){
         this.eventPosterID = id;
     }
+
+    public void setEventID(UUID eventID) {
+        this.eventID = eventID;
+    }
+
+    public void setEventDate(Calendar eventDate) {
+        this.eventDate = eventDate;
+    }
+
+
 }

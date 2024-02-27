@@ -17,6 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
 import ca.cmput301t05.placeholder.database.ImageTable;
+import ca.cmput301t05.placeholder.events.EnterEventDetailsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         app.getImageTable().uploadResource(R.raw.yeet_yah);
+
+        Intent intent = new Intent(this, EnterEventDetailsActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }
