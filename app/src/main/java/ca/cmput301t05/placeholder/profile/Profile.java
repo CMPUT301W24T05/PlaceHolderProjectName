@@ -40,7 +40,6 @@ public class Profile {
     }
 
     public void addNotification(UserNotification a){
-
         notifications.add(a);
     }
 
@@ -49,8 +48,6 @@ public class Profile {
     }
 
     //getters / setters
-
-
     public List<Event> getHostedEvents() {
         return hostedEvents;
     }
@@ -75,9 +72,7 @@ public class Profile {
         return name;
     }
 
-    public String getProfilePictureID() {
-        return profilePictureID;
-    }
+    public String getProfilePictureID() {return profilePictureID;}
 
     public UUID getProfileID() {
         return profileID;
