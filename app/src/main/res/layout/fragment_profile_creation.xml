@@ -33,12 +33,11 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
+        android:text="Homepage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Homepage"
-        tools:layout_editor_absoluteX="93dp"
-        tools:layout_editor_absoluteY="343dp" />
+        tools:layout_editor_absoluteY="401dp" />
 
     <EditText
         android:id="@+id/edit_contact"

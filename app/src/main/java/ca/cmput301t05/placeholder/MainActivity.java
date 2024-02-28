@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private FirebaseFirestore db;
 
-    //???
+    //testing
     private Button profile_button;
 
     @Override

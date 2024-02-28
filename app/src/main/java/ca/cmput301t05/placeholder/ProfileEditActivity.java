@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,9 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.UUID;
 
@@ -26,6 +30,7 @@ public class ProfileEditActivity extends AppCompatActivity{
     private EditText editContact;
     private EditText editHomepage;
     private ImageView profilePic;
+    private FloatingActionButton cameraButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +47,7 @@ public class ProfileEditActivity extends AppCompatActivity{
         editHomepage = findViewById(R.id.edit_homepage);
         editContact = findViewById(R.id.edit_contact);
         profilePic = findViewById(R.id.profile_pic);
+        cameraButton = findViewById(R.id.button_camera);
 
         // First display the information store in the database,
         // For example, getName will return "Name/Last Name" if no information get
@@ -68,6 +74,21 @@ public class ProfileEditActivity extends AppCompatActivity{
                 //finish();
             }
         });
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.with(ProfileEditActivity.this)
+                        .crop()	    			//Crop image(Optional), Check Customization for more option
+                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .start();
+            }
+        });
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri uri = data.getData();
+        profilePic.setImageURI(uri);
     }
 
     private void setUp(){
