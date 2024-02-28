@@ -12,15 +12,20 @@
         android:ems="10"
         android:inputType="text"
         android:text="Name / Last Name"
-        tools:layout_editor_absoluteX="93dp"
-        tools:layout_editor_absoluteY="265dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="343dp" />
 
     <Button
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SAVE"
-        tools:layout_editor_absoluteX="5dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edit_homepage"
@@ -28,6 +33,9 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
         android:text="Homepage"
         tools:layout_editor_absoluteX="93dp"
         tools:layout_editor_absoluteY="343dp" />
@@ -39,15 +47,18 @@
         android:ems="10"
         android:inputType="text"
         android:text="Contact"
-        tools:layout_editor_absoluteX="93dp"
-        tools:layout_editor_absoluteY="420dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="461dp" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profile_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="136dp"
-        tools:layout_editor_absoluteY="88dp"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        app:shapeAppearanceOverlay='@style/circular'
+        tools:layout_editor_absoluteX="100dp"
+        tools:layout_editor_absoluteY="87dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
@@ -55,15 +66,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Administrator"
-        tools:layout_editor_absoluteX="117dp"
-        tools:layout_editor_absoluteY="657dp" />
+        tools:layout_editor_absoluteX="126dp"
+        tools:layout_editor_absoluteY="590dp" />
 
-    <RadioButton
-        android:id="@+id/allow_geo_button"
-        android:layout_width="213dp"
-        android:layout_height="48dp"
-        android:text="Allow Geo_Location"
-        tools:layout_editor_absoluteX="90dp"
-        tools:layout_editor_absoluteY="516dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_pic"
+        app:layout_constraintEnd_toEndOf="@+id/profile_pic"
+        app:srcCompat="@drawable/baseline_camera_alt_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
