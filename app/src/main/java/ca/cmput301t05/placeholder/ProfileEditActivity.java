@@ -24,6 +24,7 @@ public class ProfileEditActivity extends AppCompatActivity{
     private Button adminButton;
     private EditText editName;
     private EditText editContact;
+    private EditText editHomepage;
     private ImageView profilePic;
 
     @Override
@@ -38,6 +39,7 @@ public class ProfileEditActivity extends AppCompatActivity{
         saveButton = findViewById(R.id.save_button);
         adminButton = findViewById(R.id.admin_button);
         editName = findViewById(R.id.edit_name);
+        editHomepage = findViewById(R.id.edit_homepage);
         editContact = findViewById(R.id.edit_contact);
         profilePic = findViewById(R.id.profile_pic);
 
@@ -45,6 +47,7 @@ public class ProfileEditActivity extends AppCompatActivity{
             // For example, getName will return "Name/Last Name" if no information get
             // for example, getContactInfo will return "Contact Info" if no information get
         setUp();
+        // Click on the save button will save the information and go back to Mainactivity
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +57,7 @@ public class ProfileEditActivity extends AppCompatActivity{
                 finish();
             }
         });
+        // Click on admin button will direct you to the admin tab
         adminButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,12 +75,14 @@ public class ProfileEditActivity extends AppCompatActivity{
         // profilePic.setImageResource(R.drawable.your_image_resource);
         editName.setText(profile.getName());
         editContact.setText(profile.getContactInfo());
+        editHomepage.setText(profile.getHomePage());
         boolean admin = profile.isAdmin();
         if (admin == false){adminButton.setVisibility(View.INVISIBLE);}
     }
     private void update(){
         profile.setName(editName.getText().toString());
         profile.setContactInfo(editContact.getText().toString());
+        profile.setHomePage(editHomepage.getText().toString());
         // Set image resource, converting byte code:
         //profile.setProfilePictureID();
         profile.updateDatabase();
