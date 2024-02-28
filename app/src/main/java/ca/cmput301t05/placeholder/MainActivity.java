@@ -3,6 +3,8 @@ package ca.cmput301t05.placeholder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private FirebaseFirestore db;
+
+    //???
+    private Button profile_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,16 @@ public class MainActivity extends AppCompatActivity {
 
         ImageTable i = new ImageTable(this);
         i.uploadResource(R.raw.yeet_yah);
+
+        // testing
+        profile_button = findViewById(R.id.button);
+        profile_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfileEditActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }
