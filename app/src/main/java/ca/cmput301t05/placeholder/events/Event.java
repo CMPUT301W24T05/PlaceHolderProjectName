@@ -1,11 +1,17 @@
 package ca.cmput301t05.placeholder.events;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 public class Event {
@@ -33,6 +39,24 @@ public class Event {
         this.eventInfo = eventInfo;
         this.eventID = UUID.randomUUID();
         this.maxAttendees = maxAttendees;
+        this.attendees = new HashMap<>();
+
+        DatabaseManager databaseManager = DatabaseManager.getInstance();
+
+        databaseManager.db.collection("events").document(eventID.toString()).set(toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                System.out.println("Event successfully uploaded!");
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.err.println("Error uploading event: " + e.getMessage());
+                    }
+                });
+
+
 
     }
 
@@ -57,6 +81,36 @@ public class Event {
         }
 
         return true;
+
+    }
+
+    public Map<String, Object> toMap(){
+
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("eventName", eventName);
+        result.put("eventPosterID", eventPosterID != null ? eventPosterID.toString() : null);
+        result.put("eventInfo", eventInfo);
+        result.put("eventDate", eventDate != null ? eventDate.getTimeInMillis() : null);
+        result.put("maxAttendees", maxAttendees);
+
+        if (attendees.isEmpty()) {
+            result.put("attendees", null);
+
+        } else {
+
+            HashMap<String, Integer> attendeesMap = new HashMap<>();
+            for (Map.Entry<Profile, Integer> entry : attendees.entrySet()) {
+                // Assuming Profile has a unique identifier we can use as a key
+                attendeesMap.put(entry.getKey().getProfileID().toString(), entry.getValue());
+            }
+
+            result.put("attendees", attendeesMap);
+
+        }
+
+
+        return result;
 
     }
 

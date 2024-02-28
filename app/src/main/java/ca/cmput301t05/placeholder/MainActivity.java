@@ -18,6 +18,7 @@ import ca.cmput301t05.placeholder.database.DeviceIDManager;
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
 import ca.cmput301t05.placeholder.database.ImageTable;
 import ca.cmput301t05.placeholder.events.EnterEventDetailsActivity;
+import ca.cmput301t05.placeholder.events.Event;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,11 +64,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        app.getImageTable().uploadResource(R.raw.yeet_yah);
+        //app.getImageTable().uploadResource(R.raw.yeet_yah);
 
-        Intent intent = new Intent(this, EnterEventDetailsActivity.class);
-        startActivity(intent);
-        finish();
+        Event test_event = new Event("Test", "Testing", 5);
+
+        //Intent intent = new Intent(this, EnterEventDetailsActivity.class);
+        //startActivity(intent);
+        //finish();
     }
 
 }
