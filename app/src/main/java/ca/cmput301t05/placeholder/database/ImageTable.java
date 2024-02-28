@@ -2,9 +2,11 @@ package ca.cmput301t05.placeholder.database;
 
 import android.content.Context;
 import android.net.Uri;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageMetadata;
@@ -18,22 +20,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class ImageTable extends  DatabaseManager{
+import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.profile.Profile;
 
-    //extends database manager which holds everything
+public class ImageTable extends Table {
 
-    private Context context;
+    StorageReference rootStorageRef = databaseManager.storage.getReference();
 
     public ImageTable(Context context){
-        this.context = context;
-
+        super(context);
     }
 
     //https://firebase.google.com/docs/storage/android/upload-files#java_2
 
     public void uploadFile(Uri file){
 
-        StorageReference rootStorageRef = storage.getReference();
 
         String filename = "images/" + UUID.randomUUID().toString() + ".jpg";
         StorageReference storageRef = rootStorageRef.child(filename);
@@ -87,6 +89,137 @@ public class ImageTable extends  DatabaseManager{
             return null;
         }
     }
+
+    public void uploadProfilePicture(Uri file, Profile profile){
+
+        UUID profileID = UUID.randomUUID();
+
+        String filename = "profiles/" + profileID.toString() + ".jpg";
+        StorageReference storageRef = rootStorageRef.child(filename);
+
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setCustomMetadata("Profile", profile.getProfileID().toString())
+                .setContentType("image/jpg")
+                .build();
+
+        UploadTask uploadTask = storageRef.putFile(file);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+
+        profile.setProfilePictureID(profileID);
+
+    }
+
+    //allows us to upload a poster to the database
+    public void uploadPoster(Uri file, Event event){
+        //uploads a poster and sets the poster id of the event
+
+        UUID posterID = UUID.randomUUID();
+
+        String filename = "posters/" + posterID.toString() + ".jpg";
+        StorageReference storageRef = rootStorageRef.child(filename);
+
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setCustomMetadata("Event", event.getEventID().toString())
+                .setContentType("image/jpg")
+                .build();
+
+        UploadTask uploadTask = storageRef.putFile(file);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+
+        event.setEventPosterID(posterID);
+    }
+
+    //will save a picture to the storage
+    public void getProfilePicture(Profile profile, ImageView imageView){
+
+        StorageReference storageReference = rootStorageRef.child(profile.getProfileID().toString());
+
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //Load your image here
+                Glide.with(imageView.getContext())
+                        .load(uri)
+                        .into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //implement some error checking
+            }
+        });
+
+    }
+
+    public void getPosterPicture(Event event, ImageView imageView){
+
+        StorageReference storageReference = rootStorageRef.child(event.getEventPosterID().toString());
+
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //Load your image here need to have error images and such
+
+                Glide.with(imageView.getContext())
+                        .load(uri)
+                        .into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //implement some error checking
+            }
+        });
+
+    }
+
+    public void testImage(String filename, ImageView imageView){
+
+        String f = "images/" + filename + ".jpg";
+        StorageReference storageReference = rootStorageRef.child(f);
+
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //Load your image here need to have error images and such
+
+                Glide.with(imageView.getContext())
+                        .load(uri)
+                        .into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //implement some error checking
+            }
+        });
+    }
+
+
 
 
 }

@@ -9,7 +9,7 @@ import ca.cmput301t05.placeholder.notifications.UserNotification;
 public class Profile {
     UUID profileID;
     String name, homePage, contactInfo;
-    String profilePictureID; //this will point to the collection in firebase storage
+    UUID profilePictureID; //this will point to the collection in firebase storage
     List<Event> hostedEvents;
     List<Event> joinedEvents;
     List<UserNotification> notifications;
@@ -71,9 +71,9 @@ public class Profile {
     public String getName() {
         return name;
     }
-
-    public String getProfilePictureID() {return profilePictureID;}
-
+    public UUID getProfilePictureID() {
+        return profilePictureID;
+    }
     public UUID getProfileID() {
         return profileID;
     }
@@ -106,11 +106,8 @@ public class Profile {
         this.notifications = notifications;
     }
 
-    public void setProfileID(UUID profileID) {
-        this.profileID = profileID;
-    }
 
-    public void setProfilePictureID(String profilePictureID) {
+    public void setProfilePictureID(UUID profilePictureID) {
         this.profilePictureID = profilePictureID;
     }
 

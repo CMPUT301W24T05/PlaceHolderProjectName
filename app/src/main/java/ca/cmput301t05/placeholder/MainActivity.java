@@ -3,9 +3,10 @@ package ca.cmput301t05.placeholder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -14,17 +15,20 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
-import ca.cmput301t05.placeholder.database.ImageTable;
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
+import ca.cmput301t05.placeholder.database.ImageTable;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private FirebaseFirestore db;
+    private PlaceholderApp app;
 
+    private ImageView picTest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        app = (PlaceholderApp) getApplicationContext();
 
         DeviceIDManager idManager = new DeviceIDManager(getApplicationContext());
         if(idManager.deviceHasIDStored()){
@@ -51,8 +55,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        ImageTable i = new ImageTable(this);
-        i.uploadResource(R.raw.yeet_yah);
+        //test image view here
+        ImageTable i = new ImageTable(app);
+
+        i.testImage("5e7acd28-10c6-45c9-aa91-23b050286fa7", findViewById(R.id.imageTest));
+
+
+
+        app.getImageTable().uploadResource(R.raw.yeet_yah);
     }
 
 }
