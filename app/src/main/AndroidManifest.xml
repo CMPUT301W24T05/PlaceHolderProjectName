@@ -26,6 +26,8 @@
 
         <activity android:name=".InitialSetupActivity" />
         <activity android:name=".events.EnterEventDetailsActivity" />
+        <activity android:name=".ProfileEditActivity"/>
+        <activity android:name=".AdminHomeActivity"/>
     </application>
 
 </manifest>
