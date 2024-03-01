@@ -20,6 +20,8 @@ public class QRCodeManager {
         return new QRCode(event);
     }
 
+    /* Still working on it ig
+    
     public String getEventInfo (String qrcode){
         String doc = qrcode.substring(0, 35);
 
@@ -37,6 +39,7 @@ public class QRCodeManager {
             System.out.println("Document not found!");
         }
     }
+    */
 
     /*
     public Boolean checkType(QRCode qr){
