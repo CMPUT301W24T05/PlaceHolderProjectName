@@ -38,6 +38,11 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-firestore:24.10.2")
     implementation("com.google.firebase:firebase-storage")
+    implementation ("com.google.cloud:google-cloud-firestore:2.1.2")
+
+    //Import the Zxing library for the QRcode generator
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+
 
     //implement the image downloading library
     implementation("com.github.bumptech.glide:glide:4.12.0")

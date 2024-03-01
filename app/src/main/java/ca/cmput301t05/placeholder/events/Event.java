@@ -22,11 +22,17 @@ public class Event {
 
     String eventInfo;
 
+    QRCode infoQRCode;
+
+    QRCodeManager QRCM = new QRCodeManager();
+
     UUID eventID;
 
     Calendar eventDate;
 
     int maxAttendees;
+
+
 
 
     HashMap<Profile,Integer> attendees; //stores all attendees and how many times they have checked in
@@ -58,6 +64,7 @@ public class Event {
 
 
 
+        infoQRCode = QRCM.generateQRCode(this);
     }
 
     //checks in a attendee
@@ -169,6 +176,5 @@ public class Event {
     public void setEventDate(Calendar eventDate) {
         this.eventDate = eventDate;
     }
-
 
 }
