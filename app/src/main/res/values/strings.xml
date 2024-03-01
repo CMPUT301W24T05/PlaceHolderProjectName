@@ -3,4 +3,9 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="enter_event_name">Enter Event Name</string>
+    <string name="enter_event_location">Enter Event Location</string>
+    <string name="enter_event_date">Enter Event Date and Time</string>
+    <string name="enter_event_capacity">Enter Event Capacity</string>
+    <string name="enter_event_description">Enter Event Description</string>
 </resources>

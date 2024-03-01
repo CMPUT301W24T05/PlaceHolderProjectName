@@ -7,37 +7,27 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.UserNotification;
 
 public class Profile {
-
     UUID profileID;
     String name, homePage, contactInfo;
-
-    String profilePictureID; //this will point to the collection in firebase storage
-
+    UUID profilePictureID; //this will point to the collection in firebase storage
     List<Event> hostedEvents;
-
     List<Event> joinedEvents;
-
     List<UserNotification> notifications;
-
     boolean isAdmin = false;
-
     public Profile(String name){
-
         this.name = name;
-
         this.profileID = UUID.randomUUID();
-
-
     }
 
     public void joinEvent(Event event){
-
         joinedEvents.add(event);
+    }
 
+    public boolean isAdmin() {
+        return isAdmin;
     }
 
     public void leaveEvent(Event event){
-
         joinedEvents.remove(event);
     }
 
@@ -50,7 +40,6 @@ public class Profile {
     }
 
     public void addNotification(UserNotification a){
-
         notifications.add(a);
     }
 
@@ -59,8 +48,6 @@ public class Profile {
     }
 
     //getters / setters
-
-
     public List<Event> getHostedEvents() {
         return hostedEvents;
     }
@@ -84,11 +71,9 @@ public class Profile {
     public String getName() {
         return name;
     }
-
-    public String getProfilePictureID() {
+    public UUID getProfilePictureID() {
         return profilePictureID;
     }
-
     public UUID getProfileID() {
         return profileID;
     }
@@ -121,12 +106,14 @@ public class Profile {
         this.notifications = notifications;
     }
 
-    public void setProfileID(UUID profileID) {
-        this.profileID = profileID;
+
+    public void setProfilePictureID(UUID profilePictureID) {
+        this.profilePictureID = profilePictureID;
     }
 
-    public void setProfilePictureID(String profilePictureID) {
-        this.profilePictureID = profilePictureID;
+    public void updateDatabase(){
+        //will update itself in the database
+
     }
 
     

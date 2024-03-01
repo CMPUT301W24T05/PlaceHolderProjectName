@@ -44,6 +44,9 @@ dependencies {
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
 
 
+    //implement the image downloading library
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     // Import the QR Code scanning library
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
