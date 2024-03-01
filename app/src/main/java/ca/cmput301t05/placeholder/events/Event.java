@@ -93,5 +93,5 @@ public class Event {
     public String getEventPosterID() {
         return eventPosterID;
     }
-    
+
 }
