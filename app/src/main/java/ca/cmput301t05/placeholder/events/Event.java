@@ -94,7 +94,9 @@ public class Event {
         return eventPosterID;
     }
 
-    public UUID getEventID() {
+    /* public UUID getEventID() {
         return eventID;
     }
+
+     */
 }
