@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.events;
 
+/*
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
@@ -8,6 +9,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
+
+ */
 
 public class QRCodeManager {
 
