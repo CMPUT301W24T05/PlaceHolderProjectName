@@ -93,10 +93,5 @@ public class Event {
     public String getEventPosterID() {
         return eventPosterID;
     }
-
-    /* public UUID getEventID() {
-        return eventID;
-    }
-
-     */
+    
 }
