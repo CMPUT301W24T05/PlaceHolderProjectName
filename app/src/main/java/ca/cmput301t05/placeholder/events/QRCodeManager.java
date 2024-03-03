@@ -1,59 +1,67 @@
 package ca.cmput301t05.placeholder.events;
 
-/*
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
+import static com.google.firebase.appcheck.internal.util.Logger.TAG;
+
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
 
- */
+import java.util.HashMap;
+
+import ca.cmput301t05.placeholder.database.DatabaseManager;
 
 public class QRCodeManager {
 
+    protected DatabaseManager databaseManager;
 
-    public QRCodeManager(){
+    public QRCodeManager() {
 
     }
 
-    public QRCode generateQRCode (Event event){
+    public QRCode generateQRCode(Event event) {
         return new QRCode(event);
     }
 
-    /* Still working on it ig
-    
-    public String getEventInfo (String qrcode){
+
+    public HashMap<String, Object> getEventInfo(String qrcode) {
         String doc = qrcode.substring(0, 35);
 
-        Firestore firestore = FirestoreOptions.getDefaultInstance().getService();
-        DocumentReference docRef = firestore.collection("events").document(doc);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        ApiFuture<DocumentSnapshot> future = docRef.get();
-        DocumentSnapshot document = future.get();
 
-        if (document.exists()) {
-            // Get the path of the document
-            String path = document.getReference().getPath();
-            System.out.println("Document path: " + path);
-        } else {
-            System.out.println("Document not found!");
-        }
+        DocumentReference eventRef = db.collection("events").document(doc);
+
+        Task<DocumentSnapshot> task = eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentSnapshot document = task.getResult();
+        HashMap<String, Object> eventInfo = (HashMap<String, Object>) document.getData();
+
+        return eventInfo;
+
+
+
     }
-    */
-
-    /*
-    public Boolean checkType(QRCode qr){
-        if (qr.getType()){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-     */
-
-
 }
