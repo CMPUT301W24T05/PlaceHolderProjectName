@@ -27,8 +27,8 @@ public class QRCodeManager {
 
     }
 
-    public QRCode generateQRCode(Event event) {
-        return new QRCode(event);
+    public QRCode generateQRCode(Event event, String type) {
+        return new QRCode(event, type);
     }
 
 
@@ -60,8 +60,6 @@ public class QRCodeManager {
         HashMap<String, Object> eventInfo = (HashMap<String, Object>) document.getData();
 
         return eventInfo;
-
-
 
     }
 }

@@ -42,7 +42,7 @@ dependencies {
 
     //Import the Zxing library for the QRcode generator
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
-    
+
 
     //implement the image downloading library
     implementation("com.github.bumptech.glide:glide:4.12.0")

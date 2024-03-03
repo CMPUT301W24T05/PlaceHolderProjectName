@@ -22,7 +22,7 @@ public class Event {
 
     String eventInfo;
 
-    QRCode infoQRCode;
+    QRCode infoQRCode, checkInQR;
 
     QRCodeManager QRCM = new QRCodeManager();
 
@@ -46,6 +46,9 @@ public class Event {
         this.eventID = UUID.randomUUID();
         this.maxAttendees = maxAttendees;
         this.attendees = new HashMap<>();
+        //create QR codes
+        this.infoQRCode = QRCM.generateQRCode(this, "eventInfo");
+        this.checkInQR = QRCM.generateQRCode(this, "checkIn");
 
         DatabaseManager databaseManager = DatabaseManager.getInstance();
 
@@ -64,7 +67,7 @@ public class Event {
 
 
 
-        infoQRCode = QRCM.generateQRCode(this);
+
     }
 
     //checks in a attendee
