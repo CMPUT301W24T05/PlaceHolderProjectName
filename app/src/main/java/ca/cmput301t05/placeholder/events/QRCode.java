@@ -29,6 +29,7 @@ public class QRCode {
             BitMatrix matrix = writer.encode((eventID.toString() + type.toString()), BarcodeFormat.QR_CODE,400,400);
             BarcodeEncoder encoder = new BarcodeEncoder();
             Bitmap bitmap = encoder.createBitmap(matrix);
+            //need to attach to a view or something with setImageBitmap(bitmap)
 
         } catch (WriterException e)
         {
