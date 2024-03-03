@@ -46,6 +46,7 @@ public class Event {
         this.eventID = UUID.randomUUID();
         this.maxAttendees = maxAttendees;
         this.attendees = new HashMap<>();
+
         //create QR codes
         this.infoQRCode = QRCM.generateQRCode(this, "eventInfo");
         this.checkInQR = QRCM.generateQRCode(this, "checkIn");

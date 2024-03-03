@@ -37,6 +37,8 @@ public class QRCode {
         }
     }
 
+
+
     public Boolean getType(){return this.type;}
 
     public void setType(Boolean type){this.type = type;}

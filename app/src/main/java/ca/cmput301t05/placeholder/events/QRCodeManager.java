@@ -5,6 +5,7 @@ import static com.google.firebase.appcheck.internal.util.Logger.TAG;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,33 +34,41 @@ public class QRCodeManager {
 
 
     public HashMap<String, Object> getEventInfo(String qrcode) {
+        //extract only the part with t
         String doc = qrcode.substring(0, 35);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String type = qrcode.substring(36);
+
+        if (type.equals("true")) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-        DocumentReference eventRef = db.collection("events").document(doc);
+            DocumentReference eventRef = db.collection("events").document(doc);
 
-        Task<DocumentSnapshot> task = eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+            Task<DocumentSnapshot> task = eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.d(TAG, "get failed with ", task.getException());
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
                 }
-            }
-        });
+            });
 
-        DocumentSnapshot document = task.getResult();
-        HashMap<String, Object> eventInfo = (HashMap<String, Object>) document.getData();
+            DocumentSnapshot document = task.getResult();
+            HashMap<String, Object> eventInfo = (HashMap<String, Object>) document.getData();
 
-        return eventInfo;
+            return eventInfo;
+        } else {
+            return null;
+        }
+
 
     }
 }
