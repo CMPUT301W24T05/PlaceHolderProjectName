@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -16,32 +16,24 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
-import ca.cmput301t05.placeholder.database.ImageTable;
+import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
+import ca.cmput301t05.placeholder.database.ImageTable;
+import ca.cmput301t05.placeholder.events.EnterEventDetailsActivity;
+import ca.cmput301t05.placeholder.events.Event;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private FirebaseFirestore db;
+    private PlaceholderApp app;
 
-    //testing
-    private Button profile_button;
-
+    private ImageView picTest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DeviceIDManager idManager = new DeviceIDManager(getApplicationContext());
-        if(idManager.deviceHasIDStored()){
-            Log.i("DevID", "Device has an ID stored in shared prefs");
-        } else {
-            Log.i("DevID", "Device does not have an ID stored in shared prefs");
-            // This is the first launch of the app!
-            Intent intent = new Intent(this, InitialSetupActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
+        app = (PlaceholderApp) getApplicationContext();
+
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -56,18 +48,21 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        ImageTable i = new ImageTable(this);
-        i.uploadResource(R.raw.yeet_yah);
+        //test image view here
+        ImageTable i = new ImageTable(app);
 
-        // testing
-        profile_button = findViewById(R.id.button);
-        profile_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProfileEditActivity.class);
-                startActivity(intent);
-            }
-        });
+        i.testImage("5e7acd28-10c6-45c9-aa91-23b050286fa7", findViewById(R.id.imageTest));
+
+
+
+        //app.getImageTable().uploadResource(R.raw.yeet_yah);
+
+        Event test_event = new Event("Test", "Testing", 5);
+
+        //Intent intent = new Intent(this, EnterEventDetailsActivity.class);
+        //startActivity(intent);
+        //finish();
+
     }
 
 }
