@@ -107,7 +107,8 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
 
         nextButton = findViewById(R.id.eventDetailNextPage);
 
-        Event newEvent[] = new Event[1];
+        final Event newEvent[] = new Event[1];
+        newEvent[0] = new Event();
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,6 +156,10 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 if (capacity.isEmpty()){
                     eventCapacity.setError("Field cannot be empty");
                     error = true;
+                }
+
+                if(c[0] == null){
+                    return;
                 }
 
                 if (error){

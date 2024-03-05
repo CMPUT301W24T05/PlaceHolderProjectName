@@ -35,6 +35,7 @@ public class Event {
 
     public Event(){
         this.eventID = UUID.randomUUID();
+        this.attendees = new HashMap<>();
     }
 
     public Event(UUID eventID){
