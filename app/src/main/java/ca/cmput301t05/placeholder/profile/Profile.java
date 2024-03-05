@@ -1,22 +1,33 @@
 package ca.cmput301t05.placeholder.profile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.UserNotification;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Exclude;
 
 public class Profile {
-    UUID profileID;
-    String name, homePage, contactInfo;
-    UUID profilePictureID; //this will point to the collection in firebase storage
-    List<Event> hostedEvents;
-    List<Event> joinedEvents;
-    List<UserNotification> notifications;
+    private UUID profileID;
+    private String name;
+    private String homePage;
+    private String contactInfo;
+    private UUID profilePictureID;
+    private List<Event> hostedEvents;
+    private List<Event> joinedEvents;
+    private List<UserNotification> notifications;
     boolean isAdmin = false;
-    public Profile(String name){
+
+    public Profile(){
+
+    }
+
+    public Profile(String name, UUID profileID){
         this.name = name;
-        this.profileID = UUID.randomUUID();
+        this.profileID = profileID;
     }
 
     public void joinEvent(Event event){
@@ -106,14 +117,58 @@ public class Profile {
         this.notifications = notifications;
     }
 
+    public void setProfileID(UUID profileID) {
+        this.profileID = profileID;
+    }
 
     public void setProfilePictureID(UUID profilePictureID) {
         this.profilePictureID = profilePictureID;
     }
 
-    public void updateDatabase(){
-        //will update itself in the database
+    @Exclude
+    public Map<String, Object> toDocument() {
+        Map<String, Object> document = new HashMap<>();
+        document.put("profileID", profileID.toString());
+        document.put("name", name);
+        document.put("homePage", homePage);
+        document.put("contactInfo", contactInfo);
+        document.put("profilePictureID", profilePictureID.toString());
+        document.put("hostedEvents", hostedEvents); // Assumes Event class can be serialized
+        document.put("joinedEvents", joinedEvents); // Assumes Event class can be serialized
+        document.put("notifications", notifications); // Assumes UserNotification can be serialized
+        document.put("isAdmin", isAdmin);
+        return document;
+    }
 
+    public void fromDocument(DocumentSnapshot document) {
+        if(document.getString("profileID") != null) {
+            profileID = UUID.fromString(document.getString("profileID"));
+        }
+        if(document.getString("name") != null) {
+            name = document.getString("name");
+        }
+        if(document.getString("homePage") != null) {
+            homePage = document.getString("homePage");
+        }
+        if(document.getString("contactInfo") != null) {
+            contactInfo = document.getString("contactInfo");
+        }
+        if(document.getString("profilePictureID") != null) {
+            profilePictureID = UUID.fromString(document.getString("profilePictureID"));
+        }
+
+        if(document.get("hostedEvents") != null) {
+            hostedEvents = (List<Event>) document.get("hostedEvents");
+        }
+        if(document.get("joinedEvents") != null) {
+            joinedEvents = (List<Event>)document.get("joinedEvents");
+        }
+        if(document.get("notifications") != null) {
+            notifications = (List<UserNotification>)document.get("notifications");
+        }
+        if(document.getBoolean("isAdmin") != null) {
+            isAdmin = Boolean.TRUE.equals(document.getBoolean("isAdmin"));
+        }
     }
 
     
