@@ -45,7 +45,7 @@ public class ProfileTable extends Table {
     }
 
     public void pushProfile(Profile profile, ProfileCallback callback) {
-        databaseManager.db.collection(COLLECTION_NAME).document(String.valueOf(profile.getProfileID())).set(profile)
+        databaseManager.db.collection(COLLECTION_NAME).document(String.valueOf(profile.getProfileID())).set(profile.toDocument())
                 .addOnSuccessListener(aVoid -> callback.onSuccess(profile))
                 .addOnFailureListener(callback::onFailure);
     }

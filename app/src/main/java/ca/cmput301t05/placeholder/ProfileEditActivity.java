@@ -17,7 +17,7 @@ import ca.cmput301t05.placeholder.profile.Profile;
 
 public class ProfileEditActivity extends AppCompatActivity{
 
-    private DeviceIDManager idManager;
+    private PlaceholderApp app;
     private UUID deviceID;
     private Profile profile;
     private Button saveButton;
@@ -32,9 +32,10 @@ public class ProfileEditActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_profile_creation);
 
-        idManager = new DeviceIDManager(this);
-        deviceID = idManager.getDeviceID();
-        // profile:
+        app = (PlaceholderApp) getApplicationContext();
+
+        deviceID = app.getIdManager().getDeviceID();
+        profile = app.getUserProfile();
 
         saveButton = findViewById(R.id.save_button);
         adminButton = findViewById(R.id.admin_button);
@@ -85,7 +86,7 @@ public class ProfileEditActivity extends AppCompatActivity{
         profile.setHomePage(editHomepage.getText().toString());
         // Set image resource, converting byte code:
         //profile.setProfilePictureID();
-        profile.updateDatabase();
+
         // implement update dateBase function:
     }
 }
