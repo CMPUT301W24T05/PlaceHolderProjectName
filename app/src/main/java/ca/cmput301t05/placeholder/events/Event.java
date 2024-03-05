@@ -249,5 +249,13 @@ public class Event {
         this.eventDate = eventDate;
     }
 
+    public void setMaxAttendees(int c){
+        this.maxAttendees = c;
+    }
+
+    public int getMaxAttendees(){
+        return this.maxAttendees;
+    }
+
 
 }

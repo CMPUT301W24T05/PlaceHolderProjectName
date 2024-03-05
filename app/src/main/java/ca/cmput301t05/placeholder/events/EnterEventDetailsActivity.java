@@ -158,6 +158,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                     error = true;
                 }
 
+
                 if(c[0] == null){
                     return;
                 }
@@ -166,6 +167,9 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                     return;
                 }
 
+                int maxAttendees = Integer.parseInt(capacity);
+
+                newEvent[0].setMaxAttendees(maxAttendees);
                 newEvent[0].setEventDate(c[0]);
                 newEvent[0].setEventName(eName);
                 newEvent[0].setEventInfo(eDescription);
