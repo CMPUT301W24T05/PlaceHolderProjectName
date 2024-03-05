@@ -11,7 +11,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Exclude;
 
 public class Profile {
-
     private UUID profileID;
     private String name;
     private String homePage;
@@ -32,13 +31,14 @@ public class Profile {
     }
 
     public void joinEvent(Event event){
-
         joinedEvents.add(event);
+    }
 
+    public boolean isAdmin() {
+        return isAdmin;
     }
 
     public void leaveEvent(Event event){
-
         joinedEvents.remove(event);
     }
 
@@ -51,7 +51,6 @@ public class Profile {
     }
 
     public void addNotification(UserNotification a){
-
         notifications.add(a);
     }
 
@@ -60,8 +59,6 @@ public class Profile {
     }
 
     //getters / setters
-
-
     public List<Event> getHostedEvents() {
         return hostedEvents;
     }
@@ -85,11 +82,9 @@ public class Profile {
     public String getName() {
         return name;
     }
-
     public UUID getProfilePictureID() {
         return profilePictureID;
     }
-
     public UUID getProfileID() {
         return profileID;
     }

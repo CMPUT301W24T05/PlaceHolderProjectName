@@ -41,6 +41,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         eventCapacity = findViewById(R.id.enterEventCapacity);
 
         nextButton = findViewById(R.id.eventDetailNextPage);
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,13 +50,33 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 //need to change this to the geolocation in google
                 String eLocation = eventLocation.toString();
 
+                //change this to the date thing
                 String eTime = eventTime.toString();
 
                 String eDescription = eventDescripiton.toString();
 
                 String cap = eventCapacity.toString();
 
-                
+                //need a better way of doing this
+                if (eName.isEmpty()){
+                    eventName.setError("This field is required");
+                }
+
+                if (eLocation.isEmpty()){
+                    eventLocation.setError("This field is required");
+                }
+
+                if (eTime.isEmpty()){
+                    eventTime.setError("This field is required");
+                }
+
+                if (eDescription.isEmpty()){
+                    eventDescripiton.setError("This field is required");
+                }
+
+                if (cap.isEmpty()){
+                    eventCapacity.setError("This field is required");
+                }
 
                 int eCapacity = Integer.parseInt(eventCapacity.toString());
 
