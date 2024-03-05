@@ -128,11 +128,11 @@ public class Profile {
     @Exclude
     public Map<String, Object> toDocument() {
         Map<String, Object> document = new HashMap<>();
-        document.put("profileID", profileID.toString());
+        document.put("profileID", String.valueOf(profileID));
         document.put("name", name);
         document.put("homePage", homePage);
         document.put("contactInfo", contactInfo);
-        document.put("profilePictureID", profilePictureID.toString());
+        document.put("profilePictureID", String.valueOf(profilePictureID));
         document.put("hostedEvents", hostedEvents); // Assumes Event class can be serialized
         document.put("joinedEvents", joinedEvents); // Assumes Event class can be serialized
         document.put("notifications", notifications); // Assumes UserNotification can be serialized
