@@ -40,6 +40,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         eventDescripiton = findViewById(R.id.enterEventDescription);
         eventCapacity = findViewById(R.id.enterEventCapacity);
 
+        nextButton = findViewById(R.id.eventDetailNextPage);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

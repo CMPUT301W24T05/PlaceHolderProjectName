@@ -32,7 +32,8 @@ public class ProfileTable extends Table {
             if (task.isSuccessful()) {
                 DocumentSnapshot doc = task.getResult();
                 if (doc.exists()) {
-                    Profile profile = doc.toObject(Profile.class);
+                    Profile profile = new Profile();
+                    profile.fromDocument(doc);
                     callback.onSuccess(profile);
                 } else {
                     callback.onFailure(new Exception("Profile was not found"));

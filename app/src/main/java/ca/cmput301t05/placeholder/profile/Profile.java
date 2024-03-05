@@ -146,15 +146,34 @@ public class Profile {
     }
 
     public void fromDocument(DocumentSnapshot document) {
-        profileID = UUID.fromString(document.getString("profileID"));
-        name = document.getString("name");
-        homePage = document.getString("homePage");
-        contactInfo = document.getString("contactInfo");
-        profilePictureID = UUID.fromString(document.getString("profilePictureID"));
-        hostedEvents = (List<Event>)document.get("hostedEvents"); // Assumes Event class can be deserialized
-        joinedEvents = (List<Event>)document.get("joinedEvents"); // Assumes Event class can be deserialized
-        notifications = (List<UserNotification>)document.get("notifications"); // Assumes UserNotification can be deserialized
-        isAdmin = Boolean.TRUE.equals(document.getBoolean("isAdmin"));
+        if(document.getString("profileID") != null) {
+            profileID = UUID.fromString(document.getString("profileID"));
+        }
+        if(document.getString("name") != null) {
+            name = document.getString("name");
+        }
+        if(document.getString("homePage") != null) {
+            homePage = document.getString("homePage");
+        }
+        if(document.getString("contactInfo") != null) {
+            contactInfo = document.getString("contactInfo");
+        }
+        if(document.getString("profilePictureID") != null) {
+            profilePictureID = UUID.fromString(document.getString("profilePictureID"));
+        }
+
+        if(document.get("hostedEvents") != null) {
+            hostedEvents = (List<Event>) document.get("hostedEvents");
+        }
+        if(document.get("joinedEvents") != null) {
+            joinedEvents = (List<Event>)document.get("joinedEvents");
+        }
+        if(document.get("notifications") != null) {
+            notifications = (List<UserNotification>)document.get("notifications");
+        }
+        if(document.getBoolean("isAdmin") != null) {
+            isAdmin = Boolean.TRUE.equals(document.getBoolean("isAdmin"));
+        }
     }
 
     
