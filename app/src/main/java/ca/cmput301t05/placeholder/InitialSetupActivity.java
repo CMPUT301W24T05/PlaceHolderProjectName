@@ -14,6 +14,8 @@ import ca.cmput301t05.placeholder.database.DeviceIDManager;
 import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.profile.Profile;
 
+import java.util.UUID;
+
 public class InitialSetupActivity extends AppCompatActivity {
     private EditText nameEdit;
     private FloatingActionButton submitButton;
@@ -37,7 +39,7 @@ public class InitialSetupActivity extends AppCompatActivity {
     private void submitName(View view) {
         String name = nameEdit.getText().toString();
         if (!name.isEmpty()) {
-            String deviceId = String.valueOf(idManager.getDeviceID());
+            UUID deviceId = idManager.getDeviceID();
             Profile userProfile = new Profile(name, deviceId);
             app.getProfileTable().pushProfile(userProfile, new ProfileTable.ProfileCallback() {
                 @Override

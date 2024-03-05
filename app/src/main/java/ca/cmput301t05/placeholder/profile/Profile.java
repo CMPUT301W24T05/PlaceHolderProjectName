@@ -1,33 +1,37 @@
 package ca.cmput301t05.placeholder.profile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.UserNotification;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Exclude;
 
 public class Profile {
 
-    private String profileID;
+    private UUID profileID;
     private String name;
     private String homePage;
     private String contactInfo;
-    private String profilePictureID;
-//    private List<Event> hostedEvents;
-//    private List<Event> joinedEvents;
-//    private List<UserNotification> notifications;
+    private UUID profilePictureID;
+    private List<Event> hostedEvents;
+    private List<Event> joinedEvents;
+    private List<UserNotification> notifications;
     boolean isAdmin = false;
 
     public Profile(){
 
     }
 
-    public Profile(String name, String profileID){
+    public Profile(String name, UUID profileID){
         this.name = name;
         this.profileID = profileID;
     }
 
-/*    public void joinEvent(Event event){
+    public void joinEvent(Event event){
 
         joinedEvents.add(event);
 
@@ -68,7 +72,7 @@ public class Profile {
 
     public List<UserNotification> getNotifications() {
         return notifications;
-    }*/
+    }
 
     public String getContactInfo() {
         return contactInfo;
@@ -82,11 +86,11 @@ public class Profile {
         return name;
     }
 
-    public String getProfilePictureID() {
+    public UUID getProfilePictureID() {
         return profilePictureID;
     }
 
-    public String getProfileID() {
+    public UUID getProfileID() {
         return profileID;
     }
 
@@ -102,28 +106,55 @@ public class Profile {
         this.contactInfo = contactInfo;
     }
 
-   /* public void setHostedEvents(List<Event> hostedEvents) {
+    public void setHostedEvents(List<Event> hostedEvents) {
         this.hostedEvents = hostedEvents;
     }
 
     public void setJoinedEvents(List<Event> joinedEvents) {
         this.joinedEvents = joinedEvents;
     }
-*/
+
     public void setName(String name) {
         this.name = name;
     }
 
-/*    public void setNotifications(List<UserNotification> notifications) {
+    public void setNotifications(List<UserNotification> notifications) {
         this.notifications = notifications;
-    }*/
+    }
 
-    public void setProfileID(String profileID) {
+    public void setProfileID(UUID profileID) {
         this.profileID = profileID;
     }
 
-    public void setProfilePictureID(String profilePictureID) {
+    public void setProfilePictureID(UUID profilePictureID) {
         this.profilePictureID = profilePictureID;
+    }
+
+    @Exclude
+    public Map<String, Object> toDocument() {
+        Map<String, Object> document = new HashMap<>();
+        document.put("profileID", profileID.toString());
+        document.put("name", name);
+        document.put("homePage", homePage);
+        document.put("contactInfo", contactInfo);
+        document.put("profilePictureID", profilePictureID.toString());
+        document.put("hostedEvents", hostedEvents); // Assumes Event class can be serialized
+        document.put("joinedEvents", joinedEvents); // Assumes Event class can be serialized
+        document.put("notifications", notifications); // Assumes UserNotification can be serialized
+        document.put("isAdmin", isAdmin);
+        return document;
+    }
+
+    public void fromDocument(DocumentSnapshot document) {
+        profileID = UUID.fromString(document.getString("profileID"));
+        name = document.getString("name");
+        homePage = document.getString("homePage");
+        contactInfo = document.getString("contactInfo");
+        profilePictureID = UUID.fromString(document.getString("profilePictureID"));
+        hostedEvents = (List<Event>)document.get("hostedEvents"); // Assumes Event class can be deserialized
+        joinedEvents = (List<Event>)document.get("joinedEvents"); // Assumes Event class can be deserialized
+        notifications = (List<UserNotification>)document.get("notifications"); // Assumes UserNotification can be deserialized
+        isAdmin = Boolean.TRUE.equals(document.getBoolean("isAdmin"));
     }
 
     

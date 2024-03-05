@@ -23,7 +23,7 @@ public class ProfileTable extends Table {
     }
 
     public boolean deviceHasProfile() {
-        // Check if the device if has been stored
+        // Check if the device id has been stored
         return idManager.deviceHasIDStored();
     }
 
@@ -44,7 +44,7 @@ public class ProfileTable extends Table {
     }
 
     public void pushProfile(Profile profile, ProfileCallback callback) {
-        databaseManager.db.collection(COLLECTION_NAME).document(profile.getProfileID()).set(profile)
+        databaseManager.db.collection(COLLECTION_NAME).document(String.valueOf(profile.getProfileID())).set(profile)
                 .addOnSuccessListener(aVoid -> callback.onSuccess(profile))
                 .addOnFailureListener(callback::onFailure);
     }
