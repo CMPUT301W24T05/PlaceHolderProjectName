@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
         Event test_event = new Event("Test", "Testing", 5);
 
-        //Intent intent = new Intent(this, EnterEventDetailsActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, EnterEventDetailsActivity.class);
+        startActivity(intent);
         //finish();
     }
 

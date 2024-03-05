@@ -33,6 +33,10 @@ public class Event {
     HashMap<String, Integer> attendees; //stored this way for the database
     //string = profileID, int = # of times checked in
 
+    public Event(){
+        this.eventID = UUID.randomUUID();
+    }
+
     public Event(UUID eventID){
         //please call getEventDatabase to this otherwise will error
         this.eventID = eventID;
