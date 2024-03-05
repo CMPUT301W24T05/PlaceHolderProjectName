@@ -23,12 +23,15 @@ public class Event {
 
     String eventInfo;
 
+    QRCode infoQRCode;
+
+    QRCodeManager QRCM = new QRCodeManager();
+
     UUID eventID;
 
     Calendar eventDate;
 
     int maxAttendees;
-
 
     HashMap<String, Integer> attendees; //stored this way for the database
     //string = profileID, int = # of times checked in
@@ -36,12 +39,15 @@ public class Event {
     public Event(){
         this.eventID = UUID.randomUUID();
         this.attendees = new HashMap<>();
+        infoQRCode = QRCM.generateQRCode(this);
     }
 
     public Event(UUID eventID){
         //please call getEventDatabase to this otherwise will error
         this.eventID = eventID;
+        infoQRCode = QRCM.generateQRCode(this);
     }
+
 
     public Event(String name, String eventInfo, int maxAttendees){
 
@@ -51,6 +57,7 @@ public class Event {
         this.eventID = UUID.randomUUID();
         this.maxAttendees = maxAttendees;
         this.attendees = new HashMap<>();
+        infoQRCode = QRCM.generateQRCode(this);
     }
 
     public boolean getEventFromDatabase(UUID eventID){
@@ -111,6 +118,7 @@ public class Event {
                 });
 
         return found[0];
+
     }
 
     //checks in a attendee
@@ -256,6 +264,5 @@ public class Event {
     public int getMaxAttendees(){
         return this.maxAttendees;
     }
-
 
 }
