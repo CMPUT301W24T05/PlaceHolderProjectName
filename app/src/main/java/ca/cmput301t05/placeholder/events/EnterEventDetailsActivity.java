@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder.events;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
 
+import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.R;
 
 public class EnterEventDetailsActivity extends AppCompatActivity {
@@ -175,7 +177,14 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 newEvent[0].setEventInfo(eDescription);
                 newEvent[0].sendEventToDatabase();
 
-                finish();
+                //now send the event id to the bundle
+                savedInstanceState.putString("created_event_ID",newEvent[0].eventID.toString());
+
+                //open the poster thing
+                Intent posterPick = new Intent(EnterEventDetailsActivity.this, uploadPosterActivity.class);
+                startActivity(posterPick);
+
+
 
             }
         });

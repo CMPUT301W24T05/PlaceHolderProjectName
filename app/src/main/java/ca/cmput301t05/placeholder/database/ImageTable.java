@@ -1,7 +1,11 @@
 package ca.cmput301t05.placeholder.database;
 
+
+
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -89,7 +93,6 @@ public class ImageTable extends Table {
             return null;
         }
     }
-
     public void uploadProfilePicture(Uri file, Profile profile){
 
         UUID profileID = UUID.randomUUID();
@@ -151,6 +154,7 @@ public class ImageTable extends Table {
         });
 
         event.setEventPosterID(posterID);
+        event.sendEventToDatabase();
     }
 
     //will save a picture to the storage
