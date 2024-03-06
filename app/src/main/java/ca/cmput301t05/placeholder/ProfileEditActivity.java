@@ -42,7 +42,7 @@ public class ProfileEditActivity extends AppCompatActivity{
 
         app = (PlaceholderApp) getApplicationContext();
         deviceID = app.getIdManager().getDeviceID();
-        profile = app.getUserProfile();
+        profile = app.getUserProfile(); // base on the database, fetched the profile
         imageTable = app.getImageTable();
 
         saveButton = findViewById(R.id.save_button);
