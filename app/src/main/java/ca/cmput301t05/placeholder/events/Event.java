@@ -1,5 +1,7 @@
 package ca.cmput301t05.placeholder.events;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -8,6 +10,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -148,19 +151,33 @@ public class Event {
     private void updateFromDocScreenshot(DocumentSnapshot documentSnapshot){
 
         if (documentSnapshot != null && documentSnapshot.exists()) {
+
             this.eventName = documentSnapshot.getString("eventName");
 
             Timestamp eventTime = documentSnapshot.getTimestamp("eventDate");
-            
-            this.eventDate.setTime(eventTime.toDate());
+
+
+            Calendar c = Calendar.getInstance();
+            c.setTime(eventTime.toDate());
+
+            this.eventDate = c;
+
 
             this.maxAttendees = Math.toIntExact(documentSnapshot.getLong("maxAttendees"));
 
             this.eventInfo = documentSnapshot.getString("eventInfo");
 
-            this.eventPosterID = UUID.fromString(documentSnapshot.getString("eventPosterID"));
+            String posterID = documentSnapshot.getString("eventPosterID");
 
-            this.attendees = (HashMap<String, Integer>) documentSnapshot.get("attendees");
+            if (posterID != null){
+                this.eventPosterID = UUID.fromString(posterID);
+            }
+
+
+            if (documentSnapshot.get("attendees") != null){
+
+                this.attendees = (HashMap<String, Integer>) documentSnapshot.get("attendees");
+            }
 
             // Set other fields similarly
         } else {
