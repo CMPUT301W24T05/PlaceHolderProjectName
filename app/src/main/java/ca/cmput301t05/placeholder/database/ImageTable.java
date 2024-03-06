@@ -205,7 +205,12 @@ public class ImageTable extends Table {
 
     public void getPosterPicture(Event event, ImageView imageView){
 
-        StorageReference storageReference = rootStorageRef.child(event.getEventPosterID().toString());
+        if (event.getEventPosterID() == null){
+            return;
+        }
+
+        String filename = "posters/" + event.getEventPosterID().toString();
+        StorageReference storageReference = rootStorageRef.child(filename);
 
         storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -223,6 +228,50 @@ public class ImageTable extends Table {
             }
         });
 
+    }
+
+    public void removeProfilePic(Profile p){
+
+        String profilePicID = p.getProfilePictureID().toString();
+
+        if (profilePicID == null){
+            return;
+        }
+
+        String filename = "profiles/" + profilePicID;
+        StorageReference storageReference = rootStorageRef.child(filename);
+
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Image Database", "Image deleted");
+            }
+        });
+
+        p.setProfileID(null);
+
+
+    }
+
+    public void removeEventPoster(Event e){
+
+        String eventPosterID = e.getEventPosterID().toString();
+
+        if (eventPosterID == null){
+            return;
+        }
+
+        String filename = "posters/" + eventPosterID;
+        StorageReference storageReference = rootStorageRef.child(filename);
+
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Image Database", "Image deleted");
+            }
+        });
+
+        e.setEventPosterID(null);
     }
 
     public void testImage(String filename, ImageView imageView){
