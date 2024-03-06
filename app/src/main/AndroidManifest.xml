@@ -32,6 +32,7 @@
         <activity android:name=".events.EnterEventDetailsActivity" />
         <activity android:name=".ProfileEditActivity"/>
         <activity android:name=".AdminHomeActivity"/>
+        <activity android:name=".events.uploadPosterActivity"/>
     </application>
 
 </manifest>
