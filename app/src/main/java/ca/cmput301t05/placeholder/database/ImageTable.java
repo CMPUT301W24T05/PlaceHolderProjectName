@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -130,12 +131,22 @@ public class ImageTable extends Table {
 
         UUID posterID = UUID.randomUUID();
 
-        String filename = "posters/" + posterID.toString() + ".jpg";
+        String posterS = posterID.toString();
+
+        String filename = "posters/" + posterS;
         StorageReference storageRef = rootStorageRef.child(filename);
+
+        String fileExtension = MimeTypeMap.getFileExtensionFromUrl(file.toString());
+        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
+
+        if (mimeType == null) {
+            // Default to "image/jpeg" if MIME type cannot be determined
+            mimeType = "image/jpeg";
+        }
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setCustomMetadata("Event", event.getEventID().toString())
-                .setContentType("image/jpg")
+                .setContentType(mimeType)
                 .build();
 
         UploadTask uploadTask = storageRef.putFile(file);
