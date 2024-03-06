@@ -74,6 +74,7 @@ public class ProfileEditActivity extends AppCompatActivity{
                 // will go to the admin page instead:
                 Intent intent = new Intent(ProfileEditActivity.this, AdminHomeActivity.class);
                 startActivity(intent);
+                finish(); //finish so a back button doesnt bring you here
             }
         });
         cameraButton.setOnClickListener(new View.OnClickListener() {
