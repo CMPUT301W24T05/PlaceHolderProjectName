@@ -95,15 +95,30 @@ public class ImageTable extends Table {
         }
     }
     public void uploadProfilePicture(Uri file, Profile profile){
+        UUID profileID;
+        if (profile.getProfilePictureID() == null){
+            profileID = UUID.randomUUID();
+        }   else {
+            profileID = profile.getProfilePictureID();
+        }
 
-        UUID profileID = UUID.randomUUID();
 
-        String filename = "profiles/" + profileID.toString() + ".jpg";
+        String profilepicID = profileID.toString();
+
+        String filename = "posters/" + profilepicID;
         StorageReference storageRef = rootStorageRef.child(filename);
+
+        String fileExtension = MimeTypeMap.getFileExtensionFromUrl(file.toString());
+        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
+
+        if (mimeType == null) {
+            // Default to "image/jpeg" if MIME type cannot be determined
+            mimeType = "image/jpeg";
+        }
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setCustomMetadata("Profile", profile.getProfileID().toString())
-                .setContentType("image/jpg")
+                .setContentType(mimeType)
                 .build();
 
         UploadTask uploadTask = storageRef.putFile(file);
@@ -122,6 +137,7 @@ public class ImageTable extends Table {
         });
 
         profile.setProfilePictureID(profileID);
+        profile.toDocument();
 
     }
 
@@ -129,7 +145,15 @@ public class ImageTable extends Table {
     public void uploadPoster(Uri file, Event event){
         //uploads a poster and sets the poster id of the event
 
-        UUID posterID = UUID.randomUUID();
+
+
+        UUID posterID;
+
+        if (event.getEventPosterID() == null){
+            posterID = UUID.randomUUID();
+        }   else {
+            posterID = event.getEventPosterID();
+        }
 
         String posterS = posterID.toString();
 
