@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.events;
+package ca.cmput301t05.placeholder.ui.events;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -17,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Calendar;
 import java.util.UUID;
 
-import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.events.Event;
 
 public class EnterEventDetailsActivity extends AppCompatActivity {
 

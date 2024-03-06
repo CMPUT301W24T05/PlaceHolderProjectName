@@ -2,9 +2,6 @@ package ca.cmput301t05.placeholder;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -15,14 +12,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import java.util.UUID;
-
-import ca.cmput301t05.placeholder.database.DeviceIDManager;
-import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
 import ca.cmput301t05.placeholder.database.ImageTable;
-import ca.cmput301t05.placeholder.events.EnterEventDetailsActivity;
-import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,9 +58,6 @@ public class MainActivity extends AppCompatActivity {
         //i.getPosterPicture(e, findViewById(R.id.imageTest));
 
 
-
-
-
         //app.getImageTable().uploadResource(R.raw.yeet_yah);
 
         //Event test_event = new Event("Test", "Testing", 5);
@@ -77,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, EnterEventDetailsActivity.class);
         //startActivity(intent);
         //finish();
+        Intent intent = new Intent(this, ProfileEditActivity.class);
+        startActivity(intent);
 
     }
 

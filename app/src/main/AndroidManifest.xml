@@ -29,10 +29,10 @@
 
 
         <activity android:name=".InitialSetupActivity" />
-        <activity android:name=".events.EnterEventDetailsActivity" />
+        <activity android:name=".ui.events.EnterEventDetailsActivity" />
         <activity android:name=".ProfileEditActivity"/>
         <activity android:name=".AdminHomeActivity"/>
-        <activity android:name=".events.uploadPosterActivity"/>
+        <activity android:name=".ui.events.uploadPosterActivity"/>
     </application>
 
 </manifest>

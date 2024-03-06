@@ -103,12 +103,22 @@ public class ImageTable extends Table {
         }
 
 
-        String filename = "profiles/" + profileID.toString() + ".jpg";
+        String profilepicID = profileID.toString();
+
+        String filename = "posters/" + profilepicID;
         StorageReference storageRef = rootStorageRef.child(filename);
+
+        String fileExtension = MimeTypeMap.getFileExtensionFromUrl(file.toString());
+        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
+
+        if (mimeType == null) {
+            // Default to "image/jpeg" if MIME type cannot be determined
+            mimeType = "image/jpeg";
+        }
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setCustomMetadata("Profile", profile.getProfileID().toString())
-                .setContentType("image/jpg")
+                .setContentType(mimeType)
                 .build();
 
         UploadTask uploadTask = storageRef.putFile(file);
@@ -127,6 +137,7 @@ public class ImageTable extends Table {
         });
 
         profile.setProfilePictureID(profileID);
+        profile.toDocument();
 
     }
 
