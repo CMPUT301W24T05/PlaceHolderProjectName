@@ -56,10 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
         //app.getImageTable().uploadResource(R.raw.yeet_yah);
 
-        Event test_event = new Event("Test", "Testing", 5);
+        //Event test_event = new Event("Test", "Testing", 5);
+        //test_event.sendEventToDatabase();
 
-        //Intent intent = new Intent(this, EnterEventDetailsActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, EnterEventDetailsActivity.class);
+        startActivity(intent);
         //finish();
     }
 
