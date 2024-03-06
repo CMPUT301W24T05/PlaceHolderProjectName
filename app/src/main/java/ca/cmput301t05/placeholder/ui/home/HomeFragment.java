@@ -18,7 +18,7 @@ import androidx.navigation.Navigation;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.databinding.FragmentHomeBinding;
 
-
+//test
 public class HomeFragment extends Fragment {
 
 
