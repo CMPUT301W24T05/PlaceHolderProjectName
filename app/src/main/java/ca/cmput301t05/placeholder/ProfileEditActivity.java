@@ -111,7 +111,7 @@ public class ProfileEditActivity extends AppCompatActivity{
         if(profile.getContactInfo()!=null){editContact.setText(profile.getContactInfo());}
         if(profile.getHomePage()!=null){editHomepage.setText(profile.getHomePage());}
         boolean admin = profile.isAdmin();
-        if (admin == false){adminButton.setVisibility(View.INVISIBLE);}
+        if (!admin){adminButton.setVisibility(View.GONE);}
     }
     private void update(){
         profile.setName(editName.getText().toString());

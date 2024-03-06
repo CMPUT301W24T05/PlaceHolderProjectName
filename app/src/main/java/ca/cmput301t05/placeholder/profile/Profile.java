@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import android.util.Log;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.UserNotification;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -146,8 +147,9 @@ public class Profile {
     }
 
     public void fromDocument(DocumentSnapshot document) {
-        if(document.getString("profileID") != null) {
-            profileID = UUID.fromString(document.getString("profileID"));
+        String profileDocID = document.getString("profileID");
+        if(profileDocID != null && !profileDocID.equals("null")) {
+            profileID = UUID.fromString(profileDocID);
         }
         if(document.getString("name") != null) {
             name = document.getString("name");
@@ -158,8 +160,9 @@ public class Profile {
         if(document.getString("contactInfo") != null) {
             contactInfo = document.getString("contactInfo");
         }
-        if(document.getString("profilePictureID") != null) {
-            profilePictureID = UUID.fromString(document.getString("profilePictureID"));
+        String profileImageID = document.getString("profilePictureID");
+        if(profileImageID != null && !profileImageID.equals("null")) {
+            profilePictureID = UUID.fromString(profileImageID);
         }
 
         if(document.get("hostedEvents") != null) {
