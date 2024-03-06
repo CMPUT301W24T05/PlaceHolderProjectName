@@ -3,6 +3,8 @@ package ca.cmput301t05.placeholder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -16,6 +18,7 @@ import androidx.navigation.ui.NavigationUI;
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
 import ca.cmput301t05.placeholder.database.ImageTable;
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
+import ca.cmput301t05.placeholder.qrcode.QRcodeScanner;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +56,18 @@ public class MainActivity extends AppCompatActivity {
 
         ImageTable i = new ImageTable(this);
         i.uploadResource(R.raw.yeet_yah);
+
+
+        Button buttonStartScanner = findViewById(R.id.testButton);
+
+        buttonStartScanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Start QRcodeScanner activity
+                Intent intent = new Intent(MainActivity.this, QRcodeScanner.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }

@@ -34,14 +34,17 @@ android {
 }
 
 dependencies {
+
+    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
+
+
+
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-firestore:24.10.2")
     implementation("com.google.firebase:firebase-storage")
-
     implementation("androidx.appcompat:appcompat:1.6.1")
-    // Import the QR Code scanning library
-    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
