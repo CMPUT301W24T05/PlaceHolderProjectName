@@ -132,7 +132,12 @@ public class Profile {
         document.put("name", name);
         document.put("homePage", homePage);
         document.put("contactInfo", contactInfo);
-        document.put("profilePictureID", String.valueOf(profilePictureID));
+
+        if (profilePictureID == null){
+            document.put("profilePictureID", null);
+        }   else {
+            document.put("profilePictureID", profilePictureID.toString());
+        }
         document.put("hostedEvents", hostedEvents); // Assumes Event class can be serialized
         document.put("joinedEvents", joinedEvents); // Assumes Event class can be serialized
         document.put("notifications", notifications); // Assumes UserNotification can be serialized

@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.events;
+package ca.cmput301t05.placeholder.ui.events;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -19,6 +19,7 @@ import java.util.UUID;
 import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.ImageTable;
+import ca.cmput301t05.placeholder.events.Event;
 
 public class uploadPosterActivity extends AppCompatActivity {
 
