@@ -36,8 +36,12 @@ android {
 dependencies {
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
-    implementation("com.google.firebase:firebase-firestore:24.10.2")
+    implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-storage")
+
+    //Import the Zxing library for the QRcode generator
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+
 
     //implement the image downloading library
     implementation("com.github.bumptech.glide:glide:4.12.0")
@@ -54,4 +58,6 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    //Import the image picker library from Github
+    implementation ("com.github.dhaval2404:imagepicker:2.1")
 }

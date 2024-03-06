@@ -32,12 +32,23 @@
         android:inputType="textPostalAddress" />
 
     <EditText
-        android:id="@+id/enterDateTime"
+        android:id="@+id/enterDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ems="10"
+        android:focusable="false"
         android:hint="@string/enter_event_date"
+        android:inputType="time" />
+
+    <EditText
+        android:id="@+id/enterTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:focusable="false"
+        android:hint='Enter Event Time'
         android:inputType="time" />
 
     <EditText

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -15,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
+import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
 import ca.cmput301t05.placeholder.database.ImageTable;
 import ca.cmput301t05.placeholder.events.EnterEventDetailsActivity;
@@ -32,17 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
         app = (PlaceholderApp) getApplicationContext();
 
-        DeviceIDManager idManager = new DeviceIDManager(getApplicationContext());
-        if(idManager.deviceHasIDStored()){
-            Log.i("DevID", "Device has an ID stored in shared prefs");
-        } else {
-            Log.i("DevID", "Device does not have an ID stored in shared prefs");
-            // This is the first launch of the app!
-            Intent intent = new Intent(this, InitialSetupActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -66,11 +57,13 @@ public class MainActivity extends AppCompatActivity {
 
         //app.getImageTable().uploadResource(R.raw.yeet_yah);
 
-        Event test_event = new Event("Test", "Testing", 5);
+        //Event test_event = new Event("Test", "Testing", 5);
+        //test_event.sendEventToDatabase();
 
-        //Intent intent = new Intent(this, EnterEventDetailsActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, EnterEventDetailsActivity.class);
+        startActivity(intent);
         //finish();
+
     }
 
 }
