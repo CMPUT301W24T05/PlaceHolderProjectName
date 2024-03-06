@@ -151,6 +151,7 @@ public class Event {
             this.eventName = documentSnapshot.getString("eventName");
 
             Timestamp eventTime = documentSnapshot.getTimestamp("eventDate");
+            
             this.eventDate.setTime(eventTime.toDate());
 
             this.maxAttendees = Math.toIntExact(documentSnapshot.getLong("maxAttendees"));

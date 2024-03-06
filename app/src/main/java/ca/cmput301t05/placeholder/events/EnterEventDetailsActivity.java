@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.R;
@@ -177,11 +179,21 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 newEvent[0].setEventInfo(eDescription);
                 newEvent[0].sendEventToDatabase();
 
-                //now send the event id to the bundle
-                savedInstanceState.putString("created_event_ID",newEvent[0].eventID.toString());
+
+                UUID eventID = newEvent[0].getEventID();
+                String id = eventID.toString();
+
+                Log.d("Event_ID", id);
+
+
+
 
                 //open the poster thing
                 Intent posterPick = new Intent(EnterEventDetailsActivity.this, uploadPosterActivity.class);
+
+
+                posterPick.putExtra("created_event_ID", id);
+
                 startActivity(posterPick);
 
 
