@@ -48,6 +48,7 @@ public class Event {
     public Event(UUID eventID){
         //please call getEventDatabase to this otherwise will error
         this.eventID = eventID;
+        this.attendees = new HashMap<>();
         infoQRCode = QRCM.generateQRCode(this);
     }
 
