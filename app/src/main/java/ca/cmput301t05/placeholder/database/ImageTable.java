@@ -95,8 +95,13 @@ public class ImageTable extends Table {
         }
     }
     public void uploadProfilePicture(Uri file, Profile profile){
+        UUID profileID;
+        if (profile.getProfilePictureID() == null){
+            profileID = UUID.randomUUID();
+        }   else {
+            profileID = profile.getProfilePictureID();
+        }
 
-        UUID profileID = UUID.randomUUID();
 
         String filename = "profiles/" + profileID.toString() + ".jpg";
         StorageReference storageRef = rootStorageRef.child(filename);
@@ -129,7 +134,15 @@ public class ImageTable extends Table {
     public void uploadPoster(Uri file, Event event){
         //uploads a poster and sets the poster id of the event
 
-        UUID posterID = UUID.randomUUID();
+
+
+        UUID posterID;
+
+        if (event.getEventPosterID() == null){
+            posterID = UUID.randomUUID();
+        }   else {
+            posterID = event.getEventPosterID();
+        }
 
         String posterS = posterID.toString();
 
