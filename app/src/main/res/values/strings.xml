@@ -9,4 +9,6 @@
     <string name="enter_event_capacity">Enter Event Capacity</string>
     <string name="enter_event_description">Enter Event Description</string>
     <string name="cameraButtonText">Take picture of QR code</string>
+    <string name="title_profile_edit_activity">Profile</string>
+    <string name="title_enter_event_details_activity">Enter Event Details Activity</string>
 </resources>
