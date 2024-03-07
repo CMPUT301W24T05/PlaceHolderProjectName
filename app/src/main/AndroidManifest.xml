@@ -33,6 +33,7 @@
         <activity android:name=".ProfileEditActivity"/>
         <activity android:name=".AdminHomeActivity"/>
         <activity android:name=".ui.events.uploadPosterActivity"/>
+        <activity android:name=".ui.events.ViewEventDetailsActivity"/>
     </application>
 
 </manifest>
