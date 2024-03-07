@@ -14,21 +14,14 @@ public class ProfileTable extends Table {
         void onFailure(Exception e);
     }
 
-    private DeviceIDManager idManager;
     public static final String COLLECTION_NAME = "profiles";
 
-    public ProfileTable(Context context) {
-        super(context);
-        idManager = new DeviceIDManager(context);
-    }
-
-    public boolean deviceHasProfile() {
-        // Check if the device id has been stored
-        return idManager.deviceHasIDStored();
+    public ProfileTable() {
+        collectionReference = DatabaseManager.getInstance().getDb().collection(COLLECTION_NAME);
     }
 
     public void fetchProfile(String profileID, ProfileCallback callback) {
-        databaseManager.db.collection(COLLECTION_NAME).document(profileID).get().addOnCompleteListener(task -> {
+        collectionReference.document(profileID).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot doc = task.getResult();
                 if (doc.exists()) {
@@ -45,7 +38,7 @@ public class ProfileTable extends Table {
     }
 
     public void pushProfile(Profile profile, ProfileCallback callback) {
-        databaseManager.db.collection(COLLECTION_NAME).document(String.valueOf(profile.getProfileID())).set(profile.toDocument())
+        collectionReference.document(String.valueOf(profile.getProfileID())).set(profile.toDocument())
                 .addOnSuccessListener(aVoid -> callback.onSuccess(profile))
                 .addOnFailureListener(callback::onFailure);
     }

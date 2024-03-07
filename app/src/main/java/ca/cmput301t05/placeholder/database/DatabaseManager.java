@@ -17,6 +17,14 @@ public class DatabaseManager {
 
     }
 
+    public FirebaseFirestore getDb(){
+        return this.db;
+    }
+
+    public FirebaseStorage getStorage(){
+        return this.storage;
+    }
+
     public static synchronized DatabaseManager getInstance(){
         if(instance == null){
             instance = new DatabaseManager();

@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         //test image view here
-        ImageTable i = new ImageTable(app);
+        ImageTable i = new ImageTable();
 
         //i.testImage("5e7acd28-10c6-45c9-aa91-23b050286fa7", findViewById(R.id.imageTest));
 
