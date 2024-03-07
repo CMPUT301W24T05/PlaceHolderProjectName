@@ -59,6 +59,9 @@ public class ProfileEditActivity extends AppCompatActivity{
         cameraButton = findViewById(R.id.button_camera);
         removeProfilePicButton = findViewById(R.id.button_remove_profile_pic);
 
+        if (profile.getProfilePictureID() != null){
+            imageTable.getProfilePicture(profile, profilePic);
+        }
 
         // First display the information store in the object
         setUp();
@@ -121,12 +124,9 @@ public class ProfileEditActivity extends AppCompatActivity{
 
     private void setUp(){
         // set up the profile picture
+        profile = app.getUserProfile();
 
-        assert profile != null;
 
-        if (profile.getProfilePictureID() != null){
-            imageTable.getProfilePicture(profile, profilePic);
-        }
         if(profile.getName()!=null){editName.setText(profile.getName());}
         if(profile.getContactInfo()!=null){editContact.setText(profile.getContactInfo());}
         if(profile.getHomePage()!=null){editHomepage.setText(profile.getHomePage());}
