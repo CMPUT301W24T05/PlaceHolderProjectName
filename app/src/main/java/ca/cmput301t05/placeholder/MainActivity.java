@@ -12,8 +12,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.UUID;
+
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
 import ca.cmput301t05.placeholder.database.ImageTable;
+import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,8 +48,17 @@ public class MainActivity extends AppCompatActivity {
         //test image view here
         ImageTable i = new ImageTable(app);
 
+
         //i.testImage("5e7acd28-10c6-45c9-aa91-23b050286fa7", findViewById(R.id.imageTest));
 
+
+        Event e = new Event(UUID.fromString("201a67cf-1aee-4ae7-95e9-6808a1a6fb85"));
+
+        e.getEventFromDatabase();
+
+        //this has a picture
+        //display it
+        //i.getPosterPicture(e, findViewById(R.id.imageTest));
 
 
         //app.getImageTable().uploadResource(R.raw.yeet_yah);
