@@ -2,6 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+<!--    Declaring that the app uses hardware on the phone, in our case the phone's camera -->
+<!--    <uses-feature android:name="android.hardware.camera.any"/>-->
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false"/>
+
+
+
     <application
         android:name=".PlaceholderApp"
         android:allowBackup="true"
@@ -13,6 +23,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlaceHolder"
         tools:targetApi="31">
+
+<!--    &lt;!&ndash; Configure Google Play services automatically download the scanner module-->
+<!--         to the device while the app is installed from the Play Store &ndash;&gt;-->
+<!--        <meta-data-->
+<!--            android:name="com.google.mlkit.vision.DEPENDENCIES"-->
+<!--            android:value="barcode_ui"/>-->
+        <activity android:name=".qrcode.QRcodeScanner">
+            <!-- Add any necessary intent filters or other configurations here -->
+        </activity>
+
         <activity
             android:name=".LoadingScreenActivity"
             android:exported="true">

@@ -28,7 +28,7 @@ public class Event {
 
     String eventInfo;
 
-    QRCode infoQRCode;
+    QRCode infoQRCode, checkInQR;
 
     QRCodeManager QRCM = new QRCodeManager();
 
@@ -48,14 +48,16 @@ public class Event {
     public Event(){
         this.eventID = UUID.randomUUID();
         this.attendees = new HashMap<>();
-        infoQRCode = QRCM.generateQRCode(this);
+        infoQRCode = QRCM.generateQRCode(this, "eventInfo");
+        checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
     public Event(UUID eventID){
         //please call getEventDatabase to this otherwise will error
         this.eventID = eventID;
         this.attendees = new HashMap<>();
-        infoQRCode = QRCM.generateQRCode(this);
+        infoQRCode = QRCM.generateQRCode(this, "eventInfo");
+        checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
 
@@ -67,10 +69,12 @@ public class Event {
         this.eventID = UUID.randomUUID();
         this.maxAttendees = maxAttendees;
         this.attendees = new HashMap<>();
-        infoQRCode = QRCM.generateQRCode(this);
+        infoQRCode = QRCM.generateQRCode(this, "eventInfo");
+        checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
     public boolean getEventFromDatabase(UUID eventID){
+      
         DatabaseManager databaseManager = DatabaseManager.getInstance();
 
         final boolean[] found = new boolean[1];
@@ -95,7 +99,6 @@ public class Event {
 
         return found[0];
     }
-
 
 
     public boolean getEventFromDatabase(){
@@ -313,3 +316,6 @@ public class Event {
     public UUID getEventCreator(){return this.eventCreator;}
 
 }
+
+
+
