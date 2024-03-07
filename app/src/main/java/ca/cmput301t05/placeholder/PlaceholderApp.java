@@ -4,12 +4,14 @@ import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
 
+import java.io.Serializable;
+
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
 import ca.cmput301t05.placeholder.database.ImageTable;
 import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.profile.Profile;
 
-public class PlaceholderApp extends Application {
+public class PlaceholderApp extends Application implements Serializable {
 
     private Profile userProfile;
     private ImageTable imageTable;
