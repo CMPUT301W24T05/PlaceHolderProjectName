@@ -31,7 +31,7 @@ public class QRCodeManager {
     public QRCode generateQRCode(Event event, String type) {
         return new QRCode(event, type);
     }
-    public void getEventInfo(String qrcode) {
+    public Event getEventInfo(String qrcode) {
         //extract only the part with the event id
         String eventID = qrcode.substring(0, 35);
 
@@ -40,13 +40,13 @@ public class QRCodeManager {
 
         if (type.equals("true")) {
 
-            //Event e = new Event(UUID.fromString(eventID));
-            //e.getFromDatabase();
+            Event e = new Event(UUID.fromString(eventID));
+            e.getEventFromDatabase();
 
-            //return e;
+            return e;
 
         } else {
-            //return null;
+            return null;
         }
 
 
