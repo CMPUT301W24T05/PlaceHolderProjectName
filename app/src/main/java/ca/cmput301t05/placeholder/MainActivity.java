@@ -73,8 +73,15 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, EnterEventDetailsActivity.class);
         //startActivity(intent);
         //finish();
-        Intent intent = new Intent(this, ProfileEditActivity.class);
-        startActivity(intent);
+        Button profileButton = findViewById(R.id.btnProfile);
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfileEditActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
 //        ImageTable i = new ImageTable(this);
 //        i.uploadResource(R.raw.yeet_yah);
