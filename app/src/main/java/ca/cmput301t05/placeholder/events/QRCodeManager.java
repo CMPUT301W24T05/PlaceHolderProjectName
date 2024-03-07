@@ -1,59 +1,56 @@
 package ca.cmput301t05.placeholder.events;
 
-/*
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
+import static com.google.firebase.appcheck.internal.util.Logger.TAG;
+
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
 
- */
+import java.util.HashMap;
+import java.util.UUID;
+
+import ca.cmput301t05.placeholder.database.DatabaseManager;
 
 public class QRCodeManager {
 
 
-    public QRCodeManager(){
+    public QRCodeManager() {
 
     }
 
-    public QRCode generateQRCode (Event event){
-        return new QRCode(event);
+    public QRCode generateQRCode(Event event, String type) {
+        return new QRCode(event, type);
     }
+    public void getEventInfo(String qrcode) {
+        //extract only the part with the event id
+        String eventID = qrcode.substring(0, 35);
 
-    /* Still working on it ig
-    
-    public String getEventInfo (String qrcode){
-        String doc = qrcode.substring(0, 35);
 
-        Firestore firestore = FirestoreOptions.getDefaultInstance().getService();
-        DocumentReference docRef = firestore.collection("events").document(doc);
+        String type = qrcode.substring(36);
 
-        ApiFuture<DocumentSnapshot> future = docRef.get();
-        DocumentSnapshot document = future.get();
+        if (type.equals("true")) {
 
-        if (document.exists()) {
-            // Get the path of the document
-            String path = document.getReference().getPath();
-            System.out.println("Document path: " + path);
+            //Event e = new Event(UUID.fromString(eventID));
+            //e.getFromDatabase();
+
+            //return e;
+
         } else {
-            System.out.println("Document not found!");
+            //return null;
         }
-    }
-    */
 
-    /*
-    public Boolean checkType(QRCode qr){
-        if (qr.getType()){
-            return true;
-        }
-        else{
-            return false;
-        }
+
     }
-     */
 
 
 }

@@ -129,12 +129,14 @@ public class Profile {
     @Exclude
     public Map<String, Object> toDocument() {
         Map<String, Object> document = new HashMap<>();
-        document.put("profileID", String.valueOf(profileID));
+
+
+        document.put("profileID", profileID.toString());
         document.put("name", name);
         document.put("homePage", homePage);
         document.put("contactInfo", contactInfo);
 
-        if (profilePictureID == null){
+        if (this.profilePictureID == null){
             document.put("profilePictureID", null);
         }   else {
             document.put("profilePictureID", profilePictureID.toString());

@@ -12,8 +12,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.UUID;
+
+
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
 import ca.cmput301t05.placeholder.database.ImageTable;
+import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,13 +44,37 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
+        //NavigationUI.setupWithNavController(binding.navView, navController); //This line is replaced by code below
+
+        navView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.navigation_home) {
+                navController.navigate(R.id.navigation_home);
+                return true;
+            } else if (id == R.id.navigation_dashboard) {
+                navController.navigate(R.id.navigation_dashboard);
+                return true;
+            } else if (id == R.id.navigation_notifications) {
+                navController.navigate(R.id.navigation_notifications);
+                return true;
+            }
+            return false;
+        });
 
         //test image view here
-        ImageTable i = new ImageTable(app);
+        ImageTable i = new ImageTable();
+
 
         //i.testImage("5e7acd28-10c6-45c9-aa91-23b050286fa7", findViewById(R.id.imageTest));
 
+
+        Event e = new Event(UUID.fromString("201a67cf-1aee-4ae7-95e9-6808a1a6fb85"));
+
+        e.getEventFromDatabase();
+
+        //this has a picture
+        //display it
+        //i.getPosterPicture(e, findViewById(R.id.imageTest));
 
 
         //app.getImageTable().uploadResource(R.raw.yeet_yah);
