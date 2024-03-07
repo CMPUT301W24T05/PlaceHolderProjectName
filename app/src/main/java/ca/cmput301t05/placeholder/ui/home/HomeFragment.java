@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder.ui.home;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import ca.cmput301t05.placeholder.ProfileEditActivity;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.databinding.FragmentHomeBinding;
 
@@ -71,9 +73,12 @@ public class HomeFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.navigation_notifications));
 
         // "Profile" Button
-//        Button btnProfile = root.findViewById(R.id.btnProfile);
-//        btnProfile.setOnClickListener(view ->
-//                Navigation.findNavController(view).navigate(R.id.action_home_to_profile));
+        Button btnProfile = root.findViewById(R.id.btnProfile);
+        btnProfile.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
+            startActivity(intent);
+        });
+
         return root;
     }
 

@@ -22,4 +22,13 @@
         android:name="ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <activity
+        android:id="@+id/navigation_profile_edit_activity"
+        android:name="ca.cmput301t05.placeholder.ProfileEditActivity"
+        android:label="@string/title_profile_edit_activity" />
+
+
+
+
 </navigation>
