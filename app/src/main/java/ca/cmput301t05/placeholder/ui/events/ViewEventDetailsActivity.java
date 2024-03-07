@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder.ui.events;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -10,8 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
@@ -39,6 +43,22 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //for testing
+        Event displayEvent = new Event(UUID.fromString("e906a09f-a80b-4e2a-a598-ab12aec2b468"));
+        displayEvent.setEventCreator(UUID.fromString("cb379e24-11a0-41dd-ad85-e86aaa1df731"));
+        displayEvent.setEventLocation("EventLocation");
+
+        Calendar calendarE = Calendar.getInstance();
+        calendarE.setTimeZone(TimeZone.getTimeZone("GMT-7")); // Set to the equivalent of UTC-7
+        calendarE.set(2024, Calendar.MARCH, 7, 15, 37, 34);
+        calendarE.set(Calendar.MILLISECOND, 0);
+
+        displayEvent.setEventDate(calendarE);
+        displayEvent.setEventInfo("Simple event Description");
+        displayEvent.setMaxAttendees(22);
+
+
+
 
         setContentView(R.layout.event_vieweventdetails);
 
@@ -52,10 +72,12 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         event_details = findViewById(R.id.vieweventdetails_eventinfo);
         event_author = findViewById(R.id.vieweventdetails_eventAuthor);
 
-        //assume we grab the event id from a bundle and use that to display
-        //so just grab from the database for testing
-        Event displayEvent = new Event(UUID.fromString("e906a09f-a80b-4e2a-a598-ab12aec2b468"));
-        displayEvent.getEventFromDatabase();
+
+        PlaceholderApp app = (PlaceholderApp) getApplicationContext();
+
+
+
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +95,11 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
             }
         });
 
+
+        Log.d("Event_Check", String.valueOf(displayEvent.getEventName()));
         //get date
+        Log.e("Event_Check",String.valueOf(displayEvent.getEventDate()));
+
         Calendar calendar = displayEvent.getEventDate();
 
         int year = calendar.get(Calendar.YEAR);
@@ -106,15 +132,10 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
         UUID profile_id = displayEvent.getEventCreator();
 
-        //now grab it from the database
-        PlaceholderApp app = (PlaceholderApp) getApplicationContext();
-
-        final Profile[] organizer = new Profile[1];
-
         app.getProfileTable().fetchProfile(profile_id.toString(), new ProfileTable.ProfileCallback() {
             @Override
             public void onSuccess(Profile profile) {
-                organizer[0] = profile;
+                event_author.setText(profile.getName());
             }
 
             @Override
@@ -125,7 +146,6 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
 
 
-        event_author.setText(organizer[0].getName());
 
 
 

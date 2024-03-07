@@ -4,9 +4,12 @@ import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
 
+import java.util.List;
+
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
 import ca.cmput301t05.placeholder.database.ImageTable;
 import ca.cmput301t05.placeholder.database.ProfileTable;
+import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 public class PlaceholderApp extends Application {
@@ -15,6 +18,7 @@ public class PlaceholderApp extends Application {
     private ImageTable imageTable;
     private ProfileTable profileTable;
     private DeviceIDManager idManager;
+
 
     @Override
     public void onCreate() {

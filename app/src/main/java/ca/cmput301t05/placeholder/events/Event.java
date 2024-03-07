@@ -82,10 +82,13 @@ public class Event {
         databaseManager.db.collection("events").document(eventID.toString()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d("event_uuid", eventID.toString());
                 if (documentSnapshot.exists()){
                     updateFromDocScreenshot(documentSnapshot);
+                    found[0] = true;
                 }
                 else {
+                    Log.d("Database", "Doc Snapshot not exist");
                     found[0] = false;
                 }
             }
@@ -162,7 +165,11 @@ public class Event {
 
         if (documentSnapshot != null && documentSnapshot.exists()) {
 
+            Log.d("Event_Database", "Event Found");
+
             this.eventName = documentSnapshot.getString("eventName");
+
+
 
             Timestamp eventTime = documentSnapshot.getTimestamp("eventDate");
 
@@ -193,12 +200,13 @@ public class Event {
                 this.attendees = (HashMap<String, Integer>) documentSnapshot.get("attendees");
             }
 
+
+
             // Set other fields similarly
         } else {
             // Handle the case where the document does not exist
-            System.out.println("Document not found"); //this shouldnt happen though
+            Log.e("Event_Database", "Event Not Found"); //this shouldnt happen though
         }
-
     }
 
     private Map<String, Object> toMap(){
@@ -264,19 +272,20 @@ public class Event {
 
 
     public String getEventInfo() {
-        return eventInfo;
+        return this.eventInfo;
     }
 
     public String getEventName() {
-        return eventName;
+
+        return this.eventName;
     }
 
     public UUID getEventPosterID() {
-        return eventPosterID;
+        return this.eventPosterID;
     }
 
     public UUID getEventID(){
-        return  eventID;
+        return  this.eventID;
     }
 
     public String getLocation(){
