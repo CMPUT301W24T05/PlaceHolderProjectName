@@ -63,6 +63,7 @@ public class ProfileEditActivity extends AppCompatActivity{
             public void onClick(View v) {
                 update();
                 finish();
+                // go back to main page
             }
         });
         // Click on admin button will direct you to the admin tab
