@@ -62,8 +62,7 @@ public class ProfileEditActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 update();
-                Intent intent = new Intent(ProfileEditActivity.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
         // Click on admin button will direct you to the admin tab
