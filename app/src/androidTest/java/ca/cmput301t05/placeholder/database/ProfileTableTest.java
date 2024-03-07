@@ -1,9 +1,9 @@
 package ca.cmput301t05.placeholder.database;
 
-import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 import ca.cmput301t05.placeholder.profile.Profile;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -11,13 +11,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProfileTableTest {
@@ -41,25 +41,26 @@ public class ProfileTableTest {
         MockitoAnnotations.initMocks(this);
 
         // Use Mockito's static method to bypass the singleton nature of DatabaseManager
-        Mockito.mockStatic(DatabaseManager.class);
-        when(DatabaseManager.getInstance()).thenReturn(databaseManager);
+        FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext());
+
         // Mock DatabaseManager to use the mocked FirebaseFirestore instance
-        when(databaseManager.getDb()).thenReturn(firestore);
+        Mockito.when(databaseManager.getDb()).thenReturn(firestore);
         // Mock Firestore to use the mocked CollectionReference instance
-        when(firestore.collection(ProfileTable.COLLECTION_NAME)).thenReturn(collectionReference);
+        Mockito.when(firestore.collection(ProfileTable.COLLECTION_NAME)).thenReturn(collectionReference);
 
         profileTable = new ProfileTable();
     }
 
     @Test
     public void fetchProfile_success() {
-        when(collectionReference.document(anyString()).get())
-            .thenReturn(Tasks.forResult(doc));
-        when(doc.exists()).thenReturn(true);
+        DocumentReference documentReference = Mockito.mock(DocumentReference.class);
+        Mockito.when(collectionReference.document(ArgumentMatchers.anyString()))
+                .thenReturn(documentReference);
+        Mockito.when(doc.exists()).thenReturn(true);
 
         // Mock document to return some expected profile data
-        when(doc.getString("name")).thenReturn("John Doe");
-        when(doc.getString("profileID")).thenReturn("testID");
+        Mockito.when(doc.getString("name")).thenReturn("John Doe");
+        Mockito.when(doc.getString("profileID")).thenReturn("testID");
 
         profileTable.fetchProfile("testID", new ProfileTable.ProfileCallback() {
             @Override
@@ -77,11 +78,11 @@ public class ProfileTableTest {
 
     @Test
     public void fetchProfile_noProfileFound() {
-        DocumentReference documentReference = mock(DocumentReference.class);
-        when(collectionReference.document(anyString()))
+        DocumentReference documentReference = Mockito.mock(DocumentReference.class);
+        Mockito.when(collectionReference.document(ArgumentMatchers.anyString()))
             .thenReturn(documentReference);
-        when(documentReference.get()).thenReturn(Tasks.forResult(doc));
-        when(doc.exists()).thenReturn(false);
+        Mockito.when(documentReference.get()).thenReturn(Tasks.forResult(doc));
+        Mockito.when(doc.exists()).thenReturn(false);
 
         profileTable.fetchProfile("testID", new ProfileTable.ProfileCallback() {
             @Override
@@ -98,8 +99,11 @@ public class ProfileTableTest {
 
     @Test
     public void fetchProfile_failure() {
-        when(collectionReference.document(anyString()).get())
-            .thenReturn(Tasks.forException(new Exception("Test Exception")));
+        DocumentReference documentReference = Mockito.mock(DocumentReference.class);
+        Mockito.when(collectionReference.document(ArgumentMatchers.anyString()))
+                .thenReturn(documentReference);
+        Mockito.when(documentReference.get())
+                .thenReturn(Tasks.forException(new Exception("Test Exception")));
 
         profileTable.fetchProfile("testID", new ProfileTable.ProfileCallback() {
             @Override
