@@ -31,6 +31,11 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    testOptions {
+        // Used for Unit testing Android dependent elements in /test folder
+        unitTests.isIncludeAndroidResources  = true
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -55,10 +60,18 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.navigation:navigation-fragment:2.7.6")
     implementation("androidx.navigation:navigation-ui:2.7.6")
+
+    // Test dependencies
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+    androidTestImplementation("org.mockito:mockito-android:5.11.0")
+    androidTestImplementation("androidx.test:monitor:1.6.1")
+    androidTestImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
 
     //this is for image picker for uploading event poster
     implementation("androidx.activity:activity-ktx:1.2.0")
