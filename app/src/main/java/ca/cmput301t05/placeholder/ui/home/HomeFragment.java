@@ -57,9 +57,9 @@ public class HomeFragment extends Fragment {
         listJoinedEvents.setAdapter(adapter);
 
         // "Create New Event" Button
-//        Button btnCreateEvent = root.findViewById(R.id.btnCreateEvent);
-//        btnCreateEvent.setOnClickListener(view ->
-//                Navigation.findNavController(view).navigate(R.id.action_home_to_createEvent));
+        Button btnCreateEvent = root.findViewById(R.id.btnCreateEvent);
+        btnCreateEvent.setOnClickListener(view ->
+                Navigation.findNavController(view).navigate(R.id.action_home_to_enterEventDetailsActivity));
 
         // List of Created Events
         ListView listCreatedEvents = root.findViewById(R.id.listCreatedEvents);
