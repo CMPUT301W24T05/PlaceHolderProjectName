@@ -22,7 +22,6 @@ import ca.cmput301t05.placeholder.database.DatabaseManager;
 
 public class QRCodeManager {
 
-    protected DatabaseManager databaseManager;
 
     public QRCodeManager() {
 
@@ -62,9 +61,8 @@ public class QRCodeManager {
             });
 
             DocumentSnapshot document = task.getResult();
-            HashMap<String, Object> eventInfo = (HashMap<String, Object>) document.getData();
 
-            return eventInfo;
+            return (HashMap<String, Object>) document.getData();
         } else {
             return null;
         }
