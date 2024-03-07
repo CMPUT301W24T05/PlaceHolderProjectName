@@ -276,6 +276,10 @@ public class Event {
         this.eventDate = eventDate;
     }
 
+    public Calendar getEventDate(){
+        return this.eventDate;
+    }
+
     public void setMaxAttendees(int c){
         this.maxAttendees = c;
     }

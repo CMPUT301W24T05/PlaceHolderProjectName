@@ -12,14 +12,14 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/event_viewDetail_back"
+            android:id="@+id/vieweventdetails_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Back" />
 
         <ImageButton
-            android:id="@+id/event_profilepic_view"
+            android:id="@+id/vieweventdetails_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -27,7 +27,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/event_viewDetails_Name"
+        android:id="@+id/vieweventdetails_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -42,7 +42,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/event_viewdetailsDate"
+            android:id="@+id/vieweventdetails_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -50,7 +50,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/event_viewLocationDetail"
+            android:id="@+id/vieweventdetails_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -59,7 +59,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/event_eventPodterInfo"
+        android:id="@+id/vieweventdetails_poster"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -68,7 +68,7 @@
         android:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/event_eventDetails"
+        android:id="@+id/vieweventdetails_eventinfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -81,7 +81,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/event_organizedby"
+            android:id="@+id/vieweventdetails_organizetext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -89,7 +89,7 @@
             android:text="Organized by:" />
 
         <TextView
-            android:id="@+id/event_EventLocationDetails"
+            android:id="@+id/vieweventdetails_eventAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
