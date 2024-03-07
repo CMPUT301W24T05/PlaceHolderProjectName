@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.UUID;
 import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.profile.Profile;
 
-public class Event {
+public class Event implements Serializable {
 
     String eventName;
 
