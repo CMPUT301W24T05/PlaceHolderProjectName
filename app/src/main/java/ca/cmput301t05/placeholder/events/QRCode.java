@@ -32,7 +32,8 @@ public class QRCode {
             Bitmap bitmap = encoder.createBitmap(matrix);
             //need to attach to a view or something with setImageBitmap(bitmap)
 
-            
+
+
 
         } catch (WriterException e)
         {

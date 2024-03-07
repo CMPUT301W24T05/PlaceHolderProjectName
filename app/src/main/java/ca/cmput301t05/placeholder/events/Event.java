@@ -51,6 +51,7 @@ public class Event {
         this.infoQRCode = QRCM.generateQRCode(this, "eventInfo");
         this.checkInQR = QRCM.generateQRCode(this, "checkIn");
 
+
         DatabaseManager databaseManager = DatabaseManager.getInstance();
 
         databaseManager.db.collection("events").document(eventID.toString()).set(toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -182,3 +183,6 @@ public class Event {
     }
 
 }
+
+
+

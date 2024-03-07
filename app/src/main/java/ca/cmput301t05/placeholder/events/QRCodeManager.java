@@ -17,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.DatabaseManager;
 
@@ -30,43 +31,26 @@ public class QRCodeManager {
     public QRCode generateQRCode(Event event, String type) {
         return new QRCode(event, type);
     }
+    public void getEventInfo(String qrcode) {
+        //extract only the part with the event id
+        String eventID = qrcode.substring(0, 35);
 
-
-    public HashMap<String, Object> getEventInfo(String qrcode) {
-        //extract only the part with t
-        String doc = qrcode.substring(0, 35);
 
         String type = qrcode.substring(36);
 
         if (type.equals("true")) {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+            //Event e = new Event(UUID.fromString(eventID));
+            //e.getFromDatabase();
 
-            DocumentReference eventRef = db.collection("events").document(doc);
+            //return e;
 
-            Task<DocumentSnapshot> task = eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        } else {
-                            Log.d(TAG, "No such document");
-                        }
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
-                    }
-                }
-            });
-
-            DocumentSnapshot document = task.getResult();
-
-            return (HashMap<String, Object>) document.getData();
         } else {
-            return null;
+            //return null;
         }
 
 
     }
+
+
 }
