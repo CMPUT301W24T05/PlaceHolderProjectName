@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -46,10 +48,22 @@ public class HomeFragment extends Fragment {
 //        btnJoinEvent.setOnClickListener(view ->
 //                Navigation.findNavController(view).navigate(R.id.action_home_to_joinEvent));
 
+        // List of Joined Events
+        ListView listJoinedEvents = root.findViewById(R.id.listJoinedEvents);
+        String[] events = {"Event 1", "Event 2", "Event 3"}; // hardcoded event names
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, events);
+        listJoinedEvents.setAdapter(adapter);
+
         // "Create New Event" Button
 //        Button btnCreateEvent = root.findViewById(R.id.btnCreateEvent);
 //        btnCreateEvent.setOnClickListener(view ->
 //                Navigation.findNavController(view).navigate(R.id.action_home_to_createEvent));
+
+        // List of Created Events
+        ListView listCreatedEvents = root.findViewById(R.id.listCreatedEvents);
+        String[] createdEvents = {"Created Event 1", "Created Event 2", "Created Event 3"}; // hardcoded event names
+        ArrayAdapter<String> createdAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, createdEvents);
+        listCreatedEvents.setAdapter(createdAdapter);
 
         // "Notifications" Button
         Button btnNotifications = root.findViewById(R.id.btnNotifications);

@@ -16,18 +16,33 @@
         android:layout_marginEnd="21dp"
         android:text="Scan An Event" />
 
+    <!-- List of Joined Events -->
+    <ListView
+        android:id="@+id/listJoinedEvents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnJoinEvent"
+        android:layout_marginTop="10dp" />
+
     <!-- "Create New Event" Button -->
     <Button
         android:id="@+id/btnCreateEvent"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_below="@id/btnJoinEvent"
+        android:layout_below="@id/listJoinedEvents"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="11dp"
-        android:layout_marginTop="129dp"
         android:layout_marginEnd="21dp"
         android:text="Create New Event" />
+
+    <!-- List of Created Events -->
+    <ListView
+        android:id="@+id/listCreatedEvents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnCreateEvent"
+        android:layout_marginTop="10dp" />
 
     <!-- "Notifications" Button -->
     <Button
