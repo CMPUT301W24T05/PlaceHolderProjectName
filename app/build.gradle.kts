@@ -40,7 +40,7 @@ android {
 
 dependencies {
 
-    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
+    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0") // The dependency for QR code scanning
 
 
 

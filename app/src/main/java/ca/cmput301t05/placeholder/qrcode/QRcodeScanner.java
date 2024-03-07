@@ -37,10 +37,12 @@ import android.Manifest;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.UUID;
 
 import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.databinding.CameraActivityBinding;
+//import ca.cmput301t05.placeholder.events;
 
 
 
@@ -57,15 +59,19 @@ public class QRcodeScanner extends AppCompatActivity{
         mCodeScanner = new CodeScanner(this, scannerView);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
-            public void onDecoded(@NonNull final Result result) {
+            public void onDecoded(@NonNull final Result result) { // Result is a string of the info from decoded image
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
+                    public void run() { // Here is when the scanner reads event id
+                        String rawText = result.getText(); // raw text embedded in QR code
+                        // get UUID from QR code
                         Toast.makeText(QRcodeScanner.this, result.getText(), Toast.LENGTH_SHORT).show();
+
                     }
                 });
             }
         });
+
         if (checkCurrentPermission()) {
             mCodeScanner.startPreview(); // Start the preview now
         }
@@ -75,6 +81,9 @@ public class QRcodeScanner extends AppCompatActivity{
         }
 
     }
+
+
+
 
 
     private boolean checkCurrentPermission() {
@@ -106,7 +115,7 @@ public class QRcodeScanner extends AppCompatActivity{
         }
 
 
-    private void showPermissionDeniedDialog() {
+    private void showPermissionDeniedDialog() { // Shows the permission denied pop-up
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Permission Denied");
         builder.setMessage("This feature requires camera permission. Please enable it in the app settings.");
@@ -118,14 +127,8 @@ public class QRcodeScanner extends AppCompatActivity{
 
             }
         });
-        // Show the dialog
         builder.show();
-//        finish();
+        //        finish();
     }
-
-
-
-
-
 
 }
