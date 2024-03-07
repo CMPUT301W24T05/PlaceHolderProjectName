@@ -76,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ProfileEditActivity.class);
         startActivity(intent);
 
-        ImageTable i = new ImageTable(this);
-        i.uploadResource(R.raw.yeet_yah);
+//        ImageTable i = new ImageTable(this);
+//        i.uploadResource(R.raw.yeet_yah);
 
 
-        Button buttonStartScanner = findViewById(R.id.testButton);
+        Button buttonStartScanner = findViewById(R.id.btnJoinEvent);
 
         buttonStartScanner.setOnClickListener(new View.OnClickListener() {
             @Override
