@@ -21,8 +21,8 @@ public class PlaceholderApp extends Application implements Serializable {
     @Override
     public void onCreate() {
         super.onCreate();
-        imageTable = new ImageTable(this);
-        profileTable = new ProfileTable(this);
+        imageTable = new ImageTable();
+        profileTable = new ProfileTable();
         idManager = new DeviceIDManager(this);
     }
 

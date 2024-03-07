@@ -26,7 +26,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
     }
 
     private void fetchProfileAndContinue() {
-        if(!app.getProfileTable().deviceHasProfile()) {
+        if(!app.getIdManager().deviceHasIDStored()){
             Intent intent = new Intent(getApplicationContext(), InitialSetupActivity.class);
             startActivity(intent);
             finish();

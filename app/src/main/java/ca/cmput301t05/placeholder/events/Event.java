@@ -27,7 +27,7 @@ public class Event implements Serializable {
 
     String eventInfo;
 
-    QRCode infoQRCode;
+    QRCode infoQRCode, checkInQR;
 
     QRCodeManager QRCM = new QRCodeManager();
 
@@ -43,14 +43,16 @@ public class Event implements Serializable {
     public Event(){
         this.eventID = UUID.randomUUID();
         this.attendees = new HashMap<>();
-        infoQRCode = QRCM.generateQRCode(this);
+        infoQRCode = QRCM.generateQRCode(this, "eventInfo");
+        checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
     public Event(UUID eventID){
         //please call getEventDatabase to this otherwise will error
         this.eventID = eventID;
         this.attendees = new HashMap<>();
-        infoQRCode = QRCM.generateQRCode(this);
+        infoQRCode = QRCM.generateQRCode(this, "eventInfo");
+        checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
 
@@ -62,10 +64,12 @@ public class Event implements Serializable {
         this.eventID = UUID.randomUUID();
         this.maxAttendees = maxAttendees;
         this.attendees = new HashMap<>();
-        infoQRCode = QRCM.generateQRCode(this);
+        infoQRCode = QRCM.generateQRCode(this, "eventInfo");
+        checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
     public boolean getEventFromDatabase(UUID eventID){
+      
         DatabaseManager databaseManager = DatabaseManager.getInstance();
 
         final boolean[] found = new boolean[1];
@@ -90,7 +94,6 @@ public class Event implements Serializable {
 
         return found[0];
     }
-
 
 
     public boolean getEventFromDatabase(){
@@ -286,3 +289,6 @@ public class Event implements Serializable {
     }
 
 }
+
+
+

@@ -40,7 +40,7 @@ public class uploadPosterActivity extends AppCompatActivity {
         uploadPoster = findViewById(R.id.uploadPosterButton);
         nextPage = findViewById(R.id.event_posternext);
 
-        ImageTable imageTable = new ImageTable(getApplicationContext());
+        ImageTable imageTable = new ImageTable();
         UUID eventID = UUID.fromString(getIntent().getStringExtra("created_event_ID"));
         Event curEvent = new Event(eventID);
 
