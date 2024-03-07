@@ -3,6 +3,7 @@ package ca.cmput301t05.placeholder;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,13 +17,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
 import ca.cmput301t05.placeholder.database.ImageTable;
+import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 public class ProfileEditActivity extends AppCompatActivity{
 
     private PlaceholderApp app;
+
+    private  Uri profilePicUri;
     private UUID deviceID;
     private Profile profile;
     private ImageTable imageTable;
@@ -54,8 +59,11 @@ public class ProfileEditActivity extends AppCompatActivity{
         cameraButton = findViewById(R.id.button_camera);
         removeProfilePicButton = findViewById(R.id.button_remove_profile_pic);
 
+
         // First display the information store in the object
         setUp();
+
+
 
         // Click on the save button will save the information and go back to Mainactivity
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -92,21 +100,29 @@ public class ProfileEditActivity extends AppCompatActivity{
         removeProfilePicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                imageTable.removeProfilePic(profile);
             }
         });
     }
+
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("ACtiviy Result", "IN FUNC");
         Uri uri = data.getData();
         //display the new picture and upload to the ImageTable
         profilePic.setImageURI(uri);
-        imageTable.uploadProfilePicture(uri, profile); // this method will update the profilePicID in profile as well
+
+        profilePicUri = uri;
+
     }
 
     private void setUp(){
         // set up the profile picture
-        imageTable.getProfilePicture(profile, profilePic);
+
+        if (profile.getProfilePictureID() != null){
+            imageTable.getProfilePicture(profile, profilePic);
+        }
         if(profile.getName()!=null){editName.setText(profile.getName());}
         if(profile.getContactInfo()!=null){editContact.setText(profile.getContactInfo());}
         if(profile.getHomePage()!=null){editHomepage.setText(profile.getHomePage());}
@@ -117,5 +133,26 @@ public class ProfileEditActivity extends AppCompatActivity{
         profile.setName(editName.getText().toString());
         profile.setContactInfo(editContact.getText().toString());
         profile.setHomePage(editHomepage.getText().toString());
+
+        if (profilePicUri != null) {
+
+            app.getImageTable().uploadProfilePicture(profilePicUri, profile);
+        }
+
+        profile.toDocument();
+        app.getProfileTable().pushProfile(profile, new ProfileTable.ProfileCallback() {
+            @Override
+            public void onSuccess(Profile profile) {
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+
+    });
+
+
     }
 }

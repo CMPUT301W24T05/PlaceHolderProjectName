@@ -105,7 +105,7 @@ public class ImageTable extends Table {
 
         String profilepicID = profileID.toString();
 
-        String filename = "posters/" + profilepicID;
+        String filename = "profiles/" + profilepicID;
         StorageReference storageRef = rootStorageRef.child(filename);
 
         String fileExtension = MimeTypeMap.getFileExtensionFromUrl(file.toString());
@@ -195,7 +195,9 @@ public class ImageTable extends Table {
     //will save a picture to the storage
     public void getProfilePicture(Profile profile, ImageView imageView){
 
-        StorageReference storageReference = rootStorageRef.child(profile.getProfileID().toString());
+        String filename = "profiles/" + profile.getProfilePictureID().toString();
+
+        StorageReference storageReference = rootStorageRef.child(filename);
 
         storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -259,7 +261,7 @@ public class ImageTable extends Table {
             }
         });
 
-        p.setProfileID(null);
+        p.setProfilePictureID(null);
 
 
     }

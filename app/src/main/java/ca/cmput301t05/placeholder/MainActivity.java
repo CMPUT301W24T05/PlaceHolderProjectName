@@ -12,8 +12,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.UUID;
+
 import ca.cmput301t05.placeholder.databinding.ActivityMainBinding;
 import ca.cmput301t05.placeholder.database.ImageTable;
+import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
 
 public class MainActivity extends AppCompatActivity {
