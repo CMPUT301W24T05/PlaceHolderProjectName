@@ -59,11 +59,24 @@ public class MainActivity extends AppCompatActivity {
         Event e = new Event(UUID.fromString("201a67cf-1aee-4ae7-95e9-6808a1a6fb85"));
 
         e.getEventFromDatabase();
+      
+        //app.getImageTable().uploadResource(R.raw.yeet_yah);
 
+        //Event test_event = new Event("Test", "Testing", 5);
+        //test_event.sendEventToDatabase();
 
-        Intent intent = new Intent(this, ProfileEditActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, EnterEventDetailsActivity.class);
+        //startActivity(intent);
+        //finish();
 
+        Button profileButton = findViewById(R.id.btnProfile);
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfileEditActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Button buttonStartScanner = findViewById(R.id.btnJoinEvent);
 
