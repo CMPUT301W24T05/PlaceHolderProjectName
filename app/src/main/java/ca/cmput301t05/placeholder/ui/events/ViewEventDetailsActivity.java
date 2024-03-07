@@ -16,5 +16,7 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         //assume we grab the event id from a bundle and use that to display
         setContentView(R.layout.event_vieweventdetails);
 
+
+
     }
 }
