@@ -50,8 +50,11 @@ public class HomeFragment extends Fragment {
 
         // "Notifications" Button
         Button btnNotifications = root.findViewById(R.id.btnNotifications);
-        btnNotifications.setOnClickListener(view ->
-                Navigation.findNavController(view).navigate(R.id.navigation_notifications));
+        btnNotifications.setOnClickListener(view -> {
+            Navigation.findNavController(view).navigate(R.id.navigation_notifications);
+            getActivity().finish(); // Add this line to finish the current activity
+        });
+
 
         // "Profile" Button
 //        Button btnProfile = root.findViewById(R.id.btnProfile);
