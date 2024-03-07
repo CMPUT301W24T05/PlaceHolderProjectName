@@ -100,7 +100,9 @@ public class ProfileEditActivity extends AppCompatActivity{
         removeProfilePicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 imageTable.removeProfilePic(profile);
+                profilePic.setImageResource(com.google.zxing.client.android.R.color.zxing_transparent);
             }
         });
     }
@@ -119,6 +121,8 @@ public class ProfileEditActivity extends AppCompatActivity{
 
     private void setUp(){
         // set up the profile picture
+
+        assert profile != null;
 
         if (profile.getProfilePictureID() != null){
             imageTable.getProfilePicture(profile, profilePic);
