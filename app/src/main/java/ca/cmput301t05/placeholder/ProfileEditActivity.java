@@ -40,6 +40,8 @@ public class ProfileEditActivity extends AppCompatActivity{
     private FloatingActionButton cameraButton;
     private FloatingActionButton removeProfilePicButton;
 
+    private boolean RemovePic = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +106,8 @@ public class ProfileEditActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                imageTable.removeProfilePic(profile);
+                //imageTable.removeProfilePic(profile);
+                RemovePic = true;
                 profilePic.setImageResource(com.google.zxing.client.android.R.color.zxing_transparent);
             }
         });
@@ -137,6 +140,10 @@ public class ProfileEditActivity extends AppCompatActivity{
         profile.setName(editName.getText().toString());
         profile.setContactInfo(editContact.getText().toString());
         profile.setHomePage(editHomepage.getText().toString());
+
+        if (RemovePic){
+            imageTable.removeProfilePic(profile);
+        }
 
         if (profilePicUri != null) {
 
