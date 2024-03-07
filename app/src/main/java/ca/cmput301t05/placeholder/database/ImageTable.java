@@ -1,7 +1,12 @@
 package ca.cmput301t05.placeholder.database;
 
+
+
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -26,10 +31,9 @@ import ca.cmput301t05.placeholder.profile.Profile;
 
 public class ImageTable extends Table {
 
-    StorageReference rootStorageRef = databaseManager.storage.getReference();
+    StorageReference rootStorageRef = DatabaseManager.getInstance().getStorage().getReference();
 
-    public ImageTable(Context context){
-        super(context);
+    public ImageTable(){
     }
 
     //https://firebase.google.com/docs/storage/android/upload-files#java_2
@@ -61,45 +65,59 @@ public class ImageTable extends Table {
 
     }
 
-    public void uploadResource(int resourceId){
-        Uri tempFileUri = copyResourceToTempFile(resourceId, "image_", ".jpg");
-        uploadFile(tempFileUri);
-    }
-
-    public Uri copyResourceToTempFile(int resourceId, String filePrefix, String fileSuffix) {
-        InputStream in = context.getResources().openRawResource(resourceId);
-        try {
-            // Create a temporary file in the app's cache directory
-            File tempFile = File.createTempFile(filePrefix, fileSuffix, context.getCacheDir());
-            OutputStream out = new FileOutputStream(tempFile);
-            byte[] buffer = new byte[1024];
-            int read;
-
-            while ((read = in.read(buffer)) != -1) {
-                out.write(buffer, 0, read);
-            }
-            in.close();
-            out.flush();
-            out.close();
-
-            // Return a Uri to the temporary file
-            return Uri.fromFile(tempFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
+//    public void uploadResource(int resourceId){
+//        Uri tempFileUri = copyResourceToTempFile(resourceId, "image_", ".jpg");
+//        uploadFile(tempFileUri);
+//    }
+//
+//    public Uri copyResourceToTempFile(int resourceId, String filePrefix, String fileSuffix) {
+//        InputStream in = context.getResources().openRawResource(resourceId);
+//        try {
+//            // Create a temporary file in the app's cache directory
+//            File tempFile = File.createTempFile(filePrefix, fileSuffix, context.getCacheDir());
+//            OutputStream out = new FileOutputStream(tempFile);
+//            byte[] buffer = new byte[1024];
+//            int read;
+//
+//            while ((read = in.read(buffer)) != -1) {
+//                out.write(buffer, 0, read);
+//            }
+//            in.close();
+//            out.flush();
+//            out.close();
+//
+//            // Return a Uri to the temporary file
+//            return Uri.fromFile(tempFile);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
     public void uploadProfilePicture(Uri file, Profile profile){
+        UUID profileID;
+        if (profile.getProfilePictureID() == null){
+            profileID = UUID.randomUUID();
+        }   else {
+            profileID = profile.getProfilePictureID();
+        }
 
-        UUID profileID = UUID.randomUUID();
 
-        String filename = "profiles/" + profileID.toString() + ".jpg";
+        String profilepicID = profileID.toString();
+
+        String filename = "profiles/" + profilepicID;
         StorageReference storageRef = rootStorageRef.child(filename);
+
+        String fileExtension = MimeTypeMap.getFileExtensionFromUrl(file.toString());
+        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
+
+        if (mimeType == null) {
+            // Default to "image/jpeg" if MIME type cannot be determined
+            mimeType = "image/jpeg";
+        }
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setCustomMetadata("Profile", profile.getProfileID().toString())
-                .setContentType("image/jpg")
+                .setContentType(mimeType)
                 .build();
 
         UploadTask uploadTask = storageRef.putFile(file);
@@ -118,6 +136,7 @@ public class ImageTable extends Table {
         });
 
         profile.setProfilePictureID(profileID);
+        profile.toDocument();
 
     }
 
@@ -125,14 +144,32 @@ public class ImageTable extends Table {
     public void uploadPoster(Uri file, Event event){
         //uploads a poster and sets the poster id of the event
 
-        UUID posterID = UUID.randomUUID();
 
-        String filename = "posters/" + posterID.toString() + ".jpg";
+
+        UUID posterID;
+
+        if (event.getEventPosterID() == null){
+            posterID = UUID.randomUUID();
+        }   else {
+            posterID = event.getEventPosterID();
+        }
+
+        String posterS = posterID.toString();
+
+        String filename = "posters/" + posterS;
         StorageReference storageRef = rootStorageRef.child(filename);
+
+        String fileExtension = MimeTypeMap.getFileExtensionFromUrl(file.toString());
+        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
+
+        if (mimeType == null) {
+            // Default to "image/jpeg" if MIME type cannot be determined
+            mimeType = "image/jpeg";
+        }
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setCustomMetadata("Event", event.getEventID().toString())
-                .setContentType("image/jpg")
+                .setContentType(mimeType)
                 .build();
 
         UploadTask uploadTask = storageRef.putFile(file);
@@ -151,12 +188,15 @@ public class ImageTable extends Table {
         });
 
         event.setEventPosterID(posterID);
+        event.sendEventToDatabase();
     }
 
     //will save a picture to the storage
     public void getProfilePicture(Profile profile, ImageView imageView){
 
-        StorageReference storageReference = rootStorageRef.child(profile.getProfileID().toString());
+        String filename = "profiles/" + profile.getProfilePictureID().toString();
+
+        StorageReference storageReference = rootStorageRef.child(filename);
 
         storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -177,7 +217,12 @@ public class ImageTable extends Table {
 
     public void getPosterPicture(Event event, ImageView imageView){
 
-        StorageReference storageReference = rootStorageRef.child(event.getEventPosterID().toString());
+        if (event.getEventPosterID() == null){
+            return;
+        }
+
+        String filename = "posters/" + event.getEventPosterID().toString();
+        StorageReference storageReference = rootStorageRef.child(filename);
 
         storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -195,6 +240,50 @@ public class ImageTable extends Table {
             }
         });
 
+    }
+
+    public void removeProfilePic(Profile p){
+
+        String profilePicID = p.getProfilePictureID().toString();
+
+        if (profilePicID == null){
+            return;
+        }
+
+        String filename = "profiles/" + profilePicID;
+        StorageReference storageReference = rootStorageRef.child(filename);
+
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Image Database", "Image deleted");
+            }
+        });
+
+        p.setProfilePictureID(null);
+
+
+    }
+
+    public void removeEventPoster(Event e){
+
+        String eventPosterID = e.getEventPosterID().toString();
+
+        if (eventPosterID == null){
+            return;
+        }
+
+        String filename = "posters/" + eventPosterID;
+        StorageReference storageReference = rootStorageRef.child(filename);
+
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Image Database", "Image deleted");
+            }
+        });
+
+        e.setEventPosterID(null);
     }
 
     public void testImage(String filename, ImageView imageView){

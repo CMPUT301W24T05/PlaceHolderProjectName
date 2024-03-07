@@ -10,12 +10,12 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\camer\.android\avd\Small_Phone_API_TiramisuPrivacySandbox.avd" />
+                  <value value="C:\Users\camer\.android\avd\Small_Phone_API_UpsideDownCakePrivacySandbox.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-19T03:47:39.994694500Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-03-06T22:24:48.337684900Z" />
         </State>
       </entry>
     </value>

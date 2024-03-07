@@ -1,13 +1,11 @@
 package ca.cmput301t05.placeholder.database;
 
 import android.content.Context;
+import com.google.firebase.firestore.CollectionReference;
 
 public abstract class Table {
-    protected Context context;
-    protected DatabaseManager databaseManager;
+    protected CollectionReference collectionReference;
 
-    public Table(Context context){
-        this.context = context;
-        this.databaseManager = DatabaseManager.getInstance();
+    public Table(){
     }
 }
