@@ -4,9 +4,6 @@
     android:layout_height="match_parent">
 
     <!-- "Scan An Event" Button -->
-
-    <!-- "Create New Event" Button -->
-
     <Button
         android:id="@+id/btnJoinEvent"
         android:layout_width="match_parent"
@@ -19,6 +16,7 @@
         android:layout_marginEnd="21dp"
         android:text="Scan An Event" />
 
+    <!-- "Create New Event" Button -->
     <Button
         android:id="@+id/btnCreateEvent"
         android:layout_width="match_parent"

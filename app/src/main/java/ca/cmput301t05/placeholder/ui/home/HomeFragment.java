@@ -12,8 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.databinding.FragmentHomeBinding;
@@ -52,6 +55,9 @@ public class HomeFragment extends Fragment {
         Button btnNotifications = root.findViewById(R.id.btnNotifications);
         btnNotifications.setOnClickListener(view ->
                 Navigation.findNavController(view).navigate(R.id.navigation_notifications));
+
+
+
 
         // "Profile" Button
 //        Button btnProfile = root.findViewById(R.id.btnProfile);
