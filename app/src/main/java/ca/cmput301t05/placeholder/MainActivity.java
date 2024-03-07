@@ -60,24 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
         e.getEventFromDatabase();
 
-        //this has a picture
-        //display it
-        //i.getPosterPicture(e, findViewById(R.id.imageTest));
 
-
-        //app.getImageTable().uploadResource(R.raw.yeet_yah);
-
-        //Event test_event = new Event("Test", "Testing", 5);
-        //test_event.sendEventToDatabase();
-
-        //Intent intent = new Intent(this, EnterEventDetailsActivity.class);
-        //startActivity(intent);
-        //finish();
         Intent intent = new Intent(this, ProfileEditActivity.class);
         startActivity(intent);
-
-//        ImageTable i = new ImageTable(this);
-//        i.uploadResource(R.raw.yeet_yah);
 
 
         Button buttonStartScanner = findViewById(R.id.btnJoinEvent);
