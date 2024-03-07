@@ -59,12 +59,7 @@ public class MainActivity extends AppCompatActivity {
         Event e = new Event(UUID.fromString("201a67cf-1aee-4ae7-95e9-6808a1a6fb85"));
 
         e.getEventFromDatabase();
-
-        //this has a picture
-        //display it
-        //i.getPosterPicture(e, findViewById(R.id.imageTest));
-
-
+      
         //app.getImageTable().uploadResource(R.raw.yeet_yah);
 
         //Event test_event = new Event("Test", "Testing", 5);
@@ -73,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, EnterEventDetailsActivity.class);
         //startActivity(intent);
         //finish();
+
         Button profileButton = findViewById(R.id.btnProfile);
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,11 +77,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-//        ImageTable i = new ImageTable(this);
-//        i.uploadResource(R.raw.yeet_yah);
-
 
         Button buttonStartScanner = findViewById(R.id.btnJoinEvent);
 

@@ -34,23 +34,24 @@ public class QRCodeManager {
     public void getEventInfo(String qrcode) {
         //extract only the part with the event id
         String eventID = qrcode.substring(0, 35);
+        boolean type = qrcode.substring(36).equals("True");
 
+        }
 
-        String type = qrcode.substring(36);
+    public boolean checkQRcodeType(String rawQRcodeString) {
+        // Make sure you pass the raw text of QR code to this method
+        // true if infoQR, false if checkInQR
+        return  rawQRcodeString.substring(36).equals("True");
+    }
 
-        if (type.equals("true")) {
-
-            //Event e = new Event(UUID.fromString(eventID));
-            //e.getFromDatabase();
-
-            //return e;
-
-        } else {
-            //return null;
+    public UUID scanGetEventID(String eventIdStr){
+            String eventID = eventIdStr.substring(0, 35); // parse the first 35 characters of the string to get UUID string
+            return UUID.fromString(eventID); // Cast String to type UUID
         }
 
 
-    }
+
+
 
 
 }
