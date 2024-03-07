@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
@@ -184,6 +185,8 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 //grab creator
                 PlaceholderApp app = (PlaceholderApp) getApplicationContext();
                 Profile profile = app.getUserProfile();
+
+                //just grab profile id
                 newEvent[0].setEventCreator(profile.getProfileID());
 
                 newEvent[0].sendEventToDatabase();

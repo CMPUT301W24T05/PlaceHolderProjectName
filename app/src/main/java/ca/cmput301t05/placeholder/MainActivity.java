@@ -22,6 +22,7 @@ import ca.cmput301t05.placeholder.database.ImageTable;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.qrcode.QRcodeScanner;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, EnterEventDetailsActivity.class);
         //startActivity(intent);
         //finish();
-        Intent intent = new Intent(this, ProfileEditActivity.class);
+        Intent intent = new Intent(this, ViewEventDetailsActivity.class);
         startActivity(intent);
 
 //        ImageTable i = new ImageTable(this);
