@@ -24,6 +24,8 @@ public class Event {
 
     UUID eventPosterID;
 
+    UUID eventCreator;
+
     String eventInfo;
 
     QRCode infoQRCode;
@@ -33,6 +35,10 @@ public class Event {
     UUID eventID;
 
     Calendar eventDate;
+
+    String eventLocation;
+
+
 
     int maxAttendees;
 
@@ -168,6 +174,10 @@ public class Event {
 
             this.eventInfo = documentSnapshot.getString("eventInfo");
 
+            this.eventLocation = documentSnapshot.getString("eventLocation");
+
+            this.eventCreator = UUID.fromString(documentSnapshot.getString("eventCreator"));
+
             String posterID = documentSnapshot.getString("eventPosterID");
 
             if (posterID != null){
@@ -195,6 +205,8 @@ public class Event {
         result.put("eventName", eventName);
         result.put("eventPosterID", eventPosterID != null ? eventPosterID.toString() : null);
         result.put("eventInfo", eventInfo);
+        result.put("eventLocation", eventLocation);
+        result.put("eventCreator", eventCreator.toString());
 
         if (eventDate != null){
             //convert to a firebase Timestamp
@@ -264,6 +276,14 @@ public class Event {
         return  eventID;
     }
 
+    public String getLocation(){
+        return this.eventLocation;
+    }
+
+    public void setEventLocation(String location){
+        this.eventLocation = location;
+    }
+
     public void setEventPosterID(UUID id){
         this.eventPosterID = id;
     }
@@ -287,5 +307,9 @@ public class Event {
     public int getMaxAttendees(){
         return this.maxAttendees;
     }
+
+    public void setEventCreator(UUID eventCreator){ this.eventCreator = eventCreator;}
+
+    public UUID getEventCreator(){return this.eventCreator;}
 
 }

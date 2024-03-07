@@ -17,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Calendar;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.profile.Profile;
 
 public class EnterEventDetailsActivity extends AppCompatActivity {
 
@@ -177,6 +179,13 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 newEvent[0].setEventDate(c[0]);
                 newEvent[0].setEventName(eName);
                 newEvent[0].setEventInfo(eDescription);
+                newEvent[0].setEventLocation(location);
+
+                //grab creator
+                PlaceholderApp app = (PlaceholderApp) getApplicationContext();
+                Profile profile = app.getUserProfile();
+                newEvent[0].setEventCreator(profile.getProfileID());
+
                 newEvent[0].sendEventToDatabase();
 
 
