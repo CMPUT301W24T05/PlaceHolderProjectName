@@ -25,6 +25,8 @@ public class Event extends DocumentSerializable implements Serializable {
 
     UUID eventPosterID;
 
+    UUID eventCreator;
+
     String eventInfo;
 
     public QRCode infoQRCode, checkInQR;
@@ -34,6 +36,10 @@ public class Event extends DocumentSerializable implements Serializable {
     UUID eventID;
 
     Calendar eventDate;
+
+    String eventLocation;
+
+
 
     int maxAttendees;
 
@@ -216,7 +222,7 @@ public class Event extends DocumentSerializable implements Serializable {
      * @return A string containing the event's information.
      */
     public String getEventInfo() {
-        return eventInfo;
+        return this.eventInfo;
     }
 
     /**
@@ -224,7 +230,8 @@ public class Event extends DocumentSerializable implements Serializable {
      * @return A string representing the name of the event.
      */
     public String getEventName() {
-        return eventName;
+
+        return this.eventName;
     }
 
     /**
@@ -232,7 +239,7 @@ public class Event extends DocumentSerializable implements Serializable {
      * @return The UUID of the event poster.
      */
     public UUID getEventPosterID() {
-        return eventPosterID;
+        return this.eventPosterID;
     }
 
     /**
@@ -240,7 +247,15 @@ public class Event extends DocumentSerializable implements Serializable {
      * @return The UUID of the event.
      */
     public UUID getEventID(){
-        return  eventID;
+        return  this.eventID;
+    }
+
+    public String getLocation(){
+        return this.eventLocation;
+    }
+
+    public void setEventLocation(String location){
+        this.eventLocation = location;
     }
 
     /**
@@ -268,6 +283,14 @@ public class Event extends DocumentSerializable implements Serializable {
     }
 
     /**
+     *
+     * @return returns a calendar corresponding to the date
+     */
+    public Calendar getEventDate() {
+        return eventDate;
+    }
+
+    /**
      * Sets the maximum number of attendees allowed for the event.
      * @param c The maximum number of attendees as an integer.
      */
@@ -282,6 +305,10 @@ public class Event extends DocumentSerializable implements Serializable {
     public int getMaxAttendees(){
         return this.maxAttendees;
     }
+
+    public void setEventCreator(UUID eventCreator){ this.eventCreator = eventCreator;}
+
+    public UUID getEventCreator(){return this.eventCreator;}
 
 }
 
