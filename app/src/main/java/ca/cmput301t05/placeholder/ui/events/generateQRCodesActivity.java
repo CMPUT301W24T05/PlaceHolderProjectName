@@ -35,11 +35,11 @@ public class generateQRCodesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                QRCode qr = QRCM.generateQRCode(event);
+               // QRCode qr = QRCM.generateQRCode(event);
 
                 // complete this
-                Intent i = new Intent(generateQRCodesActivity.this, qrCompleteFrag.class);
-                startActivity(i);
+                //Intent i = new Intent(generateQRCodesActivity.this, qrCompleteFrag.class);
+                //startActivity(i);
 
 
             }
