@@ -95,33 +95,56 @@ public class QRcodeScanner extends AppCompatActivity{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() { // Here is when the scanner reads event id
-                        String rawText = result.getText(); // raw text embedded in QR code
-                        String eventID =  rawText.substring(0, 35); // Get the UUID as a string
 
-                        app.getEventTable().fetchDocument(eventID, new Table.DocumentCallback<Event>() {
+                        Log.d("QR", "Scanned");
+
+                        String rawText = result.getText(); // raw text embedded in QR code
+
+                        Log.d("QR_RAW", rawText);
+
+                        QRCodeManager manager = new QRCodeManager();
+
+                        //grab qrcode type
+                        QRCodeType type = manager.checkQRcodeType(rawText);
+
+                        //now grab event id
+                        String qrEventID = manager.getEventID(rawText).toString();
+
+                        app.getEventTable().fetchDocument(qrEventID, new Table.DocumentCallback<Event>() {
                             @Override
                             public void onSuccess(Event event){
 
-                                Log.d("QR", "Scanned QR");
-                                // Do something with the fetched event here
-                                if (qrCodeManager.checkQRcodeType(eventID)){
-                                    Log.d("Event_QR", "Event Check in QR Scanned");
-                                    viewEventInfo(event, app);
+                                Log.d("QR_SERVER", "Server Query Successful");
+
+                                //check its type then go to the corresponding activity/fragment
+
+                                if(type == QRCodeType.CHECK_IN){
+
+                                    app.setCachedEvent(event); //sets the cached event so we can use it on the next page
+                                    Intent intent = new Intent(QRcodeScanner.this, ViewEventDetailsActivity.class);
+
+                                    startActivity(intent);
+
+                                    finish();
+
+
+                                } else if (type == QRCodeType.INFO) {
+
+                                    //need to go back to main activity and add to bundle so we can open a fragment
+
+                                    app.setCachedEvent(event);
+
+                                    Intent intent = new Intent(QRcodeScanner.this, MainActivity.class);
+
+                                    intent.putExtra("openFragment", true);
+
+                                    startActivity(intent);
+
+                                    finish();
+
+
                                 }
-                                else {
-                                    if (event.checkIn(user)) { // If user allowed to join the event
 
-                                        Log.d("Event_QR", "Event Info Qr Scanned");
-                                        user.joinEvent(event);
-
-                                        app.setCachedEvent(event);
-
-                                        Intent goEventInfo = new Intent(QRcodeScanner.this, ViewEventDetailsActivity.class);
-
-                                        startActivity(goEventInfo);
-                                        finish();
-                                    }
-                                }
                             }
 
                             @Override

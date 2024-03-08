@@ -2,13 +2,14 @@ package ca.cmput301t05.placeholder;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.UUID;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
@@ -65,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Event document) {
 
-                QRCode qr = qrM.generateQRCode(document, "eventinfo");
+                QRCode qr = qrM.generateQRCode(document, "eventInfo");
+
+                Log.d("Event_info",document.getEventID().toString());
 
                 testQR.setImageBitmap(qr.getBitmap());
 
@@ -110,8 +113,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //HANDLE FRAGMENT POP UP HERE
+        Boolean openFrag = getIntent().getBooleanExtra("openFragment", false);
+
+        if(openFrag){
+            //open fragment
+            openEventFrag();
+            getIntent().putExtra("openFragment", false);
+        }
+
 
 
     }
 
+    public void openEventFrag(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        event_info_view_and_signup infoViewAndSignup = new event_info_view_and_signup();
+
+        fragmentTransaction.replace(R.id.mainActivity_linearlayout, infoViewAndSignup);
+
+        fragmentTransaction.commit();
+
+    }
+
 }
+
