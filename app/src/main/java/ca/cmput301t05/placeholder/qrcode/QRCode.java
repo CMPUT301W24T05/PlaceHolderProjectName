@@ -83,10 +83,21 @@ public class QRCode implements Serializable {
      */
     public void setType(QRCodeType type){this.type = type;}
 
+    /**
+     * Gets the bitmap of the QR code.
+     *
+     * @return Bitmap object representing qr code that can be set to an Image.
+     */
     public Bitmap getBitmap(){
         return this.bitmap;
     }
 
+    /**
+     * Gets the raw text that has been encoded into the qr code. This raw text is the
+     * concatenation of the eventId associated with the qr code and the qrcode type
+     *
+     * @return Raw Text encoded in the qr code.
+     */
     public String getRawText() {
         return rawText;
     }
