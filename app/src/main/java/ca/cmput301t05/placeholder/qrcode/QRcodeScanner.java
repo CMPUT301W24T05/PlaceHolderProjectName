@@ -49,6 +49,7 @@ import ca.cmput301t05.placeholder.event_info_view_and_signup;
 import ca.cmput301t05.placeholder.event_info_view_and_signup;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 //import ca.cmput301t05.placeholder.events;
 
 
@@ -100,8 +101,13 @@ public class QRcodeScanner extends AppCompatActivity{
                                 else {
                                     if (event.checkIn(user)) { // If user allowed to join the event
                                         user.joinEvent(event);
-//                                    Toast.makeText(QRcodeScanner.this, "FALSE!", Toast.LENGTH_SHORT).show();
 
+                                        app.setCachedEvent(event);
+
+                                        Intent goEventInfo = new Intent(QRcodeScanner.this, ViewEventDetailsActivity.class);
+
+                                        startActivity(goEventInfo);
+                                        finish();
                                     }
                                 }
                             }
