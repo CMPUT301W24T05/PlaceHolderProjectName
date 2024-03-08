@@ -5,27 +5,49 @@ import android.content.SharedPreferences;
 
 import java.util.UUID;
 
+/**
+ * The DeviceIDManager class is responsible for managing the unique device ID.
+ */
 public class DeviceIDManager {
 
     private static final String SHARED_PREFS_FILE_NAME = "PlaceholderAppPrefs";
     private static final String DEV_ID_KEY = "deviceID";
     private Context context;
 
+    /**
+     * The DeviceIDManager constructor.
+     *
+     * @param context The application context.
+     */
     public DeviceIDManager(Context context){
         this.context = context;
     }
 
+    /**
+     * Checks if the device ID is stored in the SharedPreferences.
+     *
+     * @return true if the device ID is stored, false otherwise.
+     */
     public boolean deviceHasIDStored() {
         SharedPreferences sharedPrefs = context.getSharedPreferences(SHARED_PREFS_FILE_NAME, Context.MODE_PRIVATE);
         String deviceIDString = sharedPrefs.getString(DEV_ID_KEY, null);
         return deviceIDString != null;
     }
 
+    /**
+     * Deletes the device ID from the SharedPreferences.
+     */
     public void deleteDeviceID() {
         SharedPreferences sharedPrefs = context.getSharedPreferences(SHARED_PREFS_FILE_NAME, Context.MODE_PRIVATE);
         sharedPrefs.edit().remove(DEV_ID_KEY).apply();
     }
 
+    /**
+     * Retrieves the unique device ID from the SharedPreferences.
+     * Puts a device ID into the SharedPreferences if one doesn't exist already.
+     *
+     * @return The unique device ID as a UUID object.
+     */
     public UUID getDeviceID() {
         SharedPreferences sharedPrefs = context.getSharedPreferences(SHARED_PREFS_FILE_NAME, Context.MODE_PRIVATE);
 
