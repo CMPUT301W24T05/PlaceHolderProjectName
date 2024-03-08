@@ -1,6 +1,5 @@
 package ca.cmput301t05.placeholder.ui.events;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,10 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.events.QRCode;
-import ca.cmput301t05.placeholder.events.QRCodeManager;
+
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 
 public class generateQRCodesActivity extends AppCompatActivity {
 

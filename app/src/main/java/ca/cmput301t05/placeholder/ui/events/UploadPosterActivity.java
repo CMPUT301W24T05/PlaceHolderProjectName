@@ -23,6 +23,11 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 
+/**
+ * UploadPosterActivity allows users to upload a poster image for an event. This activity is part of the event
+ * creation process where users can select an image from their device to represent the event. The activity handles
+ * selecting and uploading the image to the database and links the image with the specified event.
+ */
 public class UploadPosterActivity extends AppCompatActivity {
 
     private ImageView eventPoster;
@@ -33,6 +38,13 @@ public class UploadPosterActivity extends AppCompatActivity {
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private Event currEvent;
 
+    /**
+     * Called when the activity is starting. This method initializes the UI components, sets up the action listeners,
+     * and retrieves the event object from the database based on the event ID passed through an intent.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied. Otherwise, it is null.
+     */
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_uploadposter);
@@ -64,6 +76,11 @@ public class UploadPosterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets up the actions for UI components. This includes setting up the media picker for selecting an image,
+     * configuring the button to trigger the media picker, and setting up the navigation for the next button after
+     * uploading the poster. The uploaded poster is attached to the current event object and updated in the database.
+     */
     private void setupActions() {
         // I'm using atomic reference, as it's thread-safe, meaning it can be updated while being accessed by multiple threads
         AtomicReference<Uri> curPic = new AtomicReference<>();
