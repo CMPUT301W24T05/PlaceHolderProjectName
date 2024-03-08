@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder.qrcode;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -44,8 +45,14 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.databinding.CameraActivityBinding;
+
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.QRCodeManager;
+
+import ca.cmput301t05.placeholder.event_info_view_and_signup;
+import ca.cmput301t05.placeholder.event_info_view_and_signup;
+import ca.cmput301t05.placeholder.events.Event;
+
 import ca.cmput301t05.placeholder.profile.Profile;
 //import ca.cmput301t05.placeholder.events;
 
@@ -65,6 +72,10 @@ public class QRcodeScanner extends AppCompatActivity{
     private QRCodeManager qrCodeManager = new QRCodeManager();
     private CodeScanner mCodeScanner;
     private ActivityResultLauncher<String> requestPermissionLauncher;
+
+
+    PlaceholderApp app = (PlaceholderApp) getApplicationContext();
+    Profile user = app.getUserProfile();
 
 
     /**
@@ -93,6 +104,7 @@ public class QRcodeScanner extends AppCompatActivity{
                     @Override
                     public void run() { // Here is when the scanner reads event id
                         String rawText = result.getText(); // raw text embedded in QR code
+
                         Log.e("amirza2", "About to parse the qr code");
 
                         String eventID =  rawText.substring(0, 30); // Get the UUID as a string
@@ -117,9 +129,6 @@ public class QRcodeScanner extends AppCompatActivity{
                                 finish();
                             }
                         });
-
-
-
                     }
                 });
             }
@@ -135,7 +144,23 @@ public class QRcodeScanner extends AppCompatActivity{
 
     }
 
+    /**
+     * This method displays a fragment that shows the event info
+     * @param event
+     * @param app
+     */
+    private void viewEventInfo(Event event, PlaceholderApp app) {
+        event_info_view_and_signup fragment =  event_info_view_and_signup.newInstance(event, app);
+        fragment.show(getSupportFragmentManager(), "Show Event info");
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mCodeScanner != null) {
+            mCodeScanner.releaseResources();
+        }
+    }
 
 
     /**

@@ -8,6 +8,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ import ca.cmput301t05.placeholder.events.Event;
  * The QR code can be of two types: infoQR (true) for event information or checkInQR (false) for event check-in.
  * This class utilizes the ZXing ("Zebra Crossing") library for encoding the event's ID and type into a QR code.
  */
-public class QRCode {
+public class QRCode implements Serializable {
     UUID eventID;
     public Boolean type; // true if infoQR, false if checkInQR
 

@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder.qrcode;
 
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.events.Event;
@@ -11,7 +12,7 @@ import ca.cmput301t05.placeholder.qrcode.QRCode;
  * Manages QR code generation and processing for events, including generating QR codes with event information,
  * determining QR code types, and facilitating event joining through QR code scanning.
  */
-public class QRCodeManager {
+public class QRCodeManager implements Serializable {
 
     /**
      * Constructs a QRCodeManager object. This constructor is empty and does not perform any operations.

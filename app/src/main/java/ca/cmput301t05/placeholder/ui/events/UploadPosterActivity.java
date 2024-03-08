@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
@@ -38,6 +37,8 @@ public class UploadPosterActivity extends AppCompatActivity {
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private Event currEvent;
 
+    private String eventId; // Will be retrieved from previous
+
     /**
      * Called when the activity is starting. This method initializes the UI components, sets up the action listeners,
      * and retrieves the event object from the database based on the event ID passed through an intent.
@@ -48,6 +49,10 @@ public class UploadPosterActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_uploadposter);
+
+        Intent intent = getIntent();
+        eventId = intent.getStringExtra("created_event_ID"); // get the event id that was passed from the previous activity that started this one
+        // Activity that invokes this activity is EnterEventDetailsActivity
 
         app = (PlaceholderApp) getApplicationContext();
         eventPoster = findViewById(R.id.eventPosterImage);
@@ -115,8 +120,10 @@ public class UploadPosterActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Event document) {
                     // If the document was successfully updated in the database, start the Main activity and finish this activity
-                    Intent i = new Intent(UploadPosterActivity.this, MainActivity.class);
+                    Intent i = new Intent(UploadPosterActivity.this, generateQRCodesActivity.class); // generate the next activity to generate the qr code!
+                    i.putExtra("EVENT_ID", eventId);
                     startActivity(i);
+                    Log.e("amirza2", "Called generate QR code activity !!");
                     finish();
                 }
 

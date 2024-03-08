@@ -156,6 +156,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
                 posterPick.putExtra("created_event_ID", eventID);
                 startActivity(posterPick);
+                Log.e("amirza2", "Called poster picker activity !!");
             }
 
             @Override
