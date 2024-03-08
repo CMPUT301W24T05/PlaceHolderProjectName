@@ -50,9 +50,10 @@ public class GenerateQRCodesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                String eventId = app.getCachedEvent().getEventID().toString();
 
                 // how to get eventId not yet determined
-                app.getEventTable().fetchDocument(eventId.toString(), new Table.DocumentCallback<Event>() {
+                app.getEventTable().fetchDocument(eventId, new Table.DocumentCallback<Event>() {
                     @Override
                     public void onSuccess(Event event){
                         // Do something with the fetched event here
@@ -60,7 +61,7 @@ public class GenerateQRCodesActivity extends AppCompatActivity {
                         event.checkInQR = qr;
 
                         //display preview activity then move to preview page
-                        Intent i = new Intent(GenerateQRCodesActivity.this, Preview.class);
+//                        Intent i = new Intent(GenerateQRCodesActivity.this, Preview.class);
 
 
                     }

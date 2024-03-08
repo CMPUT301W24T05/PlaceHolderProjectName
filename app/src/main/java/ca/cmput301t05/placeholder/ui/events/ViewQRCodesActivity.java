@@ -38,10 +38,10 @@ public class ViewQRCodesActivity extends AppCompatActivity {
 
         //event object will be pull somehow to this class
 
-        QRCode infoQR = event.infoQRCode;
-        QRCode checkInQR = event.checkInQR;
+//        QRCode infoQR = event.infoQRCode;
+//        QRCode checkInQR = event.checkInQR;
 
-        display.setImageBitmap(infoQR.bitmap);
+//        display.setImageBitmap(infoQR.bitmap);
 
 
     }
