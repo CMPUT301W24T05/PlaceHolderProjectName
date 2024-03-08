@@ -78,6 +78,8 @@ public class QRcodeScanner extends AppCompatActivity{
                     @Override
                     public void run() { // Here is when the scanner reads event id
                         String rawText = result.getText(); // raw text embedded in QR code
+//                        String eventID = eventIdStr.substring(0, 35);
+
                         // get UUID from QR code
                         Event event = qrCodeManager.joinEvent(rawText); // get the event
 
