@@ -65,11 +65,11 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
                 AtomicInteger eventCounter = new AtomicInteger();
 
-                if (app.getHostedEvents() != null) {
+                if (profile.getHostedEvents() != null) {
                     eventCounter.addAndGet(profile.getHostedEvents().size());
                     fetchEvents(profile, "hostedEvents", eventCounter);
                 }
-                if (app.getJoinedEvents() != null) {
+                if (profile.getJoinedEvents() != null) {
                     eventCounter.addAndGet(profile.getJoinedEvents().size());
                     fetchEvents(profile, "joinedEvents", eventCounter);
                 }
