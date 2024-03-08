@@ -60,6 +60,9 @@ public class QRCode {
             BarcodeEncoder encoder = new BarcodeEncoder();
             this.bitmap = encoder.createBitmap(matrix);
 
+            //the qr code is generated but is not assigned to an Image view. That will be
+            // handled in the generateqrcodes class
+
 
         } catch (WriterException e)
         {
