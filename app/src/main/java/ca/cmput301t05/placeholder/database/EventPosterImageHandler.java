@@ -14,7 +14,6 @@ public class EventPosterImageHandler extends BaseImageHandler {
         uploadImage(file, posterID.toString(), "posters", "Event", event.getEventID().toString());
 
         event.setEventPosterID(posterID);
-        event.sendEventToDatabase();
     }
 
     public void getPosterPicture(Event event, ImageView imageView) {

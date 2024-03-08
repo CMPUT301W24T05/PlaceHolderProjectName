@@ -13,11 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
 
 import java.io.Serializable;
 
-import ca.cmput301t05.placeholder.database.ImageTable;
 import ca.cmput301t05.placeholder.events.Event;
 
 public class event_infor_view_and_signup extends DialogFragment {
@@ -26,14 +26,14 @@ public class event_infor_view_and_signup extends DialogFragment {
     private Event event;
 
     @Override
-    public void onAttach(@Nullable Context context){
+    public void onAttach(@Nullable Context context) {
         super.onAttach(context);
     }
 
     //To do:
     // when scanning the QR code, implement the functionality in scanning to get the event object and pass
     // the event object when creating the fragment using the fragment object and call this object
-    static event_infor_view_and_signup newInstance(Event event, PlaceholderApp app){
+    static event_infor_view_and_signup newInstance(Event event, PlaceholderApp app) {
         Bundle args = new Bundle();
         args.putSerializable("event", event);
         args.putSerializable("app", app);
@@ -42,8 +42,9 @@ public class event_infor_view_and_signup extends DialogFragment {
         return fragment;
     }
 
-    public Dialog onCreateDialog(Bundle savedInstanceState){
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.event_infor_view_and_signup, null);
+    @NotNull
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View view = getLayoutInflater().inflate(R.layout.event_infor_view_and_signup, null);
         //PlaceholderApp app = (PlaceholderApp)getApplicationContext();
         // check whether there is Null passed into the fragment
         TextView event_name = view.findViewById(R.id.event_name_textview);
@@ -56,15 +57,14 @@ public class event_infor_view_and_signup extends DialogFragment {
         // get the Image table so that we can set the poster view
         Serializable appSerial = getArguments().getSerializable("app");
         PlaceholderApp app = (PlaceholderApp) appSerial;
-        ImageTable imageTable = app.getImageTable();
 
-        if (getArguments() != null){
+        if (getArguments() != null) {
             Serializable eventSerial = getArguments().getSerializable("event");
-            if (eventSerial != null){
+            if (eventSerial != null) {
                 event = (Event) eventSerial;
                 event_name.setText(event.getEventName());
-                if (event.getEventPosterID() != null){
-                    imageTable.getPosterPicture(event, event_poster);
+                if (event.getEventPosterID() != null) {
+                    app.getPosterImageHandler().getPosterPicture(event, event_poster);
                 }
                 event_description.setText(event.getEventInfo());
                 // To do:
@@ -78,8 +78,7 @@ public class event_infor_view_and_signup extends DialogFragment {
             }
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        AlertDialog dialog = builder
-                .setView(view).create();
+        AlertDialog dialog = builder.setView(view).create();
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
