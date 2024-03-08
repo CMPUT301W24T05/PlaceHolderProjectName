@@ -23,7 +23,7 @@ import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
  * This is done either by generating a new, random one or scanning an already existing one for reuse.
  * After this is generated, the user moves on to the next stage of the event creation process, Preview
  */
-public class generateQRCodesActivity extends AppCompatActivity {
+public class GenerateQRCodesActivity extends AppCompatActivity {
 
     Button existingQR_btn, generateQR_btn, back_btn;
     QRCodeManager QRCM;
@@ -59,6 +59,7 @@ public class generateQRCodesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                String eventId = app.getCachedEvent().getEventID().toString();
 
                 // how to get eventId not yet determined
                 app.getEventTable().fetchDocument(eventId, new Table.DocumentCallback<Event>() {
@@ -69,10 +70,12 @@ public class generateQRCodesActivity extends AppCompatActivity {
                         event.checkInQR = qr;
 
                         //display preview activity then move to preview page
-                        Intent intent = new Intent(generateQRCodesActivity.this, ViewQRCodesActivity.class);
+
+                        Intent intent = new Intent(GenerateQRCodesActivity.this, ViewQRCodesActivity.class);
                         app.setCachedEvent(event);
                         startActivity(intent);
                         finish();
+
 
 
                     }

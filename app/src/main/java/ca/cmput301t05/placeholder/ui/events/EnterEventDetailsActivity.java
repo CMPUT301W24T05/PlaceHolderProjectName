@@ -13,6 +13,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.profile.Profile;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -110,14 +111,19 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
      */
     private void setupNextButtonClick() {
         nextButton.setOnClickListener(view -> {
-            if (!hasValidEventDetails()) return;
+            if (!hasValidEventDetails()){
+                return;
+            }
 
             newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
             newEvent.setEventDate(cal);
             newEvent.setEventName(eventName.getText().toString().trim());
             newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
 
-            addEventToDatabase();
+            app.setCachedEvent(newEvent);
+            Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
+            startActivity(posterPick);
+
         });
     }
 
@@ -127,7 +133,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
      * @return true if all details are valid, false otherwise.
      */
     private boolean hasValidEventDetails() {
-        return cal != null && validateEditTextNotEmpty(eventName) && validateEditTextNotEmpty(eventLocation) && validateEditTextNotEmpty(eventDate) && validateEditTextNotEmpty(eventTime) && validateEditTextNotEmpty(eventDescripiton) && validateEditTextNotEmpty(eventCapacity);
+        return validateEditTextNotEmpty(eventName) && validateEditTextNotEmpty(eventLocation) && validateEditTextNotEmpty(eventDate) && validateEditTextNotEmpty(eventTime) && validateEditTextNotEmpty(eventDescripiton) && validateEditTextNotEmpty(eventCapacity) && cal != null;
     }
 
     /**

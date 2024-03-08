@@ -14,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
@@ -61,27 +60,14 @@ public class UploadPosterActivity extends AppCompatActivity {
         nextPage = findViewById(R.id.event_posternext);
 
         // Fetches a specific event's ID from the intent passed to this activity
-        UUID eventID = UUID.fromString(getIntent().getStringExtra("created_event_ID"));
+        currEvent = app.getCachedEvent();
 
         // I'm using atomic reference, as it's thread-safe, meaning it can be updated while being accessed by multiple threads
         AtomicReference<Uri> curPic = new AtomicReference<>();
 
         // Fetches an Event document by its ID from the events table in the database
         // This fetch is asynchronous, we set the current event (currEvent) in the onSuccess callback
-        app.getEventTable().fetchDocument(eventID.toString(), new Table.DocumentCallback<Event>() {
-            @Override
-            public void onSuccess(Event document) {
-                // If the document successfully fetched from the database
-                // set the returned event document (document) as the current event (currEvent)
-                currEvent = document;
-                setupActions(curPic);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                // TODO Handle there being no event with 'eventID' in the database
-            }
-        });
+        setupActions(curPic);
 
         pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
             if (uri == null){
@@ -120,7 +106,7 @@ public class UploadPosterActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Event document) {
                     // If the document was successfully updated in the database, start the Main activity and finish this activity
-                    Intent i = new Intent(UploadPosterActivity.this, generateQRCodesActivity.class); // generate the next activity to generate the qr code!
+                    Intent i = new Intent(UploadPosterActivity.this, GenerateQRCodesActivity.class); // generate the next activity to generate the qr code!
                     i.putExtra("EVENT_ID", eventId);
                     startActivity(i);
                     Log.e("amirza2", "Called generate QR code activity !!");
