@@ -4,9 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.UUID;
+
+import ca.cmput301t05.placeholder.database.Table;
+import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.qrcode.QRCode;
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.qrcode.QRcodeScanner;
 import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
@@ -48,6 +55,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button buttonStartScanner = findViewById(R.id.btnJoinEvent);
+
+        ImageView testQR = findViewById(R.id.qr_test_pic);
+        QRCodeManager qrM = new QRCodeManager();
+
+
+
+        app.getEventTable().fetchDocument("e906a09f-a80b-4e2a-a598-ab12aec2b468", new Table.DocumentCallback<Event>() {
+            @Override
+            public void onSuccess(Event document) {
+
+                QRCode qr = qrM.generateQRCode(document, "eventinfo");
+
+                testQR.setImageBitmap(qr.getBitmap());
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
+
+
 
         buttonStartScanner.setOnClickListener(new View.OnClickListener() {
             @Override

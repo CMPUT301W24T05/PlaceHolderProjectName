@@ -25,6 +25,8 @@ import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
+import ca.cmput301t05.placeholder.qrcode.QRcodeScanner;
 
 public class ViewEventDetailsActivity extends AppCompatActivity {
 
@@ -63,7 +65,6 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
         event_details = findViewById(R.id.vieweventdetails_eventinfo);
         event_author = findViewById(R.id.vieweventdetails_eventAuthor);
-
 
 
 

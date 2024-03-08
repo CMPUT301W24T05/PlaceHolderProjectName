@@ -101,12 +101,17 @@ public class QRcodeScanner extends AppCompatActivity{
                         app.getEventTable().fetchDocument(eventID, new Table.DocumentCallback<Event>() {
                             @Override
                             public void onSuccess(Event event){
+
+                                Log.d("QR", "Scanned QR");
                                 // Do something with the fetched event here
                                 if (qrCodeManager.checkQRcodeType(eventID)){
+                                    Log.d("Event_QR", "Event Check in QR Scanned");
                                     viewEventInfo(event, app);
                                 }
                                 else {
                                     if (event.checkIn(user)) { // If user allowed to join the event
+
+                                        Log.d("Event_QR", "Event Info Qr Scanned");
                                         user.joinEvent(event);
 
                                         app.setCachedEvent(event);

@@ -69,4 +69,8 @@ public class QRCode {
      */
     public void setType(Boolean type){this.type = type;}
 
+    public Bitmap getBitmap(){
+        return this.bitmap;
+    }
+
 }
