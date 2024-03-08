@@ -46,7 +46,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/main_app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -77,7 +77,7 @@
         <!-- List of Joined Events -->
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listJoinedEvents"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"/>
     </LinearLayout>

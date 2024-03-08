@@ -48,7 +48,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
      * allow profile creation. If a profile is found, the application proceeds to the MainActivity.
      */
     private void fetchProfileAndContinue() {
-        if(!app.getIdManager().deviceHasIDStored()){
+        if (!app.getIdManager().deviceHasIDStored()) {
             Intent intent = new Intent(getApplicationContext(), InitialSetupActivity.class);
             startActivity(intent);
             finish();
@@ -62,8 +62,12 @@ public class LoadingScreenActivity extends AppCompatActivity {
                 // The profile exists in firebase! We can continue to the Main activity
                 app.setUserProfile(profile);
 
-                if (app.getHostedEvents() != null){fetchEvents(profile, "hostedEvents");}
-                if (app.getJoinedEvents() != null){fetchEvents(profile, "joinedEvents");}
+                if (app.getHostedEvents() != null) {
+                    fetchEvents(profile, "hostedEvents");
+                }
+                if (app.getJoinedEvents() != null) {
+                    fetchEvents(profile, "joinedEvents");
+                }
 
 
                 Log.i("Placeholder App", String.format("Profile with id %s and name %s has been loaded!", profile.getProfileID(), profile.getName()));
@@ -84,32 +88,35 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
     }
 
-    private void fetchEvents(Profile profile, String event){
+    private void fetchEvents(Profile profile, String event) {
 
         List<String> events;
 
         boolean hosted = event.equals("hostedEvents");
 
-        if (hosted){
+        if (hosted) {
             events = profile.getHostedEvents();
-        }  else {
+        } else {
 
             events = profile.getJoinedEvents();
         }
 
-        if (events == null){
+        if (events == null) {
             return;
         }
 
         //now load all the events into their respective container
 
         for (String id : events) {
-            app.getEventTable().fetchDocument(id, new Table.DocumentCallback<Event>() {
+            app.getEventTable().fetchDocument(id.trim(), new Table.DocumentCallback<Event>() {
                 @Override
                 public void onSuccess(Event document) {
 
-                    if (hosted){app.getHostedEvents().put(UUID.fromString(id), document);}
-                    else {app.getJoinedEvents().put(UUID.fromString(id), document);}
+                    if (hosted) {
+                        app.getHostedEvents().put(UUID.fromString(id.trim()), document);
+                    } else {
+                        app.getJoinedEvents().put(UUID.fromString(id.trim()), document);
+                    }
 
                 }
 

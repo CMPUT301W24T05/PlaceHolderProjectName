@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private EventAdapter joinedEventsAdapter;
     private RecyclerView organizedEventsList;
 
+    private TextView appNameView;
+
 
     /**
      * Called when the activity is starting. Initializes the application context, sets the content view,
@@ -64,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
         setButtonActions();
 
+        Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
+        Log.i("MainActivityJoinedEvents", "Number of joined events: " + app.getJoinedEvents().size());
 
         ArrayList<Event> joinedEvents = new ArrayList<Event>(app.getJoinedEvents().values());
         joinedEventsList = findViewById(R.id.listJoinedEvents);
@@ -79,6 +84,14 @@ public class MainActivity extends AppCompatActivity {
             // Start ProfileEditActivity
             Intent intent = new Intent(MainActivity.this, ProfileEditActivity.class);
             startActivity(intent);
+        });
+
+        appNameView = findViewById(R.id.main_app_name);
+        appNameView.setOnClickListener(v -> {
+            // Restart MainActivity
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         startScannerButton = findViewById(R.id.btnJoinEvent);
