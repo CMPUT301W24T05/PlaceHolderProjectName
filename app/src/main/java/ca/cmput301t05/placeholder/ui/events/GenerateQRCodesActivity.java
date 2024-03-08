@@ -1,8 +1,6 @@
 package ca.cmput301t05.placeholder.ui.events;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -27,9 +25,7 @@ public class GenerateQRCodesActivity extends AppCompatActivity {
 
     Button existingQR_btn, generateQR_btn, back_btn;
     QRCodeManager QRCM;
-    PlaceholderApp app;
-
-    String eventId; // retrieved from previous activity
+    PlaceholderApp app = (PlaceholderApp) getApplicationContext();
 
 
 /**
@@ -41,19 +37,13 @@ public class GenerateQRCodesActivity extends AppCompatActivity {
  *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
  */
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-
-        Log.e("amirza2", "GOT TO THE QR CODE generator!!");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_generateqr);
-        app = (PlaceholderApp) getApplicationContext();
+
         existingQR_btn = findViewById(R.id.scan_existing_qr);
         generateQR_btn = findViewById(R.id.generate_new_qr);
         back_btn = findViewById(R.id.back_button);
         QRCM = new QRCodeManager();
-        Log.e("amirza2", "GOT TO THE QR CODE generator !!");
-
-        Intent intent = getIntent();
-        eventId = intent.getStringExtra("EVENT_ID");
 
         generateQR_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,15 +57,10 @@ public class GenerateQRCodesActivity extends AppCompatActivity {
                     public void onSuccess(Event event){
                         // Do something with the fetched event here
                         QRCode qr = QRCM.generateQRCode(event, "checkIn");
-                        event.checkInQR = qr;
+                        //event.checkInQR = qr;
 
                         //display preview activity then move to preview page
-
-                        Intent intent = new Intent(GenerateQRCodesActivity.this, ViewQRCodesActivity.class);
-                        app.setCachedEvent(event);
-                        startActivity(intent);
-                        finish();
-
+//                        Intent i = new Intent(GenerateQRCodesActivity.this, Preview.class);
 
 
                     }

@@ -14,8 +14,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
@@ -36,8 +38,6 @@ public class UploadPosterActivity extends AppCompatActivity {
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private Event currEvent;
 
-    private String eventId; // Will be retrieved from previous
-
     /**
      * Called when the activity is starting. This method initializes the UI components, sets up the action listeners,
      * and retrieves the event object from the database based on the event ID passed through an intent.
@@ -48,10 +48,6 @@ public class UploadPosterActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_uploadposter);
-
-        Intent intent = getIntent();
-        eventId = intent.getStringExtra("created_event_ID"); // get the event id that was passed from the previous activity that started this one
-        // Activity that invokes this activity is EnterEventDetailsActivity
 
         app = (PlaceholderApp) getApplicationContext();
         eventPoster = findViewById(R.id.eventPosterImage);
@@ -98,26 +94,12 @@ public class UploadPosterActivity extends AppCompatActivity {
 
         nextPage.setOnClickListener(view -> {
 
-            app.getPosterImageHandler().uploadPoster(curPic.get(), currEvent); //updates the event
+            //set this to the cache so on the final page we can do everything
+            app.setPicCache(curPic.get());
 
-            // Pushes the current event (currEvent) to the event table in the database
-            // This push is also asynchronous, we go back to the Main activity in the onSuccess callback
-            app.getEventTable().pushDocument(currEvent, currEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
-                @Override
-                public void onSuccess(Event document) {
-                    // If the document was successfully updated in the database, start the Main activity and finish this activity
-                    Intent i = new Intent(UploadPosterActivity.this, GenerateQRCodesActivity.class); // generate the next activity to generate the qr code!
-                    i.putExtra("EVENT_ID", eventId);
-                    startActivity(i);
-                    Log.e("amirza2", "Called generate QR code activity !!");
-                    finish();
-                }
+            Intent i = new Intent(UploadPosterActivity.this, GenerateInfoCheckinActivity.class);
+            startActivity(i);
 
-                @Override
-                public void onFailure(Exception e) {
-                    // TODO Handle the failure of updating the event in the database
-                }
-            });
         });
     }
 }

@@ -45,17 +45,13 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.databinding.CameraActivityBinding;
-
-import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.events.QRCodeManager;
-
 import ca.cmput301t05.placeholder.event_info_view_and_signup;
 import ca.cmput301t05.placeholder.event_info_view_and_signup;
 import ca.cmput301t05.placeholder.events.Event;
-
 import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.ui.events.EventSignUpActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 //import ca.cmput301t05.placeholder.events;
-
 
 
 /**
@@ -64,18 +60,14 @@ import ca.cmput301t05.placeholder.profile.Profile;
  * and displays a dialog if the permission is denied. It provides feedback to the user via Toast messages upon successful
  * QR code scans.
  */
-
 public class QRcodeScanner extends AppCompatActivity{
 
-//    PlaceholderApp app = (PlaceholderApp) getApplicationContext();
-//    Profile user = app.getUserProfile();
-    private QRCodeManager qrCodeManager = new QRCodeManager();
     private CodeScanner mCodeScanner;
     private ActivityResultLauncher<String> requestPermissionLauncher;
+    private QRCodeManager qrCodeManager = new QRCodeManager();
 
-
-    PlaceholderApp app = (PlaceholderApp) getApplicationContext();
-    Profile user = app.getUserProfile();
+    private PlaceholderApp app;
+    private Profile user;
 
 
     /**
@@ -87,15 +79,16 @@ public class QRcodeScanner extends AppCompatActivity{
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
-
-        PlaceholderApp app = (PlaceholderApp) getApplicationContext();
-        Profile user = app.getUserProfile();
-
         setContentView(R.layout.camera_activity);
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
+
+        //initialize app and profile
+        app = (PlaceholderApp) getApplicationContext();
+        user = app.getUserProfile();
+
+
+
         mCodeScanner = new CodeScanner(this, scannerView);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
@@ -103,32 +96,67 @@ public class QRcodeScanner extends AppCompatActivity{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() { // Here is when the scanner reads event id
+
+                        Log.d("QR", "Scanned");
+
                         String rawText = result.getText(); // raw text embedded in QR code
 
-                        Log.e("amirza2", "About to parse the qr code");
+                        Log.d("QR_RAW", rawText);
 
-                        String eventID =  rawText.substring(0, 30); // Get the UUID as a string
-                        app.getEventTable().fetchDocument(eventID, new Table.DocumentCallback<Event>() {
+                        QRCodeManager manager = new QRCodeManager();
+
+                        //grab qrcode type
+                        QRCodeType type = manager.checkQRcodeType(rawText);
+
+                        //now grab event id
+                        String qrEventID = manager.getEventID(rawText).toString();
+
+                        app.getEventTable().fetchDocument(qrEventID, new Table.DocumentCallback<Event>() {
                             @Override
                             public void onSuccess(Event event){
-                                Log.e("amirza2", "FAILED to scan and returning to main page");
 
-                                // Do something with the fetched event here
-                                if (event.checkIn(user)){ // If user allowed to join the event
-                                    user.joinEvent(event);
+                                Log.d("QR_SERVER", "Server Query Successful");
+
+                                //check its type then go to the corresponding activity/fragment
+
+                                if(type == QRCodeType.CHECK_IN){
+
+                                    app.setCachedEvent(event); //sets the cached event so we can use it on the next page
+                                    Intent intent = new Intent(QRcodeScanner.this, ViewEventDetailsActivity.class);
+
+                                    startActivity(intent);
+
                                     finish();
-//                                    Toast.makeText(QRcodeScanner.this, "FALSE!", Toast.LENGTH_SHORT).show();
+
+
+                                } else if (type == QRCodeType.INFO) {
+
+                                    //need to go back to main activity and add to bundle so we can open a fragment
+                                    Log.d("QR_CODE", "Type is Info, and we're in the if");
+                                    app.setCachedEvent(event);
+
+                                    Intent intent = new Intent(QRcodeScanner.this, EventSignUpActivity.class);
+
+                                    intent.putExtra("openFragment", true);
+
+                                    startActivity(intent);
+
+                                    finish();
+
 
                                 }
-                            }
 
+
+                            }
                             @Override
                             public void onFailure(Exception e){
-                                Log.e("amirza2", "FAILED to scan and returning to main page");
                                 // Failed to get fetch the event for eventId with exception e
-                                finish();
+
+
                             }
                         });
+
+
                     }
                 });
             }
@@ -152,14 +180,6 @@ public class QRcodeScanner extends AppCompatActivity{
     private void viewEventInfo(Event event, PlaceholderApp app) {
         event_info_view_and_signup fragment =  event_info_view_and_signup.newInstance(event, app);
         fragment.show(getSupportFragmentManager(), "Show Event info");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mCodeScanner != null) {
-            mCodeScanner.releaseResources();
-        }
     }
 
 
