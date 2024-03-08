@@ -17,6 +17,7 @@ public class QRCodeManager {
         return new QRCode(event, type);
     }
 
+
     public Event joinEvent(String rawQRcodeString){ // Join the event
         if (!checkQRcodeType(rawQRcodeString)){ // its a valid QR code for check-in
             UUID uuid = scanGetEventID(rawQRcodeString);
