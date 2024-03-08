@@ -65,8 +65,8 @@ public class QRcodeScanner extends AppCompatActivity{
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private QRCodeManager qrCodeManager = new QRCodeManager();
 
-    PlaceholderApp app = (PlaceholderApp) getApplicationContext();
-    Profile user = app.getUserProfile();
+    private PlaceholderApp app;
+    private Profile user;
 
 
     /**
@@ -81,6 +81,13 @@ public class QRcodeScanner extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera_activity);
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
+
+        //initialize app and profile
+        app = (PlaceholderApp) getApplicationContext();
+        user = app.getUserProfile();
+
+
+
         mCodeScanner = new CodeScanner(this, scannerView);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
