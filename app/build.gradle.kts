@@ -3,6 +3,8 @@ plugins {
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
 
+
+
     id("org.jetbrains.dokka") version "1.9.20"
 }
 
@@ -10,13 +12,28 @@ subprojects {
     apply(plugin = "org.jetbrains.dokka")
 }
 
-tasks.dokkaHtml.configure {
-    outputDirectory.set(file("D:\\cmput301GIT\\PlaceHolderProjectName\\javadocs"))
+tasks.dokkaHtml {
+    outputDirectory.set(layout.buildDirectory.dir("docs/javadoc"))
+}
+
+tasks.register<Jar>("dokkaHtmlJar") {
+    dependsOn(tasks.dokkaHtml)
+    from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+    archiveClassifier.set("html-docs")
+}
+
+tasks.register<Jar>("dokkaJavadocJar") {
+    dependsOn(tasks.dokkaJavadoc)
+    from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+    archiveClassifier.set("javadoc")
 }
 
 android {
     namespace = "ca.cmput301t05.placeholder"
     compileSdk = 34
+
+
+
 
     defaultConfig {
         applicationId = "ca.cmput301t05.placeholder"
