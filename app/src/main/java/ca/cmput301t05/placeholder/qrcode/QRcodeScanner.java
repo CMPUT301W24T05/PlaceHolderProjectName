@@ -50,17 +50,14 @@ import ca.cmput301t05.placeholder.profile.Profile;
 //import ca.cmput301t05.placeholder.events;
 
 
-<<<<<<< HEAD
 
-
-=======
 /**
  * QRcodeScanner is an activity for scanning QR codes using the device's camera. It leverages the CodeScanner library
  * to decode QR codes and perform actions based on the decoded information. This class handles camera permission requests
  * and displays a dialog if the permission is denied. It provides feedback to the user via Toast messages upon successful
  * QR code scans.
  */
->>>>>>> 3783d9b40a1a4a168e13311299764126a6e0c569
+
 public class QRcodeScanner extends AppCompatActivity{
 
 //    PlaceholderApp app = (PlaceholderApp) getApplicationContext();

@@ -26,9 +26,9 @@ public class QRCodeManager {
 
     }
 
-    public QRCode generateQRCode(Event event, String type) {
-        return new QRCode(event, type);
-    }
+//    public QRCode generateQRCode(Event event, String type) {
+//        return new QRCode(event, type);
+//    }
 //    public Event getEventInfo(String qrcode) {
 //        //extract only the part with the event id
 //        String eventID = qrcode.substring(0, 35);
