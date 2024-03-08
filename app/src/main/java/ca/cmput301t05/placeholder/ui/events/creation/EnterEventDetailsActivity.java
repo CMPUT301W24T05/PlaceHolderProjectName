@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.ui.events;
+package ca.cmput301t05.placeholder.ui.events.creation;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -13,7 +13,6 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.profile.Profile;
 
 import java.util.Calendar;
 import java.util.Locale;

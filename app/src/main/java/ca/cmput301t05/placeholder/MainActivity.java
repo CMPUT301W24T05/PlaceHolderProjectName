@@ -7,8 +7,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import ca.cmput301t05.placeholder.qrcode.QRCodeScannerActivity;
-import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
+import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
 
 

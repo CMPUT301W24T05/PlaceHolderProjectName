@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.qrcode;
+package ca.cmput301t05.placeholder.ui.codescanner;
 
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.content.ContextCompat;
 
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
@@ -25,7 +26,7 @@ import android.Manifest;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
-import ca.cmput301t05.placeholder.event_info_view_and_signup;
+import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 //import ca.cmput301t05.placeholder.events;
@@ -113,7 +114,7 @@ public class QRCodeScannerActivity extends AppCompatActivity{
      * @param app
      */
     private void viewEventInfo(Event event, PlaceholderApp app) {
-        event_info_view_and_signup fragment =  event_info_view_and_signup.newInstance(event, app);
+        EventDetailsDialogFragment fragment =  EventDetailsDialogFragment.newInstance(event, app);
         fragment.show(getSupportFragmentManager(), "Show Event info");
     }
 

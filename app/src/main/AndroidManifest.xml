@@ -29,7 +29,7 @@
 <!--        <meta-data-->
 <!--            android:name="com.google.mlkit.vision.DEPENDENCIES"-->
 <!--            android:value="barcode_ui"/>-->
-        <activity android:name=".qrcode.QRCodeScannerActivity">
+        <activity android:name=".ui.codescanner.QRCodeScannerActivity">
             <!-- Add any necessary intent filters or other configurations here -->
         </activity>
 
@@ -49,10 +49,10 @@
 
 
         <activity android:name=".InitialSetupActivity" />
-        <activity android:name=".ui.events.EnterEventDetailsActivity" />
+        <activity android:name=".ui.events.creation.EnterEventDetailsActivity" />
         <activity android:name=".ProfileEditActivity"/>
-        <activity android:name=".AdminHomeActivity"/>
-        <activity android:name=".ui.events.UploadPosterActivity"/>
+        <activity android:name=".ui.admin.AdminHomeActivity"/>
+        <activity android:name=".ui.events.creation.UploadPosterActivity"/>
         <activity android:name=".ui.notifications.NotificationsFragment"/>
     </application>
 
