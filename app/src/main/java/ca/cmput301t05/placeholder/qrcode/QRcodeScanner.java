@@ -45,6 +45,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.databinding.CameraActivityBinding;
+import ca.cmput301t05.placeholder.event_infor_view_and_signup;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.QRCodeManager;
 import ca.cmput301t05.placeholder.profile.Profile;
@@ -81,7 +82,8 @@ public class QRcodeScanner extends AppCompatActivity{
                             public void onSuccess(Event event){
                                 // Do something with the fetched event here
                                 if (qrCodeManager.checkQRcodeType(eventID)){
-                                    //
+                                    event_infor_view_and_signup fragment =  event_infor_view_and_signup.newInstance(event, app);
+                                    fragment.show(getSupportFragmentManager(), "Show Event info");
                                 }
                                 else {
                                     if (event.checkIn(user)) { // If user allowed to join the event
