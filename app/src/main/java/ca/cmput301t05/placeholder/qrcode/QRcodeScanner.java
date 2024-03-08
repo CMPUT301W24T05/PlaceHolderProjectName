@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder.qrcode;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -40,8 +41,14 @@ import java.util.List;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.MainActivity;
+import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.databinding.CameraActivityBinding;
+import ca.cmput301t05.placeholder.event_info_view_and_signup;
+import ca.cmput301t05.placeholder.event_info_view_and_signup;
+import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.profile.Profile;
 //import ca.cmput301t05.placeholder.events;
 
 
@@ -55,6 +62,10 @@ public class QRcodeScanner extends AppCompatActivity{
 
     private CodeScanner mCodeScanner;
     private ActivityResultLauncher<String> requestPermissionLauncher;
+    private QRCodeManager qrCodeManager = new QRCodeManager();
+
+    PlaceholderApp app = (PlaceholderApp) getApplicationContext();
+    Profile user = app.getUserProfile();
 
 
     /**
@@ -77,9 +88,29 @@ public class QRcodeScanner extends AppCompatActivity{
                     @Override
                     public void run() { // Here is when the scanner reads event id
                         String rawText = result.getText(); // raw text embedded in QR code
-                        // get UUID from QR code
-                        Toast.makeText(QRcodeScanner.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        String eventID =  rawText.substring(0, 35); // Get the UUID as a string
 
+                        app.getEventTable().fetchDocument(eventID, new Table.DocumentCallback<Event>() {
+                            @Override
+                            public void onSuccess(Event event){
+                                // Do something with the fetched event here
+                                if (qrCodeManager.checkQRcodeType(eventID)){
+                                    viewEventInfo(event, app);
+                                }
+                                else {
+                                    if (event.checkIn(user)) { // If user allowed to join the event
+                                        user.joinEvent(event);
+//                                    Toast.makeText(QRcodeScanner.this, "FALSE!", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Exception e){
+                                // Failed to get fetch the event for eventId with exception e
+                            }
+                        });
 
 
                     }
@@ -97,7 +128,15 @@ public class QRcodeScanner extends AppCompatActivity{
 
     }
 
-
+    /**
+     * This method displays a fragment that shows the event info
+     * @param event
+     * @param app
+     */
+    private void viewEventInfo(Event event, PlaceholderApp app) {
+        event_info_view_and_signup fragment =  event_info_view_and_signup.newInstance(event, app);
+        fragment.show(getSupportFragmentManager(), "Show Event info");
+    }
 
 
     /**
