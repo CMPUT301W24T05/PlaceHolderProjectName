@@ -9,7 +9,7 @@
         android:id="@+id/navigation_home"
         android:name="ca.cmput301t05.placeholder.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/activity_main" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -22,4 +22,20 @@
         android:name="ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <activity
+        android:id="@+id/navigation_profile_edit_activity"
+        android:name="ca.cmput301t05.placeholder.ProfileEditActivity"
+        android:label="@string/title_profile_edit_activity" />
+
+    <activity
+        android:id="@+id/enterEventDetailsActivity"
+        android:name="ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity"
+        android:label="@string/title_enter_event_details_activity" />
+
+    <!-- Define an action to navigate to EnterEventDetailsActivity from HomeFragment -->
+    <action
+        android:id="@+id/action_home_to_enterEventDetailsActivity"
+        app:destination="@id/enterEventDetailsActivity" />
+
 </navigation>
