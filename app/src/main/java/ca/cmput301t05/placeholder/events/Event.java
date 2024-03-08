@@ -268,7 +268,7 @@ public class Event extends DocumentSerializable implements Serializable {
 
     /**
      * Sets the maximum number of attendees allowed for the event.
-     * @param maxAttendees The maximum number of attendees as an integer.
+     * @param c The maximum number of attendees as an integer.
      */
     public void setMaxAttendees(int c){
         this.maxAttendees = c;
