@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.*;
+import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 /**
@@ -22,6 +25,12 @@ public class PlaceholderApp extends Application implements Serializable {
     private ProfileTable profileTable;
     private EventTable eventTable;
     private DeviceIDManager idManager;
+
+    private HashMap<UUID, Event> joinedEvents;
+
+    private HashMap<UUID, Event> hostedEvents;
+
+    private Event cachedEvent;
 
     /**
      * Called when the application is starting, before any activity, service, or receiver objects (excluding content providers) have been created.
@@ -102,4 +111,6 @@ public class PlaceholderApp extends Application implements Serializable {
     public EventTable getEventTable() {
         return eventTable;
     }
+
+
 }
