@@ -79,13 +79,18 @@ public class QRcodeScanner extends AppCompatActivity{
                     @Override
                     public void run() { // Here is when the scanner reads event id
                         String rawText = result.getText(); // raw text embedded in QR code
-                        String eventID =  rawText.substring(0, 35); // Get the UUID as a string
+                        Log.e("amirza2", "About to parse the qr code");
+
+                        String eventID =  rawText.substring(0, 30); // Get the UUID as a string
                         app.getEventTable().fetchDocument(eventID, new Table.DocumentCallback<Event>() {
                             @Override
                             public void onSuccess(Event event){
+                                Log.e("amirza2", "FAILED to scan and returning to main page");
+
                                 // Do something with the fetched event here
                                 if (event.checkIn(user)){ // If user allowed to join the event
                                     user.joinEvent(event);
+                                    finish();
 //                                    Toast.makeText(QRcodeScanner.this, "FALSE!", Toast.LENGTH_SHORT).show();
 
                                 }
@@ -93,7 +98,9 @@ public class QRcodeScanner extends AppCompatActivity{
 
                             @Override
                             public void onFailure(Exception e){
+                                Log.e("amirza2", "FAILED to scan and returning to main page");
                                 // Failed to get fetch the event for eventId with exception e
+                                finish();
                             }
                         });
 

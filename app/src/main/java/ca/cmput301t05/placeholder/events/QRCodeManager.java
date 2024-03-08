@@ -29,20 +29,20 @@ public class QRCodeManager {
     public QRCode generateQRCode(Event event, String type) {
         return new QRCode(event, type);
     }
-    public Event getEventInfo(String qrcode) {
-        //extract only the part with the event id
-        String eventID = qrcode.substring(0, 35);
-        boolean type = qrcode.substring(36).equals("True");
-      
-         // Event e = new Event(UUID.fromString(eventID));
-         //  e.getEventFromDatabase();
-
-         //   return e;
-
-     //   } else {
-     //       return null;
-
-        }
+//    public Event getEventInfo(String qrcode) {
+//        //extract only the part with the event id
+//        String eventID = qrcode.substring(0, 35);
+//        boolean type = qrcode.substring(36).equals("True");
+//
+//         // Event e = new Event(UUID.fromString(eventID));
+//         //  e.getEventFromDatabase();
+//
+//         //   return e;
+//
+//     //   } else {
+//     //       return null;
+//
+//        }
 
 
 
