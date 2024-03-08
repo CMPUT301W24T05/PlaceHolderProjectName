@@ -5,219 +5,164 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Calendar;
-import java.util.UUID;
-
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.database.ProfileTable;
+import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
+import java.util.Calendar;
+import java.util.Locale;
+
+/**
+ * EnterEventDetailsActivity is an activity class for entering the details of a new event.
+ * It allows the user to input event name, location, date, time, description, and capacity.
+ * This activity includes date and time pickers to facilitate the entry of date and time information.
+ * After entering the details, the user can proceed to the next step which involves uploading an event poster.
+ */
 public class EnterEventDetailsActivity extends AppCompatActivity {
 
     private EditText eventName;
-
     private EditText eventLocation;
-
     private EditText eventDate;
-
+    private EditText eventTime;
     private EditText eventCapacity;
-
     private EditText eventDescripiton;
-
     private Button nextButton;
 
-    private EditText eventTime;
+    private PlaceholderApp app;
 
+    private Event newEvent;
+    private Calendar cal;
 
+    /**
+     * Called when the activity is starting. Initializes the UI components, sets up click listeners
+     * for the date and time inputs, and prepares the next button for finalizing event details.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied. Otherwise, it is null.
+     */
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_enterdetails);
 
-        eventName = findViewById(R.id.enterEventName);
-
-        //need to do this as well
-        eventLocation = findViewById(R.id.enterLocation);
-
-        //need to make this better
-        eventDate = findViewById(R.id.enterDate);
-
-        eventTime = findViewById(R.id.enterTime);
-
-        final Calendar[] c = new Calendar[1];
-
-        eventTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int hour = c[0].get(Calendar.HOUR_OF_DAY);
-                int minute = c[0].get(Calendar.MINUTE);
-
-                TimePickerDialog timePickerDialog = new TimePickerDialog(EnterEventDetailsActivity.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay,
-                                                  int minute) {
-                                // on below line we are setting selected time
-                                // in our text view.
-                                eventTime.setText(hourOfDay + ":" + minute);
-                            }
-                        }, hour, minute, false);
-                // at last we are calling show to
-                // display our time picker dialog.
-                timePickerDialog.show();
-            }
-        });
-
-        eventDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                c[0] = Calendar.getInstance();
-
-                int year = c[0].get(Calendar.YEAR);
-                int month = c[0].get(Calendar.MONTH);
-                int day = c[0].get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        // on below line we are passing context.
-                        EnterEventDetailsActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                // on below line we are setting date to our text view.
-                                eventDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
-                            }
-                        },
-
-                        year, month, day);
-
-                datePickerDialog.show();
-            }
-        });
-
-
-
-
-        eventDescripiton = findViewById(R.id.enterEventDescription);
-        eventCapacity = findViewById(R.id.enterEventCapacity);
+        initializeEventDetails();
+        eventTime.setOnClickListener(view -> openTimePickerDialog());
+        eventDate.setOnClickListener(view -> openDatePickerDialog());
 
         nextButton = findViewById(R.id.eventDetailNextPage);
 
-        final Event newEvent[] = new Event[1];
-        newEvent[0] = new Event();
+        newEvent = new Event();
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String eName = eventName.getText().toString().trim();
-
-                boolean error = false;
-
-                if (eName.isEmpty()){
-                    eventName.setError("Field cannot be empty");
-                    error = true;
-                }
-
-                String location = eventLocation.getText().toString().trim();
-
-                if (location.isEmpty()){
-                    eventLocation.setError("Field cannot be empty");
-                    error = true;
-                }
-
-                String eDate = eventDate.getText().toString().trim();
-
-                if(eDate.isEmpty()){
-                    eventDate.setError("Field cannot be empty");
-                    error = true;
-                }
-
-                String eTime = eventTime.getText().toString().trim();
-
-                if (eTime.isEmpty()){
-                    eventTime.setError("Field cannot be empty");
-                    error = true;
-                }
-
-                String eDescription = eventDescripiton.getText().toString().trim();
-
-                if (eDescription.isEmpty()){
-                    eventDescripiton.setError("Field cannot be empty");
-                    error = true;
-                }
-
-                String capacity = eventCapacity.getText().toString().trim();
-
-                if (capacity.isEmpty()){
-                    eventCapacity.setError("Field cannot be empty");
-                    error = true;
-                }
-
-
-                if(c[0] == null){
-                    return;
-                }
-
-                if (error){
-                    return;
-                }
-
-                int maxAttendees = Integer.parseInt(capacity);
-
-                newEvent[0].setMaxAttendees(maxAttendees);
-                newEvent[0].setEventDate(c[0]);
-                newEvent[0].setEventName(eName);
-                newEvent[0].setEventInfo(eDescription);
-                newEvent[0].setEventLocation(location);
-
-                //grab creator
-                PlaceholderApp app = (PlaceholderApp) getApplicationContext();
-                Profile profile = app.getUserProfile();
-
-                //just grab profile id
-                newEvent[0].setEventCreator(profile.getProfileID());
-
-                newEvent[0].sendEventToDatabase();
-
-
-                UUID eventID = newEvent[0].getEventID();
-                String id = eventID.toString();
-
-                Log.d("Event_ID", id);
-
-
-
-
-                //open the poster thing
-                Intent posterPick = new Intent(EnterEventDetailsActivity.this, uploadPosterActivity.class);
-
-
-                posterPick.putExtra("created_event_ID", id);
-
-                startActivity(posterPick);
-
-
-
-            }
-        });
-
-
-
-
-
+        setupNextButtonClick();
+    }
+    /**
+     * Initializes the UI components used for entering event details and retrieves the application context.
+     */
+    private void initializeEventDetails() {
+        eventName = findViewById(R.id.enterEventName);
+        eventLocation = findViewById(R.id.enterLocation);
+        eventDate = findViewById(R.id.enterDate);
+        eventTime = findViewById(R.id.enterTime);
+        eventDescripiton = findViewById(R.id.enterEventDescription);
+        eventCapacity = findViewById(R.id.enterEventCapacity);
+        app = (PlaceholderApp) getApplicationContext();
     }
 
+    /**
+     * Opens a dialog for picking the time of the event. Initializes the dialog with the current hour and minute.
+     */
+    private void openTimePickerDialog() {
+        if (cal == null) return;
 
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(EnterEventDetailsActivity.this, (view, hourOfDay, minuteOfHour) -> eventTime.setText(String.format(Locale.CANADA, "%d:%d", hourOfDay, minuteOfHour)), hour, minute, false);
+
+        timePickerDialog.show();
+    }
+
+    /**
+     * Opens a dialog for picking the date of the event. Initializes the dialog with the current year, month, and day.
+     */
+    private void openDatePickerDialog() {
+        cal = Calendar.getInstance();
+
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                // on below line we are passing context.
+                EnterEventDetailsActivity.this, (view1, year1, monthOfYear1, dayOfMonth1) -> eventDate.setText(String.format(Locale.CANADA, "%d-%d-%d", dayOfMonth1, monthOfYear1 + 1, year1)), year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    /**
+     * Sets up the click listener for the "next" button. Validates the event details entered by the user,
+     * updates the event object, and proceeds to add the event to the database.
+     */
+    private void setupNextButtonClick() {
+        nextButton.setOnClickListener(view -> {
+            if (!hasValidEventDetails()) return;
+
+            newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
+            newEvent.setEventDate(cal);
+            newEvent.setEventName(eventName.getText().toString().trim());
+            newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
+
+            addEventToDatabase();
+        });
+    }
+
+    /**
+     * Validates that all event details have been entered and are valid.
+     *
+     * @return true if all details are valid, false otherwise.
+     */
+    private boolean hasValidEventDetails() {
+        return cal != null && validateEditTextNotEmpty(eventName) && validateEditTextNotEmpty(eventLocation) && validateEditTextNotEmpty(eventDate) && validateEditTextNotEmpty(eventTime) && validateEditTextNotEmpty(eventDescripiton) && validateEditTextNotEmpty(eventCapacity);
+    }
+
+    /**
+     * Validates that a specific EditText field is not empty.
+     *
+     * @param editText The EditText field to validate.
+     * @return true if the field is not empty, false otherwise.
+     */
+    private boolean validateEditTextNotEmpty(EditText editText) {
+        if (editText.getText().toString().trim().isEmpty()) {
+            editText.setError("Field cannot be empty");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Adds the event to the database and transitions to the UploadPosterActivity on success.
+     */
+    private void addEventToDatabase() {
+        app.getEventTable().pushDocument(newEvent, newEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
+            @Override
+            public void onSuccess(Event document) {
+                String eventID = newEvent.getEventID().toString();
+                Log.d("Event_ID", eventID);
+                Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
+                posterPick.putExtra("created_event_ID", eventID);
+                startActivity(posterPick);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // TODO Handle the failure of uploading the new event to the database
+            }
+        });
+    }
 }

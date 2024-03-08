@@ -9,6 +9,10 @@ import android.widget.ImageButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * An activity for the admin home page, providing navigation to different administrative functions
+ * like browsing events, profiles, and images.
+ */
 public class AdminHomeActivity extends AppCompatActivity {
     private ImageButton homeButton;
     private Button buttonBrowseEvents;

@@ -13,4 +13,6 @@
 Donec maximus lectus aliquet sapien aliquet rutrum. Fusce vulputate, odio at interdum condimentum, sem augue posuere turpis, non euismod dui sem quis eros. Maecenas sed enim ante. Quisque feugiat urna nec mauris maximus iaculis. Suspendisse sed arcu vel odio iaculis ullamcorper. Donec nec sem rutrum, faucibus felis ac, vulputate libero. Maecenas facilisis ac est vel consectetur. Nullam facilisis consequat consequat. Vestibulum dictum mi vel risus tincidunt, vel ultrices ante consectetur. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla bibendum ac sem sit amet congue. Praesent fringilla euismod vestibulum.</string>
 
     <string name="cameraButtonText">Take picture of QR code</string>
+    <string name="title_profile_edit_activity">Profile</string>
+    <string name="title_enter_event_details_activity">Enter Event Details Activity</string>
 </resources>

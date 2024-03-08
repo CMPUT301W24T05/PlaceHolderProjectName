@@ -1,24 +1,25 @@
 package ca.cmput301t05.placeholder.events;
 
-import android.util.Log;
+import ca.cmput301t05.placeholder.database.DocumentSerializable;
+import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.qrcode.QRCode;
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Exclude;
 
+import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import ca.cmput301t05.placeholder.database.DatabaseManager;
-import ca.cmput301t05.placeholder.profile.Profile;
-
-public class Event {
+/**
+ * Represents an event, including information about the event name, organizer, date,
+ * and attendees. Supports serialization for Firebase database storage and retrieval.
+ */
+public class Event extends DocumentSerializable implements Serializable {
 
     String eventName;
 
@@ -28,7 +29,7 @@ public class Event {
 
     String eventInfo;
 
-    QRCode infoQRCode, checkInQR;
+    public QRCode infoQRCode, checkInQR;
 
     QRCodeManager QRCM = new QRCodeManager();
 
@@ -45,6 +46,10 @@ public class Event {
     HashMap<String, Integer> attendees; //stored this way for the database
     //string = profileID, int = # of times checked in
 
+    /**
+     * Default constructor that generates a new event with unique ID and empty attendee list.
+     * Also generates QR codes for event information and check-in.
+     */
     public Event(){
         this.eventID = UUID.randomUUID();
         this.attendees = new HashMap<>();
@@ -52,14 +57,24 @@ public class Event {
         checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
+    /**
+     * Constructor that initializes an event with a specific UUID.
+     * Intended for use when retrieving an existing event from the database.
+     * @param eventID The UUID of the event.
+     */
     public Event(UUID eventID){
-        //please call getEventDatabase to this otherwise will error
         this.eventID = eventID;
         this.attendees = new HashMap<>();
         infoQRCode = QRCM.generateQRCode(this, "eventInfo");
-        checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
+    /**
+     * Constructor that creates a new event with the specified name, information, and maximum number of attendees.
+     * Generates unique ID for the event and QR codes for event information and check-in.
+     * @param name The name of the event.
+     * @param eventInfo The detailed information about the event.
+     * @param maxAttendees The maximum number of attendees allowed for this event.
+     */
 
     public Event(String name, String eventInfo, int maxAttendees){
 
@@ -70,74 +85,68 @@ public class Event {
         this.maxAttendees = maxAttendees;
         this.attendees = new HashMap<>();
         infoQRCode = QRCM.generateQRCode(this, "eventInfo");
-        checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
-    public boolean getEventFromDatabase(UUID eventID){
-      
-        DatabaseManager databaseManager = DatabaseManager.getInstance();
+    /**
+     * Converts this event object into a Map that can be used for document storage in Firebase Firestore.
+     * @return A Map representing the event's data.
+     */
+    @Exclude
+    public Map<String, Object> toDocument() {
+        Map<String, Object> document = new HashMap<>();
 
-        final boolean[] found = new boolean[1];
+        document.put("eventName", eventName);
+        document.put("eventPosterID", eventPosterID != null ? eventPosterID.toString() : null);
+        document.put("eventInfo", eventInfo);
+        //document.put("infoQRCode", infoQRCode);
+        //document.put("checkInQR", checkInQR);
+        document.put("eventID", eventID.toString());
+        document.put("eventDate", eventDate != null ? new Timestamp(eventDate.getTime()) : null);
+        document.put("maxAttendees", maxAttendees);
+        document.put("attendees", attendees);
 
-        databaseManager.db.collection("events").document(eventID.toString()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Log.d("event_uuid", eventID.toString());
-                if (documentSnapshot.exists()){
-                    updateFromDocScreenshot(documentSnapshot);
-                    found[0] = true;
-                }
-                else {
-                    Log.d("Database", "Doc Snapshot not exist");
-                    found[0] = false;
-                }
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        found[0] = false;
-                    }
-                });
-
-        return found[0];
+        return document;
+    }
+    /**
+     * Populates the event object's fields based on a Firestore document snapshot.
+     * @param document The Firestore document snapshot representing an event.
+     */
+    public void fromDocument(DocumentSnapshot document) {
+        String eventId = document.getString("eventID");
+        if(eventId != null && !eventId.equals("null")) {
+            eventID = UUID.fromString(eventId);
+        }
+        if(document.getString("eventName") != null) {
+            eventName = document.getString("eventName");
+        }
+        if(document.getString("eventInfo") != null) {
+            eventInfo = document.getString("eventInfo");
+        }
+        String eventPosterId = document.getString("eventPosterID");
+        if(eventPosterId != null && !eventPosterId.equals("null")) {
+            eventPosterID = UUID.fromString(eventPosterId);
+        }
+        //infoQRCode = ; // Convert back from string
+        //checkInQR = ; // Convert back from string
+        if(document.getTimestamp("eventDate") != null) {
+            eventDate = Calendar.getInstance();
+            eventDate.setTimeInMillis(document.getTimestamp("eventDate").toDate().getTime());
+        }
+        if(document.getLong("maxAttendees") != null) {
+            maxAttendees = document.getLong("maxAttendees").intValue();
+        }
+        if(document.get("attendees") != null) {
+            attendees = (HashMap<String, Integer>) document.get("attendees");
+        }
     }
 
 
-    public boolean getEventFromDatabase(){
-        //use current uuid
-        return getEventFromDatabase(this.eventID);
-    }
-
-    public boolean sendEventToDatabase(){
-        //returns true if event successfully is sent to db
-        //false otherwise
-
-
-        final boolean[] found = new boolean[1]; //essentially is an area in memory so we can use it outside of method
-
-        DatabaseManager databaseManager = DatabaseManager.getInstance();
-
-        databaseManager.db.collection("events").document(eventID.toString()).set(toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        System.out.println("Event successfully uploaded!");
-                        found[0] = true;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.err.println("Error uploading event: " + e.getMessage());
-                        found[0] = false;
-                    }
-                });
-
-        return found[0];
-
-    }
-
-    //checks in a attendee
+    /**
+     * Attempts to check in an attendee to the event.
+     * If the maximum number of attendees has been reached, no more attendees can be checked in.
+     * @param profile The profile of the attendee trying to check in.
+     * @return True if the attendee was successfully checked in, false otherwise.
+     */
     public boolean checkIn(Profile profile){
 
         //returns false if attendee can't check in, true if can
@@ -161,94 +170,19 @@ public class Event {
 
     }
 
-    private void updateFromDocScreenshot(DocumentSnapshot documentSnapshot){
-
-        if (documentSnapshot != null && documentSnapshot.exists()) {
-
-            Log.d("Event_Database", "Event Found");
-
-            this.eventName = documentSnapshot.getString("eventName");
-
-
-
-            Timestamp eventTime = documentSnapshot.getTimestamp("eventDate");
-
-
-            Calendar c = Calendar.getInstance();
-            c.setTime(eventTime.toDate());
-
-            this.eventDate = c;
-
-
-            this.maxAttendees = Math.toIntExact(documentSnapshot.getLong("maxAttendees"));
-
-            this.eventInfo = documentSnapshot.getString("eventInfo");
-
-            this.eventLocation = documentSnapshot.getString("eventLocation");
-
-            this.eventCreator = UUID.fromString(documentSnapshot.getString("eventCreator"));
-
-            String posterID = documentSnapshot.getString("eventPosterID");
-
-            if (posterID != null){
-                this.eventPosterID = UUID.fromString(posterID);
-            }
-
-
-            if (documentSnapshot.get("attendees") != null){
-
-                this.attendees = (HashMap<String, Integer>) documentSnapshot.get("attendees");
-            }
-
-
-
-            // Set other fields similarly
-        } else {
-            // Handle the case where the document does not exist
-            Log.e("Event_Database", "Event Not Found"); //this shouldnt happen though
-        }
-    }
-
-    private Map<String, Object> toMap(){
-
-        HashMap<String, Object> result = new HashMap<>();
-
-        result.put("eventName", eventName);
-        result.put("eventPosterID", eventPosterID != null ? eventPosterID.toString() : null);
-        result.put("eventInfo", eventInfo);
-        result.put("eventLocation", eventLocation);
-        result.put("eventCreator", eventCreator.toString());
-
-        if (eventDate != null){
-            //convert to a firebase Timestamp
-            result.put("eventDate", new Timestamp(eventDate.getTime()));
-        }
-        else {
-            result.put("eventDate", null);
-        }
-
-        result.put("maxAttendees", maxAttendees);
-
-        if (attendees.isEmpty()) {
-            result.put("attendees", null);
-
-        } else {
-
-            result.put("attendees", this.attendees);
-
-        }
-
-
-        return result;
-
-    }
-
+    /**
+     * Removes an attendee from the event.
+     * @param profile The profile of the attendee to remove.
+     */
     public void removeAttendee(Profile profile){
 
         attendees.remove(profile.getProfileID().toString());
     }
 
-    //returns array of all attendees
+    /**
+     * Retrieves an array of all attendee IDs.
+     * @return An array of Strings, each representing a unique attendee ID.
+     */
     public String[] getAttendees(){
 
 
@@ -258,32 +192,60 @@ public class Event {
     //getters and setters
 
 
+    /**
+     * Sets the attendees for the event.
+     * @param attendees A HashMap where the key is the attendee's profile ID as a String, and the value is the number of times they've checked in.
+     */
     public void setAttendees(HashMap<String, Integer> attendees) {
         this.attendees = attendees;
     }
 
+
+    /**
+     * Sets the detailed information about the event.
+     * @param eventInfo A string containing the event's information.
+     */
     public void setEventInfo(String eventInfo) {
         this.eventInfo = eventInfo;
     }
 
+    /**
+     * Sets the name of the event.
+     * @param eventName A string representing the name of the event.
+     */
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
 
-
+    /**
+     * Retrieves the detailed information about the event.
+     * @return A string containing the event's information.
+     */
     public String getEventInfo() {
         return this.eventInfo;
     }
 
+    /**
+     * Retrieves the name of the event.
+     * @return A string representing the name of the event.
+     */
     public String getEventName() {
 
         return this.eventName;
     }
 
+    /**
+     * Retrieves the UUID of the event poster (the organizer).
+     * @return The UUID of the event poster.
+     */
     public UUID getEventPosterID() {
         return this.eventPosterID;
     }
 
+    /**
+     * Retrieves the UUID of the event.
+     * @return The UUID of the event.
+     */
     public UUID getEventID(){
         return  this.eventID;
     }
@@ -296,26 +258,42 @@ public class Event {
         this.eventLocation = location;
     }
 
+    /**
+     * Sets the UUID of the event poster
+     * @param id The UUID to be set as the event poster's ID.
+     */
     public void setEventPosterID(UUID id){
         this.eventPosterID = id;
     }
 
+    /**
+     * Sets the UUID of the event.
+     * @param eventID The UUID to be set for the event.
+     */
     public void setEventID(UUID eventID) {
         this.eventID = eventID;
     }
 
+    /**
+     * Sets the date and time for the event.
+     * @param eventDate A Calendar instance representing the date and time of the event.
+     */
     public void setEventDate(Calendar eventDate) {
         this.eventDate = eventDate;
     }
 
-    public Calendar getEventDate(){
-        return this.eventDate;
-    }
-
+    /**
+     * Sets the maximum number of attendees allowed for the event.
+     * @param c The maximum number of attendees as an integer.
+     */
     public void setMaxAttendees(int c){
         this.maxAttendees = c;
     }
 
+    /**
+     * Retrieves the maximum number of attendees allowed for the event.
+     * @return The maximum number of attendees as an integer.
+     */
     public int getMaxAttendees(){
         return this.maxAttendees;
     }

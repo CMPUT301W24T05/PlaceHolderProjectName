@@ -52,8 +52,8 @@
         <activity android:name=".ui.events.EnterEventDetailsActivity" />
         <activity android:name=".ProfileEditActivity"/>
         <activity android:name=".AdminHomeActivity"/>
-        <activity android:name=".ui.events.uploadPosterActivity"/>
-        <activity android:name=".ui.events.ViewEventDetailsActivity"/>
+        <activity android:name=".ui.events.UploadPosterActivity"/>
+        <activity android:name=".ui.notifications.NotificationsFragment"/>
     </application>
 
 </manifest>
