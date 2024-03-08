@@ -115,7 +115,7 @@ public class QRcodeScanner extends AppCompatActivity{
                             @Override
                             public void onSuccess(Event event){
 
-                                Log.d("QR_SERVER", "Server Query Successful");
+                                Log.e("QR_SERVER", "Server Query Successful");
 
                                 //check its type then go to the corresponding activity/fragment
 

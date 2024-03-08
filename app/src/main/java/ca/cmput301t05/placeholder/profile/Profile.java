@@ -266,7 +266,7 @@ public class Profile extends DocumentSerializable {
     }
 
     /**
-     * Converts the Profile object to a document in the form of a Map<String, Object>.
+     * Converts the Profile object to a document in the form of a Map &lt;String, Object&gt;.
      * This method is used to store the Profile object in a database.
      *
      * @return The Profile object converted to a document.

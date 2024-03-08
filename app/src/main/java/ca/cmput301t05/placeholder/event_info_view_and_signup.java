@@ -42,14 +42,7 @@ public class event_info_view_and_signup extends DialogFragment {
     //To do:
     // when scanning the QR code, implement the functionality in scanning to get the event object and pass
     // the event object when creating the fragment using the fragment object and call this object
-    static public event_info_view_and_signup newInstance(Event event, PlaceholderApp app) {
-        Bundle args = new Bundle();
-        args.putSerializable("event", event);
-        args.putSerializable("app", app);
-        event_info_view_and_signup fragment = new event_info_view_and_signup();
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     /**
      * Creates a new instance of event_info_view_and_signup DialogFragment with the specified Event and PlaceholderApp objects.
@@ -59,10 +52,20 @@ public class event_info_view_and_signup extends DialogFragment {
      * @param app   The PlaceholderApp object for accessing application-wide resources and databases.
      * @return A new instance of event_info_view_and_signup DialogFragment with the event and app data.
      */
+
+    static public event_info_view_and_signup newInstance(Event event, PlaceholderApp app) {
+        Bundle args = new Bundle();
+        args.putSerializable("event", event);
+        args.putSerializable("app", app);
+        event_info_view_and_signup fragment = new event_info_view_and_signup();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @NotNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = getLayoutInflater().inflate(R.layout.event_infor_view_and_signup, null);
-        //PlaceholderApp app = (PlaceholderApp)getApplicationContext();
+//        PlaceholderApp app = (PlaceholderApp)getApplicationContext();
         // check whether there is Null passed into the fragment
         TextView event_name = view.findViewById(R.id.event_name_textview);
         ImageView event_poster = view.findViewById(R.id.event_poster_view);
