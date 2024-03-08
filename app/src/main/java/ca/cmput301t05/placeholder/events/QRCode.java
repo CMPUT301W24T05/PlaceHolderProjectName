@@ -17,6 +17,8 @@ public class QRCode {
     UUID eventID;
     public Boolean type; // true if infoQR, false if checkInQR
 
+    public Bitmap bitmap;
+
 
     // constructs a QRCode object and encodes it with the eventID of the event that it's for
     public QRCode(Event event, String type){
@@ -29,7 +31,7 @@ public class QRCode {
         {
             BitMatrix matrix = writer.encode((eventID.toString() + type), BarcodeFormat.QR_CODE,400,400);
             BarcodeEncoder encoder = new BarcodeEncoder();
-            Bitmap bitmap = encoder.createBitmap(matrix);
+            this.bitmap = encoder.createBitmap(matrix);
             //need to attach to a view or something with setImageBitmap(bitmap)
 
 
