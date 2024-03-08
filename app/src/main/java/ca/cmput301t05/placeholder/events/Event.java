@@ -1,24 +1,18 @@
 package ca.cmput301t05.placeholder.events;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import ca.cmput301t05.placeholder.database.DocumentSerializable;
+import ca.cmput301t05.placeholder.profile.Profile;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Exclude;
 
+import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import ca.cmput301t05.placeholder.database.DatabaseManager;
-import ca.cmput301t05.placeholder.profile.Profile;
-
-public class Event {
+public class Event extends DocumentSerializable implements Serializable {
 
     String eventName;
 
@@ -67,65 +61,50 @@ public class Event {
         checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
-    public boolean getEventFromDatabase(UUID eventID){
-      
-        DatabaseManager databaseManager = DatabaseManager.getInstance();
+    @Exclude
+    public Map<String, Object> toDocument() {
+        Map<String, Object> document = new HashMap<>();
 
-        final boolean[] found = new boolean[1];
+        document.put("eventName", eventName);
+        document.put("eventPosterID", eventPosterID != null ? eventPosterID.toString() : null);
+        document.put("eventInfo", eventInfo);
+        //document.put("infoQRCode", infoQRCode);
+        //document.put("checkInQR", checkInQR);
+        document.put("eventID", eventID.toString());
+        document.put("eventDate", eventDate != null ? new Timestamp(eventDate.getTime()) : null);
+        document.put("maxAttendees", maxAttendees);
+        document.put("attendees", attendees);
 
-        databaseManager.db.collection("events").document(eventID.toString()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()){
-                    updateFromDocScreenshot(documentSnapshot);
-                }
-                else {
-                    found[0] = false;
-                }
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        found[0] = false;
-                    }
-                });
-
-        return found[0];
+        return document;
     }
 
-
-    public boolean getEventFromDatabase(){
-        //use current uuid
-        return getEventFromDatabase(this.eventID);
-    }
-
-    public boolean sendEventToDatabase(){
-        //returns true if event successfully is sent to db
-        //false otherwise
-
-
-        final boolean[] found = new boolean[1]; //essentially is an area in memory so we can use it outside of method
-
-        DatabaseManager databaseManager = DatabaseManager.getInstance();
-
-        databaseManager.db.collection("events").document(eventID.toString()).set(toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        System.out.println("Event successfully uploaded!");
-                        found[0] = true;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.err.println("Error uploading event: " + e.getMessage());
-                        found[0] = false;
-                    }
-                });
-
-        return found[0];
-
+    public void fromDocument(DocumentSnapshot document) {
+        String eventId = document.getString("eventID");
+        if(eventId != null && !eventId.equals("null")) {
+            eventID = UUID.fromString(eventId);
+        }
+        if(document.getString("eventName") != null) {
+            eventName = document.getString("eventName");
+        }
+        if(document.getString("eventInfo") != null) {
+            eventInfo = document.getString("eventInfo");
+        }
+        String eventPosterId = document.getString("eventPosterID");
+        if(eventPosterId != null && !eventPosterId.equals("null")) {
+            eventPosterID = UUID.fromString(eventPosterId);
+        }
+        //infoQRCode = ; // Convert back from string
+        //checkInQR = ; // Convert back from string
+        if(document.getTimestamp("eventDate") != null) {
+            eventDate = Calendar.getInstance();
+            eventDate.setTimeInMillis(document.getTimestamp("eventDate").toDate().getTime());
+        }
+        if(document.getLong("maxAttendees") != null) {
+            maxAttendees = document.getLong("maxAttendees").intValue();
+        }
+        if(document.get("attendees") != null) {
+            attendees = (HashMap<String, Integer>) document.get("attendees");
+        }
     }
 
     //checks in a attendee
@@ -149,77 +128,6 @@ public class Event {
         }
 
         return true;
-
-    }
-
-    private void updateFromDocScreenshot(DocumentSnapshot documentSnapshot){
-
-        if (documentSnapshot != null && documentSnapshot.exists()) {
-
-            this.eventName = documentSnapshot.getString("eventName");
-
-            Timestamp eventTime = documentSnapshot.getTimestamp("eventDate");
-
-
-            Calendar c = Calendar.getInstance();
-            c.setTime(eventTime.toDate());
-
-            this.eventDate = c;
-
-
-            this.maxAttendees = Math.toIntExact(documentSnapshot.getLong("maxAttendees"));
-
-            this.eventInfo = documentSnapshot.getString("eventInfo");
-
-            String posterID = documentSnapshot.getString("eventPosterID");
-
-            if (posterID != null){
-                this.eventPosterID = UUID.fromString(posterID);
-            }
-
-
-            if (documentSnapshot.get("attendees") != null){
-
-                this.attendees = (HashMap<String, Integer>) documentSnapshot.get("attendees");
-            }
-
-            // Set other fields similarly
-        } else {
-            // Handle the case where the document does not exist
-            System.out.println("Document not found"); //this shouldnt happen though
-        }
-
-    }
-
-    private Map<String, Object> toMap(){
-
-        HashMap<String, Object> result = new HashMap<>();
-
-        result.put("eventName", eventName);
-        result.put("eventPosterID", eventPosterID != null ? eventPosterID.toString() : null);
-        result.put("eventInfo", eventInfo);
-
-        if (eventDate != null){
-            //convert to a firebase Timestamp
-            result.put("eventDate", new Timestamp(eventDate.getTime()));
-        }
-        else {
-            result.put("eventDate", null);
-        }
-
-        result.put("maxAttendees", maxAttendees);
-
-        if (attendees.isEmpty()) {
-            result.put("attendees", null);
-
-        } else {
-
-            result.put("attendees", this.attendees);
-
-        }
-
-
-        return result;
 
     }
 

@@ -39,6 +39,11 @@ android {
 }
 
 dependencies {
+
+    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0") // The dependency for QR code scanning
+
+
+
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-firestore:24.10.3")
@@ -52,10 +57,10 @@ dependencies {
     //implement the image downloading library
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.google.firebase:firebase-database:20.3.1")
+    implementation("androidx.databinding:databinding-runtime:8.3.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    // Import the QR Code scanning library
-    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
