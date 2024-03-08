@@ -1,5 +1,7 @@
 package ca.cmput301t05.placeholder;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,8 +10,11 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ca.cmput301t05.placeholder.qrcode.QRcodeScanner;
+import ca.cmput301t05.placeholder.ui.events.CreatedEventsAdapter;
 import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.events.JoinedEventsAdapter;
 import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
+
 
 /**
  * MainActivity serves as the primary entry point for the Placeholder application. It provides navigation to different
@@ -77,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
 
 
