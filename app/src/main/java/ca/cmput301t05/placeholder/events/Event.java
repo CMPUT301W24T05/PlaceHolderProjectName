@@ -20,7 +20,7 @@ public class Event extends DocumentSerializable implements Serializable {
 
     String eventInfo;
 
-    QRCode infoQRCode, checkInQR;
+    public QRCode infoQRCode, checkInQR;
 
     QRCodeManager QRCM = new QRCodeManager();
 
@@ -45,7 +45,6 @@ public class Event extends DocumentSerializable implements Serializable {
         this.eventID = eventID;
         this.attendees = new HashMap<>();
         infoQRCode = QRCM.generateQRCode(this, "eventInfo");
-        checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
 
@@ -58,7 +57,6 @@ public class Event extends DocumentSerializable implements Serializable {
         this.maxAttendees = maxAttendees;
         this.attendees = new HashMap<>();
         infoQRCode = QRCM.generateQRCode(this, "eventInfo");
-        checkInQR = QRCM.generateQRCode(this, "checkIn");
     }
 
     @Exclude
