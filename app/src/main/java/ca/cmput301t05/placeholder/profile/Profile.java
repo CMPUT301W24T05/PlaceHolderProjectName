@@ -117,7 +117,7 @@ public class Profile extends DocumentSerializable {
      * @return The list of hosted events.
      */
     //getters / setters
-    public List<String getHostedEvents() {
+    public List<String> getHostedEvents() {
         return hostedEvents;
     }
 
