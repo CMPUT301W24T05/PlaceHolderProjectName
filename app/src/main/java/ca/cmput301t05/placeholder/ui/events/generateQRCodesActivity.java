@@ -31,7 +31,7 @@ public class generateQRCodesActivity extends AppCompatActivity {
         generateQR_btn = findViewById(R.id.generate_new_qr);
         back_btn = findViewById(R.id.back_button);
         QRCM = new QRCodeManager();
-        
+
         generateQR_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
