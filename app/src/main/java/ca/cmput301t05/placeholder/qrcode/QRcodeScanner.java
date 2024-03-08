@@ -45,12 +45,25 @@ import ca.cmput301t05.placeholder.databinding.CameraActivityBinding;
 //import ca.cmput301t05.placeholder.events;
 
 
-
+/**
+ * QRcodeScanner is an activity for scanning QR codes using the device's camera. It leverages the CodeScanner library
+ * to decode QR codes and perform actions based on the decoded information. This class handles camera permission requests
+ * and displays a dialog if the permission is denied. It provides feedback to the user via Toast messages upon successful
+ * QR code scans.
+ */
 public class QRcodeScanner extends AppCompatActivity{
 
     private CodeScanner mCodeScanner;
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
+
+    /**
+     * Called when the activity is starting. This method initializes the CodeScanner, sets the content view to the
+     * camera_activity layout, and sets up permission handling for accessing the camera.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down, this
+     *                           Bundle contains the data it most recently supplied. Otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +100,11 @@ public class QRcodeScanner extends AppCompatActivity{
 
 
 
-
+    /**
+     * Checks if the app has been granted camera permission.
+     *
+     * @return true if the permission has been granted, false otherwise.
+     */
     private boolean checkCurrentPermission() {
         // check if the user granted us permission from a previous session
         if (ContextCompat.checkSelfPermission(QRcodeScanner.this, Manifest.permission.CAMERA)
@@ -98,6 +115,11 @@ public class QRcodeScanner extends AppCompatActivity{
             return false;
         }
     }
+
+    /**
+     * Initializes the requestPermissionLauncher used to request camera permission from the user. Defines the
+     * behavior upon permission grant or denial.
+     */
     private void initializePermissionLauncher(){
             // This method initializes and handles the logic of the permission launcher if we need to request permissions
             requestPermissionLauncher = registerForActivityResult( // Request launcher is being initialized
@@ -117,6 +139,10 @@ public class QRcodeScanner extends AppCompatActivity{
         }
 
 
+    /**
+     * Shows a dialog informing the user that camera permission has been denied and the feature requires this permission.
+     * The dialog provides an "OK" button to dismiss it.
+     */
     private void showPermissionDeniedDialog() { // Shows the permission denied pop-up
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Permission Denied");

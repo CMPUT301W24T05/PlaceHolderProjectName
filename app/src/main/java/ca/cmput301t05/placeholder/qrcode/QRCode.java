@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.events;
+package ca.cmput301t05.placeholder.qrcode;
 
 import android.graphics.Bitmap;
 
@@ -10,6 +10,8 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.Objects;
 import java.util.UUID;
+
+import ca.cmput301t05.placeholder.events.Event;
 
 /**
  * Represents a QR Code for an event, encapsulating the event ID and the type of QR code.

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,17 +13,26 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
 
 import java.io.Serializable;
 
 import ca.cmput301t05.placeholder.events.Event;
 
-public class event_infor_view_and_signup extends DialogFragment {
+/**
+ * A DialogFragment that presents detailed information about an event and provides an interface for user signup.
+ * This fragment displays the event's name, description, poster, and organizer details. Users can sign up for the event
+ * or close the dialog to go back to the previous screen.
+ */
+public class event_info_view_and_signup extends DialogFragment {
 
     private Button signup_button;
     private Event event;
 
+    /**
+     * Called when the fragment is first attached to its context. {@link #onCreate(Bundle)} will be called after this.
+     *
+     * @param context The context to which the fragment is being attached.
+     */
     @Override
     public void onAttach(@Nullable Context context) {
         super.onAttach(context);
@@ -33,15 +41,23 @@ public class event_infor_view_and_signup extends DialogFragment {
     //To do:
     // when scanning the QR code, implement the functionality in scanning to get the event object and pass
     // the event object when creating the fragment using the fragment object and call this object
-    static event_infor_view_and_signup newInstance(Event event, PlaceholderApp app) {
+    static event_info_view_and_signup newInstance(Event event, PlaceholderApp app) {
         Bundle args = new Bundle();
         args.putSerializable("event", event);
         args.putSerializable("app", app);
-        event_infor_view_and_signup fragment = new event_infor_view_and_signup();
+        event_info_view_and_signup fragment = new event_info_view_and_signup();
         fragment.setArguments(args);
         return fragment;
     }
 
+    /**
+     * Creates a new instance of event_info_view_and_signup DialogFragment with the specified Event and PlaceholderApp objects.
+     * This method packages the Event and PlaceholderApp objects into a Bundle to be used when creating the fragment.
+     *
+     * @param event The Event object containing details about the event.
+     * @param app   The PlaceholderApp object for accessing application-wide resources and databases.
+     * @return A new instance of event_info_view_and_signup DialogFragment with the event and app data.
+     */
     @NotNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = getLayoutInflater().inflate(R.layout.event_infor_view_and_signup, null);

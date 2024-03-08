@@ -1,7 +1,10 @@
-package ca.cmput301t05.placeholder.events;
+package ca.cmput301t05.placeholder.qrcode;
 
 
 import java.util.UUID;
+
+import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.qrcode.QRCode;
 
 
 /**
