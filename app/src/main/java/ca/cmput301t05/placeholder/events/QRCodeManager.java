@@ -50,7 +50,7 @@ public class QRCodeManager {
 
     }
 
-    
+
     // public void
     public boolean checkQRcodeType(String rawQRcodeString) {
         // Make sure you pass the raw text of QR code to this method

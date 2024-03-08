@@ -40,20 +40,34 @@ import java.util.List;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.MainActivity;
+import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.databinding.CameraActivityBinding;
+import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.events.QRCodeManager;
+import ca.cmput301t05.placeholder.profile.Profile;
 //import ca.cmput301t05.placeholder.events;
+
 
 
 
 public class QRcodeScanner extends AppCompatActivity{
 
+//    PlaceholderApp app = (PlaceholderApp) getApplicationContext();
+//    Profile user = app.getUserProfile();
+    private QRCodeManager qrCodeManager = new QRCodeManager();
     private CodeScanner mCodeScanner;
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
+
+        PlaceholderApp app = (PlaceholderApp) getApplicationContext();
+        Profile user = app.getUserProfile();
+
         setContentView(R.layout.camera_activity);
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
         mCodeScanner = new CodeScanner(this, scannerView);
@@ -65,7 +79,15 @@ public class QRcodeScanner extends AppCompatActivity{
                     public void run() { // Here is when the scanner reads event id
                         String rawText = result.getText(); // raw text embedded in QR code
                         // get UUID from QR code
-                        Toast.makeText(QRcodeScanner.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        Event event = qrCodeManager.joinEvent(rawText); // get the event
+
+                        if (event.checkIn(user)){ // If user allowed to join the event
+                            user.joinEvent(event);
+                        }
+                        else{
+                            Toast.makeText(QRcodeScanner.this, "FALSE!", Toast.LENGTH_SHORT).show();
+
+                        }
 
                     }
                 });
