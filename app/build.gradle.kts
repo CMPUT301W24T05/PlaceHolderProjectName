@@ -3,36 +3,14 @@ plugins {
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
 
-
-
-    id("org.jetbrains.dokka") version "1.9.20"
 }
 
-subprojects {
-    apply(plugin = "org.jetbrains.dokka")
-}
 
-tasks.dokkaHtml {
-    outputDirectory.set(layout.buildDirectory.dir("docs/javadoc"))
-}
 
-tasks.register<Jar>("dokkaHtmlJar") {
-    dependsOn(tasks.dokkaHtml)
-    from(tasks.dokkaHtml.flatMap { it.outputDirectory })
-    archiveClassifier.set("html-docs")
-}
-
-tasks.register<Jar>("dokkaJavadocJar") {
-    dependsOn(tasks.dokkaJavadoc)
-    from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
-    archiveClassifier.set("javadoc")
-}
 
 android {
     namespace = "ca.cmput301t05.placeholder"
     compileSdk = 34
-
-
 
 
     defaultConfig {
@@ -76,6 +54,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-storage")
+    implementation(files("D:/androidSDK"))
 
 
     //Import the Zxing library for the QRcode generator
