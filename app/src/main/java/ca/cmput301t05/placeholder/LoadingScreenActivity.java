@@ -13,9 +13,22 @@ import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.profile.Profile;
 
+/**
+ * LoadingScreenActivity is an activity displayed during the startup of the application. It is responsible for
+ * determining whether a user profile exists for the current device. If a profile exists, it transitions to the
+ * MainActivity. Otherwise, it directs the user to the InitialSetupActivity to create a new profile.
+ */
 public class LoadingScreenActivity extends AppCompatActivity {
 
     PlaceholderApp app;
+
+    /**
+     * Called when the activity is starting. This method sets the content view to the loading screen layout
+     * and initiates the process of fetching the user's profile based on the device ID.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied. Otherwise, it is null.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +39,11 @@ public class LoadingScreenActivity extends AppCompatActivity {
         fetchProfileAndContinue();
     }
 
+    /**
+     * Attempts to fetch the user profile associated with the device's ID. If the device does not have a stored
+     * ID or the profile cannot be found in the database, the user is redirected to InitialSetupActivity to
+     * allow profile creation. If a profile is found, the application proceeds to the MainActivity.
+     */
     private void fetchProfileAndContinue() {
         if(!app.getIdManager().deviceHasIDStored()){
             Intent intent = new Intent(getApplicationContext(), InitialSetupActivity.class);

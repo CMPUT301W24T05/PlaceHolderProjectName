@@ -4,10 +4,9 @@ package ca.cmput301t05.placeholder;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.events.QRCode;
-import ca.cmput301t05.placeholder.events.QRCodeManager;
+import ca.cmput301t05.placeholder.qrcode.QRCode;
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 
 public class QRCodeTest {
 

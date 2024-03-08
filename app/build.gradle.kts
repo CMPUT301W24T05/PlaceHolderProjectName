@@ -2,11 +2,16 @@ plugins {
     id("com.android.application")
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
+
 }
+
+
+
 
 android {
     namespace = "ca.cmput301t05.placeholder"
     compileSdk = 34
+
 
     defaultConfig {
         applicationId = "ca.cmput301t05.placeholder"
@@ -44,10 +49,12 @@ dependencies {
 
 
 
+
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-storage")
+    implementation(files("D:/androidSDK"))
 
 
     //Import the Zxing library for the QRcode generator
