@@ -131,7 +131,7 @@ public class QRcodeScanner extends AppCompatActivity{
                                 } else if (type == QRCodeType.INFO) {
 
                                     //need to go back to main activity and add to bundle so we can open a fragment
-
+                                    Log.d("QR_CODE", "Type is Info, and we're in the if");
                                     app.setCachedEvent(event);
 
                                     Intent intent = new Intent(QRcodeScanner.this, MainActivity.class);
@@ -145,11 +145,13 @@ public class QRcodeScanner extends AppCompatActivity{
 
                                 }
 
-                            }
 
+                            }
                             @Override
                             public void onFailure(Exception e){
                                 // Failed to get fetch the event for eventId with exception e
+
+
                             }
                         });
 

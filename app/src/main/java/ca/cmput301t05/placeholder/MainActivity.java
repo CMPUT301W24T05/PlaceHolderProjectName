@@ -62,11 +62,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        app.getEventTable().fetchDocument("e906a09f-a80b-4e2a-a598-ab12aec2b468", new Table.DocumentCallback<Event>() {
+        app.getEventTable().fetchDocument("a950e92d-7b97-4d47-9d90-f6e421c42cd1", new Table.DocumentCallback<Event>() {
             @Override
             public void onSuccess(Event document) {
 
-                QRCode qr = qrM.generateQRCode(document, "eventInfo");
+                QRCode qr = qrM.generateQRCode(document, "checkIn");
 
                 Log.d("Event_info",document.getEventID().toString());
 

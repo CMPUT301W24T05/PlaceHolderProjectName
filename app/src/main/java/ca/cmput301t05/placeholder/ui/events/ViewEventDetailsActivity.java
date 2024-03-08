@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -42,6 +43,8 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
     private TextView event_author;
 
+    private ImageView event_poster;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +69,7 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         event_details = findViewById(R.id.vieweventdetails_eventinfo);
         event_author = findViewById(R.id.vieweventdetails_eventAuthor);
 
+        event_poster = findViewById(R.id.vieweventdetails_poster);
 
 
 
@@ -135,6 +139,8 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
             }
         });
+
+        app.getPosterImageHandler().getPosterPicture(displayEvent, event_poster);
 
 
     }

@@ -119,6 +119,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             newEvent.setEventDate(cal);
             newEvent.setEventName(eventName.getText().toString().trim());
             newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
+            newEvent.setEventCreator(app.getUserProfile().getProfileID());
 
             app.setCachedEvent(newEvent);
             Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
