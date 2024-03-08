@@ -1,15 +1,17 @@
 package ca.cmput301t05.placeholder.ui.notifications;
 
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import ca.cmput301t05.placeholder.R;
+
 import ca.cmput301t05.placeholder.databinding.FragmentNotificationsBinding;
 
-//not a fragment but an activity now!!
 public class NotificationsFragment extends AppCompatActivity {
 
     private FragmentNotificationsBinding binding;
@@ -23,9 +25,13 @@ public class NotificationsFragment extends AppCompatActivity {
         binding = FragmentNotificationsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //for NotificationViewModel
-        final TextView textView = binding.textNotifications;
-        notificationsViewModel.getText().observe(this, textView::setText);
+        Button backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
