@@ -37,6 +37,7 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
     private ImageView event_poster;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,7 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         event_author = findViewById(R.id.event_signup_author);
 
         event_poster = findViewById(R.id.event_signup_poster);
+
 
 
 
@@ -133,6 +135,8 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         });
 
         app.getPosterImageHandler().getPosterPicture(displayEvent, event_poster);
+
+
 
 
     }

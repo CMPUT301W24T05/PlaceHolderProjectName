@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,8 @@ public class EventSignUpActivity extends AppCompatActivity {
 
     private ImageView event_poster;
 
+    private Button interested;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +61,8 @@ public class EventSignUpActivity extends AppCompatActivity {
         event_author = findViewById(R.id.event_signup_author);
 
         event_poster = findViewById(R.id.event_signup_poster);
+
+        interested = findViewById(R.id.event_signup_interested);
 
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -117,5 +122,35 @@ public class EventSignUpActivity extends AppCompatActivity {
         });
 
         app.getPosterImageHandler().getPosterPicture(displayEvent, event_poster);
+
+        interested.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //basically when we click we join the event
+
+                app.getUserProfile().joinEvent(displayEvent);
+                app.getJoinedEvents().put(displayEvent.getEventID(),displayEvent);
+
+                app.getUserProfile().toDocument();
+
+                app.getProfileTable().pushDocument(app.getUserProfile(), app.getProfileTable().toString(), new Table.DocumentCallback<Profile>() {
+                    @Override
+                    public void onSuccess(Profile document) {
+                        
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+
+                Toast toast = Toast.makeText(getApplicationContext(), "Joined Event", Toast.LENGTH_SHORT);
+                toast.show();
+
+                finish();
+
+            }
+        });
     }
 }
