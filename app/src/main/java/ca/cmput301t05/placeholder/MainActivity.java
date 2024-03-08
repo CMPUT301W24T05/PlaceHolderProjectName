@@ -2,20 +2,35 @@ package ca.cmput301t05.placeholder;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.view.View;
 import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import ca.cmput301t05.placeholder.qrcode.QRcodeScanner;
 import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
 
+/**
+ * MainActivity serves as the primary entry point for the Placeholder application. It provides navigation to different
+ * parts of the application, such as creating events, joining events via QR code scanning, editing user profiles,
+ * and viewing notifications. This activity sets up the main user interface and initializes action listeners for
+ * navigation buttons.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private PlaceholderApp app;
 
     private Button guideToEvent;
-  
+
+
+    /**
+     * Called when the activity is starting. Initializes the application context, sets the content view,
+     * and configures button listeners for navigating to various features of the app.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied. Otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +68,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        
+        Button notificationsButton = findViewById(R.id.btnNotifications);
+        notificationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Start NotificationsActivity
+                Intent intent = new Intent(MainActivity.this, NotificationsFragment.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
     }
 
 }

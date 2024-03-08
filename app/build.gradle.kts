@@ -2,11 +2,16 @@ plugins {
     id("com.android.application")
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
+
 }
+
+
+
 
 android {
     namespace = "ca.cmput301t05.placeholder"
     compileSdk = 34
+
 
     defaultConfig {
         applicationId = "ca.cmput301t05.placeholder"
@@ -41,6 +46,7 @@ android {
 dependencies {
 
     implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0") // The dependency for QR code scanning
+
 
 
 

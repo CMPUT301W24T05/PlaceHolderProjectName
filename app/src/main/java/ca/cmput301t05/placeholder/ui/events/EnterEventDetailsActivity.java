@@ -17,6 +17,12 @@ import ca.cmput301t05.placeholder.events.Event;
 import java.util.Calendar;
 import java.util.Locale;
 
+/**
+ * EnterEventDetailsActivity is an activity class for entering the details of a new event.
+ * It allows the user to input event name, location, date, time, description, and capacity.
+ * This activity includes date and time pickers to facilitate the entry of date and time information.
+ * After entering the details, the user can proceed to the next step which involves uploading an event poster.
+ */
 public class EnterEventDetailsActivity extends AppCompatActivity {
 
     private EditText eventName;
@@ -32,6 +38,13 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     private Event newEvent;
     private Calendar cal;
 
+    /**
+     * Called when the activity is starting. Initializes the UI components, sets up click listeners
+     * for the date and time inputs, and prepares the next button for finalizing event details.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied. Otherwise, it is null.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +60,9 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
 
         setupNextButtonClick();
     }
-
+    /**
+     * Initializes the UI components used for entering event details and retrieves the application context.
+     */
     private void initializeEventDetails() {
         eventName = findViewById(R.id.enterEventName);
         eventLocation = findViewById(R.id.enterLocation);
@@ -58,6 +73,9 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         app = (PlaceholderApp) getApplicationContext();
     }
 
+    /**
+     * Opens a dialog for picking the time of the event. Initializes the dialog with the current hour and minute.
+     */
     private void openTimePickerDialog() {
         if (cal == null) return;
 
@@ -69,6 +87,9 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    /**
+     * Opens a dialog for picking the date of the event. Initializes the dialog with the current year, month, and day.
+     */
     private void openDatePickerDialog() {
         cal = Calendar.getInstance();
 
@@ -83,6 +104,10 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    /**
+     * Sets up the click listener for the "next" button. Validates the event details entered by the user,
+     * updates the event object, and proceeds to add the event to the database.
+     */
     private void setupNextButtonClick() {
         nextButton.setOnClickListener(view -> {
             if (!hasValidEventDetails()) return;
@@ -96,10 +121,21 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Validates that all event details have been entered and are valid.
+     *
+     * @return true if all details are valid, false otherwise.
+     */
     private boolean hasValidEventDetails() {
         return cal != null && validateEditTextNotEmpty(eventName) && validateEditTextNotEmpty(eventLocation) && validateEditTextNotEmpty(eventDate) && validateEditTextNotEmpty(eventTime) && validateEditTextNotEmpty(eventDescripiton) && validateEditTextNotEmpty(eventCapacity);
     }
 
+    /**
+     * Validates that a specific EditText field is not empty.
+     *
+     * @param editText The EditText field to validate.
+     * @return true if the field is not empty, false otherwise.
+     */
     private boolean validateEditTextNotEmpty(EditText editText) {
         if (editText.getText().toString().trim().isEmpty()) {
             editText.setError("Field cannot be empty");
@@ -108,6 +144,9 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Adds the event to the database and transitions to the UploadPosterActivity on success.
+     */
     private void addEventToDatabase() {
         app.getEventTable().pushDocument(newEvent, newEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
             @Override
