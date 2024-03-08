@@ -1,52 +1,35 @@
-package ca.cmput301t05.placeholder.qrcode;
+package ca.cmput301t05.placeholder.ui.codescanner;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
+import android.util.Log;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.OptIn;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.viewbinding.ViewBinding;
 
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
+import ca.cmput301t05.placeholder.qrcode.QRCodeType;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import com.google.zxing.Result;
 
 
 import android.Manifest;
-import android.widget.Toast;
 
-import java.util.List;
-import java.util.UUID;
-
-import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
-import ca.cmput301t05.placeholder.databinding.CameraActivityBinding;
-import ca.cmput301t05.placeholder.event_info_view_and_signup;
-import ca.cmput301t05.placeholder.event_info_view_and_signup;
+import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.ui.events.EventSignUpActivity;
@@ -60,7 +43,7 @@ import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
  * and displays a dialog if the permission is denied. It provides feedback to the user via Toast messages upon successful
  * QR code scans.
  */
-public class QRcodeScanner extends AppCompatActivity{
+public class QRCodeScannerActivity extends AppCompatActivity{
 
     private CodeScanner mCodeScanner;
     private ActivityResultLauncher<String> requestPermissionLauncher;
@@ -122,7 +105,7 @@ public class QRcodeScanner extends AppCompatActivity{
                                 if(type == QRCodeType.CHECK_IN){
 
                                     app.setCachedEvent(event); //sets the cached event so we can use it on the next page
-                                    Intent intent = new Intent(QRcodeScanner.this, ViewEventDetailsActivity.class);
+                                    Intent intent = new Intent(QRCodeScannerActivity.this, ViewEventDetailsActivity.class);
 
                                     startActivity(intent);
 
@@ -135,7 +118,7 @@ public class QRcodeScanner extends AppCompatActivity{
                                     Log.d("QR_CODE", "Type is Info, and we're in the if");
                                     app.setCachedEvent(event);
 
-                                    Intent intent = new Intent(QRcodeScanner.this, EventSignUpActivity.class);
+                                    Intent intent = new Intent(QRCodeScannerActivity.this, EventSignUpActivity.class);
 
                                     intent.putExtra("openFragment", true);
 
@@ -178,7 +161,7 @@ public class QRcodeScanner extends AppCompatActivity{
      * @param app
      */
     private void viewEventInfo(Event event, PlaceholderApp app) {
-        event_info_view_and_signup fragment =  event_info_view_and_signup.newInstance(event, app);
+        EventDetailsDialogFragment fragment =  EventDetailsDialogFragment.newInstance(event, app);
         fragment.show(getSupportFragmentManager(), "Show Event info");
     }
 
@@ -190,7 +173,7 @@ public class QRcodeScanner extends AppCompatActivity{
      */
     private boolean checkCurrentPermission() {
         // check if the user granted us permission from a previous session
-        if (ContextCompat.checkSelfPermission(QRcodeScanner.this, Manifest.permission.CAMERA)
+        if (ContextCompat.checkSelfPermission(QRCodeScannerActivity.this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) { // Check if permission granted, if granted start camera!
             return true;
         }
