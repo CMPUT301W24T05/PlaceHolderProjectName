@@ -58,6 +58,9 @@ public class UploadPosterActivity extends AppCompatActivity {
         // Fetches a specific event's ID from the intent passed to this activity
         UUID eventID = UUID.fromString(getIntent().getStringExtra("created_event_ID"));
 
+        // I'm using atomic reference, as it's thread-safe, meaning it can be updated while being accessed by multiple threads
+        AtomicReference<Uri> curPic = new AtomicReference<>();
+
         // Fetches an Event document by its ID from the events table in the database
         // This fetch is asynchronous, we set the current event (currEvent) in the onSuccess callback
         app.getEventTable().fetchDocument(eventID.toString(), new Table.DocumentCallback<Event>() {
@@ -66,7 +69,7 @@ public class UploadPosterActivity extends AppCompatActivity {
                 // If the document successfully fetched from the database
                 // set the returned event document (document) as the current event (currEvent)
                 currEvent = document;
-                setupActions();
+                setupActions(curPic);
             }
 
             @Override
@@ -74,16 +77,6 @@ public class UploadPosterActivity extends AppCompatActivity {
                 // TODO Handle there being no event with 'eventID' in the database
             }
         });
-    }
-
-    /**
-     * Sets up the actions for UI components. This includes setting up the media picker for selecting an image,
-     * configuring the button to trigger the media picker, and setting up the navigation for the next button after
-     * uploading the poster. The uploaded poster is attached to the current event object and updated in the database.
-     */
-    private void setupActions() {
-        // I'm using atomic reference, as it's thread-safe, meaning it can be updated while being accessed by multiple threads
-        AtomicReference<Uri> curPic = new AtomicReference<>();
 
         pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
             if (uri == null){
@@ -95,7 +88,14 @@ public class UploadPosterActivity extends AppCompatActivity {
                 curPic.set(uri);
             }
         });
+    }
 
+    /**
+     * Sets up the actions for UI components. This includes setting up the media picker for selecting an image,
+     * configuring the button to trigger the media picker, and setting up the navigation for the next button after
+     * uploading the poster. The uploaded poster is attached to the current event object and updated in the database.
+     */
+    private void setupActions(AtomicReference<Uri> curPic) {
         back.setOnClickListener(view -> finish());
 
         uploadPoster.setOnClickListener(view -> {
