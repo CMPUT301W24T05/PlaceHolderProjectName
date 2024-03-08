@@ -49,6 +49,7 @@ import ca.cmput301t05.placeholder.event_info_view_and_signup;
 import ca.cmput301t05.placeholder.event_info_view_and_signup;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.ui.events.EventSignUpActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 //import ca.cmput301t05.placeholder.events;
 
@@ -134,7 +135,7 @@ public class QRcodeScanner extends AppCompatActivity{
                                     Log.d("QR_CODE", "Type is Info, and we're in the if");
                                     app.setCachedEvent(event);
 
-                                    Intent intent = new Intent(QRcodeScanner.this, MainActivity.class);
+                                    Intent intent = new Intent(QRcodeScanner.this, EventSignUpActivity.class);
 
                                     intent.putExtra("openFragment", true);
 

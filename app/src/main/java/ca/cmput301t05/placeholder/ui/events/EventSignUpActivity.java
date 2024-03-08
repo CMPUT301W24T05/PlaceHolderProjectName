@@ -21,11 +21,10 @@ import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
-public class ViewEventDetailsActivity extends AppCompatActivity {
+public class EventSignUpActivity extends AppCompatActivity {
 
     private Button back;
 
-    private Button profile_button;
 
     private TextView event_date;
 
@@ -47,13 +46,10 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         Event displayEvent = app.getCachedEvent();
 
 
-
-
-        setContentView(R.layout.event_vieweventdetails);
+        setContentView(R.layout.event_signupevent);
 
 
         back = findViewById(R.id.event_signup_back);
-        profile_button = findViewById(R.id.vieweventdetails_profile);
 
         event_date = findViewById(R.id.event_signup_eventDate);
         event_location = findViewById(R.id.event_signup_eventlocation);
@@ -64,9 +60,6 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         event_poster = findViewById(R.id.event_signup_poster);
 
 
-
-
-
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,19 +67,10 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
             }
         });
 
-        profile_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //open profile
-                Intent i = new Intent(ViewEventDetailsActivity.this, ProfileEditActivity.class);
-                startActivity(i);
-            }
-        });
-
 
         Log.d("Event_Check", String.valueOf(displayEvent.getEventName()));
         //get date
-        Log.e("Event_Check",String.valueOf(displayEvent.getEventDate()));
+        Log.e("Event_Check", String.valueOf(displayEvent.getEventDate()));
 
         Calendar calendar = displayEvent.getEventDate();
 
@@ -100,9 +84,9 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         int amPm = calendar.get(Calendar.AM_PM);
 
         String amOrPm;
-        if (amPm == Calendar.AM){
+        if (amPm == Calendar.AM) {
             amOrPm = " AM";
-        }   else {
+        } else {
             amOrPm = " PM";
         }
 
@@ -133,7 +117,5 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         });
 
         app.getPosterImageHandler().getPosterPicture(displayEvent, event_poster);
-
-
     }
 }

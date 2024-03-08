@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Event document) {
 
-                QRCode qr = qrM.generateQRCode(document, "checkIn");
+                QRCode qr = qrM.generateQRCode(document, "eventInfo");
 
                 Log.d("Event_info",document.getEventID().toString());
 
