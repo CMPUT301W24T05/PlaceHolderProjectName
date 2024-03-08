@@ -56,27 +56,14 @@ public class UploadPosterActivity extends AppCompatActivity {
         nextPage = findViewById(R.id.event_posternext);
 
         // Fetches a specific event's ID from the intent passed to this activity
-        UUID eventID = UUID.fromString(getIntent().getStringExtra("created_event_ID"));
+        currEvent = app.getCachedEvent();
 
         // I'm using atomic reference, as it's thread-safe, meaning it can be updated while being accessed by multiple threads
         AtomicReference<Uri> curPic = new AtomicReference<>();
 
         // Fetches an Event document by its ID from the events table in the database
         // This fetch is asynchronous, we set the current event (currEvent) in the onSuccess callback
-        app.getEventTable().fetchDocument(eventID.toString(), new Table.DocumentCallback<Event>() {
-            @Override
-            public void onSuccess(Event document) {
-                // If the document successfully fetched from the database
-                // set the returned event document (document) as the current event (currEvent)
-                currEvent = document;
-                setupActions(curPic);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                // TODO Handle there being no event with 'eventID' in the database
-            }
-        });
+        setupActions(curPic);
 
         pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
             if (uri == null){

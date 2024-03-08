@@ -111,14 +111,19 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
      */
     private void setupNextButtonClick() {
         nextButton.setOnClickListener(view -> {
-            if (!hasValidEventDetails()) return;
+            if (!hasValidEventDetails()){
+                return;
+            }
 
             newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
             newEvent.setEventDate(cal);
             newEvent.setEventName(eventName.getText().toString().trim());
             newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
 
-            addEventToDatabase();
+            app.setCachedEvent(newEvent);
+            Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
+            startActivity(posterPick);
+
         });
     }
 
@@ -128,7 +133,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
      * @return true if all details are valid, false otherwise.
      */
     private boolean hasValidEventDetails() {
-        return cal != null && validateEditTextNotEmpty(eventName) && validateEditTextNotEmpty(eventLocation) && validateEditTextNotEmpty(eventDate) && validateEditTextNotEmpty(eventTime) && validateEditTextNotEmpty(eventDescripiton) && validateEditTextNotEmpty(eventCapacity);
+        return validateEditTextNotEmpty(eventName) && validateEditTextNotEmpty(eventLocation) && validateEditTextNotEmpty(eventDate) && validateEditTextNotEmpty(eventTime) && validateEditTextNotEmpty(eventDescripiton) && validateEditTextNotEmpty(eventCapacity) && cal != null;
     }
 
     /**
