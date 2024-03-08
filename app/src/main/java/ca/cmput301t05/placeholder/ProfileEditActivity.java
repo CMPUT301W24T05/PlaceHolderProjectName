@@ -20,6 +20,13 @@ import java.util.UUID;
 
 import ca.cmput301t05.placeholder.profile.Profile;
 
+/**
+ * The ProfileEditActivity class allows users to edit their profile information.
+ * Users can update their name, contact information, homepage, and profile picture.
+ * Admin users have additional access to an admin button that directs them to the admin tab.
+ * This activity supports adding a profile picture via an external image picker library
+ * and removing the current profile picture.
+ */
 public class ProfileEditActivity extends AppCompatActivity{
 
     private PlaceholderApp app;
@@ -38,6 +45,15 @@ public class ProfileEditActivity extends AppCompatActivity{
 
     private boolean RemovePic = false;
 
+    /**
+     * Handles the result from the image picker activity, updating the profile picture view
+     * and storing the new picture's URI.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(),
+     *                    allowing you to identify who this result came from.
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +119,15 @@ public class ProfileEditActivity extends AppCompatActivity{
     }
 
 
+    /**
+     * Handles the result from the image picker activity, updating the profile picture view
+     * and storing the new picture's URI.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(),
+     *                    allowing you to identify who this result came from.
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("ACtiviy Result", "IN FUNC");
@@ -114,6 +139,11 @@ public class ProfileEditActivity extends AppCompatActivity{
 
     }
 
+    /**
+     * Initializes the activity's views with the user's current profile information,
+     * including their name, contact information, homepage, and profile picture.
+     * The admin button visibility is set based on the user's admin status.
+     */
     private void setUp(){
         // set up the profile picture
         profile = app.getUserProfile();
@@ -126,6 +156,11 @@ public class ProfileEditActivity extends AppCompatActivity{
         boolean admin = profile.isAdmin();
         if (!admin){adminButton.setVisibility(View.GONE);}
     }
+    /**
+     * Updates the user's profile with the information entered in the activity's views.
+     * This includes updating the name, contact information, homepage, and profile picture.
+     * Changes are saved to the application's database.
+     */
     private void update(){
         profile.setName(editName.getText().toString());
         profile.setContactInfo(editContact.getText().toString());
