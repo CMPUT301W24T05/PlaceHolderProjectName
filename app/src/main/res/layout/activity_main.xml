@@ -75,4 +75,9 @@
             android:layout_marginTop="10dp" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/qr_test_pic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
