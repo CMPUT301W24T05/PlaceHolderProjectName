@@ -41,7 +41,7 @@ public class QRCodeManager {
 
      //   } else {
      //       return null;
-
+            return null;
         }
 
     public Event joinEvent(String rawQRcodeString){ // Join the event
