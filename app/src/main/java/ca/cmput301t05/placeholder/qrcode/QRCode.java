@@ -24,6 +24,8 @@ public class QRCode {
 
     public Bitmap bitmap;
 
+    String rawText;
+
 
 
     /**
@@ -50,6 +52,9 @@ public class QRCode {
         try
         {
             String content = eventID.toString() + ";" + this.type.name();
+
+            this.rawText = content;
+
             BitMatrix matrix = writer.encode(content, BarcodeFormat.QR_CODE, 400, 400);
 
             BarcodeEncoder encoder = new BarcodeEncoder();
@@ -79,6 +84,10 @@ public class QRCode {
 
     public Bitmap getBitmap(){
         return this.bitmap;
+    }
+
+    public String getRawText() {
+        return rawText;
     }
 
 }
