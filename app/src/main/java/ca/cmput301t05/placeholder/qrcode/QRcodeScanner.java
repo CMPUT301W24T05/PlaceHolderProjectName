@@ -42,6 +42,7 @@ import java.util.UUID;
 import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.databinding.CameraActivityBinding;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.QRCodeManager;
@@ -78,18 +79,23 @@ public class QRcodeScanner extends AppCompatActivity{
                     @Override
                     public void run() { // Here is when the scanner reads event id
                         String rawText = result.getText(); // raw text embedded in QR code
-//                        String eventID = eventIdStr.substring(0, 35);
+                        String eventID =  rawText.substring(0, 35); // Get the UUID as a string
+                        app.getEventTable().fetchDocument(eventID, new Table.DocumentCallback<Event>() {
+                            @Override
+                            public void onSuccess(Event event){
+                                // Do something with the fetched event here
+                                if (event.checkIn(user)){ // If user allowed to join the event
+                                    user.joinEvent(event);
+//                                    Toast.makeText(QRcodeScanner.this, "FALSE!", Toast.LENGTH_SHORT).show();
 
-                        // get UUID from QR code
-                        Event event = qrCodeManager.joinEvent(rawText); // get the event
+                                }
+                            }
 
-                        if (event.checkIn(user)){ // If user allowed to join the event
-                            user.joinEvent(event);
-                        }
-                        else{
-                            Toast.makeText(QRcodeScanner.this, "FALSE!", Toast.LENGTH_SHORT).show();
-
-                        }
+                            @Override
+                            public void onFailure(Exception e){
+                                // Failed to get fetch the event for eventId with exception e
+                            }
+                        });
 
                     }
                 });

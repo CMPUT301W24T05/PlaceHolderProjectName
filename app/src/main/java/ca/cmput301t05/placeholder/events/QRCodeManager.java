@@ -44,18 +44,6 @@ public class QRCodeManager {
 
         }
 
-    public Event joinEvent(String rawQRcodeString){ // Join the event
-        if (!checkQRcodeType(rawQRcodeString)){ // its a valid QR code for check-in
-            UUID uuid = scanGetEventID(rawQRcodeString);
-            // I'm commenting out getting the event from DB for now, will do it outside this activity
-            Event event = new Event(uuid);
-//            boolean success = event.getEventFromDatabase();
-//            Log.e("amirza2", "Join event state" + success);
-            return event;
-        }
-        return null;
-
-    }
 
 
     // public void
