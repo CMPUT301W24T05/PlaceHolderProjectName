@@ -60,6 +60,8 @@ public class GenerateQRCodesActivity extends AppCompatActivity {
                         //event.checkInQR = qr;
 
                         //display preview activity then move to preview page
+                       // Intent i = new Intent(GenerateQRCodesActivity.this, EventPreview.class);
+
 //                        Intent i = new Intent(GenerateQRCodesActivity.this, Preview.class);
 
 
