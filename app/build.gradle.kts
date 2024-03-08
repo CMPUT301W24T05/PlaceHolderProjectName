@@ -54,7 +54,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-storage")
-    implementation(files("D:/androidSDK"))
 
 
     //Import the Zxing library for the QRcode generator
