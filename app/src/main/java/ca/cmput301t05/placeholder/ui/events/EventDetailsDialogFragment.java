@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder;
+package ca.cmput301t05.placeholder.ui.events;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import ca.cmput301t05.placeholder.PlaceholderApp;
+import ca.cmput301t05.placeholder.R;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -23,7 +25,7 @@ import ca.cmput301t05.placeholder.events.Event;
  * This fragment displays the event's name, description, poster, and organizer details. Users can sign up for the event
  * or close the dialog to go back to the previous screen.
  */
-public class event_info_view_and_signup extends DialogFragment {
+public class EventDetailsDialogFragment extends DialogFragment {
 
     private Button signup_button;
     private Event event;
@@ -42,11 +44,11 @@ public class event_info_view_and_signup extends DialogFragment {
     //To do:
     // when scanning the QR code, implement the functionality in scanning to get the event object and pass
     // the event object when creating the fragment using the fragment object and call this object
-    static public event_info_view_and_signup newInstance(Event event, PlaceholderApp app) {
+    static public EventDetailsDialogFragment newInstance(Event event, PlaceholderApp app) {
         Bundle args = new Bundle();
         args.putSerializable("event", event);
         args.putSerializable("app", app);
-        event_info_view_and_signup fragment = new event_info_view_and_signup();
+        EventDetailsDialogFragment fragment = new EventDetailsDialogFragment();
         fragment.setArguments(args);
         return fragment;
     }
