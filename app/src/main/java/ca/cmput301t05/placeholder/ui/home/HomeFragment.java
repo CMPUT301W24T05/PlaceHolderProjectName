@@ -9,27 +9,22 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
-
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import ca.cmput301t05.placeholder.ProfileEditActivity;
 import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.databinding.FragmentHomeBinding;
+//import ca.cmput301t05.placeholder.databinding.FragmentHomeBinding;
 
-//test
 public class HomeFragment extends Fragment {
 
 
-    private FragmentHomeBinding binding;
+    //private FragmentHomeBinding binding;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -38,7 +33,10 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        //binding = FragmentHomeBinding.inflate(inflater, container, false);
+        // Use DataBindingUtil to inflate the layout
+        ViewDataBinding binding = DataBindingUtil.inflate(
+                inflater, R.layout.activity_main, container, false);
         View root = binding.getRoot();
 
         //For HomeViewModel
@@ -86,6 +84,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        //binding = null;
     }
 }
