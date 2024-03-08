@@ -1,7 +1,5 @@
 package ca.cmput301t05.placeholder;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,10 +7,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import ca.cmput301t05.placeholder.qrcode.QRcodeScanner;
-import ca.cmput301t05.placeholder.ui.events.CreatedEventsAdapter;
+import ca.cmput301t05.placeholder.qrcode.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
-import ca.cmput301t05.placeholder.ui.events.JoinedEventsAdapter;
 import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
 
 
@@ -58,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Start QRcodeScanner activity
-                Intent intent = new Intent(MainActivity.this, QRcodeScanner.class);
+                Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
                 startActivity(intent);
             }
         });

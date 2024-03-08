@@ -19,6 +19,9 @@ import androidx.navigation.Navigation;
 
 import ca.cmput301t05.placeholder.ProfileEditActivity;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.databinding.EventEnterdetailsBinding;
+import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
 //import ca.cmput301t05.placeholder.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -56,8 +59,10 @@ public class HomeFragment extends Fragment {
 
         // "Create New Event" Button
         Button btnCreateEvent = root.findViewById(R.id.btnCreateEvent);
-        btnCreateEvent.setOnClickListener(view ->
-                Navigation.findNavController(view).navigate(R.id.action_home_to_enterEventDetailsActivity));
+        btnCreateEvent.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), EnterEventDetailsActivity.class);
+            startActivity(intent);
+        });
 
         // List of Created Events
         ListView listCreatedEvents = root.findViewById(R.id.listCreatedEvents);
@@ -67,8 +72,10 @@ public class HomeFragment extends Fragment {
 
         // "Notifications" Button
         Button btnNotifications = root.findViewById(R.id.btnNotifications);
-        btnNotifications.setOnClickListener(view ->
-                Navigation.findNavController(view).navigate(R.id.navigation_notifications));
+        btnNotifications.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), NotificationsFragment.class);
+            startActivity(intent);
+        });
 
         // "Profile" Button
         Button btnProfile = root.findViewById(R.id.btnProfile);
