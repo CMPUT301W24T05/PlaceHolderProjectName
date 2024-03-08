@@ -31,10 +31,7 @@ public class generateQRCodesActivity extends AppCompatActivity {
         generateQR_btn = findViewById(R.id.generate_new_qr);
         back_btn = findViewById(R.id.back_button);
         QRCM = new QRCodeManager();
-
-        //Here should I get the event from the previous intent as a Serializable object or should I pull it from the database
-        //String event = getIntent().getExtras().getString("event");
-
+        
         generateQR_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +48,7 @@ public class generateQRCodesActivity extends AppCompatActivity {
                         //display generation success fragment then move to preview page
                         //...
 
-                        
+
                     }
 
                     @Override
