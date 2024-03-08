@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.ui.events.creation;
+package ca.cmput301t05.placeholder.ui.events;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.cmput301t05.placeholder.MainActivity;

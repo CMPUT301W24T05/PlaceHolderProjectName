@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.ui.events.creation;
+package ca.cmput301t05.placeholder.ui.events;
 
 import android.os.Bundle;
 import android.view.View;
