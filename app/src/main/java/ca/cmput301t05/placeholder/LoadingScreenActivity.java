@@ -62,8 +62,9 @@ public class LoadingScreenActivity extends AppCompatActivity {
                 // The profile exists in firebase! We can continue to the Main activity
                 app.setUserProfile(profile);
 
-                fetchEvents(profile, "hostedEvents");
-                fetchEvents(profile, "joinedEvents");
+                if (app.getHostedEvents() != null){fetchEvents(profile, "hostedEvents");}
+                if (app.getJoinedEvents() != null){fetchEvents(profile, "joinedEvents");}
+
 
                 Log.i("Placeholder App", String.format("Profile with id %s and name %s has been loaded!", profile.getProfileID(), profile.getName()));
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -94,6 +95,10 @@ public class LoadingScreenActivity extends AppCompatActivity {
         }  else {
 
             events = profile.getJoinedEvents();
+        }
+
+        if (events == null){
+            return;
         }
 
         //now load all the events into their respective container

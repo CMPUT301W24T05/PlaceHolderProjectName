@@ -119,7 +119,10 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             newEvent.setEventName(eventName.getText().toString().trim());
             newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
 
-            addEventToDatabase();
+            app.setCachedEvent(newEvent);
+            Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
+            startActivity(posterPick);
+
         });
     }
 

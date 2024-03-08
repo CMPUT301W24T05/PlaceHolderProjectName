@@ -123,5 +123,11 @@ public class PlaceholderApp extends Application implements Serializable {
         return this.hostedEvents;
     }
 
+    public void setCachedEvent(Event cachedEvent) {
+        this.cachedEvent = cachedEvent;
+    }
 
+    public Event getCachedEvent() {
+        return cachedEvent;
+    }
 }
