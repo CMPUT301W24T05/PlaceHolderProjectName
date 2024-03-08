@@ -64,6 +64,7 @@ dependencies {
     //implement the image downloading library
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.google.firebase:firebase-database:20.3.1")
+    implementation("androidx.databinding:databinding-runtime:8.3.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
 

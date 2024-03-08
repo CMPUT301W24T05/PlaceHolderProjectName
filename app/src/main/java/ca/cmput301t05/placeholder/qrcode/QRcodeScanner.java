@@ -67,6 +67,8 @@ public class QRcodeScanner extends AppCompatActivity{
                         // get UUID from QR code
                         Toast.makeText(QRcodeScanner.this, result.getText(), Toast.LENGTH_SHORT).show();
 
+
+
                     }
                 });
             }

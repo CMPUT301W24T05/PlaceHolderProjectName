@@ -1,37 +1,36 @@
 package ca.cmput301t05.placeholder.ui.notifications;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import ca.cmput301t05.placeholder.databinding.FragmentNotificationsBinding;
 
-public class NotificationsFragment extends Fragment {
+//not a fragment but an activity now!!
+public class NotificationsFragment extends AppCompatActivity {
 
     private FragmentNotificationsBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         NotificationsViewModel notificationsViewModel =
                 new ViewModelProvider(this).get(NotificationsViewModel.class);
 
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        binding = FragmentNotificationsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        //for NotificationViewModel
         final TextView textView = binding.textNotifications;
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+        notificationsViewModel.getText().observe(this, textView::setText);
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    protected void onDestroy() {
+        super.onDestroy();
         binding = null;
     }
 }
