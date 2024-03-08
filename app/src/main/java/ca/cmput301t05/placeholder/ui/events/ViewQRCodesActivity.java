@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.qrcode.QRCode;
 
 /**
  * The ViewQRCodesActivity is an activity class for viewing and sharing the generated QR codes

@@ -104,6 +104,7 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("eventDate", eventDate != null ? new Timestamp(eventDate.getTime()) : null);
         document.put("maxAttendees", maxAttendees);
         document.put("attendees", attendees);
+        document.put("eventCreator", eventCreator.toString());
 
         return document;
     }
@@ -116,6 +117,11 @@ public class Event extends DocumentSerializable implements Serializable {
         if(eventId != null && !eventId.equals("null")) {
             eventID = UUID.fromString(eventId);
         }
+
+        if (document.getString("eventCreator") != null){
+            eventCreator = UUID.fromString(document.getString("eventCreator"));
+        }
+
         if(document.getString("eventName") != null) {
             eventName = document.getString("eventName");
         }
