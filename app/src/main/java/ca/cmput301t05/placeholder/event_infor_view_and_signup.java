@@ -33,7 +33,7 @@ public class event_infor_view_and_signup extends DialogFragment {
     //To do:
     // when scanning the QR code, implement the functionality in scanning to get the event object and pass
     // the event object when creating the fragment using the fragment object and call this object
-    static event_infor_view_and_signup newInstance(Event event, PlaceholderApp app) {
+    public static event_infor_view_and_signup newInstance(Event event, PlaceholderApp app) {
         Bundle args = new Bundle();
         args.putSerializable("event", event);
         args.putSerializable("app", app);
