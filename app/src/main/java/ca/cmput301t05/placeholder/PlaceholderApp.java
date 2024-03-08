@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder;
 
 import android.app.Application;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -31,6 +32,8 @@ public class PlaceholderApp extends Application implements Serializable {
     private HashMap<UUID, Event> hostedEvents;
 
     private Event cachedEvent;
+
+    private Uri picCache;
 
     /**
      * Called when the application is starting, before any activity, service, or receiver objects (excluding content providers) have been created.
@@ -129,5 +132,13 @@ public class PlaceholderApp extends Application implements Serializable {
 
     public Event getCachedEvent() {
         return cachedEvent;
+    }
+
+    public void setPicCache(Uri picCache) {
+        this.picCache = picCache;
+    }
+
+    public Uri getPicCache() {
+        return picCache;
     }
 }

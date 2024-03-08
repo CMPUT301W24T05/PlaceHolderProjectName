@@ -56,6 +56,7 @@
         <activity android:name=".ui.notifications.NotificationsFragment"/>
         <activity android:name=".ui.events.ViewEventDetailsActivity"/>
         <activity android:name=".ui.events.EventSignUpActivity"/>
+        <activity android:name=".ui.events.GenerateInfoCheckinActivity"/>
     </application>
 
 </manifest>

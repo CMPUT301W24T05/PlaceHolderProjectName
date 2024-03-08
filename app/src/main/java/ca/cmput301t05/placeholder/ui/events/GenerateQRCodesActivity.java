@@ -57,7 +57,7 @@ public class GenerateQRCodesActivity extends AppCompatActivity {
                     public void onSuccess(Event event){
                         // Do something with the fetched event here
                         QRCode qr = QRCM.generateQRCode(event, "checkIn");
-                        event.checkInQR = qr;
+                        //event.checkInQR = qr;
 
                         //display preview activity then move to preview page
 //                        Intent i = new Intent(GenerateQRCodesActivity.this, Preview.class);

@@ -94,24 +94,12 @@ public class UploadPosterActivity extends AppCompatActivity {
 
         nextPage.setOnClickListener(view -> {
 
-            app.getPosterImageHandler().uploadPoster(curPic.get(), currEvent); //updates the event
+            //set this to the cache so on the final page we can do everything
+            app.setPicCache(curPic.get());
 
-            // Pushes the current event (currEvent) to the event table in the database
-            // This push is also asynchronous, we go back to the Main activity in the onSuccess callback
-            app.getEventTable().pushDocument(currEvent, currEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
-                @Override
-                public void onSuccess(Event document) {
-                    // If the document was successfully updated in the database, start the Main activity and finish this activity
-                    Intent i = new Intent(UploadPosterActivity.this, MainActivity.class);
-                    startActivity(i);
-                    finish();
-                }
+            Intent i = new Intent(UploadPosterActivity.this, GenerateInfoCheckinActivity.class);
+            startActivity(i);
 
-                @Override
-                public void onFailure(Exception e) {
-                    // TODO Handle the failure of updating the event in the database
-                }
-            });
         });
     }
 }
