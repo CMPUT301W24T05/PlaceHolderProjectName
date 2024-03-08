@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.ui.events;
+package ca.cmput301t05.placeholder.ui.events.creation;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.cmput301t05.placeholder.MainActivity;
@@ -22,6 +21,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
 
 /**
  * UploadPosterActivity allows users to upload a poster image for an event. This activity is part of the event

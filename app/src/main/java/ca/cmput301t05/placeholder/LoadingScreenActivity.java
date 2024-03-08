@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.database.Table;
@@ -48,7 +49,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
      * allow profile creation. If a profile is found, the application proceeds to the MainActivity.
      */
     private void fetchProfileAndContinue() {
-        if(!app.getIdManager().deviceHasIDStored()){
+        if (!app.getIdManager().deviceHasIDStored()) {
             Intent intent = new Intent(getApplicationContext(), InitialSetupActivity.class);
             startActivity(intent);
             finish();
@@ -62,14 +63,21 @@ public class LoadingScreenActivity extends AppCompatActivity {
                 // The profile exists in firebase! We can continue to the Main activity
                 app.setUserProfile(profile);
 
-                if (app.getHostedEvents() != null){fetchEvents(profile, "hostedEvents");}
-                if (app.getJoinedEvents() != null){fetchEvents(profile, "joinedEvents");}
+                AtomicInteger eventCounter = new AtomicInteger();
 
+                if (profile.getHostedEvents() != null) {
+                    eventCounter.addAndGet(profile.getHostedEvents().size());
+                    fetchEvents(profile, "hostedEvents", eventCounter);
+                }
+                if (profile.getJoinedEvents() != null) {
+                    eventCounter.addAndGet(profile.getJoinedEvents().size());
+                    fetchEvents(profile, "joinedEvents", eventCounter);
+                }
 
-                Log.i("Placeholder App", String.format("Profile with id %s and name %s has been loaded!", profile.getProfileID(), profile.getName()));
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
+                // Check if there are no events to fetch in the first place, start MainActivity immediately
+                if (eventCounter.get() == 0) {
+                    startMainActivity();
+                }
             }
 
             @Override
@@ -84,33 +92,41 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
     }
 
-    private void fetchEvents(Profile profile, String event){
-
+    private void fetchEvents(Profile profile, String event, AtomicInteger eventCounter) {
         List<String> events;
 
         boolean hosted = event.equals("hostedEvents");
 
-        if (hosted){
+        if (hosted) {
             events = profile.getHostedEvents();
-        }  else {
+        } else {
 
             events = profile.getJoinedEvents();
         }
 
-        if (events == null){
+        if (events == null) {
             return;
         }
 
         //now load all the events into their respective container
 
         for (String id : events) {
-            app.getEventTable().fetchDocument(id, new Table.DocumentCallback<Event>() {
+            app.getEventTable().fetchDocument(id.trim(), new Table.DocumentCallback<Event>() {
                 @Override
                 public void onSuccess(Event document) {
 
-                    if (hosted){app.getHostedEvents().put(UUID.fromString(id), document);}
-                    else {app.getJoinedEvents().put(UUID.fromString(id), document);}
+                    if (hosted) {
+                        app.getHostedEvents().put(UUID.fromString(id.trim()), document);
+                    } else {
+                        app.getJoinedEvents().put(UUID.fromString(id.trim()), document);
+                    }
 
+                    // Decrease the counter once an event is fetched
+                    eventCounter.decrementAndGet();
+                    // If all events have been fetched, start MainActivity
+                    if (eventCounter.get() == 0) {
+                        startMainActivity();
+                    }
                 }
 
                 @Override
@@ -120,5 +136,13 @@ public class LoadingScreenActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+    private void startMainActivity() {
+        Log.i("Placeholder App", String.format("Profile with id %s and name %s has been loaded!",
+                  app.getUserProfile().getProfileID(), app.getUserProfile().getName()));
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
