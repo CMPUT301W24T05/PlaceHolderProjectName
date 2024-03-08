@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView joinedEventsList;
     private EventAdapter joinedEventsAdapter;
     private RecyclerView organizedEventsList;
+    private EventAdapter organizedEventsAdapter;
 
     private TextView appNameView;
 
@@ -76,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
         joinedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         joinedEventsList.setAdapter(joinedEventsAdapter);
 
+        ArrayList<Event> hostedEvents = new ArrayList<>(app.getHostedEvents().values());
+        organizedEventsList = findViewById(R.id.listCreatedEvents);
+        organizedEventsAdapter = new EventAdapter(getApplicationContext(), hostedEvents);
+        organizedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        organizedEventsList.setAdapter(organizedEventsAdapter);
     }
 
     private void setButtonActions() {
