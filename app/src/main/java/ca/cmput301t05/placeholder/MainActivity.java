@@ -102,28 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         startScannerButton = findViewById(R.id.btnJoinEvent);
 
-        ImageView testQR = findViewById(R.id.qr_test_pic);
-        QRCodeManager qrM = new QRCodeManager();
-
-
-
-        app.getEventTable().fetchDocument("a950e92d-7b97-4d47-9d90-f6e421c42cd1", new Table.DocumentCallback<Event>() {
-            @Override
-            public void onSuccess(Event document) {
-
-                QRCode qr = qrM.generateQRCode(document, "eventInfo");
-
-                Log.d("Event_info",document.getEventID().toString());
-
-                testQR.setImageBitmap(qr.getBitmap());
-
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-        });
+        
 
         startScannerButton.setOnClickListener(view -> {
             // Start QRCodeScannerActivity
