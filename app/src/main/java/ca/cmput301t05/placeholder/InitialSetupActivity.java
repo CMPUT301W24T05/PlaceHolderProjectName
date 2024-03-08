@@ -8,6 +8,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import ca.cmput301t05.placeholder.database.Table;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
@@ -41,7 +42,7 @@ public class InitialSetupActivity extends AppCompatActivity {
         if (!name.isEmpty()) {
             UUID deviceId = idManager.getDeviceID();
             Profile userProfile = new Profile(name, deviceId);
-            app.getProfileTable().pushProfile(userProfile, new ProfileTable.ProfileCallback() {
+            app.getProfileTable().pushDocument(userProfile, userProfile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
                 @Override
                 public void onSuccess(Profile profile) {
                     app.setUserProfile(userProfile);

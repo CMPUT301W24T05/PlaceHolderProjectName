@@ -12,15 +12,12 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import ca.cmput301t05.placeholder.database.*;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.UUID;
 
-import ca.cmput301t05.placeholder.database.DatabaseManager;
-import ca.cmput301t05.placeholder.database.DeviceIDManager;
-import ca.cmput301t05.placeholder.database.ImageTable;
-import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 public class ProfileEditActivity extends AppCompatActivity{
@@ -30,7 +27,6 @@ public class ProfileEditActivity extends AppCompatActivity{
     private  Uri profilePicUri;
     private UUID deviceID;
     private Profile profile;
-    private ImageTable imageTable;
     private Button saveButton;
     private Button adminButton;
     private EditText editName;
@@ -50,7 +46,6 @@ public class ProfileEditActivity extends AppCompatActivity{
         app = (PlaceholderApp) getApplicationContext();
         deviceID = app.getIdManager().getDeviceID();
         profile = app.getUserProfile(); // base on the database, fetched the profile
-        imageTable = app.getImageTable();
 
         saveButton = findViewById(R.id.save_button);
         adminButton = findViewById(R.id.admin_button);
@@ -123,7 +118,7 @@ public class ProfileEditActivity extends AppCompatActivity{
         // set up the profile picture
         profile = app.getUserProfile();
         if (profile.getProfilePictureID() != null){
-            imageTable.getProfilePicture(profile, profilePic);
+            app.getProfileImageHandler().getProfilePicture(profile, profilePic);
         }
         if(profile.getName()!=null){editName.setText(profile.getName());}
         if(profile.getContactInfo()!=null){editContact.setText(profile.getContactInfo());}
@@ -137,16 +132,16 @@ public class ProfileEditActivity extends AppCompatActivity{
         profile.setHomePage(editHomepage.getText().toString());
 
         if (RemovePic){
-            imageTable.removeProfilePic(profile);
+            app.getProfileImageHandler().removeProfilePic(profile);
         }
 
         if (profilePicUri != null) {
 
-            app.getImageTable().uploadProfilePicture(profilePicUri, profile);
+            app.getProfileImageHandler().uploadProfilePicture(profilePicUri, profile);
         }
 
         profile.toDocument();
-        app.getProfileTable().pushProfile(profile, new ProfileTable.ProfileCallback() {
+        app.getProfileTable().pushDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile profile) {
 

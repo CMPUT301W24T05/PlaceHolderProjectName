@@ -62,7 +62,7 @@ public class ProfileTableTest {
         Mockito.when(doc.getString("name")).thenReturn("John Doe");
         Mockito.when(doc.getString("profileID")).thenReturn("testID");
 
-        profileTable.fetchProfile("testID", new ProfileTable.ProfileCallback() {
+        profileTable.fetchDocument("testID", new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile profile) {
                 assertNotNull(profile);
@@ -84,7 +84,7 @@ public class ProfileTableTest {
         Mockito.when(documentReference.get()).thenReturn(Tasks.forResult(doc));
         Mockito.when(doc.exists()).thenReturn(false);
 
-        profileTable.fetchProfile("testID", new ProfileTable.ProfileCallback() {
+        profileTable.fetchDocument("testID", new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile profile) {
                 fail("Should not succeed when profile not found.");
@@ -105,7 +105,7 @@ public class ProfileTableTest {
         Mockito.when(documentReference.get())
                 .thenReturn(Tasks.forException(new Exception("Test Exception")));
 
-        profileTable.fetchProfile("testID", new ProfileTable.ProfileCallback() {
+        profileTable.fetchDocument("testID", new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile profile) {
                 fail("Should not succeed when there is an exception.");
