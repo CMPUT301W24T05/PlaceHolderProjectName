@@ -1,9 +1,11 @@
 package ca.cmput301t05.placeholder.ui.codescanner;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.util.Log;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
+import ca.cmput301t05.placeholder.qrcode.QRCodeType;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
@@ -102,7 +105,7 @@ public class QRCodeScannerActivity extends AppCompatActivity{
                                 if(type == QRCodeType.CHECK_IN){
 
                                     app.setCachedEvent(event); //sets the cached event so we can use it on the next page
-                                    Intent intent = new Intent(QRcodeScanner.this, ViewEventDetailsActivity.class);
+                                    Intent intent = new Intent(QRCodeScannerActivity.this, ViewEventDetailsActivity.class);
 
                                     startActivity(intent);
 
@@ -115,7 +118,7 @@ public class QRCodeScannerActivity extends AppCompatActivity{
                                     Log.d("QR_CODE", "Type is Info, and we're in the if");
                                     app.setCachedEvent(event);
 
-                                    Intent intent = new Intent(QRcodeScanner.this, EventSignUpActivity.class);
+                                    Intent intent = new Intent(QRCodeScannerActivity.this, EventSignUpActivity.class);
 
                                     intent.putExtra("openFragment", true);
 
