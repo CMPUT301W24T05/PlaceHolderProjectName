@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.ui.events;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,16 +14,29 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 
+import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 
-public class generateQRCodesActivity extends AppCompatActivity {
+/**
+ * GenerateQRCodesActivity is an activity class for creating the check-in QR code.
+ * This is done either by generating a new, random one or scanning an already existing one for reuse.
+ * After this is generated, the user moves on to the next stage of the event creation process, Preview
+ */
+public class GenerateQRCodesActivity extends AppCompatActivity {
 
     Button existingQR_btn, generateQR_btn, back_btn;
     QRCodeManager QRCM;
     PlaceholderApp app = (PlaceholderApp) getApplicationContext();
 
 
-
+/**
+ * Called when the activity is starting. Initializes the UI components, sets up click listeners
+ * when the generate new qr button is clicked, a new random check in qr is initialized for the event object
+ *
+ * @param savedInstanceState If the activity is being re-initialized after
+ *     previously being shut down then this Bundle contains the data it most
+ *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+ */
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_generateqr);
@@ -45,8 +59,8 @@ public class generateQRCodesActivity extends AppCompatActivity {
                         QRCode qr = QRCM.generateQRCode(event, "checkIn");
                         event.checkInQR = qr;
 
-                        //display generation success fragment then move to preview page
-                        //...
+                        //display preview activity then move to preview page
+                        Intent i = new Intent(GenerateQRCodesActivity.this, Preview.class);
 
 
                     }
@@ -56,12 +70,6 @@ public class generateQRCodesActivity extends AppCompatActivity {
                         // Failed to get fetch the event for eventId with exception e
                     }
                 });
-
-
-
-                // complete this
-                //Intent i = new Intent(generateQRCodesActivity.this, qrCompleteFrag.class);
-                //startActivity(i);
 
 
             }
