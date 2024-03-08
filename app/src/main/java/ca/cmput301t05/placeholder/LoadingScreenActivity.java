@@ -7,10 +7,13 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.database.Table;
+import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 /**
@@ -58,6 +61,10 @@ public class LoadingScreenActivity extends AppCompatActivity {
             public void onSuccess(Profile profile) {
                 // The profile exists in firebase! We can continue to the Main activity
                 app.setUserProfile(profile);
+
+                fetchEvents(profile, "hostedEvents");
+                fetchEvents(profile, "joinedEvents");
+
                 Log.i("Placeholder App", String.format("Profile with id %s and name %s has been loaded!", profile.getProfileID(), profile.getName()));
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
@@ -73,5 +80,40 @@ public class LoadingScreenActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+    }
+
+    private void fetchEvents(Profile profile, String event){
+
+        List<String> events;
+
+        boolean hosted = event.equals("hostedEvents");
+
+        if (hosted){
+            events = profile.getHostedEvents();
+        }  else {
+
+            events = profile.getJoinedEvents();
+        }
+
+        //now load all the events into their respective container
+
+        for (String id : events) {
+            app.getEventTable().fetchDocument(id, new Table.DocumentCallback<Event>() {
+                @Override
+                public void onSuccess(Event document) {
+
+                    if (hosted){app.getHostedEvents().put(UUID.fromString(id), document);}
+                    else {app.getJoinedEvents().put(UUID.fromString(id), document);}
+
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    //TODO handle failure
+                }
+            });
+
+        }
     }
 }

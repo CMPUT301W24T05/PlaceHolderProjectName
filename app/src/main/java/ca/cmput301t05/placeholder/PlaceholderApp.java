@@ -45,6 +45,9 @@ public class PlaceholderApp extends Application implements Serializable {
 
         posterImageHandler = new EventPosterImageHandler();
         profileImageHandler = new ProfileImageHandler();
+
+        hostedEvents = new HashMap<>();
+        joinedEvents = new HashMap<>();
     }
 
     /**
@@ -110,6 +113,14 @@ public class PlaceholderApp extends Application implements Serializable {
      */
     public EventTable getEventTable() {
         return eventTable;
+    }
+
+    public HashMap<UUID,Event> getJoinedEvents(){
+        return this.joinedEvents;
+    }
+
+    public HashMap<UUID,Event> getHostedEvents(){
+        return this.hostedEvents;
     }
 
 
