@@ -11,12 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import ca.cmput301t05.placeholder.qrcode.QRcodeScanner;
+import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private PlaceholderApp app;
 
-    private ImageView picTest;
+    private Button guideToEvent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        guideToEvent = findViewById(R.id.btnCreateEvent);
+
+        guideToEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, EnterEventDetailsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        
     }
 
 }
