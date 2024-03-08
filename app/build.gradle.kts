@@ -2,6 +2,16 @@ plugins {
     id("com.android.application")
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
+
+    id("org.jetbrains.dokka") version "1.9.20"
+}
+
+subprojects {
+    apply(plugin = "org.jetbrains.dokka")
+}
+
+tasks.dokkaHtml.configure {
+    outputDirectory.set(file("D:\\cmput301GIT\\PlaceHolderProjectName\\javadocs"))
 }
 
 android {
@@ -41,6 +51,7 @@ android {
 dependencies {
 
     implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0") // The dependency for QR code scanning
+
 
 
 
