@@ -60,6 +60,9 @@ public class QRCodeTest {
 
     @Test
     public void testGenerateQRCode(){
+
+        //still receiving a tests not received error. Needs debugging
+
         Event event = new Event("exampleEvent", "this is my event info", 100);
         QRCode infoqr = QRCM.generateQRCode(event, "eventinfo");
         QRCode checkInQr = QRCM.generateQRCode(event, "checkin");
