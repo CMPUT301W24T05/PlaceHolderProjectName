@@ -33,6 +33,7 @@ public class event_info_view_and_signup extends DialogFragment {
      *
      * @param context The context to which the fragment is being attached.
      */
+    
     @Override
     public void onAttach(@Nullable Context context) {
         super.onAttach(context);
