@@ -147,7 +147,7 @@ public class EventSignUpActivity extends AppCompatActivity {
 
                 String message = "Joined Event: " + displayEvent.getEventName();
 
-                Toast toast = Toast.makeText(getApplicationContext(), "Joined Event", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
                 toast.show();
 
                 finish();
