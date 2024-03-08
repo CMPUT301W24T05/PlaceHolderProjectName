@@ -22,6 +22,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.ProfileEditActivity;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.ProfileTable;
+import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
@@ -43,19 +44,10 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //for testing
-        Event displayEvent = new Event(UUID.fromString("e906a09f-a80b-4e2a-a598-ab12aec2b468"));
-        displayEvent.setEventCreator(UUID.fromString("cb379e24-11a0-41dd-ad85-e86aaa1df731"));
-        displayEvent.setEventLocation("EventLocation");
 
-        Calendar calendarE = Calendar.getInstance();
-        calendarE.setTimeZone(TimeZone.getTimeZone("GMT-7")); // Set to the equivalent of UTC-7
-        calendarE.set(2024, Calendar.MARCH, 7, 15, 37, 34);
-        calendarE.set(Calendar.MILLISECOND, 0);
-
-        displayEvent.setEventDate(calendarE);
-        displayEvent.setEventInfo("Simple event Description");
-        displayEvent.setMaxAttendees(22);
+        //ASSUMING THAT WE HAVE CACHE THE EVENT WE JUST LOADED
+        PlaceholderApp app = (PlaceholderApp) getApplicationContext();
+        Event displayEvent = app.getCachedEvent();
 
 
 
@@ -73,7 +65,6 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         event_author = findViewById(R.id.vieweventdetails_eventAuthor);
 
 
-        PlaceholderApp app = (PlaceholderApp) getApplicationContext();
 
 
 
@@ -132,10 +123,10 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
         UUID profile_id = displayEvent.getEventCreator();
 
-        app.getProfileTable().fetchProfile(profile_id.toString(), new ProfileTable.ProfileCallback() {
+        app.getProfileTable().fetchDocument(profile_id.toString(), new Table.DocumentCallback<Profile>() {
             @Override
-            public void onSuccess(Profile profile) {
-                event_author.setText(profile.getName());
+            public void onSuccess(Profile document) {
+                event_author.setText(document.getName());
             }
 
             @Override
@@ -143,18 +134,6 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }

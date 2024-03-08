@@ -283,6 +283,14 @@ public class Event extends DocumentSerializable implements Serializable {
     }
 
     /**
+     *
+     * @return returns a calendar corresponding to the date
+     */
+    public Calendar getEventDate() {
+        return eventDate;
+    }
+
+    /**
      * Sets the maximum number of attendees allowed for the event.
      * @param c The maximum number of attendees as an integer.
      */
