@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.ProfileTable;
+import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 public class LoadingScreenActivity extends AppCompatActivity {
@@ -34,7 +35,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
         }
 
         UUID deviceId = app.getIdManager().getDeviceID();
-        app.getProfileTable().fetchProfile(String.valueOf(deviceId), new ProfileTable.ProfileCallback() {
+        app.getProfileTable().fetchDocument(deviceId.toString(), new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile profile) {
                 // The profile exists in firebase! We can continue to the Main activity

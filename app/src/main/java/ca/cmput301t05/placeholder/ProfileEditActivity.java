@@ -12,15 +12,12 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import ca.cmput301t05.placeholder.database.ProfileImageHandler;
+import ca.cmput301t05.placeholder.database.*;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.UUID;
 
-import ca.cmput301t05.placeholder.database.DatabaseManager;
-import ca.cmput301t05.placeholder.database.DeviceIDManager;
-import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 public class ProfileEditActivity extends AppCompatActivity{
@@ -144,7 +141,7 @@ public class ProfileEditActivity extends AppCompatActivity{
         }
 
         profile.toDocument();
-        app.getProfileTable().pushProfile(profile, new ProfileTable.ProfileCallback() {
+        app.getProfileTable().pushDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile profile) {
 

@@ -6,12 +6,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import android.util.Log;
+import ca.cmput301t05.placeholder.database.DocumentSerializable;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.UserNotification;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Exclude;
 
-public class Profile {
+public class Profile extends DocumentSerializable {
     private UUID profileID;
     private String name;
     private String homePage;
