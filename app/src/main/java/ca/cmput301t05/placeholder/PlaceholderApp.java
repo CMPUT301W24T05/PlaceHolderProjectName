@@ -2,11 +2,15 @@ package ca.cmput301t05.placeholder;
 
 import android.app.Application;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.*;
+import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 /**
@@ -23,6 +27,14 @@ public class PlaceholderApp extends Application implements Serializable {
     private EventTable eventTable;
     private DeviceIDManager idManager;
 
+    private HashMap<UUID, Event> joinedEvents;
+
+    private HashMap<UUID, Event> hostedEvents;
+
+    private Event cachedEvent;
+
+    private Uri picCache;
+
     /**
      * Called when the application is starting, before any activity, service, or receiver objects (excluding content providers) have been created.
      * Initializes the tables and managers used throughout the application.
@@ -36,6 +48,9 @@ public class PlaceholderApp extends Application implements Serializable {
 
         posterImageHandler = new EventPosterImageHandler();
         profileImageHandler = new ProfileImageHandler();
+
+        hostedEvents = new HashMap<>();
+        joinedEvents = new HashMap<>();
     }
 
     /**
@@ -101,5 +116,29 @@ public class PlaceholderApp extends Application implements Serializable {
      */
     public EventTable getEventTable() {
         return eventTable;
+    }
+
+    public HashMap<UUID,Event> getJoinedEvents(){
+        return this.joinedEvents;
+    }
+
+    public HashMap<UUID,Event> getHostedEvents(){
+        return this.hostedEvents;
+    }
+
+    public void setCachedEvent(Event cachedEvent) {
+        this.cachedEvent = cachedEvent;
+    }
+
+    public Event getCachedEvent() {
+        return cachedEvent;
+    }
+
+    public void setPicCache(Uri picCache) {
+        this.picCache = picCache;
+    }
+
+    public Uri getPicCache() {
+        return picCache;
     }
 }

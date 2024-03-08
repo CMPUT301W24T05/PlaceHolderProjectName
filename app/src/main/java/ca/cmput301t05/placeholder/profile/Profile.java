@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.profile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +23,8 @@ public class Profile extends DocumentSerializable {
     private String homePage;
     private String contactInfo;
     private UUID profilePictureID;
-    private List<Event> hostedEvents;
-    private List<Event> joinedEvents;
+    private List<String> hostedEvents;
+    private List<String> joinedEvents;
     private List<UserNotification> notifications;
     boolean isAdmin = false;
 
@@ -43,6 +44,8 @@ public class Profile extends DocumentSerializable {
     public Profile(String name, UUID profileID){
         this.name = name;
         this.profileID = profileID;
+        this.joinedEvents = new ArrayList<>();
+        this.hostedEvents = new ArrayList<>();
     }
 
     /**
@@ -51,7 +54,7 @@ public class Profile extends DocumentSerializable {
      * @param event The event to join.
      */
     public void joinEvent(Event event){
-        joinedEvents.add(event);
+        joinedEvents.add(event.getEventID().toString());
     }
 
     /**
@@ -69,7 +72,7 @@ public class Profile extends DocumentSerializable {
      * @param event The event to be removed.
      */
     public void leaveEvent(Event event){
-        joinedEvents.remove(event);
+        joinedEvents.remove(event.getEventID().toString());
     }
 
     /**
@@ -78,7 +81,7 @@ public class Profile extends DocumentSerializable {
      * @param e The event to be hosted.
      */
     public void hostEvent(Event e){
-        hostedEvents.add(e);
+        hostedEvents.add(e.getEventID().toString());
     }
 
     /**
@@ -87,7 +90,7 @@ public class Profile extends DocumentSerializable {
      * @param e The event to be de-hosted.
      */
     public void unHostEvent(Event e){
-        hostedEvents.remove(e);
+        hostedEvents.remove(e.getEventID().toString());
     }
 
     /**
@@ -114,7 +117,7 @@ public class Profile extends DocumentSerializable {
      * @return The list of hosted events.
      */
     //getters / setters
-    public List<Event> getHostedEvents() {
+    public List<String> getHostedEvents() {
         return hostedEvents;
     }
 
@@ -123,7 +126,7 @@ public class Profile extends DocumentSerializable {
      *
      * @return The list of joined events.
      */
-    public List<Event> getJoinedEvents() {
+    public List<String> getJoinedEvents() {
         return joinedEvents;
     }
 
@@ -213,7 +216,7 @@ public class Profile extends DocumentSerializable {
      *
      * @param hostedEvents The list of hosted events to be set.
      */
-    public void setHostedEvents(List<Event> hostedEvents) {
+    public void setHostedEvents(List<String> hostedEvents) {
         this.hostedEvents = hostedEvents;
     }
 
@@ -222,7 +225,7 @@ public class Profile extends DocumentSerializable {
      *
      * @param joinedEvents The list of joined events to be set.
      */
-    public void setJoinedEvents(List<Event> joinedEvents) {
+    public void setJoinedEvents(List<String> joinedEvents) {
         this.joinedEvents = joinedEvents;
     }
 
@@ -317,10 +320,10 @@ public class Profile extends DocumentSerializable {
         }
 
         if(document.get("hostedEvents") != null) {
-            hostedEvents = (List<Event>) document.get("hostedEvents");
+            hostedEvents = (List<String>) document.get("hostedEvents");
         }
         if(document.get("joinedEvents") != null) {
-            joinedEvents = (List<Event>)document.get("joinedEvents");
+            joinedEvents = (List<String>)document.get("joinedEvents");
         }
         if(document.get("notifications") != null) {
             notifications = (List<UserNotification>)document.get("notifications");

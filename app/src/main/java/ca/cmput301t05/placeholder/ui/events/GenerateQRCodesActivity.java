@@ -1,6 +1,5 @@
 package ca.cmput301t05.placeholder.ui.events;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -50,17 +49,20 @@ public class GenerateQRCodesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                String eventId = app.getCachedEvent().getEventID().toString();
 
                 // how to get eventId not yet determined
-                app.getEventTable().fetchDocument(eventId.toString(), new Table.DocumentCallback<Event>() {
+                app.getEventTable().fetchDocument(eventId, new Table.DocumentCallback<Event>() {
                     @Override
                     public void onSuccess(Event event){
                         // Do something with the fetched event here
                         QRCode qr = QRCM.generateQRCode(event, "checkIn");
-                        event.checkInQR = qr;
+                        //event.checkInQR = qr;
 
                         //display preview activity then move to preview page
                        // Intent i = new Intent(GenerateQRCodesActivity.this, EventPreview.class);
+
+//                        Intent i = new Intent(GenerateQRCodesActivity.this, Preview.class);
 
 
                     }

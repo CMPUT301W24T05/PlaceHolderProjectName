@@ -2,11 +2,19 @@ package ca.cmput301t05.placeholder;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import ca.cmput301t05.placeholder.database.Table;
+import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.qrcode.QRCode;
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.qrcode.QRcodeScanner;
 import ca.cmput301t05.placeholder.ui.events.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
@@ -49,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonStartScanner = findViewById(R.id.btnJoinEvent);
 
+
+
         buttonStartScanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,8 +89,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //HANDLE FRAGMENT POP UP HERE
+        Boolean openFrag = getIntent().getBooleanExtra("openFragment", false);
+
+        if(openFrag){
+            //open fragment
+            openEventFrag();
+            getIntent().putExtra("openFragment", false);
+        }
+
 
 
     }
 
+    public void openEventFrag(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        event_info_view_and_signup infoViewAndSignup = new event_info_view_and_signup();
+
+        fragmentTransaction.replace(R.id.mainActivity_linearlayout, infoViewAndSignup);
+
+        fragmentTransaction.commit();
+
+    }
+
 }
+

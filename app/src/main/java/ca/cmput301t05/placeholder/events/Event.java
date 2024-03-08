@@ -18,6 +18,8 @@ import java.util.UUID;
 /**
  * Represents an event, including information about the event name, organizer, date,
  * and attendees. Supports serialization for Firebase database storage and retrieval.
+ *
+ *
  */
 public class Event extends DocumentSerializable implements Serializable {
 
@@ -25,15 +27,20 @@ public class Event extends DocumentSerializable implements Serializable {
 
     UUID eventPosterID;
 
+    UUID eventCreator;
+
     String eventInfo;
 
-    public QRCode infoQRCode, checkInQR;
+    String infoQRCode, checkInQR; //qr codes are represented by their string
 
-    QRCodeManager QRCM = new QRCodeManager();
 
     UUID eventID;
 
     Calendar eventDate;
+
+    String eventLocation;
+
+
 
     int maxAttendees;
 
@@ -42,13 +49,12 @@ public class Event extends DocumentSerializable implements Serializable {
 
     /**
      * Default constructor that generates a new event with unique ID and empty attendee list.
-     * Also generates QR codes for event information and check-in.
+     *
      */
     public Event(){
         this.eventID = UUID.randomUUID();
         this.attendees = new HashMap<>();
-        infoQRCode = QRCM.generateQRCode(this, "eventInfo");
-        checkInQR = QRCM.generateQRCode(this, "checkIn");
+
     }
 
     /**
@@ -59,7 +65,7 @@ public class Event extends DocumentSerializable implements Serializable {
     public Event(UUID eventID){
         this.eventID = eventID;
         this.attendees = new HashMap<>();
-        infoQRCode = QRCM.generateQRCode(this, "eventInfo");
+
     }
 
     /**
@@ -78,7 +84,7 @@ public class Event extends DocumentSerializable implements Serializable {
         this.eventID = UUID.randomUUID();
         this.maxAttendees = maxAttendees;
         this.attendees = new HashMap<>();
-        infoQRCode = QRCM.generateQRCode(this, "eventInfo");
+
     }
 
     /**
@@ -92,12 +98,13 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("eventName", eventName);
         document.put("eventPosterID", eventPosterID != null ? eventPosterID.toString() : null);
         document.put("eventInfo", eventInfo);
-        //document.put("infoQRCode", infoQRCode);
-        //document.put("checkInQR", checkInQR);
+        document.put("infoQRCode", infoQRCode);
+        document.put("checkInQR", checkInQR);
         document.put("eventID", eventID.toString());
         document.put("eventDate", eventDate != null ? new Timestamp(eventDate.getTime()) : null);
         document.put("maxAttendees", maxAttendees);
         document.put("attendees", attendees);
+        document.put("eventCreator", eventCreator.toString());
 
         return document;
     }
@@ -110,6 +117,11 @@ public class Event extends DocumentSerializable implements Serializable {
         if(eventId != null && !eventId.equals("null")) {
             eventID = UUID.fromString(eventId);
         }
+
+        if (document.getString("eventCreator") != null){
+            eventCreator = UUID.fromString(document.getString("eventCreator"));
+        }
+
         if(document.getString("eventName") != null) {
             eventName = document.getString("eventName");
         }
@@ -120,8 +132,16 @@ public class Event extends DocumentSerializable implements Serializable {
         if(eventPosterId != null && !eventPosterId.equals("null")) {
             eventPosterID = UUID.fromString(eventPosterId);
         }
-        //infoQRCode = ; // Convert back from string
-        //checkInQR = ; // Convert back from string
+
+
+        if(document.getString("infoQRCode") != null){
+            infoQRCode = document.getString("infoQRCode");
+        }
+
+        if(document.getString("checkInQR") != null){
+            checkInQR = document.getString("checkInQR");
+        }
+
         if(document.getTimestamp("eventDate") != null) {
             eventDate = Calendar.getInstance();
             eventDate.setTimeInMillis(document.getTimestamp("eventDate").toDate().getTime());
@@ -216,7 +236,7 @@ public class Event extends DocumentSerializable implements Serializable {
      * @return A string containing the event's information.
      */
     public String getEventInfo() {
-        return eventInfo;
+        return this.eventInfo;
     }
 
     /**
@@ -224,7 +244,8 @@ public class Event extends DocumentSerializable implements Serializable {
      * @return A string representing the name of the event.
      */
     public String getEventName() {
-        return eventName;
+
+        return this.eventName;
     }
 
     /**
@@ -232,7 +253,7 @@ public class Event extends DocumentSerializable implements Serializable {
      * @return The UUID of the event poster.
      */
     public UUID getEventPosterID() {
-        return eventPosterID;
+        return this.eventPosterID;
     }
 
     /**
@@ -240,7 +261,15 @@ public class Event extends DocumentSerializable implements Serializable {
      * @return The UUID of the event.
      */
     public UUID getEventID(){
-        return  eventID;
+        return  this.eventID;
+    }
+
+    public String getLocation(){
+        return this.eventLocation;
+    }
+
+    public void setEventLocation(String location){
+        this.eventLocation = location;
     }
 
     /**
@@ -268,6 +297,14 @@ public class Event extends DocumentSerializable implements Serializable {
     }
 
     /**
+     *
+     * @return returns a calendar corresponding to the date
+     */
+    public Calendar getEventDate() {
+        return eventDate;
+    }
+
+    /**
      * Sets the maximum number of attendees allowed for the event.
      * @param c The maximum number of attendees as an integer.
      */
@@ -283,6 +320,29 @@ public class Event extends DocumentSerializable implements Serializable {
         return this.maxAttendees;
     }
 
+    public void setEventCreator(UUID eventCreator){ this.eventCreator = eventCreator;}
+
+    public UUID getEventCreator(){return this.eventCreator;}
+
+    public String getCheckInQR() {
+        return checkInQR;
+    }
+
+    public String getEventLocation() {
+        return eventLocation;
+    }
+
+    public String getInfoQRCode() {
+        return infoQRCode;
+    }
+
+    public void setCheckInQR(String checkInQR) {
+        this.checkInQR = checkInQR;
+    }
+
+    public void setInfoQRCode(String infoQRCode) {
+        this.infoQRCode = infoQRCode;
+    }
 }
 
 
