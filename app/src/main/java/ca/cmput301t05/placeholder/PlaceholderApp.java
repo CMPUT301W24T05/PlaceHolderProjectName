@@ -7,31 +7,31 @@ import android.util.Log;
 import java.io.Serializable;
 
 import ca.cmput301t05.placeholder.database.DeviceIDManager;
-import ca.cmput301t05.placeholder.database.ImageTable;
+import ca.cmput301t05.placeholder.database.EventPosterImageHandler;
+import ca.cmput301t05.placeholder.database.ProfileImageHandler;
 import ca.cmput301t05.placeholder.database.ProfileTable;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 public class PlaceholderApp extends Application implements Serializable {
 
     private Profile userProfile;
-    private ImageTable imageTable;
+    private EventPosterImageHandler posterImageHandler;
+    private ProfileImageHandler profileImageHandler;
     private ProfileTable profileTable;
     private DeviceIDManager idManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        imageTable = new ImageTable();
         profileTable = new ProfileTable();
         idManager = new DeviceIDManager(this);
+
+        posterImageHandler = new EventPosterImageHandler();
+        profileImageHandler = new ProfileImageHandler();
     }
 
     public DeviceIDManager getIdManager(){
         return idManager;
-    }
-
-    public ImageTable getImageTable() {
-        return imageTable;
     }
 
     public ProfileTable getProfileTable() {
@@ -46,5 +46,13 @@ public class PlaceholderApp extends Application implements Serializable {
     }
     public boolean currentProfileExists(){
         return userProfile != null;
+    }
+
+    public EventPosterImageHandler getPosterImageHandler() {
+        return posterImageHandler;
+    }
+
+    public ProfileImageHandler getProfileImageHandler() {
+        return profileImageHandler;
     }
 }

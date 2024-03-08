@@ -17,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.MainActivity;
+import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.database.ImageTable;
 import ca.cmput301t05.placeholder.events.Event;
 
 public class uploadPosterActivity extends AppCompatActivity {
@@ -26,21 +26,20 @@ public class uploadPosterActivity extends AppCompatActivity {
     private ImageView eventPoster;
     private Button back;
     private Button uploadPoster;
-
     private Button nextPage;
-
+    private PlaceholderApp app;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_uploadposter);
 
+        app = (PlaceholderApp) getApplicationContext();
         eventPoster = findViewById(R.id.eventPosterImage);
         back = findViewById(R.id.eventPoster_back);
         uploadPoster = findViewById(R.id.uploadPosterButton);
         nextPage = findViewById(R.id.event_posternext);
 
-        ImageTable imageTable = new ImageTable();
         UUID eventID = UUID.fromString(getIntent().getStringExtra("created_event_ID"));
         Event curEvent = new Event(eventID);
 
@@ -81,7 +80,7 @@ public class uploadPosterActivity extends AppCompatActivity {
         nextPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageTable.uploadPoster(curPic[0], curEvent); //updates the event
+                app.getPosterImageHandler().uploadPoster(curPic[0], curEvent); //updates the event
 
                 Intent i = new Intent(uploadPosterActivity.this, MainActivity.class);
                 startActivity(i);
