@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.ui.admin;
+package ca.cmput301t05.placeholder;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +8,6 @@ import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import ca.cmput301t05.placeholder.MainActivity;
-import ca.cmput301t05.placeholder.R;
 
 /**
  * An activity for the admin home page, providing navigation to different administrative functions
