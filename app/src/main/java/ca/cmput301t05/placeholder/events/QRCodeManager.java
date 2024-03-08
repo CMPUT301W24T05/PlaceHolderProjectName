@@ -36,6 +36,20 @@ public class QRCodeManager {
 
         }
 
+    public Event joinEvent(String rawQRcodeString){ // Join the event
+        if (!checkQRcodeType(rawQRcodeString)){ // its a valid QR code for check-in
+            UUID uuid = scanGetEventID(rawQRcodeString);
+            Event event = new Event(uuid);
+            boolean success = event.getEventFromDatabase();
+            Log.e("amirza2", "Join event state" + success);
+            return event;
+        }
+        return null;
+
+    }
+
+    
+    // public void
     public boolean checkQRcodeType(String rawQRcodeString) {
         // Make sure you pass the raw text of QR code to this method
         // true if infoQR, false if checkInQR
