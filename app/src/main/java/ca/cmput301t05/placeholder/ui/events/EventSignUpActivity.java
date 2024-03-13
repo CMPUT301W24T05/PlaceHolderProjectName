@@ -133,7 +133,7 @@ public class EventSignUpActivity extends AppCompatActivity {
 
                 app.getUserProfile().toDocument();
 
-                app.getProfileTable().pushDocument(app.getUserProfile(), app.getProfileTable().toString(), new Table.DocumentCallback<Profile>() {
+                app.getProfileTable().pushDocument(app.getUserProfile(), app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
                     @Override
                     public void onSuccess(Profile document) {
 
