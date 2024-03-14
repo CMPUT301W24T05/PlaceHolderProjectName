@@ -9,13 +9,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.database.DocumentSerializable;
+
 /**
  * Represents a notification associated with a user event. It contains information about
  * the notification message, the time it was generated, the creator of the notification,
  * and the event it is associated with. Users will store references to these notifications,
  * and the profile class contains a list of all notifications.
  */
-public class Notification {
+public class Notification extends DocumentSerializable {
 
     /**
      * The unique identifier for this notification.
@@ -41,6 +43,13 @@ public class Notification {
      * The message content of the notification.
      */
     String message;
+
+    /**
+     * Constructs a new Notification with nothing inside of it, please always use generic constructor, not this
+     */
+    public Notification(){
+
+    }
 
 
     /**
