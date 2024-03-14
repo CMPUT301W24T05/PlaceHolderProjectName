@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import android.util.Log;
 import ca.cmput301t05.placeholder.database.DocumentSerializable;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.notifications.UserNotification;
+import ca.cmput301t05.placeholder.notifications.Notification;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Exclude;
 
@@ -25,7 +25,7 @@ public class Profile extends DocumentSerializable {
     private UUID profilePictureID;
     private List<String> hostedEvents;
     private List<String> joinedEvents;
-    private List<UserNotification> notifications;
+    private List<Notification> notifications;
     boolean isAdmin = false;
 
     /**
@@ -98,7 +98,7 @@ public class Profile extends DocumentSerializable {
      *
      * @param a The UserNotification to be added.
      */
-    public void addNotification(UserNotification a){
+    public void addNotification(Notification a){
         notifications.add(a);
     }
 
@@ -107,7 +107,7 @@ public class Profile extends DocumentSerializable {
      *
      * @param a The UserNotification to be removed.
      */
-    public void removeNotification(UserNotification a){
+    public void removeNotification(Notification a){
         notifications.remove(a);
     }
 
@@ -135,7 +135,7 @@ public class Profile extends DocumentSerializable {
      *
      * @return The list of notifications.
      */
-    public List<UserNotification> getNotifications() {
+    public List<Notification> getNotifications() {
         return notifications;
     }
 
@@ -243,7 +243,7 @@ public class Profile extends DocumentSerializable {
      *
      * @param notifications The list of UserNotifications to be set.
      */
-    public void setNotifications(List<UserNotification> notifications) {
+    public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
     }
 
@@ -326,7 +326,7 @@ public class Profile extends DocumentSerializable {
             joinedEvents = (List<String>)document.get("joinedEvents");
         }
         if(document.get("notifications") != null) {
-            notifications = (List<UserNotification>)document.get("notifications");
+            notifications = (List<Notification>)document.get("notifications");
         }
         if(document.getBoolean("isAdmin") != null) {
             isAdmin = Boolean.TRUE.equals(document.getBoolean("isAdmin"));
