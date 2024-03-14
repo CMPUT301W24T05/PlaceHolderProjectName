@@ -47,8 +47,9 @@ public class Notification extends DocumentSerializable {
     /**
      * Constructs a new Notification with nothing inside of it, please always use generic constructor, not this
      */
-    public Notification(){
+    public Notification(DocumentSnapshot snapshot){
 
+        fromDocument(snapshot);
     }
 
 

@@ -9,9 +9,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
  */
 public class EventTable extends Table<Event> {
 
-    private final static String COLLECTION_NAME = "events";
+    private final static Collections COLLECTION = Collections.EVENTS;
     public EventTable() {
-        super(COLLECTION_NAME);
+        super(COLLECTION);
     }
 
     /**
