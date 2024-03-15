@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.utils.DateStrings;
@@ -24,12 +26,20 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     private final Context context;
 
+    private Map<Integer, Boolean> itemExpanded; //used to track which are expanded
+
     public NotificationAdapter(Context context, ArrayList<Notification> notifications){
 
         this.notificationList = new ArrayList<>();
         this.notificationList.addAll(notifications);
 
         this.context = context;
+
+        //init itemexpanded as false
+        for (int i = 0; i < notifications.size(); i++) {
+            itemExpanded.put(i, false); //position = key, everything not expanded
+        }
+
 
     }
 
@@ -58,6 +68,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
 
+
     public class NotificationCardViewHolder extends RecyclerView.ViewHolder {
 
         TextView notification_time, notification_message;
@@ -71,6 +82,35 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             notification_message = itemView.findViewById(R.id.notification_card_message);
 
             menu = itemView.findViewById(R.id.notification_card_triple);
+
+            // Listener for expanding/collapsing the text views
+            View.OnClickListener expandCollapseListener = v -> {
+                // Get the position of the item clicked
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    // Toggle the expansion state
+                    boolean isExpanded = itemExpanded.getOrDefault(position, false);
+                    itemExpanded.put(position, !isExpanded);
+
+                    // Notify the adapter to rebind the view, which will update its appearance
+                    notifyItemChanged(position);
+                }
+            };
+
+            notification_time.setOnClickListener(expandCollapseListener);
+            notification_message.setOnClickListener(expandCollapseListener);
+
+            menu.setOnClickListener(v -> {
+
+                int position = getAdapterPosition();
+
+                if (position != RecyclerView.NO_POSITION) {
+                    //this will open a fragment or something that will allow us to maybe view more details/pin the message
+                }
+            });
+
+
+
         }
 
         public void bindView(int position){
@@ -96,8 +136,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             notification_time.setText(formatNotifTime);
 
-            //truncate message
-            notification_message.setText(StringManip.truncateString(n.getMessage(), 50)); //max length 50 chars (then adds ...) so 53 total
+            boolean isExpanded = itemExpanded.get(position);
+
+            if (!isExpanded){
+                //truncate message
+                notification_message.setText(StringManip.truncateString(n.getMessage(), 50)); //max length 50 chars (then adds ...) so 53 total
+            }   else {
+                notification_message.setText(n.getMessage());
+            }
+
+
         }
 
 
