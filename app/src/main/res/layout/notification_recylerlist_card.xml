@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="4dp"
+        app:cardBackgroundColor="@color/md_theme_onTertiary"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
@@ -49,7 +50,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/notification_card_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="6dp"
