@@ -1,8 +1,11 @@
 package ca.cmput301t05.placeholder.ui.notifications;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -73,7 +76,10 @@ public class EventNotificationPageActivity extends AppCompatActivity {
         create_notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //have it open a fragment which allows us to create a notification similar to how we do it in the figma
+                //have it open a dialog which allows us to create a notification similar to how we do it in the figma
+
+
+
             }
         });
 
