@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,11 +42,12 @@ public class Event extends DocumentSerializable implements Serializable {
     String eventLocation;
 
 
-
     int maxAttendees;
 
     HashMap<String, Integer> attendees; //stored this way for the database
     //string = profileID, int = # of times checked in
+
+    ArrayList<String> notifications; //notifications that are sent for this specific event
 
     /**
      * Default constructor that generates a new event with unique ID and empty attendee list.
@@ -54,6 +56,7 @@ public class Event extends DocumentSerializable implements Serializable {
     public Event(){
         this.eventID = UUID.randomUUID();
         this.attendees = new HashMap<>();
+        this.notifications = new ArrayList<>();
 
     }
 
@@ -65,7 +68,7 @@ public class Event extends DocumentSerializable implements Serializable {
     public Event(UUID eventID){
         this.eventID = eventID;
         this.attendees = new HashMap<>();
-
+        this.notifications = new ArrayList<>();
     }
 
     /**
@@ -84,6 +87,7 @@ public class Event extends DocumentSerializable implements Serializable {
         this.eventID = UUID.randomUUID();
         this.maxAttendees = maxAttendees;
         this.attendees = new HashMap<>();
+        this.notifications = new ArrayList<>();
 
     }
 
@@ -105,6 +109,7 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("maxAttendees", maxAttendees);
         document.put("attendees", attendees);
         document.put("eventCreator", eventCreator.toString());
+        document.put("notifications", this.notifications);
 
         return document;
     }
@@ -151,6 +156,10 @@ public class Event extends DocumentSerializable implements Serializable {
         }
         if(document.get("attendees") != null) {
             attendees = (HashMap<String, Integer>) document.get("attendees");
+        }
+
+        if(document.get("notifications") != null){
+            notifications = (ArrayList<String>) document.get("notifications");
         }
     }
 

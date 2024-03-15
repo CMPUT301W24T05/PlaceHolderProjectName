@@ -37,7 +37,7 @@ public class NotificationsFragment extends AppCompatActivity {
                 finish();
             }
         });
-        
+
 
     }
 
