@@ -352,6 +352,10 @@ public class Event extends DocumentSerializable implements Serializable {
     public void setInfoQRCode(String infoQRCode) {
         this.infoQRCode = infoQRCode;
     }
+
+    public ArrayList<String> getNotifications() {
+        return notifications;
+    }
 }
 
 
