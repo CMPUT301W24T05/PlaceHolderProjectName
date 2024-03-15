@@ -54,6 +54,7 @@ public class QRCodeManager implements Serializable {
         return QRCodeType.ERROR;
     }
 
+
     /**
      * Extracts and returns the event ID from a raw QR code string.
      *
