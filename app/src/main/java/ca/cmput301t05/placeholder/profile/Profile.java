@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import ca.cmput301t05.placeholder.database.DocumentSerializable;
 import ca.cmput301t05.placeholder.events.Event;
@@ -46,6 +47,7 @@ public class Profile extends DocumentSerializable {
         this.profileID = profileID;
         this.joinedEvents = new ArrayList<>();
         this.hostedEvents = new ArrayList<>();
+        this.notifications = new ArrayList<>();
     }
 
     /**
@@ -332,6 +334,19 @@ public class Profile extends DocumentSerializable {
             isAdmin = Boolean.TRUE.equals(document.getBoolean("isAdmin"));
         }
     }
+
+    private ArrayList<String> turnNotifToString(){
+
+        ArrayList<String> notifID = new ArrayList<>();
+
+        for (Notification n : this.notifications){
+
+            notifID.add(n.getNotificationID().toString());
+        }
+
+        return notifID;
+    }
+
 
     
 }

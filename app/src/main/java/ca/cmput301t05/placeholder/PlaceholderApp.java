@@ -25,6 +25,8 @@ public class PlaceholderApp extends Application implements Serializable {
     private ProfileImageHandler profileImageHandler;
     private ProfileTable profileTable;
     private EventTable eventTable;
+
+    private NotificationTable notificationTable;
     private DeviceIDManager idManager;
 
     private HashMap<UUID, Event> joinedEvents;
@@ -44,6 +46,8 @@ public class PlaceholderApp extends Application implements Serializable {
         super.onCreate();
         profileTable = new ProfileTable();
         eventTable = new EventTable();
+        notificationTable = new NotificationTable();
+
         idManager = new DeviceIDManager(this);
 
         posterImageHandler = new EventPosterImageHandler();
@@ -141,4 +145,10 @@ public class PlaceholderApp extends Application implements Serializable {
     public Uri getPicCache() {
         return picCache;
     }
+
+    public NotificationTable getNotificationTable() {
+        return notificationTable;
+    }
+
+
 }

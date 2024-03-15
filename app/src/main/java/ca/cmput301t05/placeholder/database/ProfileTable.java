@@ -8,10 +8,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
  * It extends the Table class and provides methods for converting Firestore document snapshots into Profile objects.
  */
 public class ProfileTable extends Table<Profile> {
-    public static final String COLLECTION_NAME = "profiles";
+    public static final Collections COLLECTION = Collections.PROFILES;
 
     public ProfileTable() {
-        super(COLLECTION_NAME);
+        super(COLLECTION);
     }
 
     /**

@@ -1,8 +1,13 @@
 package ca.cmput301t05.placeholder.database;
 
-import android.content.Context;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The Table class is an abstract class that represents a table in the database.
@@ -11,18 +16,25 @@ import com.google.firebase.firestore.DocumentSnapshot;
  * @param <T> The type of document stored in the table, which should extend DocumentSerializable.
  */
 public abstract class Table<T extends DocumentSerializable> {
+
     /**
      * A reference to a collection in the Firestore database.
      */
     protected CollectionReference collectionReference;
 
     /**
+     * enum which lets us get all the paths and such
+     */
+    final Collections COLLECTION;
+
+    /**
      * Constructs a Table object with the given collection name.
      *
-     * @param collectionName The name of the collection in the database.
+     * @param collection an enum which allows us to grab paths and such
      */
-    public Table(String collectionName) {
-        collectionReference = DatabaseManager.getInstance().getDb().collection(collectionName);
+    public Table(Collections collection) {
+        COLLECTION = collection;
+        collectionReference = DatabaseManager.getInstance().getDb().collection(collection.getPath());
     }
 
     /**
@@ -68,6 +80,40 @@ public abstract class Table<T extends DocumentSerializable> {
         });
     }
 
+    public void fetchMultipleDocuments(ArrayList<String> documents, DocumentCallback<ArrayList<T>> callback){
+
+        //https://firebase.google.com/docs/firestore/query-data/queries
+        ArrayList<T> fetchedDocuments = new ArrayList<>();
+
+        //essentially grabs us all the snapshots for everything in the list if they exist
+        collectionReference.whereIn(COLLECTION.getId(), Arrays.asList(documents.toArray())).get().addOnCompleteListener(task -> {
+
+            if (task.isSuccessful()){
+
+                QuerySnapshot querySnapshot = task.getResult(); //all the types we want
+
+                for (DocumentSnapshot document : querySnapshot){
+
+                    if (document.exists()){
+                        T object = documentFromSnapshot(document);
+                        fetchedDocuments.add(object);
+                    }   else {
+                        callback.onFailure(new Exception(document.toString() + " Does not exist"));
+                    }
+
+                }
+                callback.onSuccess(fetchedDocuments);
+
+            } else {
+                callback.onFailure(task.getException());
+            }
+
+
+        });
+
+
+    }
+
     /**
      * Pushes a document to the Firestore collection with the specified document ID and calls the callback methods based on the result of the operation.
      *
@@ -93,4 +139,6 @@ public abstract class Table<T extends DocumentSerializable> {
      * @return An object of type T representing the DocumentSnapshot.
      */
     protected abstract T documentFromSnapshot(DocumentSnapshot snapshot);
+
+
 }
