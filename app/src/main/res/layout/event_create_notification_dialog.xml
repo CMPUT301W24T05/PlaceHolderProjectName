@@ -30,24 +30,4 @@
         android:text="Send Push Notification"
         android:textSize="24sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/create_event_notification_dialog_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="150dp"
-            android:layout_weight="1"
-            android:text="back" />
-
-        <Button
-            android:id="@+id/create_event_notification_dialog_create"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="create" />
-    </LinearLayout>
 </LinearLayout>

@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.*;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 /**
@@ -33,7 +34,8 @@ public class PlaceholderApp extends Application implements Serializable {
 
     private HashMap<UUID, Event> hostedEvents;
 
-    private Event cachedEvent;
+    private Event cachedEvent; //honestly having these cashed variables probably isnt the way to go. we should be using an observer/listener to decouple this
+
 
     private Uri picCache;
 

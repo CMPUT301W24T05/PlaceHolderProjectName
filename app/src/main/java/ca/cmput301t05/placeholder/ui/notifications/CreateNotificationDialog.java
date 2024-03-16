@@ -2,33 +2,74 @@ package ca.cmput301t05.placeholder.ui.notifications;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
 
+import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.notifications.Notification;
 
 public class CreateNotificationDialog extends DialogFragment {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout to use as a dialog or embedded fragment.
-        return inflater.inflate(R.layout.event_create_notification_dialog, container, false);
-    }
+    private EditText notificationMessageEditText;
+    private CheckBox sendPushCheckbox;
+
+    private PlaceholderApp app;
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // The only reason you might override this method when using
-        // onCreateView() is to modify the dialog characteristics. For example,
-        // the dialog includes a title by default, but your custom layout might
-        // not need it. Here, you can remove the dialog title, but you must
-        // call the superclass to get the Dialog.
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        return dialog;
+
+        app = (PlaceholderApp) getContext().getApplicationContext();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.event_create_notification_dialog, null);
+
+        notificationMessageEditText = view.findViewById(R.id.create_event_notification_dialog_messageEditText);
+        sendPushCheckbox = view.findViewById(R.id.create_event_notification_dialog_checkbox);
+
+        builder.setView(view)
+                .setTitle("Send Notification")
+                .setPositiveButton("Send", (dialog, id) -> {
+                    // Handle "Create" button click
+                    // Extract and use your EditText and CheckBox values here
+
+                    String notificationMessage = notificationMessageEditText.getText().toString();
+                    notificationMessage = notificationMessage.trim();
+
+                    if (notificationMessage.isEmpty()){
+                        notificationMessageEditText.setError("Please Enter a Notification Message");
+                    }   else {
+
+                        boolean sendPush = sendPushCheckbox.isChecked();
+
+
+
+                        Notification newNotification = new Notification(notificationMessage,app.getUserProfile().getProfileID(), app.getCachedEvent().getEventID());
+                        //TODO need to figure out how to bring this notification back to the activity using a callback
+
+
+                        dialog.dismiss();
+
+                    }
+
+                })
+                .setNegativeButton("Cancel", (dialog, id) -> {
+                    // User cancelled the dialog
+                    dialog.dismiss();
+                });
+
+
+        return builder.create();
+
     }
 }
