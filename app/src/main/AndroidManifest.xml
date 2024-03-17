@@ -46,8 +46,6 @@
             android:exported="true">
         </activity>
 
-
-
         <activity android:name=".InitialSetupActivity" />
         <activity android:name=".ui.events.creation.EnterEventDetailsActivity" />
         <activity android:name=".ProfileEditActivity"/>
@@ -57,6 +55,10 @@
         <activity android:name=".ui.events.ViewEventDetailsActivity"/>
         <activity android:name=".ui.events.EventSignUpActivity"/>
         <activity android:name=".ui.events.GenerateInfoCheckinActivity"/>
+        <activity android:name=".ui.events.creation.PreviewEventActivity" />
+        <activity android:name=".ui.events.ViewQRCodesActivity"/>
+        <activity android:name=".ui.events.EventMenuActivity"/>
+
     </application>
 
 </manifest>
