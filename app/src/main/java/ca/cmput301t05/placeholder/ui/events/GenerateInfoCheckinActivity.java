@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -19,15 +18,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.OutputStream;
 
-import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.qrcode.QRCodeType;
-import ca.cmput301t05.placeholder.ui.events.event_menu.PreviewEventActivity;
+import ca.cmput301t05.placeholder.ui.events.creation.PreviewEventActivity;
 
 public class GenerateInfoCheckinActivity extends AppCompatActivity {
 
@@ -36,10 +33,6 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
     private Button generate2;
 
     private Button next;
-
-    private ImageButton shareqr1;
-
-    private ImageButton shareqr2;
 
     private ImageView qrCode1;
 
@@ -54,7 +47,6 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         PlaceholderApp app = (PlaceholderApp) getApplicationContext();
-
         Event curEvent = app.getCachedEvent();
 
         setContentView(R.layout.event_generate_info_checkin);
@@ -67,11 +59,6 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
         //gen2 = info
         generate2 = findViewById(R.id.event_generate_generate2);
 
-        //share check in qr
-        shareqr1 = findViewById(R.id.share_btn1);
-
-        //share info qr
-        shareqr2 = findViewById(R.id.share_btn2);
 
         next = findViewById(R.id.event_generate_qr_next);
         qrCode1 = findViewById(R.id.event_generate_qrcode1);
@@ -112,8 +99,6 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
                     generate1.setText("Export QR Code");
                     curEvent.setCheckInQR(checkIn.getRawText());
 
-                    shareqr1.setVisibility(View.VISIBLE);
-
 
                 }   else {
 
@@ -125,13 +110,6 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
             }
         });
 
-        shareqr1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareQRCode(checkIn);
-
-            }
-        });
 
         generate2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +121,6 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
                     generate2.setText("Export QR Code");
                     curEvent.setInfoQRCode(info.getRawText());
 
-                    shareqr2.setVisibility(View.VISIBLE);
 
                 }   else {
 
@@ -156,20 +133,13 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
             }
         });
 
-        shareqr2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareQRCode(info);
-            }
-        });
-
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent i = new Intent(GenerateInfoCheckinActivity.this, PreviewEventActivity.class);
                 startActivity(i);
-
+                finish();
 
             }
         });

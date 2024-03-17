@@ -55,7 +55,8 @@
         <activity android:name=".ui.events.ViewEventDetailsActivity"/>
         <activity android:name=".ui.events.EventSignUpActivity"/>
         <activity android:name=".ui.events.GenerateInfoCheckinActivity"/>
-        <activity android:name=".ui.events.event_menu.PreviewEventActivity" />
+        <activity android:name=".ui.events.creation.PreviewEventActivity" />
+        <activity android:name=".ui.events.ViewQRCodesActivity"/>
     </application>
 
 </manifest>

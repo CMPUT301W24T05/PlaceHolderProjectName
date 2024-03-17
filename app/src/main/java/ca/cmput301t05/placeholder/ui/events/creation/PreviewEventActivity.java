@@ -1,6 +1,4 @@
-package ca.cmput301t05.placeholder.ui.events.event_menu;
-
-import static android.os.Build.VERSION_CODES.P;
+package ca.cmput301t05.placeholder.ui.events.creation;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -24,7 +22,7 @@ import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
-import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 
 public class PreviewEventActivity extends AppCompatActivity {
 
@@ -52,7 +50,6 @@ public class PreviewEventActivity extends AppCompatActivity {
 
         PlaceholderApp app = (PlaceholderApp) getApplicationContext();
         Event curEvent = app.getCachedEvent();
-        QRCodeManager qrm = new QRCodeManager();
 
         createEvent = findViewById(R.id.preview_create);
         back = findViewById(R.id.event_preview_back);
@@ -86,6 +83,8 @@ public class PreviewEventActivity extends AppCompatActivity {
         String date = String.valueOf(day) + ", " + String.valueOf(month) + ", " + String.valueOf(year);
 
         String dateTime = time + " - " + date;
+
+        event_name.setText(curEvent.getEventName());
 
         event_date.setText(dateTime);
 
@@ -132,12 +131,12 @@ public class PreviewEventActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Event document) {
                         // If the document was successfully updated in the database, start the Main activity and finish this activity
-                        String message = "Event," + curEvent.getEventName() +  " , Successfully created";
+                        String message = "Event, " + curEvent.getEventName() +  " , Successfully created";
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                         //change this to navigate to access qr code page
 
-                        Intent i = new Intent(PreviewEventActivity.this, MainActivity.class);
+                        Intent i = new Intent(PreviewEventActivity.this, ViewQRCodesActivity.class);
                         startActivity(i);
                         finish();
                     }

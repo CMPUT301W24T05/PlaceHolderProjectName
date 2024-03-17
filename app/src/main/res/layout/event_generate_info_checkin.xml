@@ -61,14 +61,6 @@
                 android:layout_marginBottom="20dp"
                 android:text="Generate" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/share_btn1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="share"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/baseline_share_24" />
-
 
         </LinearLayout>
     </LinearLayout>
@@ -108,13 +100,6 @@
                 android:layout_marginBottom="20dp"
                 android:text="Generate" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/share_btn2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="share"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/baseline_share_24" />
         </LinearLayout>
     </LinearLayout>
 
@@ -125,5 +110,5 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:text="Create Event" />
+        android:text="Next" />
 </LinearLayout>
