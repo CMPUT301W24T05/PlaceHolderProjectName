@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder.ui.notifications;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,10 +19,18 @@ import ca.cmput301t05.placeholder.notifications.Notification;
 
 public class CreateNotificationDialog extends DialogFragment {
 
+
+    public interface NotificationListener{
+
+        void onNotificationCreated(Notification notification, Boolean push);
+    }
+
     private EditText notificationMessageEditText;
     private CheckBox sendPushCheckbox;
 
     private PlaceholderApp app;
+
+    private NotificationListener notificationListener;
 
 
     @Override
@@ -57,6 +66,7 @@ public class CreateNotificationDialog extends DialogFragment {
                         Notification newNotification = new Notification(notificationMessage,app.getUserProfile().getProfileID(), app.getCachedEvent().getEventID());
                         //TODO need to figure out how to bring this notification back to the activity using a callback
 
+                        notificationListener.onNotificationCreated(newNotification, sendPush); //lets us send the notification back
 
                         dialog.dismiss();
 
@@ -71,5 +81,19 @@ public class CreateNotificationDialog extends DialogFragment {
 
         return builder.create();
 
+    }
+
+    /**
+     * basically makes sure that we implementing our dialog
+     * @param context
+     */
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            notificationListener = (NotificationListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement NotificationListener");
+        }
     }
 }

@@ -21,13 +21,37 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
 
-public class EventNotificationPageActivity extends AppCompatActivity {
+public class EventNotificationPageActivity extends AppCompatActivity implements CreateNotificationDialog.NotificationListener {
+
+    @Override
+    public void onNotificationCreated(Notification notification, Boolean push) {
+        // we get the notification from the dialog
+        notifications.add(notification);
+
+        //send the notification to the database
+        app.getNotificationTable().pushDocument(notification, notification.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
+            @Override
+            public void onSuccess(Notification document) {
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
+        //get all profiles inside of the event then give the notification to them, if it is a push notification we can get their firebase noti id and send
+
+    }
 
     private PlaceholderApp app;
 
     private Button back, create_notification;
 
     private RecyclerView notificationList;
+
+    private ArrayList<Notification> notifications;
 
     private NotificationAdapter notificationAdapter;
 
@@ -44,7 +68,7 @@ public class EventNotificationPageActivity extends AppCompatActivity {
         //ASSUMING THAT OUR EVENT IS IN THE CACHEDEVENTS
         Event e = app.getCachedEvent();
 
-        ArrayList<Notification> notifications = new ArrayList<>();
+        notifications = new ArrayList<>();
 
         notificationList = findViewById(R.id.event_notification_page_recyclerview);
         notificationAdapter = new NotificationAdapter(getApplicationContext(), notifications);
