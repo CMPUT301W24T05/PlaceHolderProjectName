@@ -20,6 +20,7 @@ import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
+import ca.cmput301t05.placeholder.profile.Profile;
 
 public class EventNotificationPageActivity extends AppCompatActivity implements CreateNotificationDialog.NotificationListener {
 
@@ -32,6 +33,47 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         app.getNotificationTable().pushDocument(notification, notification.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
             @Override
             public void onSuccess(Notification document) {
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+            }
+        });
+
+        //get all profiles inside of the event then give the notification to them, if it is a push notification we can get their firebase noti id and send
+
+
+
+        app.getProfileTable().fetchMultipleDocuments(curEvent.getAttendees(), new Table.DocumentCallback<ArrayList<Profile>>() {
+            @Override
+            public void onSuccess(ArrayList<Profile> document) {
+
+                ArrayList<String> profileIDS = new ArrayList<>(); //getting ready to upload everything again
+
+                for (Profile p : document){
+                    p.addNotification(notification); //add notification to each profile
+
+                    profileIDS.add(p.getProfileID().toString());
+
+                    if (push){
+                        //do push notification things here
+                    }
+
+                }
+
+                //now upload profiles back
+
+                app.getProfileTable().pushMultipleDocuments(document, profileIDS, new Table.DocumentCallback<ArrayList<Profile>>() {
+                    @Override
+                    public void onSuccess(ArrayList<Profile> document) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
 
             }
 
@@ -41,11 +83,13 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             }
         });
 
-        //get all profiles inside of the event then give the notification to them, if it is a push notification we can get their firebase noti id and send
+
 
     }
 
     private PlaceholderApp app;
+
+    private Event curEvent;
 
     private Button back, create_notification;
 
@@ -66,7 +110,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         create_notification = findViewById(R.id.event_notification_page_create_notification);
 
         //ASSUMING THAT OUR EVENT IS IN THE CACHEDEVENTS
-        Event e = app.getCachedEvent();
+        curEvent = app.getCachedEvent();
 
         notifications = new ArrayList<>();
 
@@ -76,7 +120,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         notificationList.setAdapter(notificationAdapter);
 
 
-        app.getNotificationTable().fetchMultipleDocuments(e.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+        app.getNotificationTable().fetchMultipleDocuments(curEvent.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
             @Override
             public void onSuccess(ArrayList<Notification> document) {
                 //add all of our notifications

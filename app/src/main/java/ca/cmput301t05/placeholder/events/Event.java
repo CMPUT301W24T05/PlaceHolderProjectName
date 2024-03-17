@@ -2,8 +2,6 @@ package ca.cmput301t05.placeholder.events;
 
 import ca.cmput301t05.placeholder.database.DocumentSerializable;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.qrcode.QRCode;
-import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -204,12 +202,13 @@ public class Event extends DocumentSerializable implements Serializable {
 
     /**
      * Retrieves an array of all attendee IDs.
-     * @return An array of Strings, each representing a unique attendee ID.
+     *
+     * @return an arrayList of strings pertaining to the attendee's ids
      */
-    public String[] getAttendees(){
+    public ArrayList<String> getAttendees(){
 
 
-        return attendees.keySet().toArray(new String[0]);
+        return new ArrayList<>(attendees.keySet());
     }
 
     //getters and setters

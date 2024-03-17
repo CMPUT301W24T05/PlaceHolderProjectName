@@ -1,10 +1,10 @@
 package ca.cmput301t05.placeholder.database;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.checkerframework.checker.units.qual.A;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,12 +50,16 @@ public abstract class Table<T extends DocumentSerializable> {
          */
         void onSuccess(T document);
 
+
         /**
          * This method is called when the document operation fails.
          *
          * @param e The exception that occurred during the document operation.
          */
         void onFailure(Exception e);
+
+
+
     }
 
     /**
@@ -130,6 +134,48 @@ public abstract class Table<T extends DocumentSerializable> {
                 callback.onFailure(task.getException());
             }
         });
+    }
+
+    /**
+     * allows us to push multiple documents to the cloud. Does not work for array lists > 50
+     *
+     * @param documents document objects which we'll push
+     * @param documentIds ids of the documents we'll push
+     * @param callback callback to be called when push operation is complete
+     */
+    public void pushMultipleDocuments(ArrayList<T> documents, ArrayList<String> documentIds, DocumentCallback<ArrayList<T>> callback ){
+
+
+        WriteBatch batch = DatabaseManager.getInstance().getDb().batch();
+
+        if (documents.size() != documentIds.size()) {
+            // Handle the error, perhaps by calling the callback with an error message
+            callback.onFailure(new Exception("Documents arent the same sizes"));
+            return;
+        }
+
+        // Loop through the documents
+        for (int i = 0; i < documents.size(); i++) {
+            // Get each document and its corresponding ID
+            T document = documents.get(i);
+            String documentId = documentIds.get(i);
+
+
+            //get the document reference so we can get ready to batch send it
+            DocumentReference docRef = collectionReference.document(documentId);
+
+            batch.set(docRef, document.toDocument());
+        }
+
+        batch.commit().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callback.onSuccess(documents); // Adjust as needed
+            } else {
+                callback.onFailure(task.getException());
+            }
+        });
+
+
     }
 
     /**
