@@ -72,7 +72,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public class NotificationCardViewHolder extends RecyclerView.ViewHolder {
 
         TextView notification_time, notification_message;
-        ImageView menu; //this will be used to pin
+        ImageView menu, pin; //this will be used to pin
 
 
         public NotificationCardViewHolder(@NonNull View itemView) {
@@ -82,6 +82,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             notification_message = itemView.findViewById(R.id.notification_card_message);
 
             menu = itemView.findViewById(R.id.notification_card_triple);
+            pin = itemView.findViewById(R.id.notification_card_pin);
 
             // Listener for expanding/collapsing the text views
             View.OnClickListener expandCollapseListener = v -> {
@@ -116,6 +117,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public void bindView(int position){
             Notification n = notificationList.get(position);
             assert n != null;
+
+            if (n.isPinned){
+                pin.setVisibility(View.VISIBLE);
+                //TODO maybe set the background to a different colour too
+            }
 
             //format the event time here dont need to check for timezone because calendar does that automatically
             Calendar c = n.getTimeCreated();

@@ -12,7 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
@@ -28,6 +32,23 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
     public void onNotificationCreated(Notification notification, Boolean push) {
         // we get the notification from the dialog
         notifications.add(notification);
+        notifications.sort(new Comparator<Notification>() {
+            @Override
+            public int compare(Notification o1, Notification o2) {
+                // Check if either or both notifications are pinned
+                if (o1.isPinned() && !o2.isPinned()) {
+                    return -1; // o1 comes before o2
+                } else if (!o1.isPinned() && o2.isPinned()) {
+                    return 1; // o2 comes before o1
+                } else {
+                    // If both have the same pinned status, compare by time
+                    return o1.getTimeCreated().compareTo(o2.getTimeCreated());
+                }
+            }
+        });
+
+
+        notificationAdapter.notifyDataSetChanged();
 
         //send the notification to the database
         app.getNotificationTable().pushDocument(notification, notification.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
@@ -99,6 +120,8 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
     private NotificationAdapter notificationAdapter;
 
+
+
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -146,14 +169,14 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             public void onClick(View view) {
                 //have it open a dialog which allows us to create a notification similar to how we do it in the figma
 
+                CreateNotificationDialog dialog = new CreateNotificationDialog();
+                dialog.show(getSupportFragmentManager(), "CreateNotificationDialog");
 
 
             }
         });
 
 
-
-
-
+        
     }
 }

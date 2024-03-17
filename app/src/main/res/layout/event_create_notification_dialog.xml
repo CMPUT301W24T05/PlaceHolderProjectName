@@ -30,4 +30,11 @@
         android:text="Send Push Notification"
         android:textSize="24sp" />
 
+    <CheckBox
+        android:id="@+id/create_event_notification_dialog_checkbox_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pin Notification"
+        android:textSize="24sp" />
+
 </LinearLayout>

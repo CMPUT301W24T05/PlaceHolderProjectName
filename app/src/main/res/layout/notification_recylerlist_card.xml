@@ -37,11 +37,19 @@
                     android:textStyle="bold" />
 
                 <ImageView
+                    android:id="@+id/notification_card_pin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pin"
+                    android:visibility="invisible" />
+
+                <ImageView
                     android:id="@+id/notification_card_triple"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:src="@drawable/triple_dot" />
+
             </LinearLayout>
 
             <LinearLayout

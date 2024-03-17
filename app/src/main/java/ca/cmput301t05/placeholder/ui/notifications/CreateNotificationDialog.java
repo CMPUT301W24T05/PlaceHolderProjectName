@@ -26,7 +26,7 @@ public class CreateNotificationDialog extends DialogFragment {
     }
 
     private EditText notificationMessageEditText;
-    private CheckBox sendPushCheckbox;
+    private CheckBox sendPushCheckbox, pinCheckbox;
 
     private PlaceholderApp app;
 
@@ -45,6 +45,7 @@ public class CreateNotificationDialog extends DialogFragment {
 
         notificationMessageEditText = view.findViewById(R.id.create_event_notification_dialog_messageEditText);
         sendPushCheckbox = view.findViewById(R.id.create_event_notification_dialog_checkbox);
+        pinCheckbox = view.findViewById(R.id.create_event_notification_dialog_checkbox_pin);
 
         builder.setView(view)
                 .setTitle("Send Notification")
@@ -64,7 +65,7 @@ public class CreateNotificationDialog extends DialogFragment {
 
 
                         Notification newNotification = new Notification(notificationMessage,app.getUserProfile().getProfileID(), app.getCachedEvent().getEventID());
-                        //TODO need to figure out how to bring this notification back to the activity using a callback
+                        newNotification.setPinned(pinCheckbox.isChecked());
 
                         notificationListener.onNotificationCreated(newNotification, sendPush); //lets us send the notification back
 

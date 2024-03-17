@@ -45,6 +45,11 @@ public class Notification extends DocumentSerializable {
     String message;
 
     /**
+     * Used for sorting the top by pinned
+     */
+    boolean isPinned;
+
+    /**
      * Constructs a new Notification with nothing inside of it, please always use generic constructor, not this
      */
     public Notification(DocumentSnapshot snapshot){
@@ -70,6 +75,8 @@ public class Notification extends DocumentSerializable {
         this.timeCreated = Calendar.getInstance();
         this.notificationID = UUID.randomUUID();
 
+        this.isPinned = false;
+
     }
 
     /**
@@ -90,6 +97,8 @@ public class Notification extends DocumentSerializable {
         //now convert cal to timestamp
         document.put("timeCreated", new Timestamp(timeCreated.getTime()));
 
+        document.put("isPinned", this.isPinned);
+
         return document;
     }
 
@@ -108,6 +117,8 @@ public class Notification extends DocumentSerializable {
 
         //sets the calendar to this current one
         this.timeCreated.setTimeInMillis(document.getTimestamp("timeCreated").toDate().getTime());
+
+        this.isPinned = document.getBoolean("isPinned");
 
     }
 
@@ -133,6 +144,10 @@ public class Notification extends DocumentSerializable {
         return notificationID;
     }
 
+    public Boolean isPinned(){
+        return isPinned;
+    }
+
     public void setCreatorID(UUID creatorID) {
         this.creatorID = creatorID;
     }
@@ -152,4 +167,10 @@ public class Notification extends DocumentSerializable {
     public void setTimeCreated(Calendar timeCreated) {
         this.timeCreated = timeCreated;
     }
+
+    public void setPinned(boolean pinned) {
+        isPinned = pinned;
+    }
+
+
 }
