@@ -106,6 +106,8 @@ public class ViewQRCodesActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(ViewQRCodesActivity.this, EventMenuActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
