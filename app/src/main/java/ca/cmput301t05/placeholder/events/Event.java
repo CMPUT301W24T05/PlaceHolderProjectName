@@ -328,6 +328,14 @@ public class Event extends DocumentSerializable implements Serializable {
         return this.maxAttendees;
     }
 
+    public void addNotification(String notificationID){
+        this.notifications.add(notificationID);
+    }
+
+    public void removeNotification(String notificationID){
+        this.notifications.remove(notificationID);
+    }
+
     public void setEventCreator(UUID eventCreator){ this.eventCreator = eventCreator;}
 
     public UUID getEventCreator(){return this.eventCreator;}
@@ -355,6 +363,8 @@ public class Event extends DocumentSerializable implements Serializable {
     public ArrayList<String> getNotifications() {
         return notifications;
     }
+
+
 }
 
 

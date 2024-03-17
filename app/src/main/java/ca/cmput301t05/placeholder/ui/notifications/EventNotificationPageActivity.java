@@ -32,6 +32,9 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
     public void onNotificationCreated(Notification notification, Boolean push) {
         // we get the notification from the dialog
         notifications.add(notification);
+
+
+
         notifications.sort(new Comparator<Notification>() {
             @Override
             public int compare(Notification o1, Notification o2) {
@@ -54,6 +57,22 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         app.getNotificationTable().pushDocument(notification, notification.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
             @Override
             public void onSuccess(Notification document) {
+                curEvent.addNotification(document.getNotificationID().toString()); //add this to the event
+
+                //update the event to have the notification
+
+                app.getEventTable().pushDocument(curEvent, curEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
+                    @Override
+                    public void onSuccess(Event document) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+
             }
 
             @Override
@@ -148,6 +167,22 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             public void onSuccess(ArrayList<Notification> document) {
                 //add all of our notifications
                 notifications.addAll(document);
+
+                notifications.sort(new Comparator<Notification>() {
+                    @Override
+                    public int compare(Notification o1, Notification o2) {
+                        // Check if either or both notifications are pinned
+                        if (o1.isPinned() && !o2.isPinned()) {
+                            return -1; // o1 comes before o2
+                        } else if (!o1.isPinned() && o2.isPinned()) {
+                            return 1; // o2 comes before o1
+                        } else {
+                            // If both have the same pinned status, compare by time
+                            return o1.getTimeCreated().compareTo(o2.getTimeCreated());
+                        }
+                    }
+                });
+
                 notificationAdapter.notifyDataSetChanged(); //this error is fine since we're basically loading everything
             }
 
@@ -176,7 +211,5 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             }
         });
 
-
-        
     }
 }
