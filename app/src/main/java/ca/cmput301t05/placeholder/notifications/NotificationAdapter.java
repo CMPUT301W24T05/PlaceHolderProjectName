@@ -126,6 +126,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             if (n.isPinned){
                 pin.setVisibility(View.VISIBLE);
                 //TODO maybe set the background to a different colour too
+            }   else {
+                pin.setVisibility(View.INVISIBLE);
             }
 
             //format the event time here dont need to check for timezone because calendar does that automatically
@@ -147,7 +149,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             notification_time.setText(formatNotifTime);
 
-            boolean isExpanded = itemExpanded.get(position);
+            boolean isExpanded = itemExpanded.getOrDefault(position, false);
 
             if (!isExpanded){
                 //truncate message

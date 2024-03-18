@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="6dp"
                     android:paddingRight="6dp"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In faucibus luctus nisl sed congue. In ut a..." />
+                    android:text="" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

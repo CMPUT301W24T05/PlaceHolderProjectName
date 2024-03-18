@@ -44,7 +44,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
                     return 1; // o2 comes before o1
                 } else {
                     // If both have the same pinned status, compare by time
-                    return o1.getTimeCreated().compareTo(o2.getTimeCreated());
+                    return o2.getTimeCreated().compareTo(o1.getTimeCreated());
                 }
             }
         });
@@ -202,7 +202,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
                                 return 1; // o2 comes before o1
                             } else {
                                 // If both have the same pinned status, compare by time
-                                return o1.getTimeCreated().compareTo(o2.getTimeCreated());
+                                return o2.getTimeCreated().compareTo(o1.getTimeCreated());
                             }
                         }
                     });
