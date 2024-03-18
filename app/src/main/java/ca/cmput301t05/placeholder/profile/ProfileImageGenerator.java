@@ -11,6 +11,12 @@ public class ProfileImageGenerator {
     protected static final int TEXT_SIZE = PROFILE_IMAGE_SIZE / 2;
 
     public static Bitmap defaultProfileImage(String name) {
+        if(name == null){
+            throw new IllegalArgumentException("Name cannot be null!");
+        } else if (name.trim().isEmpty()){
+            throw new IllegalArgumentException("Name cannot be empty!");
+        }
+
         Bitmap bitmap = Bitmap.createBitmap(PROFILE_IMAGE_SIZE, PROFILE_IMAGE_SIZE, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
@@ -41,13 +47,13 @@ public class ProfileImageGenerator {
         return Math.abs(hash * 56 % 360); // Ensure the hue is within the 0-360 range for HSV
     }
 
-    protected static Paint createPaint(int color) {
+    private static Paint createPaint(int color) {
         Paint paint = new Paint();
         paint.setColor(color);
         return paint;
     }
 
-    protected static Paint createTextPaint(int color) {
+    private static Paint createTextPaint(int color) {
         Paint paint = new Paint();
         paint.setColor(color);
         paint.setTextSize(TEXT_SIZE);
@@ -55,12 +61,35 @@ public class ProfileImageGenerator {
         return paint;
     }
 
-    protected static String extractInitials(String name) {
-        name = name.trim();
-        String initials = name.substring(0, 1);
-        if(name.contains(" ")) {
-            initials += name.substring(name.indexOf(" ")+1, name.indexOf(" ")+2);
+    private static String extractInitials(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return ""; // Return an empty string or some default initials if the name is null or empty
         }
-        return initials.toUpperCase();
+
+        // Remove any leading and trailing spaces, and split the name into parts
+        String[] parts = name.trim().split("[\\s\\-]+");
+
+        // Now we'll work with the first and last parts for initials
+        String firstPart = parts[0];
+        String lastPart = parts.length > 1 ? parts[parts.length - 1] : ""; // Use the last part if it exists
+
+        // Extract the first character of the first part, ignoring non-alphabetic characters
+        String firstInitial = firstPart.replaceAll("[^a-zA-Z]", "").toUpperCase();
+        if (!firstInitial.isEmpty()) {
+            firstInitial = firstInitial.substring(0, 1);
+        }
+
+        // Extract the first character of the last part, if it's different from the first part
+        String lastInitial = "";
+        if (!lastPart.isEmpty() && !firstPart.equals(lastPart)) {
+            lastInitial = lastPart.replaceAll("[^a-zA-Z]", "").toUpperCase();
+            if (!lastInitial.isEmpty()) {
+                lastInitial = lastInitial.substring(0, 1);
+            }
+        }
+
+        // Combine the initials
+        return firstInitial + lastInitial;
     }
+
 }
