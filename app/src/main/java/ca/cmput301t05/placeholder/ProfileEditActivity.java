@@ -31,9 +31,11 @@ import ca.cmput301t05.placeholder.profile.Profile;
  * and removing the current profile picture.
  */
 public class ProfileEditActivity extends AppCompatActivity{
+    private static final int COMPRESSION_QUALITY = 1024;
+    private static final int IMAGE_MAX_HEIGHT = 1080;
+    private static final int IMAGE_MAX_WIDTH = 1080;
 
     private PlaceholderApp app;
-
     private  Uri profilePicUri;
     private UUID deviceID;
     private Profile profile;
@@ -45,18 +47,21 @@ public class ProfileEditActivity extends AppCompatActivity{
     private ImageView profilePic;
     private FloatingActionButton cameraButton;
     private FloatingActionButton removeProfilePicButton;
-
-    private boolean RemovePic = false;
+    private boolean removePic = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_profile_creation);
+        initializeComponents();
+        setUp();
+        setupListeners();
+    }
 
+    private void initializeComponents() {
         app = (PlaceholderApp) getApplicationContext();
         deviceID = app.getIdManager().getDeviceID();
-        profile = app.getUserProfile(); // base on the database, fetched the profile
-
+        profile = app.getUserProfile();
         saveButton = findViewById(R.id.save_button);
         adminButton = findViewById(R.id.admin_button);
         editName = findViewById(R.id.edit_name);
@@ -65,52 +70,51 @@ public class ProfileEditActivity extends AppCompatActivity{
         profilePic = findViewById(R.id.profile_pic);
         cameraButton = findViewById(R.id.button_camera);
         removeProfilePicButton = findViewById(R.id.button_remove_profile_pic);
-
-
-        // First display the information store in the object
-        setUp();
-        // Click on the save button will save the information and go back to Mainactivity
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                update();
-                finish();
-                // go back to main page
-            }
-        });
-        // Click on admin button will direct you to the admin tab
-        adminButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                update();
-                // will go to the admin page instead:
-                Intent intent = new Intent(ProfileEditActivity.this, AdminHomeActivity.class);
-                startActivity(intent);
-                finish(); //finish so a back button doesnt bring you here
-            }
-        });
-        cameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImagePicker.with(ProfileEditActivity.this)
-                        .crop()	    			//Crop image(Optional), Check Customization for more option
-                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                        .start();
-            }
-        });
-
-        // remove profile pictures
-        removeProfilePicButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RemovePic = true;
-                Bitmap defaultPic = ProfileImageGenerator.defaultProfileImage(profile.getName());
-                profilePic.setImageBitmap(defaultPic);
-            }
-        });
     }
 
+    private void setupListeners() {
+        saveButton.setOnClickListener(createOnSaveButtonClickListener());
+        adminButton.setOnClickListener(createOnAdminButtonClickListener());
+        cameraButton.setOnClickListener(createOnCameraButtonClickListener());
+        removeProfilePicButton.setOnClickListener(createOnRemoveProfilePicButtonClickListener());
+    }
+
+    // Clicking on the save button will save the information and go back to the Main Activity
+    private View.OnClickListener createOnSaveButtonClickListener() {
+        return v -> {
+            update();
+            finish();
+        };
+    }
+
+    // Clicking on the admin button will direct you to the Administrator page
+    private View.OnClickListener createOnAdminButtonClickListener() {
+        return v -> {
+            update();
+            Intent intent = new Intent(ProfileEditActivity.this, AdminHomeActivity.class);
+            startActivity(intent);
+            finish();
+        };
+    }
+
+    // Clicking on the camera button will present the user with the option to take a picture or upload one from their library
+    private View.OnClickListener createOnCameraButtonClickListener() {
+        return v -> ImagePicker.with(ProfileEditActivity.this)
+                .crop()                                             // Crop the image
+                .compress(COMPRESSION_QUALITY)                      // Final image size will be less than COMPRESSION_QUALITY KB
+                .maxResultSize(IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT)   // Final image resolution will be less than IMAGE_MAX_HEIGHT x IMAGE_MAX_WIDTH
+                .start();
+    }
+
+    // Clicking on the remove button will remove the user's uploaded profile picture (if any) and replace it with the default generated picture
+    private View.OnClickListener createOnRemoveProfilePicButtonClickListener() {
+        return v -> {
+            removePic = true;
+            Bitmap defaultPic = ProfileImageGenerator.defaultProfileImage(profile.getName());
+            profilePic.setImageBitmap(defaultPic);
+            profilePicUri = null;
+        };
+    }
 
     /**
      * Handles the result from the image picker activity, updating the profile picture view
@@ -123,13 +127,11 @@ public class ProfileEditActivity extends AppCompatActivity{
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("ACtiviy Result", "IN FUNC");
+        Log.d("Activity Result", "IN FUNC");
         Uri uri = data.getData();
         //display the new picture and upload to the ImageTable
         profilePic.setImageURI(uri);
-
         profilePicUri = uri;
-
     }
 
     /**
@@ -162,7 +164,7 @@ public class ProfileEditActivity extends AppCompatActivity{
         profile.setContactInfo(editContact.getText().toString());
         profile.setHomePage(editHomepage.getText().toString());
 
-        if (RemovePic){
+        if (removePic){
             app.getProfileImageHandler().removeProfilePic(profile);
         }
 
