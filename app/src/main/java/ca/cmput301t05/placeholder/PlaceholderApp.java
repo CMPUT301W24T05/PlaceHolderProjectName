@@ -8,7 +8,12 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.Location.LocationManager;
-import ca.cmput301t05.placeholder.database.*;
+import ca.cmput301t05.placeholder.database.images.EventPosterImageHandler;
+import ca.cmput301t05.placeholder.database.images.ProfileImageHandler;
+import ca.cmput301t05.placeholder.database.tables.EventTable;
+import ca.cmput301t05.placeholder.database.tables.NotificationTable;
+import ca.cmput301t05.placeholder.database.tables.ProfileTable;
+import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 

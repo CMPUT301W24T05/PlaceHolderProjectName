@@ -1,20 +1,20 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder.database.images;
 
 import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
+import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.StorageMetadata;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.google.firebase.storage.*;
 
 import java.util.UUID;
+import java.io.IOException;
 
 /**
  * The abstract base class for handling image-related operations such as uploading, retrieving,
@@ -38,58 +38,61 @@ public abstract class BaseImageHandler {
     /**
      * Uploads an image to the Firebase Storage with custom metadata.
      *
-     * @param file               The Uri of the image file to upload.
-     * @param imageID            The ID of the image.
-     * @param folder             The folder in which to upload the image.
-     * @param customMetadataKey  The key for the custom metadata.
+     * @param file                The Uri of the image file to upload.
+     * @param imageID             The ID of the image.
+     * @param folder              The folder in which to upload the image.
+     * @param customMetadataKey   The key for the custom metadata.
      * @param customMetadataValue The value for the custom metadata.
      */
-    protected void uploadImage(Uri file, String imageID, String folder, String customMetadataKey, String customMetadataValue) {
+    protected void uploadImage(Uri file, String imageID, String folder, String customMetadataKey, String customMetadataValue) throws IOException {
 
         String filename = folder + "/" + imageID;
         StorageReference storageRef = rootStorageRef.child(filename);
-        Log.e("amirza2", " UPLOAD - GOT HERE 1");
 
         String mimeType = getFileMimeType(file);
-        if (mimeType == null) {
-            // Default to "image/jpeg" if MIME type cannot be determined
-            mimeType = "image/jpeg";
+        if (mimeType == null || !(mimeType.startsWith("image/"))) {
+            throw new IOException("Invalid file. This is not an image file.");
         }
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setCustomMetadata(customMetadataKey, customMetadataValue)
                 .setContentType(mimeType)
                 .build();
-        Log.e("amirza2", "UPLOAD - GOT HERE 2");
-        Log.e("amirza2", String.valueOf(file));
         UploadTask uploadTask = storageRef.putFile(file, metadata);
-        Log.e("amirza2", "UPLOAD - GOT HERE 3");
+
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            // Handle successful uploads on complete
+            Log.d("Image Upload", "Image upload successful");
+        }).addOnFailureListener(e -> {
+            // Handle unsuccessful uploads
+            Log.d("Image Upload", "Image upload failed: " + e.getMessage());
+        }).addOnProgressListener(taskSnapshot -> {
+            // Progress percentage can be calculated as (bytesTransferred / totalByteCount) * 100
+            double progressPercentage = (100.0 * taskSnapshot.getBytesTransferred()) /
+                    taskSnapshot.getTotalByteCount();
+            Log.d("Image Upload", "Upload is " + progressPercentage + "% done");
+        }).addOnPausedListener(taskSnapshot -> Log.d("Image Upload", "Upload is paused"));
     }
 
     /**
      * Retrieves and sets an image from Firebase Storage into an ImageView using the Glide library.
      *
-     * @param imageID    The ID of the image to retrieve.
-     * @param folder     The folder in which the image is located.
-     * @param imageView  The ImageView to set the image into.
+     * @param imageID   The ID of the image to retrieve.
+     * @param folder    The folder in which the image is located.
+     * @param imageView The ImageView to set the image into.
      */
     protected void getImage(String imageID, String folder, ImageView imageView) {
         String filename = folder + "/" + imageID;
         StorageReference storageReference = rootStorageRef.child(filename);
 
-        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                //Load your image here
-                Glide.with(imageView.getContext())
-                        .load(uri)
-                        .into(imageView);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                //implement some error checking
-            }
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            //Load your image here
+            Glide.with(imageView.getContext())
+                    .load(uri)
+                    .into(imageView);
+        }).addOnFailureListener(e -> {
+            // If the image ID is invalid or the image does not exist, then the download will fail.
+            Log.d("Image Database", "Error: " + e.getMessage());
         });
     }
 
@@ -103,12 +106,11 @@ public abstract class BaseImageHandler {
         String filename = folder + "/" + imageID;
         StorageReference storageReference = rootStorageRef.child(filename);
 
-        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("Image Database", "Image deleted");
-            }
-        });
+        storageReference.delete().addOnSuccessListener(unused -> Log.d("Image Database", "Image deleted"))
+                .addOnFailureListener(e -> {
+                    // If the image ID is invalid or the image does not exist
+                    Log.d("Image Database", "Error: " + e.getMessage());
+                });
     }
 }
 

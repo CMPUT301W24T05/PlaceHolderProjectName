@@ -15,13 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Calendar;
 import java.util.UUID;
 
-import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.database.Table;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 
 public class PreviewEventActivity extends AppCompatActivity {

@@ -8,11 +8,10 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import ca.cmput301t05.placeholder.database.Table;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import ca.cmput301t05.placeholder.database.DeviceIDManager;
-import ca.cmput301t05.placeholder.database.ProfileTable;
+import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 import java.util.UUID;
