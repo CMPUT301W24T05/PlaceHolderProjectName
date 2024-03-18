@@ -96,4 +96,7 @@ dependencies {
     //Import the image picker library from Github
     implementation ("com.github.dhaval2404:imagepicker:2.1")
 
+    // Import google play service for geolocation
+    implementation ("com.google.android.gms:play-services-location:19.0.1")
+
 }

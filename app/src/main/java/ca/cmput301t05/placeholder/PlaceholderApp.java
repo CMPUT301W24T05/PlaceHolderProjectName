@@ -1,14 +1,13 @@
 package ca.cmput301t05.placeholder;
 
 import android.app.Application;
-import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.Location.LocationManager;
 import ca.cmput301t05.placeholder.database.*;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
@@ -37,6 +36,8 @@ public class PlaceholderApp extends Application implements Serializable {
 
     private Uri picCache;
 
+    private LocationManager locationManager;
+
     /**
      * Called when the application is starting, before any activity, service, or receiver objects (excluding content providers) have been created.
      * Initializes the tables and managers used throughout the application.
@@ -55,6 +56,7 @@ public class PlaceholderApp extends Application implements Serializable {
 
         hostedEvents = new HashMap<>();
         joinedEvents = new HashMap<>();
+        locationManager = new LocationManager(this);
     }
 
     /**
@@ -150,5 +152,11 @@ public class PlaceholderApp extends Application implements Serializable {
         return notificationTable;
     }
 
-
+    /**
+     * Returns the singleton instance of LocationManager.
+     * @return The LocationManager Instance.
+     */
+    public LocationManager getLocationManager() {
+        return locationManager;
+    }
 }
