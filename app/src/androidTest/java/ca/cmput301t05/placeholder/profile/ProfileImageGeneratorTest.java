@@ -10,11 +10,10 @@ public class ProfileImageGeneratorTest {
     @Test
     public void testDefaultProfileImage() {
         //Arrange
-        ProfileImageGenerator profileImageGenerator = new ProfileImageGenerator();
         String name = "Max Ritchie";
 
         //Act
-        Bitmap bitmap = profileImageGenerator.defaultProfileImage(name);
+        Bitmap bitmap = ProfileImageGenerator.defaultProfileImage(name);
 
         //Assert
         assertNotNull(bitmap);
@@ -25,13 +24,12 @@ public class ProfileImageGeneratorTest {
     @Test
     public void testProfileImageInitials() {
         //Arrange
-        ProfileImageGenerator profileImageGenerator = new ProfileImageGenerator();
         String name = "John Doe";
         String expectedInitials = "JD";
 
         //Act
-        Bitmap bitmap = profileImageGenerator.defaultProfileImage(name);
-        String actualInitials = profileImageGenerator.extractInitials(name);
+        Bitmap bitmap = ProfileImageGenerator.defaultProfileImage(name);
+        String actualInitials = ProfileImageGenerator.extractInitials(name);
 
         //Assert
         assertEquals(expectedInitials, actualInitials);

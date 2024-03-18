@@ -10,7 +10,7 @@ public class ProfileImageGenerator {
     protected static final int PROFILE_IMAGE_SIZE = 500;
     protected static final int TEXT_SIZE = PROFILE_IMAGE_SIZE / 2;
 
-    public Bitmap defaultProfileImage(String name) {
+    public static Bitmap defaultProfileImage(String name) {
         Bitmap bitmap = Bitmap.createBitmap(PROFILE_IMAGE_SIZE, PROFILE_IMAGE_SIZE, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
@@ -41,13 +41,13 @@ public class ProfileImageGenerator {
         return Math.abs(hash * 56 % 360); // Ensure the hue is within the 0-360 range for HSV
     }
 
-    protected Paint createPaint(int color) {
+    protected static Paint createPaint(int color) {
         Paint paint = new Paint();
         paint.setColor(color);
         return paint;
     }
 
-    protected Paint createTextPaint(int color) {
+    protected static Paint createTextPaint(int color) {
         Paint paint = new Paint();
         paint.setColor(color);
         paint.setTextSize(TEXT_SIZE);
@@ -55,7 +55,7 @@ public class ProfileImageGenerator {
         return paint;
     }
 
-    protected String extractInitials(String name) {
+    protected static String extractInitials(String name) {
         name = name.trim();
         String initials = name.substring(0, 1);
         if(name.contains(" ")) {
