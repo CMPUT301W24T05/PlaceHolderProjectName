@@ -4,6 +4,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,8 @@ import ca.cmput301t05.placeholder.R;
 public class Successful_Checked_In_Activity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
     private LocationManager locationManager;
     private PlaceholderApp app;
+    private Button next_button;
+    private CheckBox shareLocation;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (PlaceholderApp) getApplicationContext();
@@ -23,6 +27,9 @@ public class Successful_Checked_In_Activity extends AppCompatActivity implements
         locationManager.setLocationPermissionListener(this);
         // Request Location Permission by showing the pop up windows, this will automatically call OnRequestPermissionsResult()
         locationManager.requestLocationPermission(this);
+
+        next_button = findViewById(R.id.go_to_event_button);
+        shareLocation = findViewById(R.id.checkbox_share_location);
     }
 
     // Overriden method from the activity class, will call the onRequestPermissionsResult in LocationManagerClass
