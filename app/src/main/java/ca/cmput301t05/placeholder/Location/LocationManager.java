@@ -67,27 +67,6 @@ public class LocationManager {
         }
     }
 
-//    public Location getLastLocation() {
-//        final Location[] lastLocation = {null};
-//        if (checkLocationPermission()) {
-//            fusedLocationProviderClient.getLastLocation()
-//                    .addOnSuccessListener(new OnSuccessListener<Location>() {
-//                        @Override
-//                        public void onSuccess(Location location) {
-//                            if (location != null) {
-//                                lastLocation[0] = location;
-                                    // skip it because of
-//                            }
-//
-//                        }
-//                    });
-//        } else {
-//            permissionListener.onLocationPermissionDenied();
-//        }
-//        Log.d("Location", "lastLocation[0] = " + lastLocation[0]);
-//        return lastLocation[0];
-//    }
-
     public interface LocationCallback {
         void onLocationReceived(Location location);
     }
