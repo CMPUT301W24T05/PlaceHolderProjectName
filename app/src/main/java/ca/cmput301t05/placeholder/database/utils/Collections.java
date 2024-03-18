@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder.database.utils;
 
 /**
  * Enum to easily allow us to grab the collection name

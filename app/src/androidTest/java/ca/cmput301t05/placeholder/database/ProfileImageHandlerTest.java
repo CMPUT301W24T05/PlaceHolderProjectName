@@ -1,28 +1,18 @@
 package ca.cmput301t05.placeholder.database;
 
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 
 import android.net.Uri;
-import android.widget.ImageView;
 
-import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.images.ProfileImageHandler;
 import ca.cmput301t05.placeholder.profile.Profile;
-import junit.framework.TestCase;
+
 import static org.junit.Assert.*;
 
-import androidx.test.core.app.ApplicationProvider;
-
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import java.util.UUID;

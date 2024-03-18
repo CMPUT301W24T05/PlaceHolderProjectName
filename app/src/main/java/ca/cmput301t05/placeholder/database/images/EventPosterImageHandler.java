@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder.database.images;
 
 import android.net.Uri;
 import android.widget.ImageView;

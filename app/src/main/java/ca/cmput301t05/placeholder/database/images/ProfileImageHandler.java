@@ -1,7 +1,6 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder.database.images;
 
 import android.net.Uri;
-import android.util.Log;
 import android.widget.ImageView;
 import ca.cmput301t05.placeholder.profile.Profile;
 

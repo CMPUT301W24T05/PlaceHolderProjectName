@@ -7,13 +7,11 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ca.cmput301t05.placeholder.database.ProfileTable;
-import ca.cmput301t05.placeholder.database.Table;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 

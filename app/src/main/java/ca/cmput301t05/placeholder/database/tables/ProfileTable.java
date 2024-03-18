@@ -1,5 +1,6 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder.database.tables;
 
+import ca.cmput301t05.placeholder.database.utils.Collections;
 import ca.cmput301t05.placeholder.profile.Profile;
 import com.google.firebase.firestore.DocumentSnapshot;
 

@@ -1,10 +1,11 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder.database.images;
 
 import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
+import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import com.bumptech.glide.Glide;

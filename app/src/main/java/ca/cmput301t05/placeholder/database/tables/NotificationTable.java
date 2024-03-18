@@ -1,8 +1,7 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder.database.tables;
 
+import ca.cmput301t05.placeholder.database.utils.Collections;
 import com.google.firebase.firestore.DocumentSnapshot;
-
-import java.util.ArrayList;
 
 import ca.cmput301t05.placeholder.notifications.Notification;
 

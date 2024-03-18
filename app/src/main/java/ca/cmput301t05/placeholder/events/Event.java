@@ -1,9 +1,7 @@
 package ca.cmput301t05.placeholder.events;
 
-import ca.cmput301t05.placeholder.database.DocumentSerializable;
+import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.qrcode.QRCode;
-import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
