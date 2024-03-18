@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
@@ -122,17 +123,32 @@ public class PreviewEventActivity extends AppCompatActivity {
     private void handleEventCreation(PlaceholderApp app, Event currentEvent) {
         //push changes
         app.getPosterImageHandler().uploadPoster(app.getPicCache(), currentEvent, this); //updates the event
+
         // Pushes the current event (currEvent) to the event table in the database
         app.getEventTable().pushDocument(currentEvent, currentEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
             @Override
             public void onSuccess(Event document) {
-                // If the document was successfully updated in the database, start the Main activity and finish this activity
-                String message = "Event, " + currentEvent.getEventName() + " , Successfully created";
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                //change this to navigate to access qr code page
-                Intent intent = new Intent(PreviewEventActivity.this, ViewQRCodesActivity.class);
-                startActivity(intent);
-                finish();
+
+                List<String> hostedEvents = app.getUserProfile().getHostedEvents();
+                hostedEvents.add(currentEvent.getEventID().toString());
+                app.getUserProfile().setHostedEvents(hostedEvents);
+                app.getProfileTable().pushDocument(app.getUserProfile(), app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+                    @Override
+                    public void onSuccess(Profile document) {
+                        // If the document was successfully updated in the database, start the Main activity and finish this activity
+                        String message = "Event, " + currentEvent.getEventName() + " , Successfully created";
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        //change this to navigate to access qr code page
+                        Intent intent = new Intent(PreviewEventActivity.this, ViewQRCodesActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
             }
 
             @Override
