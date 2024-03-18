@@ -29,6 +29,8 @@ public class Profile extends DocumentSerializable {
     private List<Notification> notifications;
     boolean isAdmin = false;
 
+    private String messagingToken; //for notifications
+
     /**
      * Default constructor creating an empty profile.
      */
@@ -267,6 +269,14 @@ public class Profile extends DocumentSerializable {
         this.profilePictureID = profilePictureID;
     }
 
+    public void setMessagingToken(String messagingToken) {
+        this.messagingToken = messagingToken;
+    }
+
+    public String getMessagingToken() {
+        return messagingToken;
+    }
+
     /**
      * Converts the Profile object to a document in the form of a Map &lt;String, Object&gt;.
      * This method is used to store the Profile object in a database.
@@ -293,6 +303,7 @@ public class Profile extends DocumentSerializable {
         document.put("joinedEvents", joinedEvents); // Assumes Event class can be serialized
         document.put("notifications", notifications); // Assumes UserNotification can be serialized
         document.put("isAdmin", isAdmin);
+        document.put("messagingToken", messagingToken);
         return document;
     }
 
@@ -332,6 +343,10 @@ public class Profile extends DocumentSerializable {
         }
         if(document.getBoolean("isAdmin") != null) {
             isAdmin = Boolean.TRUE.equals(document.getBoolean("isAdmin"));
+        }
+
+        if(document.get("messagingToken") != null){
+            messagingToken = document.getString("messagingToken");
         }
     }
 

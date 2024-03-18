@@ -94,4 +94,7 @@ dependencies {
     //Import the image picker library from Github
     implementation ("com.github.dhaval2404:imagepicker:2.1")
 
+    //for push notifications
+    implementation("com.google.firebase:firebase-messaging")
+
 }

@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder.ui.notifications;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -97,6 +98,10 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
                         if (push) {
                             //do push notification things here
+                            //THIS IS CLIENT SIDE MASS NOTIFICATIONS IN COMMON PRACTICES FOR CODING THIS IS BAD
+                            //BUT SETTING UP A SERVER IS OUT OF SCOPE SO..
+
+
                         }
 
                     }

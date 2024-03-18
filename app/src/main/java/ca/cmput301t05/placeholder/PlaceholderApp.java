@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -36,8 +37,8 @@ public class PlaceholderApp extends Application implements Serializable {
 
     private Event cachedEvent; //honestly having these cashed variables probably isnt the way to go. we should be using an observer/listener to decouple this
 
-
     private Uri picCache;
+
 
     /**
      * Called when the application is starting, before any activity, service, or receiver objects (excluding content providers) have been created.

@@ -46,6 +46,14 @@
             android:exported="true">
         </activity>
 
+        <service
+            android:name=".notifications.PushNotification"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
 
 
         <activity android:name=".InitialSetupActivity" />
@@ -58,6 +66,9 @@
         <activity android:name=".ui.events.EventSignUpActivity"/>
         <activity android:name=".ui.events.GenerateInfoCheckinActivity"/>
         <activity android:name=".ui.notifications.EventNotificationPageActivity"/>
+        <activity android:name=".ui.notifications.UserNotificationActivity"/>
     </application>
+
+
 
 </manifest>

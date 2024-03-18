@@ -55,7 +55,7 @@ public class NotificationsFragment extends AppCompatActivity {
 
                 app.setCachedEvent(document);
 
-                Intent i = new Intent(NotificationsFragment.this, EventNotificationPageActivity.class);
+                Intent i = new Intent(NotificationsFragment.this, UserNotificationActivity.class);
                 startActivity(i);
 
             }
