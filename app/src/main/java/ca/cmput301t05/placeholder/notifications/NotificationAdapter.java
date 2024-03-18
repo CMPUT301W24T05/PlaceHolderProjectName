@@ -35,6 +35,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         this.context = context;
 
+        itemExpanded = new HashMap<>();
+
         //init itemexpanded as false
         for (int i = 0; i < notifications.size(); i++) {
             itemExpanded.put(i, false); //position = key, everything not expanded

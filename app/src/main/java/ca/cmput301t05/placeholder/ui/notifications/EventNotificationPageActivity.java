@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder.ui.notifications;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -83,47 +84,48 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         //get all profiles inside of the event then give the notification to them, if it is a push notification we can get their firebase noti id and send
 
 
+        if (!curEvent.getAttendees().isEmpty()) {
 
-        app.getProfileTable().fetchMultipleDocuments(curEvent.getAttendees(), new Table.DocumentCallback<ArrayList<Profile>>() {
-            @Override
-            public void onSuccess(ArrayList<Profile> document) {
+            app.getProfileTable().fetchMultipleDocuments(curEvent.getAttendees(), new Table.DocumentCallback<ArrayList<Profile>>() {
+                @Override
+                public void onSuccess(ArrayList<Profile> document) {
 
-                ArrayList<String> profileIDS = new ArrayList<>(); //getting ready to upload everything again
+                    ArrayList<String> profileIDS = new ArrayList<>(); //getting ready to upload everything again
 
-                for (Profile p : document){
-                    p.addNotification(notification); //add notification to each profile
+                    for (Profile p : document) {
+                        p.addNotification(notification); //add notification to each profile
 
-                    profileIDS.add(p.getProfileID().toString());
+                        profileIDS.add(p.getProfileID().toString());
 
-                    if (push){
-                        //do push notification things here
+                        if (push) {
+                            //do push notification things here
+                        }
+
                     }
+
+                    //now upload profiles back
+
+                    app.getProfileTable().pushMultipleDocuments(document, profileIDS, new Table.DocumentCallback<ArrayList<Profile>>() {
+                        @Override
+                        public void onSuccess(ArrayList<Profile> document) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+
+                        }
+                    });
 
                 }
 
-                //now upload profiles back
+                @Override
+                public void onFailure(Exception e) {
 
-                app.getProfileTable().pushMultipleDocuments(document, profileIDS, new Table.DocumentCallback<ArrayList<Profile>>() {
-                    @Override
-                    public void onSuccess(ArrayList<Profile> document) {
+                }
+            });
 
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-
-                    }
-                });
-
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-        });
-
-
+        }
 
     }
 
@@ -131,7 +133,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
     private Event curEvent;
 
-    private Button back, create_notification;
+    private Button back, create_notification, refresh;
 
     private RecyclerView notificationList;
 
@@ -151,6 +153,8 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         back = findViewById(R.id.event_notification_page_back);
         create_notification = findViewById(R.id.event_notification_page_create_notification);
 
+        refresh = findViewById(R.id.refresh_noti);
+
         //ASSUMING THAT OUR EVENT IS IN THE CACHEDEVENTS
         curEvent = app.getCachedEvent();
 
@@ -161,36 +165,52 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         notificationList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         notificationList.setAdapter(notificationAdapter);
 
-
-        app.getNotificationTable().fetchMultipleDocuments(curEvent.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+        refresh.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(ArrayList<Notification> document) {
-                //add all of our notifications
-                notifications.addAll(document);
+            public void onClick(View view) {
 
-                notifications.sort(new Comparator<Notification>() {
-                    @Override
-                    public int compare(Notification o1, Notification o2) {
-                        // Check if either or both notifications are pinned
-                        if (o1.isPinned() && !o2.isPinned()) {
-                            return -1; // o1 comes before o2
-                        } else if (!o1.isPinned() && o2.isPinned()) {
-                            return 1; // o2 comes before o1
-                        } else {
-                            // If both have the same pinned status, compare by time
-                            return o1.getTimeCreated().compareTo(o2.getTimeCreated());
-                        }
-                    }
-                });
+                Log.d("noti", String.valueOf(notifications.size()));
+                Log.d("noti", String.valueOf(curEvent.getNotifications().size()));
 
-                notificationAdapter.notifyDataSetChanged(); //this error is fine since we're basically loading everything
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
+                notifications.add(new Notification("Test Notification", app.getUserProfile().getProfileID(), curEvent.getEventID()));
+                notificationAdapter.notifyDataSetChanged();
             }
         });
+
+        //grab notifications is event isnt empty
+        if (!curEvent.getNotifications().isEmpty()) {
+
+            app.getNotificationTable().fetchMultipleDocuments(curEvent.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+                @Override
+                public void onSuccess(ArrayList<Notification> document) {
+                    //add all of our notifications
+                    notifications.addAll(document);
+
+                    notifications.sort(new Comparator<Notification>() {
+                        @Override
+                        public int compare(Notification o1, Notification o2) {
+                            // Check if either or both notifications are pinned
+                            if (o1.isPinned() && !o2.isPinned()) {
+                                return -1; // o1 comes before o2
+                            } else if (!o1.isPinned() && o2.isPinned()) {
+                                return 1; // o2 comes before o1
+                            } else {
+                                // If both have the same pinned status, compare by time
+                                return o1.getTimeCreated().compareTo(o2.getTimeCreated());
+                            }
+                        }
+                    });
+
+                    notificationAdapter.notifyDataSetChanged(); //this error is fine since we're basically loading everything
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
+
+        }
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

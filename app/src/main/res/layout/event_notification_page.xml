@@ -12,6 +12,12 @@
         android:layout_margin="5dp"
         android:text="back" />
 
+    <Button
+        android:id="@+id/refresh_noti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="refresh" />
+
     <TextView
         android:id="@+id/event_notification_page_announcementText"
         android:layout_width="match_parent"
