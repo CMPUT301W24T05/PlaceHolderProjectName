@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import android.widget.ImageView;
@@ -17,6 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
@@ -66,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
         app = (PlaceholderApp) getApplicationContext();
         setContentView(R.layout.activity_main);
 
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
+
         setButtonActions();
 
         Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
@@ -82,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         organizedEventsAdapter = new EventAdapter(getApplicationContext(), hostedEvents);
         organizedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         organizedEventsList.setAdapter(organizedEventsAdapter);
+
     }
 
     private void setButtonActions() {
@@ -102,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         startScannerButton = findViewById(R.id.btnJoinEvent);
 
-        
+
 
         startScannerButton.setOnClickListener(view -> {
             // Start QRCodeScannerActivity
@@ -150,5 +164,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-}
+    private boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_item1) {
+            // Navigate to activity_main.xml
+            startActivity(new Intent(this, MainActivity.class));
+            return true;
+        } else if (id == R.id.menu_item2) {
+            // Handle item 2 selection
+            return true;
+        } else if (id == R.id.menu_item3) {
+            // Handle item 3 selection
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+
+}
