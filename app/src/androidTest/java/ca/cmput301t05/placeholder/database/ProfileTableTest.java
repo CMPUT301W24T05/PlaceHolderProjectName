@@ -46,8 +46,7 @@ public class ProfileTableTest {
         // Mock DatabaseManager to use the mocked FirebaseFirestore instance
         Mockito.when(databaseManager.getDb()).thenReturn(firestore);
         // Mock Firestore to use the mocked CollectionReference instance
-        Mockito.when(firestore.collection(ProfileTable.COLLECTION_NAME)).thenReturn(collectionReference);
-
+        //Mockito.when(firestore.collection(ProfileTable.COLLECTION_NAME)).thenReturn(collectionReference);
         profileTable = new ProfileTable();
     }
 

@@ -45,8 +45,10 @@ public abstract class BaseImageHandler {
      * @param customMetadataValue The value for the custom metadata.
      */
     protected void uploadImage(Uri file, String imageID, String folder, String customMetadataKey, String customMetadataValue) {
+
         String filename = folder + "/" + imageID;
         StorageReference storageRef = rootStorageRef.child(filename);
+        Log.e("amirza2", " UPLOAD - GOT HERE 1");
 
         String mimeType = getFileMimeType(file);
         if (mimeType == null) {
@@ -58,8 +60,10 @@ public abstract class BaseImageHandler {
                 .setCustomMetadata(customMetadataKey, customMetadataValue)
                 .setContentType(mimeType)
                 .build();
-
+        Log.e("amirza2", "UPLOAD - GOT HERE 2");
+        Log.e("amirza2", String.valueOf(file));
         UploadTask uploadTask = storageRef.putFile(file, metadata);
+        Log.e("amirza2", "UPLOAD - GOT HERE 3");
     }
 
     /**
