@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 import ca.cmput301t05.placeholder.ui.admin.AdminHomeActivity;
@@ -30,14 +31,13 @@ import ca.cmput301t05.placeholder.profile.Profile;
  * This activity supports adding a profile picture via an external image picker library
  * and removing the current profile picture.
  */
-public class ProfileEditActivity extends AppCompatActivity{
+public class ProfileEditActivity extends AppCompatActivity {
     private static final int COMPRESSION_QUALITY = 1024;
     private static final int IMAGE_MAX_HEIGHT = 1080;
     private static final int IMAGE_MAX_WIDTH = 1080;
 
     private PlaceholderApp app;
-    private  Uri profilePicUri;
-    private UUID deviceID;
+    private Uri profilePicUri;
     private Profile profile;
     private Button saveButton;
     private Button adminButton;
@@ -60,7 +60,6 @@ public class ProfileEditActivity extends AppCompatActivity{
 
     private void initializeComponents() {
         app = (PlaceholderApp) getApplicationContext();
-        deviceID = app.getIdManager().getDeviceID();
         profile = app.getUserProfile();
         saveButton = findViewById(R.id.save_button);
         adminButton = findViewById(R.id.admin_button);
@@ -139,37 +138,52 @@ public class ProfileEditActivity extends AppCompatActivity{
      * including their name, contact information, homepage, and profile picture.
      * The admin button visibility is set based on the user's admin status.
      */
-    private void setUp(){
+    private void setUp() {
         // set up the profile picture
         profile = app.getUserProfile();
-        if (profile.getProfilePictureID() != null){
-            app.getProfileImageHandler().getProfilePicture(profile, profilePic);
-        } else {
-            Bitmap defaultPic = ProfileImageGenerator.defaultProfileImage(profile.getName());
-            profilePic.setImageBitmap(defaultPic);
+        app.getProfileImageHandler().getProfilePicture(profile, this, new BaseImageHandler.ImageCallback() {
+            @Override
+            public void onImageLoaded(Bitmap bitmap) {
+                runOnUiThread(() -> profilePic.setImageBitmap(bitmap));
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+        if (profile.getName() != null) {
+            editName.setText(profile.getName());
         }
-        if(profile.getName()!=null){editName.setText(profile.getName());}
-        if(profile.getContactInfo()!=null){editContact.setText(profile.getContactInfo());}
-        if(profile.getHomePage()!=null){editHomepage.setText(profile.getHomePage());}
+        if (profile.getContactInfo() != null) {
+            editContact.setText(profile.getContactInfo());
+        }
+        if (profile.getHomePage() != null) {
+            editHomepage.setText(profile.getHomePage());
+        }
         boolean admin = profile.isAdmin();
-        if (!admin){adminButton.setVisibility(View.GONE);}
+        if (!admin) {
+            adminButton.setVisibility(View.GONE);
+        }
     }
+
     /**
      * Updates the user's profile with the information entered in the activity's views.
      * This includes updating the name, contact information, homepage, and profile picture.
      * Changes are saved to the application's database.
      */
-    private void update(){
+    private void update() {
         profile.setName(editName.getText().toString());
         profile.setContactInfo(editContact.getText().toString());
         profile.setHomePage(editHomepage.getText().toString());
 
-        if (removePic){
+        if (removePic) {
             app.getProfileImageHandler().removeProfilePic(profile);
         }
 
         if (profilePicUri != null) {
             app.getProfileImageHandler().uploadProfilePicture(profilePicUri, profile);
+            profile.setProfilePictureFromUri(profilePicUri, this);
         }
 
         app.getProfileTable().pushDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
@@ -183,7 +197,7 @@ public class ProfileEditActivity extends AppCompatActivity{
 
             }
 
-    });
+        });
 
 
     }
