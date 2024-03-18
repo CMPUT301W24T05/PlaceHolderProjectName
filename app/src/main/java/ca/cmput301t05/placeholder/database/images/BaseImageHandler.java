@@ -11,9 +11,7 @@ import ca.cmput301t05.placeholder.profile.Profile;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.StorageMetadata;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.google.firebase.storage.*;
 
 import java.util.UUID;
 
@@ -49,7 +47,6 @@ public abstract class BaseImageHandler {
 
         String filename = folder + "/" + imageID;
         StorageReference storageRef = rootStorageRef.child(filename);
-        Log.e("amirza2", " UPLOAD - GOT HERE 1");
 
         String mimeType = getFileMimeType(file);
         if (mimeType == null) {
@@ -61,10 +58,34 @@ public abstract class BaseImageHandler {
                 .setCustomMetadata(customMetadataKey, customMetadataValue)
                 .setContentType(mimeType)
                 .build();
-        Log.e("amirza2", "UPLOAD - GOT HERE 2");
-        Log.e("amirza2", String.valueOf(file));
         UploadTask uploadTask = storageRef.putFile(file, metadata);
-        Log.e("amirza2", "UPLOAD - GOT HERE 3");
+
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // Handle successful uploads on complete
+                Log.d("Image Upload", "Image upload successful");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Handle unsuccessful uploads
+                Log.d("Image Upload", "Image upload failed: " + e.getMessage());
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                // Progress percentage can be calculated as (bytesTransferred / totalByteCount) * 100
+                double progressPercentage = (100.0 * taskSnapshot.getBytesTransferred()) /
+                        taskSnapshot.getTotalByteCount();
+                Log.d("Image Upload", "Upload is " + progressPercentage + "% done");
+            }
+        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onPaused(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                Log.d("Image Upload", "Upload is paused");
+            }
+        });
     }
 
     /**
