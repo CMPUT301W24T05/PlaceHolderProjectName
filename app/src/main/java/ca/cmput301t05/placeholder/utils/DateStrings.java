@@ -16,8 +16,7 @@ public class DateStrings {
             return "Invalid month"; // Return an error message or handle this case as you see fit
         }
 
-        // Array index starts at 0 but month starts at 1
-        return monthNames[month - 1];
+        return monthNames[month];
     }
 
     public static String getAmPM(int ampm){

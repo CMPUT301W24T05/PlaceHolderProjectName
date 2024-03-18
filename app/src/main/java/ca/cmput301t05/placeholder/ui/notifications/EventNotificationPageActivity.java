@@ -34,8 +34,6 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         // we get the notification from the dialog
         notifications.add(notification);
 
-
-
         notifications.sort(new Comparator<Notification>() {
             @Override
             public int compare(Notification o1, Notification o2) {
@@ -162,28 +160,6 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
         notifications = new ArrayList<>();
 
-        notifications.add(new Notification("Test Notification", app.getUserProfile().getProfileID(), curEvent.getEventID()));
-        notifications.add(new Notification("Test Notification2", app.getUserProfile().getProfileID(), curEvent.getEventID()));
-
-        Notification n = new Notification("t", app.getUserProfile().getProfileID(), curEvent.getEventID());
-        n.setPinned(true);
-
-        notifications.add(n);
-
-        notifications.sort(new Comparator<Notification>() {
-            @Override
-            public int compare(Notification o1, Notification o2) {
-                // Check if either or both notifications are pinned
-                if (o1.isPinned() && !o2.isPinned()) {
-                    return -1; // o1 comes before o2
-                } else if (!o1.isPinned() && o2.isPinned()) {
-                    return 1; // o2 comes before o1
-                } else {
-                    // If both have the same pinned status, compare by time
-                    return o1.getTimeCreated().compareTo(o2.getTimeCreated());
-                }
-            }
-        });
 
         notificationList = findViewById(R.id.event_notification_page_recyclerview);
         notificationAdapter = new NotificationAdapter(this, notifications);
@@ -197,11 +173,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Log.d("noti", String.valueOf(notifications.size()));
-                Log.d("noti", String.valueOf(curEvent.getNotifications().size()));
-
-                notifications.add(new Notification("Test Notification", app.getUserProfile().getProfileID(), curEvent.getEventID()));
+                //TODO maybe make is so that when you swipe up it changes
                 notificationAdapter.notifyDataSetChanged();
             }
         });
@@ -214,6 +186,11 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
                 public void onSuccess(ArrayList<Notification> document) {
                     //add all of our notifications
                     notifications.addAll(document);
+
+                    Log.d("GETNOTIFROMTABLE", "SUCESS");
+
+                    Log.d("DOCSIZE",String.valueOf(document.size()));
+                    Log.d("EVENTSIZE", String.valueOf(curEvent.getNotifications().size()));
 
                     notifications.sort(new Comparator<Notification>() {
                         @Override

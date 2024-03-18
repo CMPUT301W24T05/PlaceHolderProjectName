@@ -31,8 +31,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public NotificationAdapter(Context context, ArrayList<Notification> notifications){
 
-        this.notificationList = new ArrayList<>();
-        this.notificationList.addAll(notifications);
+        this.notificationList = notifications;
 
         this.context = context;
 
@@ -53,8 +52,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public NotificationCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(context).inflate(R.layout.notification_recylerlist_card, parent, false);
-
-        Log.d("RECYCLER", "OnCreate");
 
         return new NotificationCardViewHolder(v);
     }
@@ -85,7 +82,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public NotificationCardViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            Log.d("NotificationCardView", "U HERE");
 
             notification_time = itemView.findViewById(R.id.notification_card_time);
             notification_message = itemView.findViewById(R.id.notification_card_message);
@@ -138,7 +134,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
 
-            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int hour = c.get(Calendar.HOUR);
             int amPM = c.get(Calendar.AM_PM);
 
             String monthName = DateStrings.getMonthName(month);
@@ -147,7 +143,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             String amOrPmString = DateStrings.getAmPM(amPM);
             String hourString = String.valueOf(hour);
 
-            String formatNotifTime = hourString + " " + amOrPmString + "  " + dayString + ", " + monthName;
+            String formatNotifTime = hourString + " " + amOrPmString + ",  " + monthName + " " + dayString;
 
             notification_time.setText(formatNotifTime);
 
