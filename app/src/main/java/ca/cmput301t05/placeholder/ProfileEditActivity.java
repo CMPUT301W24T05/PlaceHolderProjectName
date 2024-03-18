@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 import ca.cmput301t05.placeholder.ui.admin.AdminHomeActivity;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -46,15 +48,6 @@ public class ProfileEditActivity extends AppCompatActivity{
 
     private boolean RemovePic = false;
 
-    /**
-     * Handles the result from the image picker activity, updating the profile picture view
-     * and storing the new picture's URI.
-     *
-     * @param requestCode The integer request code originally supplied to startActivityForResult(),
-     *                    allowing you to identify who this result came from.
-     * @param resultCode  The integer result code returned by the child activity through its setResult().
-     * @param data        An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
-     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,10 +104,9 @@ public class ProfileEditActivity extends AppCompatActivity{
         removeProfilePicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //imageTable.removeProfilePic(profile);
                 RemovePic = true;
-                profilePic.setImageResource(com.google.zxing.client.android.R.color.zxing_transparent);
+                Bitmap defaultPic = ProfileImageGenerator.defaultProfileImage(profile.getName());
+                profilePic.setImageBitmap(defaultPic);
             }
         });
     }
@@ -150,6 +142,9 @@ public class ProfileEditActivity extends AppCompatActivity{
         profile = app.getUserProfile();
         if (profile.getProfilePictureID() != null){
             app.getProfileImageHandler().getProfilePicture(profile, profilePic);
+        } else {
+            Bitmap defaultPic = ProfileImageGenerator.defaultProfileImage(profile.getName());
+            profilePic.setImageBitmap(defaultPic);
         }
         if(profile.getName()!=null){editName.setText(profile.getName());}
         if(profile.getContactInfo()!=null){editContact.setText(profile.getContactInfo());}
@@ -172,11 +167,9 @@ public class ProfileEditActivity extends AppCompatActivity{
         }
 
         if (profilePicUri != null) {
-
             app.getProfileImageHandler().uploadProfilePicture(profilePicUri, profile);
         }
 
-        profile.toDocument();
         app.getProfileTable().pushDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile profile) {
