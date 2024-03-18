@@ -22,11 +22,11 @@ public class ProfileImageHandler extends BaseImageHandler {
      * @param file    The Uri of the image file to upload.
      * @param profile The profile to assign the profile picture to.
      */
-    public void uploadProfilePicture(Uri file, Profile profile) {
+    public void uploadProfilePicture(Uri file, Profile profile, Context context) {
 
         UUID profileID = profile.getProfilePictureID() == null ? UUID.randomUUID() : profile.getProfilePictureID();
         try {
-            uploadImage(file, profileID.toString(), "profiles", "Profile", profile.getProfileID().toString());
+            uploadImage(file, profileID.toString(), "profiles", "Profile", profile.getProfileID().toString(), context);
         } catch (IOException e) {
             Log.e("ProfileImageHandler", "The provided uri is invalid: " + file.toString());
             // Return and don't associate the profile picture id to the profile

@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.ui.events;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
@@ -119,8 +121,22 @@ public class EventSignUpActivity extends AppCompatActivity {
             }
         });
 
-        app.getPosterImageHandler().getPosterPicture(displayEvent, event_poster);
+        if(displayEvent.hasEventPosterBitmap()){
+            event_poster.setImageBitmap(displayEvent.getEventPosterBitmap());
+        } else {
+            app.getPosterImageHandler().getPosterPicture(displayEvent, this, new BaseImageHandler.ImageCallback() {
+                @Override
+                public void onImageLoaded(Bitmap bitmap) {
+                    event_poster.setImageBitmap(bitmap);
+                }
 
+                @Override
+                public void onError(Exception e) {
+                    // Handle error
+                    Log.e("EventDetailsDialogFragment", "Error loading image: " + e.getMessage());
+                }
+            });
+        }
         interested.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

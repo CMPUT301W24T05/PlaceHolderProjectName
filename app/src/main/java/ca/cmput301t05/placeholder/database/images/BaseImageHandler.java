@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.database.images;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -58,12 +59,19 @@ public abstract class BaseImageHandler {
      * @param customMetadataKey   The key for the custom metadata.
      * @param customMetadataValue The value for the custom metadata.
      */
-    protected void uploadImage(Uri file, String imageID, String folder, String customMetadataKey, String customMetadataValue) throws IOException {
-
+    protected void uploadImage(Uri file, String imageID, String folder, String customMetadataKey, String customMetadataValue, Context context) throws IOException {
         String filename = folder + "/" + imageID;
         StorageReference storageRef = rootStorageRef.child(filename);
 
-        String mimeType = getFileMimeType(file);
+        // Use ContentResolver for content URIs, otherwise fall back to getFileMimeType
+        String mimeType;
+
+        if (file.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            mimeType = context.getContentResolver().getType(file);
+        } else {
+            mimeType = getFileMimeType(file);
+        }
+
         if (mimeType == null || !(mimeType.startsWith("image/"))) {
             throw new IOException("Invalid file. This is not an image file.");
         }

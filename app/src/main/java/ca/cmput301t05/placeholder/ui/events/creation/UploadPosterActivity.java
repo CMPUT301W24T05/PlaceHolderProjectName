@@ -94,6 +94,7 @@ public class UploadPosterActivity extends AppCompatActivity {
 
             //set this to the cache so on the final page we can do everything
             app.setPicCache(curPic.get());
+            currEvent.setEventPosterFromUri(curPic.get(), this);
 
             Intent i = new Intent(UploadPosterActivity.this, GenerateInfoCheckinActivity.class);
             startActivity(i);

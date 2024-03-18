@@ -182,7 +182,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         }
 
         if (profilePicUri != null) {
-            app.getProfileImageHandler().uploadProfilePicture(profilePicUri, profile);
+            app.getProfileImageHandler().uploadProfilePicture(profilePicUri, profile, this);
             profile.setProfilePictureFromUri(profilePicUri, this);
         }
 

@@ -1,5 +1,9 @@
 package ca.cmput301t05.placeholder.events;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 import ca.cmput301t05.placeholder.profile.Profile;
 
@@ -20,39 +24,25 @@ import java.util.UUID;
  *
  */
 public class Event extends DocumentSerializable implements Serializable {
-
-    String eventName;
-
-    UUID eventPosterID;
-
-    UUID eventCreator;
-
-    String eventInfo;
-
-    String infoQRCode, checkInQR; //qr codes are represented by their string
-
-
-    UUID eventID;
-
-    Calendar eventDate;
-
-    String eventLocation;
-
-
-
-    int maxAttendees;
-
-    HashMap<String, Integer> attendees; //stored this way for the database
+    private String eventName;
+    private UUID eventPosterID;
+    private Bitmap eventPosterBitmap;
+    private UUID eventCreator;
+    private String eventInfo;
+    private String infoQRCode, checkInQR; //qr codes are represented by their string
+    private UUID eventID;
+    private Calendar eventDate;
+    private String eventLocation;
+    private int maxAttendees;
+    private HashMap<String, Integer> attendees; //stored this way for the database
     //string = profileID, int = # of times checked in
 
     /**
      * Default constructor that generates a new event with unique ID and empty attendee list.
-     *
      */
     public Event(){
         this.eventID = UUID.randomUUID();
         this.attendees = new HashMap<>();
-
     }
 
     /**
@@ -61,9 +51,8 @@ public class Event extends DocumentSerializable implements Serializable {
      * @param eventID The UUID of the event.
      */
     public Event(UUID eventID){
+        this();
         this.eventID = eventID;
-        this.attendees = new HashMap<>();
-
     }
 
     /**
@@ -75,14 +64,10 @@ public class Event extends DocumentSerializable implements Serializable {
      */
 
     public Event(String name, String eventInfo, int maxAttendees){
-
-
+        this();
         this.eventName = name;
         this.eventInfo = eventInfo;
-        this.eventID = UUID.randomUUID();
         this.maxAttendees = maxAttendees;
-        this.attendees = new HashMap<>();
-
     }
 
     /**
@@ -106,39 +91,30 @@ public class Event extends DocumentSerializable implements Serializable {
 
         return document;
     }
+
+    // Method to get String value from a document
+    private String getStringValueFromDocument(DocumentSnapshot document, String key) {
+        return document.getString(key);
+    }
+
+    // Method to get UUID from a document
+    private UUID getUUIDFromDocument(DocumentSnapshot document, String key) {
+        String uuidAsString = getStringValueFromDocument(document, key);
+        return (uuidAsString != null && !uuidAsString.equals("null"))? UUID.fromString(uuidAsString) : null;
+    }
+
     /**
      * Populates the event object's fields based on a Firestore document snapshot.
      * @param document The Firestore document snapshot representing an event.
      */
     public void fromDocument(DocumentSnapshot document) {
-        String eventId = document.getString("eventID");
-        if(eventId != null && !eventId.equals("null")) {
-            eventID = UUID.fromString(eventId);
-        }
-
-        if (document.getString("eventCreator") != null){
-            eventCreator = UUID.fromString(document.getString("eventCreator"));
-        }
-
-        if(document.getString("eventName") != null) {
-            eventName = document.getString("eventName");
-        }
-        if(document.getString("eventInfo") != null) {
-            eventInfo = document.getString("eventInfo");
-        }
-        String eventPosterId = document.getString("eventPosterID");
-        if(eventPosterId != null && !eventPosterId.equals("null")) {
-            eventPosterID = UUID.fromString(eventPosterId);
-        }
-
-
-        if(document.getString("infoQRCode") != null){
-            infoQRCode = document.getString("infoQRCode");
-        }
-
-        if(document.getString("checkInQR") != null){
-            checkInQR = document.getString("checkInQR");
-        }
+        eventID = getUUIDFromDocument(document, "eventID");
+        eventCreator = getUUIDFromDocument(document, "eventCreator");
+        eventName = getStringValueFromDocument(document, "eventName");
+        eventInfo = getStringValueFromDocument(document, "eventInfo");
+        eventPosterID = getUUIDFromDocument(document, "eventPosterID");
+        infoQRCode = getStringValueFromDocument(document, "infoQRCode");
+        checkInQR = getStringValueFromDocument(document, "checkInQR");
 
         if(document.getTimestamp("eventDate") != null) {
             eventDate = Calendar.getInstance();
@@ -340,6 +316,25 @@ public class Event extends DocumentSerializable implements Serializable {
 
     public void setInfoQRCode(String infoQRCode) {
         this.infoQRCode = infoQRCode;
+    }
+
+    public Bitmap getEventPosterBitmap() {
+        return eventPosterBitmap;
+    }
+
+    public void setEventPosterBitmap(Bitmap eventPosterBitmap) {
+        this.eventPosterBitmap = eventPosterBitmap;
+    }
+
+    public boolean hasEventPosterBitmap(){
+        return this.eventPosterBitmap != null;
+    }
+
+    public void setEventPosterFromUri(Uri imageFromUri, Context context){
+        Bitmap bmp = BaseImageHandler.uriToBitmap(context, imageFromUri);
+        if(bmp != null) {
+            setEventPosterBitmap(bmp);
+        }
     }
 }
 
