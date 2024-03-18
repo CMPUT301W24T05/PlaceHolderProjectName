@@ -160,10 +160,14 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
         notifications = new ArrayList<>();
 
+        notifications.add(new Notification("Test Notification", app.getUserProfile().getProfileID(), curEvent.getEventID()));
+        notifications.add(new Notification("Test Notification2", app.getUserProfile().getProfileID(), curEvent.getEventID()));
+
         notificationList = findViewById(R.id.event_notification_page_recyclerview);
-        notificationAdapter = new NotificationAdapter(getApplicationContext(), notifications);
+        notificationAdapter = new NotificationAdapter(this, notifications);
         notificationList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         notificationList.setAdapter(notificationAdapter);
+
 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override

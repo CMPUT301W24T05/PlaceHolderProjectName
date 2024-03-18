@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder.notifications;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         itemExpanded = new HashMap<>();
 
+        Log.d("Adapter", "First Being Created");
+
         //init itemexpanded as false
         for (int i = 0; i < notifications.size(); i++) {
             itemExpanded.put(i, false); //position = key, everything not expanded
@@ -51,11 +54,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         View v = LayoutInflater.from(context).inflate(R.layout.notification_recylerlist_card, parent, false);
 
+        Log.d("RECYCLER", "OnCreate");
+
         return new NotificationCardViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NotificationCardViewHolder holder, int position) {
+
         try {
             holder.bindView(position);
         } catch (Exception e) {
@@ -65,8 +71,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public int getItemCount() {
-        if (notificationList == null) return 0;
-        else return notificationList.size();
+        return notificationList.size();
     }
 
 
@@ -79,6 +84,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         public NotificationCardViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            Log.d("NotificationCardView", "U HERE");
 
             notification_time = itemView.findViewById(R.id.notification_card_time);
             notification_message = itemView.findViewById(R.id.notification_card_message);
