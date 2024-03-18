@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.Location.LocationManager;
 import ca.cmput301t05.placeholder.database.images.EventPosterImageHandler;
 import ca.cmput301t05.placeholder.database.images.ProfileImageHandler;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
