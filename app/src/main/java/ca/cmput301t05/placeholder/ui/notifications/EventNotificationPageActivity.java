@@ -143,6 +143,8 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
 
 
+
+
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -163,10 +165,33 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         notifications.add(new Notification("Test Notification", app.getUserProfile().getProfileID(), curEvent.getEventID()));
         notifications.add(new Notification("Test Notification2", app.getUserProfile().getProfileID(), curEvent.getEventID()));
 
+        Notification n = new Notification("t", app.getUserProfile().getProfileID(), curEvent.getEventID());
+        n.setPinned(true);
+
+        notifications.add(n);
+
+        notifications.sort(new Comparator<Notification>() {
+            @Override
+            public int compare(Notification o1, Notification o2) {
+                // Check if either or both notifications are pinned
+                if (o1.isPinned() && !o2.isPinned()) {
+                    return -1; // o1 comes before o2
+                } else if (!o1.isPinned() && o2.isPinned()) {
+                    return 1; // o2 comes before o1
+                } else {
+                    // If both have the same pinned status, compare by time
+                    return o1.getTimeCreated().compareTo(o2.getTimeCreated());
+                }
+            }
+        });
+
         notificationList = findViewById(R.id.event_notification_page_recyclerview);
         notificationAdapter = new NotificationAdapter(this, notifications);
         notificationList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         notificationList.setAdapter(notificationAdapter);
+
+
+
 
 
         refresh.setOnClickListener(new View.OnClickListener() {
