@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder.database;
 
 import static org.mockito.Mockito.mock;
 
+import android.content.Context;
 import android.net.Uri;
 
 import ca.cmput301t05.placeholder.database.images.ProfileImageHandler;
@@ -21,12 +22,13 @@ public class ProfileImageHandlerTest {
 
     private ProfileImageHandler profileImageHandler;
     private Uri mockUri;
-
+    private Context mockContext;
 
     @Before
     public void setUp() {
         profileImageHandler = new ProfileImageHandler();
         mockUri = mock(Uri.class);
+        mockContext = mock(Context.class);
     }
 
     @Test
@@ -37,7 +39,7 @@ public class ProfileImageHandlerTest {
         Profile profile = new Profile("Jack", profileID);
         Mockito.when(mockUri.toString()).thenReturn("mock_uri_string"); // Stub the mockUri so that it returns null whenever toString() is called on it.
         assertNull(profile.getProfilePictureID());
-        profileImageHandler.uploadProfilePicture(mockUri, profile);
+        profileImageHandler.uploadProfilePicture(mockUri, profile, mockContext);
         // Initially a user's profile picture ID is null as they don't have one.
         // Check that one was uploaded and set by having a Profile Picture ID after method called.
         assertNotNull(profile.getProfilePictureID());
@@ -52,7 +54,7 @@ public class ProfileImageHandlerTest {
         assertNull(profile.getProfilePictureID());
         Mockito.when(mockUri.toString()).thenReturn("mock_uri_string"); // Invalid Uri, should throw an exception
         assertThrows(StorageException.class, () -> {
-            profileImageHandler.uploadProfilePicture(mockUri, profile); // Should throw an exception
+            profileImageHandler.uploadProfilePicture(mockUri, profile, mockContext); // Should throw an exception
         });
 
     }
@@ -64,7 +66,6 @@ public class ProfileImageHandlerTest {
         profile.setProfilePictureID(UUID.randomUUID());
         profileImageHandler.removeProfilePic(profile);
         assertNull(profile.getProfilePictureID());
-
 
     }
 }

@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.notifications.Notification;
@@ -28,6 +30,8 @@ import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
 import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
+
+import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
 
 
 /**
@@ -67,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setButtonActions();
+        setProfileIcon();
 
         Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
         Log.i("MainActivityJoinedEvents", "Number of joined events: " + app.getJoinedEvents().size());
@@ -86,6 +91,31 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setProfileIcon();
+    }
+
+    private void setProfileIcon() {
+        if (app.getUserProfile().hasProfileBitmap()){
+            profileButton.setImageBitmap(getCircularBitmap(app.getUserProfile().getProfilePictureBitmap()));
+        } else {
+            app.getProfileImageHandler().getProfilePicture(app.getUserProfile(), this, new BaseImageHandler.ImageCallback() {
+                @Override
+                public void onImageLoaded(Bitmap bitmap) {
+                    profileButton.setImageBitmap(getCircularBitmap(bitmap));
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    app.getUserProfile().setProfilePictureToDefault();
+                    profileButton.setImageBitmap(getCircularBitmap(app.getUserProfile().getProfilePictureBitmap()));
+                }
+            });
+        }
     }
 
     private void setButtonActions() {

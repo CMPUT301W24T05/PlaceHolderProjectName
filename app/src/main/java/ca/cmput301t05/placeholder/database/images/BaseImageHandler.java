@@ -1,26 +1,41 @@
 package ca.cmput301t05.placeholder.database.images;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.*;
 
+import java.io.InputStream;
 import java.util.UUID;
 import java.io.IOException;
+import java.util.function.Consumer;
 
 /**
  * The abstract base class for handling image-related operations such as uploading, retrieving,
  * and removing images from firebase storage.
  */
 public abstract class BaseImageHandler {
+
+    // Callback interface for image retrieval
+    public interface ImageCallback {
+        void onImageLoaded(Bitmap bitmap);
+        void onError(Exception e);
+    }
 
     protected StorageReference rootStorageRef = DatabaseManager.getInstance().getStorage().getReference();
 
@@ -44,12 +59,19 @@ public abstract class BaseImageHandler {
      * @param customMetadataKey   The key for the custom metadata.
      * @param customMetadataValue The value for the custom metadata.
      */
-    protected void uploadImage(Uri file, String imageID, String folder, String customMetadataKey, String customMetadataValue) throws IOException {
-
+    protected void uploadImage(Uri file, String imageID, String folder, String customMetadataKey, String customMetadataValue, Context context) throws IOException {
         String filename = folder + "/" + imageID;
         StorageReference storageRef = rootStorageRef.child(filename);
 
-        String mimeType = getFileMimeType(file);
+        // Use ContentResolver for content URIs, otherwise fall back to getFileMimeType
+        String mimeType;
+
+        if (file.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            mimeType = context.getContentResolver().getType(file);
+        } else {
+            mimeType = getFileMimeType(file);
+        }
+
         if (mimeType == null || !(mimeType.startsWith("image/"))) {
             throw new IOException("Invalid file. This is not an image file.");
         }
@@ -81,20 +103,24 @@ public abstract class BaseImageHandler {
      * @param folder    The folder in which the image is located.
      * @param imageView The ImageView to set the image into.
      */
-    protected void getImage(String imageID, String folder, ImageView imageView) {
+// Updated getImage method
+    protected void getImage(String imageID, String folder, Context context, ImageCallback callback) {
         String filename = folder + "/" + imageID;
         StorageReference storageReference = rootStorageRef.child(filename);
 
         storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-            //Load your image here
-            Glide.with(imageView.getContext())
+            Glide.with(context) // Context needs to be passed or obtained differently
+                    .asBitmap()
                     .load(uri)
-                    .into(imageView);
-        }).addOnFailureListener(e -> {
-            // If the image ID is invalid or the image does not exist, then the download will fail.
-            Log.d("Image Database", "Error: " + e.getMessage());
-        });
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            callback.onImageLoaded(resource);
+                        }
+                    });
+        }).addOnFailureListener(callback::onError);
     }
+
 
     /**
      * Removes an image from Firebase Storage.
@@ -111,6 +137,23 @@ public abstract class BaseImageHandler {
                     // If the image ID is invalid or the image does not exist
                     Log.d("Image Database", "Error: " + e.getMessage());
                 });
+    }
+
+    /**
+     * Converts a Uri into a Bitmap.
+     *
+     * @param context the application context.
+     * @param uri the Uri of the image.
+     * @return the converted Bitmap, or null if the Uri could not be converted.
+     */
+    public static Bitmap uriToBitmap(Context context, Uri uri) {
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (Exception e) {
+            Log.d("Uri to Bitmap", "Conversion failed: " + e.getMessage());
+            return null;
+        }
     }
 }
 

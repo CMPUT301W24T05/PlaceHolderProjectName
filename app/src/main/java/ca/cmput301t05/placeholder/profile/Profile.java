@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Notification;
@@ -22,6 +26,7 @@ public class Profile extends DocumentSerializable {
     private String name;
     private String homePage;
     private String contactInfo;
+    private Bitmap profilePictureBitmap;
     private UUID profilePictureID;
     private List<String> hostedEvents;
     private List<String> joinedEvents;
@@ -351,7 +356,26 @@ public class Profile extends DocumentSerializable {
         }
     }
 
+    public Bitmap getProfilePictureBitmap() {
+        return profilePictureBitmap;
+    }
 
+    public void setProfilePictureBitmap(Bitmap profilePictureBitmap) {
+        this.profilePictureBitmap = profilePictureBitmap;
+    }
 
-    
+    public void setProfilePictureToDefault() {
+        this.profilePictureBitmap = ProfileImageGenerator.defaultProfileImage(this.name);
+    }
+
+    public void setProfilePictureFromUri(Uri imageFromUri, Context context){
+        Bitmap bmp = BaseImageHandler.uriToBitmap(context, imageFromUri);
+        if(bmp != null) {
+            setProfilePictureBitmap(bmp);
+        }
+    }
+
+    public boolean hasProfileBitmap(){
+        return profilePictureBitmap != null;
+    }
 }

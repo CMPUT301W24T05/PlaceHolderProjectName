@@ -1,5 +1,7 @@
 package ca.cmput301t05.placeholder.database.images;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
@@ -20,11 +22,11 @@ public class EventPosterImageHandler extends BaseImageHandler {
      * @param file  The URI of the image file to be uploaded.
      * @param event The event object for which the poster image is being uploaded.
      */
-    public void uploadPoster(Uri file, Event event) {
+    public void uploadPoster(Uri file, Event event, Context context) {
         UUID posterID = event.getEventPosterID() == null ? UUID.randomUUID() : event.getEventPosterID();
 
         try {
-            uploadImage(file, posterID.toString(), "posters", "Event", event.getEventID().toString());
+            uploadImage(file, posterID.toString(), "posters", "Event", event.getEventID().toString(), context);
         } catch (IOException e) {
             Log.e("EventPosterImageHandler", "The provided uri is invalid: " + file.toString());
             // Return and don't associate the event poster picture id to the event
@@ -34,19 +36,26 @@ public class EventPosterImageHandler extends BaseImageHandler {
         event.setEventPosterID(posterID);
     }
 
-    /**
-     * Retrieves the poster picture for an event and sets it to the provided ImageView.
-     *
-     * @param event      The event object for which the poster picture is being retrieved.
-     * @param imageView  The ImageView where the poster picture will be set.
-     */
-    public void getPosterPicture(Event event, ImageView imageView) {
+    public void getPosterPicture(Event event, Context context, ImageCallback callback) {
         if (event.getEventPosterID() == null) {
-            return;
-        }
+            callback.onError(new Exception("Poster ID is null"));
+        } else {
+            getImage(event.getEventPosterID().toString(), "posters", context, new BaseImageHandler.ImageCallback() {
+                @Override
+                public void onImageLoaded(Bitmap bitmap) {
+                    // Successfully retrieved the image
+                    event.setEventPosterBitmap(bitmap);
+                    callback.onImageLoaded(bitmap);
+                }
 
-        getImage(event.getEventPosterID().toString(), "posters", imageView);
+                @Override
+                public void onError(Exception e) {
+                    callback.onError(e);
+                }
+            });
+        }
     }
+
 
     /**
      * Removes the event poster image for the given event.
