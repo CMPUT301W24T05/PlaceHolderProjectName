@@ -69,7 +69,6 @@ public class ProfileImageHandlerTest {
 
     @Test
     public void testRemoveProfilePic() {
-
         Profile profile = new Profile("John", UUID.randomUUID());
         profile.setProfilePictureID(UUID.randomUUID());
         profileImageHandler.removeProfilePic(profile);
