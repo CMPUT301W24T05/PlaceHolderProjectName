@@ -17,10 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
@@ -108,6 +106,7 @@ public class UploadPosterActivity extends AppCompatActivity {
 
             //set this to the cache so on the final page we can do everything
             app.setPicCache(curPic.get());
+            currEvent.setEventPosterFromUri(curPic.get(), this);
 
             if(nextPage.getText()== "Update Event"){
                 Intent updated = new Intent(UploadPosterActivity.this, PreviewEventActivity.class);
