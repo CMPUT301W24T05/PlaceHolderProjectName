@@ -33,6 +33,8 @@ import ca.cmput301t05.placeholder.profile.Profile;
  * Events can now create notifications, which are then added to every single profile who is inside of the event.
  * Push notifications aren't added yet since they are a pain and require a lot of set up
  *
+ * TODO: Add functionality to maybe delete / pin events with the 3 dots. In Adapter
+ *
  * NOTE MAKE SURE TO PASS AN EVENT THROUGH CACHED EVENT IN APP.SETCACHEDEVENT() TO ACCESS THIS PAGE OR IT WILL BREAK
  */
 

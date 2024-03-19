@@ -20,6 +20,12 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.utils.DateStrings;
 import ca.cmput301t05.placeholder.utils.StringManip;
 
+/**
+ * Recycler View for notification objects
+ *
+ * TODO: Add functionality to maybe delete / pin events with the 3 dots.
+ */
+
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationCardViewHolder> {
 
 

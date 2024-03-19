@@ -21,6 +21,8 @@ import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
 /**
  * User notification activity, grabs from the app's preloaded notifications and displays them on the notifications screen
  * Updates the notifications from database every time you open.
+ * TODO: Create a seperate Notification Adapter for User Notifications so we can display which event sent the notification and guide the user to it
+ *
  */
 public class UserNotificationActivity extends AppCompatActivity {
 
