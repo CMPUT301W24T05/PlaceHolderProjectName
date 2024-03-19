@@ -28,6 +28,7 @@ import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
+import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
 
 
 /**
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         notificationButton = findViewById(R.id.btnNotifications);
         notificationButton.setOnClickListener(view -> {
             // Start NotificationsActivity
-            Intent intent = new Intent(MainActivity.this, NotificationsFragment.class);
+            Intent intent = new Intent(MainActivity.this, UserNotificationActivity.class);
             startActivity(intent);
         });
 
