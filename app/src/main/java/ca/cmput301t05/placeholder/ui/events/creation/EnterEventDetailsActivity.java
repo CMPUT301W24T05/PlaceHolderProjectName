@@ -35,8 +35,10 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
 
     private PlaceholderApp app;
 
-    private Event newEvent;
+    private Event newEvent, curEvent;
     private Calendar cal;
+
+    private Intent fromEdit;
 
     /**
      * Called when the activity is starting. Initializes the UI components, sets up click listeners
@@ -49,6 +51,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_enterdetails);
+        fromEdit = getIntent();
 
         initializeEventDetails();
         eventTime.setOnClickListener(view -> openTimePickerDialog());
@@ -71,6 +74,27 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         eventDescripiton = findViewById(R.id.enterEventDescription);
         eventCapacity = findViewById(R.id.enterEventCapacity);
         app = (PlaceholderApp) getApplicationContext();
+
+        if(fromEdit.hasExtra("edit")){
+            curEvent = app.getCachedEvent();
+            cal = curEvent.getEventDate();
+
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int minute = cal.get(Calendar.MINUTE);
+
+            eventName.setText(curEvent.getEventName());
+            eventLocation.setText(curEvent.getEventLocation());
+            eventDate.setText(String.format(Locale.getDefault(), "%02d-%02d-%04d", day, month, year));
+            eventTime.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+            eventCapacity.setText(String.valueOf(curEvent.getMaxAttendees()));
+            eventDescripiton.setText(curEvent.getEventInfo());
+
+
+        }
     }
 
     /**
@@ -114,15 +138,29 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 return;
             }
 
-            newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
-            newEvent.setEventDate(cal);
-            newEvent.setEventName(eventName.getText().toString().trim());
-            newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
-            newEvent.setEventCreator(app.getUserProfile().getProfileID());
 
-            app.setCachedEvent(newEvent);
-            Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
-            startActivity(posterPick);
+            if(fromEdit.hasExtra("edit")){
+
+                curEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
+                curEvent.setEventDate(cal);
+                curEvent.setEventName(eventName.getText().toString().trim());
+                curEvent.setEventInfo(eventDescripiton.getText().toString().trim());
+                curEvent.setEventCreator(app.getUserProfile().getProfileID());
+                Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
+                posterPick.putExtra("edit", true);
+                startActivity(posterPick);
+            }else{
+
+                newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
+                newEvent.setEventDate(cal);
+                newEvent.setEventName(eventName.getText().toString().trim());
+                newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
+                newEvent.setEventCreator(app.getUserProfile().getProfileID());
+                app.setCachedEvent(newEvent);
+                Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
+                startActivity(posterPick);
+            }
+
 
         });
     }

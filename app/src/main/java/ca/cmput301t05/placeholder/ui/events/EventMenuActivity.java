@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 
 public class EventMenuActivity extends AppCompatActivity {
 
@@ -46,8 +47,18 @@ public class EventMenuActivity extends AppCompatActivity {
         menuMilestones = findViewById(R.id.menu_milestones);
         checkInLocations = findViewById(R.id.check_in_locations);
 
+
         eventName.setText(curEvent.getEventName());
         app.getPosterImageHandler().getPosterPicture(curEvent, eventPoster);
+
+        editEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventMenuActivity.this, EnterEventDetailsActivity.class);
+                intent.putExtra("edit", true);
+                startActivity(intent);
+            }
+        });
 
         accessQRCodes.setOnClickListener(new View.OnClickListener() {
             @Override

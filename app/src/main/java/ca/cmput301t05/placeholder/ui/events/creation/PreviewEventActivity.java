@@ -3,6 +3,7 @@ package ca.cmput301t05.placeholder.ui.events.creation;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,11 +23,12 @@ import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
+import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 
 public class PreviewEventActivity extends AppCompatActivity {
 
-    Button createEvent;
+    Button setEvent;
 
     private Button back;
 
@@ -42,6 +44,8 @@ public class PreviewEventActivity extends AppCompatActivity {
 
     private ImageView event_poster;
 
+    private Intent fromEdit;
+
     @SuppressLint("MissingInflatedId")
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -51,7 +55,7 @@ public class PreviewEventActivity extends AppCompatActivity {
         PlaceholderApp app = (PlaceholderApp) getApplicationContext();
         Event curEvent = app.getCachedEvent();
 
-        createEvent = findViewById(R.id.preview_create);
+        setEvent = findViewById(R.id.preview_create);
         back = findViewById(R.id.event_preview_back);
         event_name = findViewById(R.id.preview_name);
         event_date = findViewById(R.id.event_preview_eventDate);
@@ -59,6 +63,12 @@ public class PreviewEventActivity extends AppCompatActivity {
         event_details = findViewById(R.id.event_preview_eventinfo);
         event_author = findViewById(R.id.event_preview_author);
         event_poster = findViewById(R.id.event_preview_poster);
+        fromEdit = getIntent();
+
+        if(fromEdit.hasExtra("edit")){
+            setEvent.setText("Update Event");
+        }
+
 
         Calendar calendar = curEvent.getEventDate();
 
@@ -116,38 +126,82 @@ public class PreviewEventActivity extends AppCompatActivity {
         });
 
 
-        createEvent.setOnClickListener(new View.OnClickListener() {
+        setEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //basically we want to upload the qr strings
-                curEvent.toDocument();
 
-                //push changes
-                app.getPosterImageHandler().uploadPoster(app.getPicCache(), curEvent); //updates the event
 
-                // Pushes the current event (currEvent) to the event table in the database
-                // This push is also asynchronous, we go back to the Main activity in the onSuccess callback
-                app.getEventTable().pushDocument(curEvent, curEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
-                    @Override
-                    public void onSuccess(Event document) {
-                        // If the document was successfully updated in the database, start the Main activity and finish this activity
-                        String message = "Event, " + curEvent.getEventName() +  " , Successfully created";
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                if(fromEdit.hasExtra("edit")){
+                    curEvent.toDocument();
 
-                        //change this to navigate to access qr code page
+                    //push changes
+                    app.getPosterImageHandler().uploadPoster(app.getPicCache(), curEvent); //updates the event
 
-                        Intent i = new Intent(PreviewEventActivity.this, ViewQRCodesActivity.class);
-                        startActivity(i);
-                        finish();
-                    }
+                    // Pushes the current event (currEvent) to the event table in the database
+                    // This push is also asynchronous, we go back to the Main activity in the onSuccess callback
+                    app.getEventTable().updateDocument(curEvent, curEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
+                        @Override
+                        public void onSuccess(Event document) {
+                            // If the document was successfully updated in the database, start the Main activity and finish this activity
+                            String message = "Event, " + curEvent.getEventName() +  " , Successfully updated";
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
-                    @Override
-                    public void onFailure(Exception e) {
-                        // TODO Handle the failure of updating the event in the database
-                    }
-                });
+                            //change this to navigate to access qr code page
+
+                            Intent updated = new Intent(PreviewEventActivity.this, EventMenuActivity.class);
+                            startActivity(updated);
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            // TODO Handle the failure of updating the event in the database
+                        }
+                    });
+                } else{
+                    //basically we want to upload the qr strings
+                    curEvent.toDocument();
+
+                    //push changes
+                    try {
+                        // Code block where the SecurityException might occur
+                        app.getPosterImageHandler().uploadPoster(app.getPicCache(), curEvent);
+                    } catch (SecurityException e) {
+                        Log.e("MyApp", "SecurityException occurred: " + e.getMessage());
+                        e.printStackTrace();
+                    } //updates the event
+
+                    // Pushes the current event (currEvent) to the event table in the database
+                    // This push is also asynchronous, we go back to the Main activity in the onSuccess callback
+                    app.getEventTable().pushDocument(curEvent, curEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
+                        @Override
+                        public void onSuccess(Event document) {
+                            // If the document was successfully updated in the database, start the Main activity and finish this activity
+                            String message = "Event, " + curEvent.getEventName() +  " , Successfully created";
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                            //change this to navigate to access qr code page
+
+                            Intent i = new Intent(PreviewEventActivity.this, ViewQRCodesActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            // TODO Handle the failure of updating the event in the database
+                        }
+                    });
+                }
+
+
+
+
+
 
             }
         });
+
+
     }
 }

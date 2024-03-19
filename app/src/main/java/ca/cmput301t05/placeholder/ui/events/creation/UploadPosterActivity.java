@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -21,7 +22,9 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 
 /**
  * UploadPosterActivity allows users to upload a poster image for an event. This activity is part of the event
@@ -37,6 +40,8 @@ public class UploadPosterActivity extends AppCompatActivity {
     private PlaceholderApp app;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private Event currEvent;
+
+    private Intent fromEdit;
 
     /**
      * Called when the activity is starting. This method initializes the UI components, sets up the action listeners,
@@ -54,9 +59,16 @@ public class UploadPosterActivity extends AppCompatActivity {
         back = findViewById(R.id.eventPoster_back);
         uploadPoster = findViewById(R.id.uploadPosterButton);
         nextPage = findViewById(R.id.event_posternext);
+        fromEdit = getIntent();
 
         // Fetches a specific event's ID from the intent passed to this activity
         currEvent = app.getCachedEvent();
+
+        if(fromEdit.hasExtra("edit")){
+            app.getPosterImageHandler().getPosterPicture(currEvent, eventPoster);
+            nextPage.setText("Update Event");
+        }
+
 
         // I'm using atomic reference, as it's thread-safe, meaning it can be updated while being accessed by multiple threads
         AtomicReference<Uri> curPic = new AtomicReference<>();
@@ -97,9 +109,35 @@ public class UploadPosterActivity extends AppCompatActivity {
             //set this to the cache so on the final page we can do everything
             app.setPicCache(curPic.get());
 
-            Intent i = new Intent(UploadPosterActivity.this, GenerateInfoCheckinActivity.class);
-            startActivity(i);
+            if(nextPage.getText()== "Update Event"){
+                Intent updated = new Intent(UploadPosterActivity.this, PreviewEventActivity.class);
+                updated.putExtra("edit", true);
+                startActivity(updated);
+                finish();
+
+            }else{
+                Intent i = new Intent(UploadPosterActivity.this, GenerateInfoCheckinActivity.class);
+                startActivity(i);
+                finish();
+            }
+
+
+
+
+
+
+
+
+
+            if(nextPage.getText()== "Update Event"){
+
+
+            }
 
         });
     }
 }
+
+
+
+

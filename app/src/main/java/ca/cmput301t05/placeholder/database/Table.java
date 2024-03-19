@@ -133,6 +133,24 @@ public abstract class Table<T extends DocumentSerializable> {
     }
 
     /**
+     * Updates a document in the Firestore collection with the specified document ID and calls the callback methods based on the result of the operation.
+     *
+     * @param document    The document object to be pushed.
+     * @param documentId  The ID of the document.
+     * @param callback    The callback to be called when the push operation is complete.
+     */
+    public void updateDocument(T document, String documentId, DocumentCallback<T> callback) {
+        collectionReference.document(documentId).update(document.toDocument())
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess(document);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+    }
+
+    /**
      * Converts a Firestore DocumentSnapshot into an object of type T.
      *
      * @param snapshot The DocumentSnapshot to convert.
