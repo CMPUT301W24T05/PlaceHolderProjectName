@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
 
@@ -45,17 +46,35 @@ public class UserNotificationActivity extends AppCompatActivity {
         });
 
         notificationList = findViewById(R.id.user_notification_recyclerview);
-        notifications = new ArrayList<>();
 
 
         if(app.getUserProfile().getNotifications() == null){
             app.getUserProfile().setNotifications(new ArrayList<>());
         }
 
-        notifications.addAll(app.getUserNotifications());
-        notificationAdapter = new NotificationAdapter(this, notifications);
+        //first grab the pre-loaded notifications
+
+        notificationAdapter = new NotificationAdapter(this, app.getUserNotifications());
         notificationList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         notificationList.setAdapter(notificationAdapter);
+
+        //now query for new notifications
+        app.getNotificationTable().fetchMultipleDocuments(app.getUserProfile().getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+            @Override
+            public void onSuccess(ArrayList<Notification> document) {
+                app.getUserNotifications().clear();
+                app.getUserNotifications().addAll(document);
+                notificationAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
+
+
 
 
 
