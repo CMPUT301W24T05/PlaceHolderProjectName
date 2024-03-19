@@ -52,7 +52,7 @@ public class UserNotificationActivity extends AppCompatActivity {
             app.getUserProfile().setNotifications(new ArrayList<>());
         }
 
-        notifications.addAll(app.getUserProfile().getNotifications());
+        notifications.addAll(app.getUserNotifications());
         notificationAdapter = new NotificationAdapter(this, notifications);
         notificationList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         notificationList.setAdapter(notificationAdapter);

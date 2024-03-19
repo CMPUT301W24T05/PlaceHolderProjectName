@@ -17,10 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
+import ca.cmput301t05.placeholder.notifications.Notification;
+import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
@@ -83,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
         organizedEventsAdapter = new EventAdapter(getApplicationContext(), hostedEvents);
         organizedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         organizedEventsList.setAdapter(organizedEventsAdapter);
+
+
+
+
     }
 
     private void setButtonActions() {

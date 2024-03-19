@@ -92,7 +92,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
                     ArrayList<String> profileIDS = new ArrayList<>(); //getting ready to upload everything again
 
                     for (Profile p : document) {
-                        p.addNotification(notification); //add notification to each profile
+                        p.addNotification(notification.getNotificationID().toString()); //add notification to each profile
 
                         profileIDS.add(p.getProfileID().toString());
 

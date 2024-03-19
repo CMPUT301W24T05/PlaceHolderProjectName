@@ -35,6 +35,8 @@ public class PlaceholderApp extends Application implements Serializable {
 
     private HashMap<UUID, Event> hostedEvents;
 
+    private ArrayList<Notification> userNotifications;
+
     private Event cachedEvent; //honestly having these cashed variables probably isnt the way to go. we should be using an observer/listener to decouple this
 
     private Uri picCache;
@@ -58,6 +60,7 @@ public class PlaceholderApp extends Application implements Serializable {
 
         hostedEvents = new HashMap<>();
         joinedEvents = new HashMap<>();
+        userNotifications = new ArrayList<>();
     }
 
     /**
@@ -153,5 +156,11 @@ public class PlaceholderApp extends Application implements Serializable {
         return notificationTable;
     }
 
+    public void setUserNotifications(ArrayList<Notification> userNotifications) {
+        this.userNotifications = userNotifications;
+    }
 
+    public ArrayList<Notification> getUserNotifications() {
+        return userNotifications;
+    }
 }

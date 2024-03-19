@@ -90,6 +90,9 @@ public abstract class Table<T extends DocumentSerializable> {
 
     public void fetchMultipleDocuments(ArrayList<String> documents, DocumentCallback<ArrayList<T>> callback){
 
+        if (documents.isEmpty()){
+            callback.onSuccess(new ArrayList<T>());
+        }
 
         Log.d("Fetch", "in loop");
         //Idea is that we loop through all the tasks then add them to a arraylist need to be careful since the tasks may be on different threads
