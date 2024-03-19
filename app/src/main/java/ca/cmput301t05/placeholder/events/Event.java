@@ -12,6 +12,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,12 +38,15 @@ public class Event extends DocumentSerializable implements Serializable {
     private HashMap<String, Integer> attendees; //stored this way for the database
     //string = profileID, int = # of times checked in
 
+    ArrayList<String> notifications; //notifications that are sent for this specific event
+
     /**
      * Default constructor that generates a new event with unique ID and empty attendee list.
      */
     public Event(){
         this.eventID = UUID.randomUUID();
         this.attendees = new HashMap<>();
+        this.notifications = new ArrayList<>();
     }
 
     /**
@@ -53,6 +57,8 @@ public class Event extends DocumentSerializable implements Serializable {
     public Event(UUID eventID){
         this();
         this.eventID = eventID;
+        this.attendees = new HashMap<>();
+        this.notifications = new ArrayList<>();
     }
 
     /**
@@ -68,6 +74,8 @@ public class Event extends DocumentSerializable implements Serializable {
         this.eventName = name;
         this.eventInfo = eventInfo;
         this.maxAttendees = maxAttendees;
+        this.attendees = new HashMap<>();
+        this.notifications = new ArrayList<>();
     }
 
     /**
@@ -88,6 +96,7 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("maxAttendees", maxAttendees);
         document.put("attendees", attendees);
         document.put("eventCreator", eventCreator.toString());
+        document.put("notifications", this.notifications);
 
         return document;
     }
@@ -125,6 +134,10 @@ public class Event extends DocumentSerializable implements Serializable {
         }
         if(document.get("attendees") != null) {
             attendees = (HashMap<String, Integer>) document.get("attendees");
+        }
+
+        if(document.get("notifications") != null){
+            notifications = (ArrayList<String>) document.get("notifications");
         }
     }
 
@@ -169,12 +182,13 @@ public class Event extends DocumentSerializable implements Serializable {
 
     /**
      * Retrieves an array of all attendee IDs.
-     * @return An array of Strings, each representing a unique attendee ID.
+     *
+     * @return an arrayList of strings pertaining to the attendee's ids
      */
-    public String[] getAttendees(){
+    public ArrayList<String> getAttendees(){
 
 
-        return attendees.keySet().toArray(new String[0]);
+        return new ArrayList<>(attendees.keySet());
     }
 
     //getters and setters
@@ -294,6 +308,14 @@ public class Event extends DocumentSerializable implements Serializable {
         return this.maxAttendees;
     }
 
+    public void addNotification(String notificationID){
+        this.notifications.add(notificationID);
+    }
+
+    public void removeNotification(String notificationID){
+        this.notifications.remove(notificationID);
+    }
+
     public void setEventCreator(UUID eventCreator){ this.eventCreator = eventCreator;}
 
     public UUID getEventCreator(){return this.eventCreator;}
@@ -335,6 +357,10 @@ public class Event extends DocumentSerializable implements Serializable {
         if(bmp != null) {
             setEventPosterBitmap(bmp);
         }
+    }
+
+    public ArrayList<String> getNotifications() {
+        return notifications;
     }
 }
 
