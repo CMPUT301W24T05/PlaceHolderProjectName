@@ -150,17 +150,24 @@ public class ProfileEditActivity extends AppCompatActivity {
     private void setUp() {
         // set up the profile picture
         profile = app.getUserProfile();
-        app.getProfileImageHandler().getProfilePicture(profile, this, new BaseImageHandler.ImageCallback() {
-            @Override
-            public void onImageLoaded(Bitmap bitmap) {
-                runOnUiThread(() -> profilePic.setImageBitmap(bitmap));
-            }
 
-            @Override
-            public void onError(Exception e) {
+        if(profile.hasProfileBitmap()){
+            profilePic.setImageBitmap(profile.getProfilePictureBitmap());
+        } else {
+            app.getProfileImageHandler().getProfilePicture(profile, this, new BaseImageHandler.ImageCallback() {
+                @Override
+                public void onImageLoaded(Bitmap bitmap) {
+                    runOnUiThread(() -> profilePic.setImageBitmap(bitmap));
+                    profile.setProfilePictureBitmap(bitmap);
+                }
 
-            }
-        });
+                @Override
+                public void onError(Exception e) {
+                    profile.setProfilePictureToDefault();
+                    runOnUiThread(() -> profilePic.setImageBitmap(profile.getProfilePictureBitmap()));
+                }
+            });
+        }
         if (profile.getName() != null) {
             editName.setText(profile.getName());
         }
@@ -188,6 +195,7 @@ public class ProfileEditActivity extends AppCompatActivity {
 
         if (removePic) {
             app.getProfileImageHandler().removeProfilePic(profile);
+            profile.setProfilePictureToDefault();
         }
 
         if (profilePicUri != null) {
