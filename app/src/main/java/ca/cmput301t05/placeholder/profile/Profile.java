@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
-import ca.cmput301t05.placeholder.database.DocumentSerializable;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
+import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Notification;
 
@@ -23,11 +26,16 @@ public class Profile extends DocumentSerializable {
     private String name;
     private String homePage;
     private String contactInfo;
+    private Bitmap profilePictureBitmap;
     private UUID profilePictureID;
     private List<String> hostedEvents;
     private List<String> joinedEvents;
-    private List<Notification> notifications;
+    private ArrayList<String> notifications;
+
+
     boolean isAdmin = false;
+
+    private String messagingToken; //for notifications
 
     /**
      * Default constructor creating an empty profile.
@@ -98,18 +106,18 @@ public class Profile extends DocumentSerializable {
     /**
      * Adds a UserNotification to the list of notifications.
      *
-     * @param a The UserNotification to be added.
+     * @param a The UserNotificationID to be added.
      */
-    public void addNotification(Notification a){
+    public void addNotification(String a){
         notifications.add(a);
     }
 
     /**
      * This method removes the given UserNotification from the list of notifications in the Profile class.
      *
-     * @param a The UserNotification to be removed.
+     * @param a The UserNotificationID to be removed.
      */
-    public void removeNotification(Notification a){
+    public void removeNotification(String a){
         notifications.remove(a);
     }
 
@@ -137,7 +145,7 @@ public class Profile extends DocumentSerializable {
      *
      * @return The list of notifications.
      */
-    public List<Notification> getNotifications() {
+    public ArrayList<String> getNotifications() {
         return notifications;
     }
 
@@ -245,7 +253,7 @@ public class Profile extends DocumentSerializable {
      *
      * @param notifications The list of UserNotifications to be set.
      */
-    public void setNotifications(List<Notification> notifications) {
+    public void setNotifications(ArrayList<String> notifications) {
         this.notifications = notifications;
     }
 
@@ -265,6 +273,14 @@ public class Profile extends DocumentSerializable {
      */
     public void setProfilePictureID(UUID profilePictureID) {
         this.profilePictureID = profilePictureID;
+    }
+
+    public void setMessagingToken(String messagingToken) {
+        this.messagingToken = messagingToken;
+    }
+
+    public String getMessagingToken() {
+        return messagingToken;
     }
 
     /**
@@ -293,6 +309,7 @@ public class Profile extends DocumentSerializable {
         document.put("joinedEvents", joinedEvents); // Assumes Event class can be serialized
         document.put("notifications", notifications); // Assumes UserNotification can be serialized
         document.put("isAdmin", isAdmin);
+        document.put("messagingToken", messagingToken);
         return document;
     }
 
@@ -328,25 +345,37 @@ public class Profile extends DocumentSerializable {
             joinedEvents = (List<String>)document.get("joinedEvents");
         }
         if(document.get("notifications") != null) {
-            notifications = (List<Notification>)document.get("notifications");
+            notifications = (ArrayList<String>)document.get("notifications");
         }
         if(document.getBoolean("isAdmin") != null) {
             isAdmin = Boolean.TRUE.equals(document.getBoolean("isAdmin"));
         }
-    }
 
-    private ArrayList<String> turnNotifToString(){
-
-        ArrayList<String> notifID = new ArrayList<>();
-
-        for (Notification n : this.notifications){
-
-            notifID.add(n.getNotificationID().toString());
+        if(document.get("messagingToken") != null){
+            messagingToken = document.getString("messagingToken");
         }
-
-        return notifID;
     }
 
+    public Bitmap getProfilePictureBitmap() {
+        return profilePictureBitmap;
+    }
 
-    
+    public void setProfilePictureBitmap(Bitmap profilePictureBitmap) {
+        this.profilePictureBitmap = profilePictureBitmap;
+    }
+
+    public void setProfilePictureToDefault() {
+        this.profilePictureBitmap = ProfileImageGenerator.defaultProfileImage(this.name);
+    }
+
+    public void setProfilePictureFromUri(Uri imageFromUri, Context context){
+        Bitmap bmp = BaseImageHandler.uriToBitmap(context, imageFromUri);
+        if(bmp != null) {
+            setProfilePictureBitmap(bmp);
+        }
+    }
+
+    public boolean hasProfileBitmap(){
+        return profilePictureBitmap != null;
+    }
 }

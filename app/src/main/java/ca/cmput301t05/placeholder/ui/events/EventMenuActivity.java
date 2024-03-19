@@ -2,7 +2,9 @@ package ca.cmput301t05.placeholder.ui.events;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.events.Event;
 
 public class EventMenuActivity extends AppCompatActivity {
@@ -47,7 +50,22 @@ public class EventMenuActivity extends AppCompatActivity {
         checkInLocations = findViewById(R.id.check_in_locations);
 
         eventName.setText(curEvent.getEventName());
-        app.getPosterImageHandler().getPosterPicture(curEvent, eventPoster);
+        if (curEvent.hasEventPosterBitmap()) {
+            eventPoster.setImageBitmap(curEvent.getEventPosterBitmap());
+        } else {
+            app.getPosterImageHandler().getPosterPicture(curEvent, this, new BaseImageHandler.ImageCallback() {
+                @Override
+                public void onImageLoaded(Bitmap bitmap) {
+                    eventPoster.setImageBitmap(bitmap);
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    // Handle error
+                    Log.e("EventDetailsDialogFragment", "Error loading image: " + e.getMessage());
+                }
+            });
+        }
 
         accessQRCodes.setOnClickListener(new View.OnClickListener() {
             @Override
