@@ -13,6 +13,10 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import ca.cmput301t05.placeholder.database.DatabaseManager;
+import ca.cmput301t05.placeholder.database.utils.Collections;
+import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
+
 /**
  * The Table class is an abstract class that represents a table in the database.
  * It provides methods for fetching and pushing documents to the table.
