@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -11,9 +12,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 
 /**
  * LoadingScreenActivity is an activity displayed during the startup of the application. It is responsible for
@@ -61,21 +64,22 @@ public class LoadingScreenActivity extends AppCompatActivity {
                 // The profile exists in firebase! We can continue to the Main activity
                 app.setUserProfile(profile);
 
-                AtomicInteger eventCounter = new AtomicInteger();
+                app.getProfileImageHandler().getProfilePicture(profile, LoadingScreenActivity.this, new BaseImageHandler.ImageCallback() {
+                    @Override
+                    public void onImageLoaded(Bitmap bitmap) {
+                        profile.setProfilePictureBitmap(bitmap);
 
-                if (profile.getHostedEvents() != null) {
-                    eventCounter.addAndGet(profile.getHostedEvents().size());
-                    fetchEvents(profile, "hostedEvents", eventCounter);
-                }
-                if (profile.getJoinedEvents() != null) {
-                    eventCounter.addAndGet(profile.getJoinedEvents().size());
-                    fetchEvents(profile, "joinedEvents", eventCounter);
-                }
+                        fetchEvents(profile);
+                    }
 
-                // Check if there are no events to fetch in the first place, start MainActivity immediately
-                if (eventCounter.get() == 0) {
-                    startMainActivity();
-                }
+                    @Override
+                    public void onError(Exception e) {
+                        Bitmap defaultProfilePic = ProfileImageGenerator.defaultProfileImage(profile.getName());
+                        profile.setProfilePictureBitmap(defaultProfilePic);
+
+                        fetchEvents(profile);
+                    }
+                });
             }
 
             @Override
@@ -87,6 +91,28 @@ public class LoadingScreenActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+    }
+
+    private void fetchEvents(Profile profile) {
+        AtomicInteger eventCounter = new AtomicInteger();
+
+        if (profile.getHostedEvents() != null) {
+            eventCounter.addAndGet(profile.getHostedEvents().size());
+            fetchEvents(profile, "hostedEvents", eventCounter);
+        }
+        if (profile.getJoinedEvents() != null) {
+            eventCounter.addAndGet(profile.getJoinedEvents().size());
+            fetchEvents(profile, "joinedEvents", eventCounter);
+        }
+
+        // Check if there are no events to fetch in the first place, start MainActivity immediately
+        if (eventCounter.get() == 0) {
+            startMainActivity();
+        }
+    }
+
+    private void fetchProfilePicture(Profile profile){
 
     }
 

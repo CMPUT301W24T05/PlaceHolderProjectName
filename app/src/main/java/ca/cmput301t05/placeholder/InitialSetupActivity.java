@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
@@ -65,6 +67,10 @@ public class InitialSetupActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Profile profile) {
                     app.setUserProfile(userProfile);
+
+                    Bitmap defaultProfilePic = ProfileImageGenerator.defaultProfileImage(userProfile.getName());
+                    userProfile.setProfilePictureBitmap(defaultProfilePic);
+
                     // Transition to MainActivity
                     Intent intent = new Intent(InitialSetupActivity.this, MainActivity.class);
                     startActivity(intent);
