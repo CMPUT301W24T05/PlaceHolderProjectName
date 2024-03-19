@@ -40,6 +40,7 @@ public class ProfileEditActivity extends AppCompatActivity {
     private Uri profilePicUri;
     private Profile profile;
     private Button saveButton;
+    private Button cancelButton;
     private Button adminButton;
     private EditText editName;
     private EditText editContact;
@@ -62,6 +63,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         app = (PlaceholderApp) getApplicationContext();
         profile = app.getUserProfile();
         saveButton = findViewById(R.id.save_button);
+        cancelButton = findViewById(R.id.cancel_button);
         adminButton = findViewById(R.id.admin_button);
         editName = findViewById(R.id.edit_name);
         editHomepage = findViewById(R.id.edit_homepage);
@@ -72,10 +74,17 @@ public class ProfileEditActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
+        cancelButton.setOnClickListener(createOnCancelButtonClickListener());
         saveButton.setOnClickListener(createOnSaveButtonClickListener());
         adminButton.setOnClickListener(createOnAdminButtonClickListener());
         cameraButton.setOnClickListener(createOnCameraButtonClickListener());
         removeProfilePicButton.setOnClickListener(createOnRemoveProfilePicButtonClickListener());
+    }
+
+    private View.OnClickListener createOnCancelButtonClickListener() {
+        return v -> {
+            finish();
+        };
     }
 
     // Clicking on the save button will save the information and go back to the Main Activity
