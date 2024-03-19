@@ -5,9 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
-import ca.cmput301t05.placeholder.database.DocumentSerializable;
+import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Notification;
 

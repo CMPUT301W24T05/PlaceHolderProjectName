@@ -5,6 +5,8 @@
 <!--    Declaring that the app uses hardware on the phone, in our case the phone's camera -->
 <!--    <uses-feature android:name="android.hardware.camera.any"/>-->
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -67,6 +69,11 @@
         <activity android:name=".ui.events.GenerateInfoCheckinActivity"/>
         <activity android:name=".ui.notifications.EventNotificationPageActivity"/>
         <activity android:name=".ui.notifications.UserNotificationActivity"/>
+        <activity android:name=".ui.events.creation.PreviewEventActivity" />
+        <activity android:name=".ui.events.ViewQRCodesActivity"/>
+        <activity android:name=".ui.events.EventMenuActivity"/>
+        <activity android:name=".Location.Successful_Checked_In_Activity"/>
+
     </application>
 
 

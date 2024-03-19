@@ -1,9 +1,11 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder.database.images;
 
 import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 import ca.cmput301t05.placeholder.events.Event;
 
+import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -21,7 +23,13 @@ public class EventPosterImageHandler extends BaseImageHandler {
     public void uploadPoster(Uri file, Event event) {
         UUID posterID = event.getEventPosterID() == null ? UUID.randomUUID() : event.getEventPosterID();
 
-        uploadImage(file, posterID.toString(), "posters", "Event", event.getEventID().toString());
+        try {
+            uploadImage(file, posterID.toString(), "posters", "Event", event.getEventID().toString());
+        } catch (IOException e) {
+            Log.e("EventPosterImageHandler", "The provided uri is invalid: " + file.toString());
+            // Return and don't associate the event poster picture id to the event
+            return;
+        }
 
         event.setEventPosterID(posterID);
     }

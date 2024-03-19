@@ -1,6 +1,5 @@
 package ca.cmput301t05.placeholder.ui.events;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,9 +15,8 @@ import java.util.Calendar;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
-import ca.cmput301t05.placeholder.ProfileEditActivity;
 import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.database.Table;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 

@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class Table" class="title">Class Table&lt;T extends <a href="DocumentSerializable.html" title="class in ca.cmput301t05.placeholder.database">DocumentSerializable</a>&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">ca.cmput301t05.placeholder.database.Table&lt;T&gt;</div>
+<div class="inheritance">ca.cmput301t05.placeholder.database.tables.Table&lt;T&gt;</div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
@@ -135,13 +135,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fetchDocument(java.lang.String,ca.cmput301t05.placeholder.database.Table.DocumentCallback)" class="member-name-link">fetchDocument</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;documentId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fetchDocument(java.lang.String,ca.cmput301t05.placeholder.database.tables.Table.DocumentCallback)" class="member-name-link">fetchDocument</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;documentId,
  <a href="Table.DocumentCallback.html" title="interface in ca.cmput301t05.placeholder.database">Table.DocumentCallback</a>&lt;<a href="Table.html" title="type parameter in Table">T</a>&gt;&nbsp;callback)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Fetches a document from the collection using the given document ID and calls the callback methods based on the result of the operation.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pushDocument(T,java.lang.String,ca.cmput301t05.placeholder.database.Table.DocumentCallback)" class="member-name-link">pushDocument</a><wbr>(<a href="Table.html" title="type parameter in Table">T</a>&nbsp;document,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pushDocument(T,java.lang.String,ca.cmput301t05.placeholder.database.tables.Table.DocumentCallback)" class="member-name-link">pushDocument</a><wbr>(<a href="Table.html" title="type parameter in Table">T</a>&nbsp;document,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;documentId,
  <a href="Table.DocumentCallback.html" title="interface in ca.cmput301t05.placeholder.database">Table.DocumentCallback</a>&lt;<a href="Table.html" title="type parameter in Table">T</a>&gt;&nbsp;callback)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -184,7 +184,7 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="fetchDocument(java.lang.String,ca.cmput301t05.placeholder.database.Table.DocumentCallback)">
+<section class="detail" id="fetchDocument(java.lang.String,ca.cmput301t05.placeholder.database.tables.Table.DocumentCallback)">
 <h3>fetchDocument</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">fetchDocument</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;documentId,
  <a href="Table.DocumentCallback.html" title="interface in ca.cmput301t05.placeholder.database">Table.DocumentCallback</a>&lt;<a href="Table.html" title="type parameter in Table">T</a>&gt;&nbsp;callback)</span></div>
@@ -197,8 +197,8 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="pushDocument(T,java.lang.String,ca.cmput301t05.placeholder.database.Table.DocumentCallback)">
-<h3 id="pushDocument(ca.cmput301t05.placeholder.database.DocumentSerializable,java.lang.String,ca.cmput301t05.placeholder.database.Table.DocumentCallback)">pushDocument</h3>
+<section class="detail" id="pushDocument(T,java.lang.String,ca.cmput301t05.placeholder.database.tables.Table.DocumentCallback)">
+<h3 id="pushDocument(ca.cmput301t05.placeholder.database.utils.DocumentSerializable,java.lang.String,ca.cmput301t05.placeholder.database.tables.Table.DocumentCallback)">pushDocument</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">pushDocument</span><wbr><span class="parameters">(<a href="Table.html" title="type parameter in Table">T</a>&nbsp;document,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;documentId,
  <a href="Table.DocumentCallback.html" title="interface in ca.cmput301t05.placeholder.database">Table.DocumentCallback</a>&lt;<a href="Table.html" title="type parameter in Table">T</a>&gt;&nbsp;callback)</span></div>

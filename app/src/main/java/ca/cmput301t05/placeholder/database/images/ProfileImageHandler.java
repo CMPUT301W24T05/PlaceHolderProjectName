@@ -1,9 +1,11 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder.database.images;
 
 import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 import ca.cmput301t05.placeholder.profile.Profile;
 
+import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -19,12 +21,17 @@ public class ProfileImageHandler extends BaseImageHandler {
      * @param profile The profile to assign the profile picture to.
      */
     public void uploadProfilePicture(Uri file, Profile profile) {
-        UUID profileID = profile.getProfilePictureID() == null ? UUID.randomUUID() : profile.getProfilePictureID();
 
-        uploadImage(file, profileID.toString(), "profiles", "Profile", profile.getProfileID().toString());
+        UUID profileID = profile.getProfilePictureID() == null ? UUID.randomUUID() : profile.getProfilePictureID();
+        try {
+            uploadImage(file, profileID.toString(), "profiles", "Profile", profile.getProfileID().toString());
+        } catch (IOException e) {
+            Log.e("ProfileImageHandler", "The provided uri is invalid: " + file.toString());
+            // Return and don't associate the profile picture id to the profile
+            return;
+        }
 
         profile.setProfilePictureID(profileID);
-        profile.toDocument();
     }
 
     /**

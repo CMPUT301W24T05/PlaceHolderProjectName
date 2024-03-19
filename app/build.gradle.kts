@@ -47,7 +47,9 @@ dependencies {
 
     implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0") // The dependency for QR code scanning
 
-
+    //Implement ViewPager2 Swipe View
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+    implementation ("me.relex:circleindicator:2.1.6")
 
 
     // Import the Firebase BoM
@@ -96,5 +98,9 @@ dependencies {
 
     //for push notifications
     implementation("com.google.firebase:firebase-messaging")
+
+    // Import google play service for geolocation
+    implementation ("com.google.android.gms:play-services-location:19.0.1")
+
 
 }

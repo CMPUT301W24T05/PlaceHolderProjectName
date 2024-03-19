@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import ca.cmput301t05.placeholder.database.DocumentSerializable;
+import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 
 /**
  * Represents a notification associated with a user event. It contains information about

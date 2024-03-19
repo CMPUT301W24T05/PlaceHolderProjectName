@@ -1,6 +1,6 @@
 package ca.cmput301t05.placeholder.events;
 
-import ca.cmput301t05.placeholder.database.DocumentSerializable;
+import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 import com.google.firebase.Timestamp;

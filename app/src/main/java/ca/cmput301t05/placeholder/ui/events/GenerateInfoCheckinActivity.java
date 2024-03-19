@@ -1,13 +1,15 @@
 package ca.cmput301t05.placeholder.ui.events;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -16,13 +18,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.OutputStream;
 
-import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
+import ca.cmput301t05.placeholder.qrcode.QRCodeType;
+import ca.cmput301t05.placeholder.ui.events.creation.PreviewEventActivity;
 
 public class GenerateInfoCheckinActivity extends AppCompatActivity {
 
@@ -30,7 +32,7 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
 
     private Button generate2;
 
-    private Button createEvent;
+    private Button next;
 
     private ImageView qrCode1;
 
@@ -40,11 +42,11 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
     private Button back;
 
     private ActivityResultLauncher<String> createDocumentLauncher;
+    @SuppressLint("MissingInflatedId")
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         PlaceholderApp app = (PlaceholderApp) getApplicationContext();
-
         Event curEvent = app.getCachedEvent();
 
         setContentView(R.layout.event_generate_info_checkin);
@@ -57,7 +59,8 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
         //gen2 = info
         generate2 = findViewById(R.id.event_generate_generate2);
 
-        createEvent = findViewById(R.id.event_generate_create);
+
+        next = findViewById(R.id.event_generate_qr_next);
         qrCode1 = findViewById(R.id.event_generate_qrcode1);
         qrCode2 = findViewById(R.id.event_generate_qr2);
         back = findViewById(R.id.event_generate_back);
@@ -68,8 +71,6 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
 
         QRCode checkIn = qrm.generateQRCode(curEvent, "checkIn");
         QRCode info = qrm.generateQRCode(curEvent, "eventInfo");
@@ -109,6 +110,7 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
             }
         });
 
+
         generate2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +120,7 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
                     qrCode2.setImageBitmap(info.getBitmap());
                     generate2.setText("Export QR Code");
                     curEvent.setInfoQRCode(info.getRawText());
+
 
                 }   else {
 
@@ -130,35 +133,13 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
             }
         });
 
-        createEvent.setOnClickListener(new View.OnClickListener() {
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //basically we want to upload the qr strings
-                curEvent.toDocument();
 
-                //push changes
-                app.getPosterImageHandler().uploadPoster(app.getPicCache(), curEvent); //updates the event
-
-                // Pushes the current event (currEvent) to the event table in the database
-                // This push is also asynchronous, we go back to the Main activity in the onSuccess callback
-                app.getEventTable().pushDocument(curEvent, curEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
-                    @Override
-                    public void onSuccess(Event document) {
-                        // If the document was successfully updated in the database, start the Main activity and finish this activity
-                        String message = "Event," + curEvent.getEventName() +  " , Successfully created";
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-
-
-                        Intent i = new Intent(GenerateInfoCheckinActivity.this, MainActivity.class);
-                        startActivity(i);
-                        finish();
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        // TODO Handle the failure of updating the event in the database
-                    }
-                });
+                Intent i = new Intent(GenerateInfoCheckinActivity.this, PreviewEventActivity.class);
+                startActivity(i);
+                finish();
 
             }
         });
@@ -178,6 +159,24 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
 
             e.printStackTrace();
         }
+    }
+
+    private void shareQRCode(QRCode qr){
+        String text;
+        if(qr.getType() == QRCodeType.INFO){
+            text = "My Event Info QR code";
+        }
+        else{
+            text = "My CheckIn QR code";
+        }
+
+        String stringPath = MediaStore.Images.Media
+                .insertImage(this.getContentResolver(), qr.getBitmap(), text, null);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(stringPath));
+        startActivity(Intent.createChooser(intent, "Share this qr code"));
     }
 
 

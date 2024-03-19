@@ -1,6 +1,8 @@
 package ca.cmput301t05.placeholder.database;
 
 import androidx.test.core.app.ApplicationProvider;
+import ca.cmput301t05.placeholder.database.tables.ProfileTable;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.profile.Profile;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.FirebaseApp;
@@ -46,8 +48,7 @@ public class ProfileTableTest {
         // Mock DatabaseManager to use the mocked FirebaseFirestore instance
         Mockito.when(databaseManager.getDb()).thenReturn(firestore);
         // Mock Firestore to use the mocked CollectionReference instance
-        Mockito.when(firestore.collection(ProfileTable.COLLECTION_NAME)).thenReturn(collectionReference);
-
+        //Mockito.when(firestore.collection(ProfileTable.COLLECTION_NAME)).thenReturn(collectionReference);
         profileTable = new ProfileTable();
     }
 

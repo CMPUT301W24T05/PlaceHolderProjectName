@@ -3,11 +3,9 @@ package ca.cmput301t05.placeholder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -19,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.notifications.Notification;
@@ -28,7 +25,6 @@ import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
 import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
