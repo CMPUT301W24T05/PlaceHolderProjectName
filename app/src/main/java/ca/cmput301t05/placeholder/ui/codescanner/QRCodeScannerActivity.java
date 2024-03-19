@@ -28,7 +28,7 @@ import android.Manifest;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.database.Table;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
@@ -45,12 +45,17 @@ import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
  */
 public class QRCodeScannerActivity extends AppCompatActivity{
 
-    private CodeScanner mCodeScanner;
-    private ActivityResultLauncher<String> requestPermissionLauncher;
+    CodeScanner mCodeScanner;
+    ActivityResultLauncher<String> requestPermissionLauncher;
+
+
     private QRCodeManager qrCodeManager = new QRCodeManager();
 
     private PlaceholderApp app;
     private Profile user;
+    boolean dialogBool;
+
+
 
 
     /**
@@ -66,9 +71,12 @@ public class QRCodeScannerActivity extends AppCompatActivity{
         setContentView(R.layout.camera_activity);
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
 
+
+
         //initialize app and profile
         app = (PlaceholderApp) getApplicationContext();
         user = app.getUserProfile();
+
 
 
 
@@ -151,9 +159,12 @@ public class QRCodeScannerActivity extends AppCompatActivity{
         else {
             initializePermissionLauncher();
             requestPermissionLauncher.launch(Manifest.permission.CAMERA);
+
         }
 
     }
+
+
 
     /**
      * This method displays a fragment that shows the event info
@@ -171,7 +182,7 @@ public class QRCodeScannerActivity extends AppCompatActivity{
      *
      * @return true if the permission has been granted, false otherwise.
      */
-    private boolean checkCurrentPermission() {
+    boolean checkCurrentPermission() {
         // check if the user granted us permission from a previous session
         if (ContextCompat.checkSelfPermission(QRCodeScannerActivity.this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) { // Check if permission granted, if granted start camera!
@@ -186,7 +197,7 @@ public class QRCodeScannerActivity extends AppCompatActivity{
      * Initializes the requestPermissionLauncher used to request camera permission from the user. Defines the
      * behavior upon permission grant or denial.
      */
-    private void initializePermissionLauncher(){
+    void initializePermissionLauncher(){
             // This method initializes and handles the logic of the permission launcher if we need to request permissions
             requestPermissionLauncher = registerForActivityResult( // Request launcher is being initialized
                     new ActivityResultContracts.RequestPermission(),
@@ -202,6 +213,7 @@ public class QRCodeScannerActivity extends AppCompatActivity{
                             }
                         }
                     });
+
         }
 
 
@@ -209,7 +221,8 @@ public class QRCodeScannerActivity extends AppCompatActivity{
      * Shows a dialog informing the user that camera permission has been denied and the feature requires this permission.
      * The dialog provides an "OK" button to dismiss it.
      */
-    private void showPermissionDeniedDialog() { // Shows the permission denied pop-up
+    void showPermissionDeniedDialog() { // Shows the permission denied pop-up
+        dialogBool = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Permission Denied");
         builder.setMessage("This feature requires camera permission. Please enable it in the app settings.");
@@ -223,6 +236,13 @@ public class QRCodeScannerActivity extends AppCompatActivity{
         });
         builder.show();
         //        finish();
+    }
+
+    boolean dialogStatus(){ // To be used strictly for testing.
+        // Required as the code scanner is final and mockito states
+        // to not mock types you do not own.
+
+        return dialogBool;
     }
 
 }

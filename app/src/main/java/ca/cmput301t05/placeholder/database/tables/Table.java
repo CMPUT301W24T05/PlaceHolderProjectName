@@ -1,13 +1,21 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder.database.tables;
+
+import android.util.Log;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.checkerframework.checker.units.qual.A;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import ca.cmput301t05.placeholder.database.DatabaseManager;
+import ca.cmput301t05.placeholder.database.utils.Collections;
+import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 
 /**
  * The Table class is an abstract class that represents a table in the database.
@@ -50,12 +58,16 @@ public abstract class Table<T extends DocumentSerializable> {
          */
         void onSuccess(T document);
 
+
         /**
          * This method is called when the document operation fails.
          *
          * @param e The exception that occurred during the document operation.
          */
         void onFailure(Exception e);
+
+
+
     }
 
     /**
@@ -82,35 +94,38 @@ public abstract class Table<T extends DocumentSerializable> {
 
     public void fetchMultipleDocuments(ArrayList<String> documents, DocumentCallback<ArrayList<T>> callback){
 
-        //https://firebase.google.com/docs/firestore/query-data/queries
-        ArrayList<T> fetchedDocuments = new ArrayList<>();
+        if (documents.isEmpty()){
+            callback.onSuccess(new ArrayList<T>());
+        }
 
-        //essentially grabs us all the snapshots for everything in the list if they exist
-        collectionReference.whereIn(COLLECTION.getId(), Arrays.asList(documents.toArray())).get().addOnCompleteListener(task -> {
+        Log.d("Fetch", "in loop");
+        //Idea is that we loop through all the tasks then add them to a arraylist need to be careful since the tasks may be on different threads
+        ArrayList<T> fetchedDocs = new ArrayList<>();
+        AtomicInteger docCounter = new AtomicInteger(documents.size()); //start at the size so we can deecrement to 0 so we dont have to check document size
+        AtomicBoolean docFetchFail = new AtomicBoolean(false);
 
-            if (task.isSuccessful()){
+        for (String id : documents) {
 
-                QuerySnapshot querySnapshot = task.getResult(); //all the types we want
+            collectionReference.document(id).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult() != null && task.getResult().exists()) {
+                    DocumentSnapshot document = task.getResult();
 
-                for (DocumentSnapshot document : querySnapshot){
+                    T object = documentFromSnapshot(document);
+                    fetchedDocs.add(object);
 
-                    if (document.exists()){
-                        T object = documentFromSnapshot(document);
-                        fetchedDocuments.add(object);
-                    }   else {
-                        callback.onFailure(new Exception(document.toString() + " Does not exist"));
+                    // Check if all documents have been fetched
+                    if (docCounter.decrementAndGet() == 0 && !docFetchFail.get()) {
+                        callback.onSuccess(fetchedDocs);
                     }
-
+                } else {
+                    docFetchFail.set(true);
+                    callback.onFailure(task.getException());
+                    // Prevent multiple callbacks
+                    return;
                 }
-                callback.onSuccess(fetchedDocuments);
+            });
 
-            } else {
-                callback.onFailure(task.getException());
-            }
-
-
-        });
-
+        }
 
     }
 
@@ -130,6 +145,48 @@ public abstract class Table<T extends DocumentSerializable> {
                 callback.onFailure(task.getException());
             }
         });
+    }
+
+    /**
+     * allows us to push multiple documents to the cloud. Does not work for array lists > 50
+     *
+     * @param documents document objects which we'll push
+     * @param documentIds ids of the documents we'll push
+     * @param callback callback to be called when push operation is complete
+     */
+    public void pushMultipleDocuments(ArrayList<T> documents, ArrayList<String> documentIds, DocumentCallback<ArrayList<T>> callback ){
+
+
+        WriteBatch batch = DatabaseManager.getInstance().getDb().batch();
+
+        if (documents.size() != documentIds.size()) {
+            // Handle the error, perhaps by calling the callback with an error message
+            callback.onFailure(new Exception("Documents arent the same sizes"));
+            return;
+        }
+
+        // Loop through the documents
+        for (int i = 0; i < documents.size(); i++) {
+            // Get each document and its corresponding ID
+            T document = documents.get(i);
+            String documentId = documentIds.get(i);
+
+
+            //get the document reference so we can get ready to batch send it
+            DocumentReference docRef = collectionReference.document(documentId);
+
+            batch.set(docRef, document.toDocument());
+        }
+
+        batch.commit().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callback.onSuccess(documents); // Adjust as needed
+            } else {
+                callback.onFailure(task.getException());
+            }
+        });
+
+
     }
 
     /**

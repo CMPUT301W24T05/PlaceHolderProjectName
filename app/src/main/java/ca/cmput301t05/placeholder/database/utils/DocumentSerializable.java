@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder.database.utils;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Exclude;
