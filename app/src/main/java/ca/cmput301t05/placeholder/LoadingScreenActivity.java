@@ -68,15 +68,12 @@ public class LoadingScreenActivity extends AppCompatActivity {
                     @Override
                     public void onImageLoaded(Bitmap bitmap) {
                         profile.setProfilePictureBitmap(bitmap);
-
                         fetchEvents(profile);
                     }
 
                     @Override
                     public void onError(Exception e) {
-                        Bitmap defaultProfilePic = ProfileImageGenerator.defaultProfileImage(profile.getName());
-                        profile.setProfilePictureBitmap(defaultProfilePic);
-
+                        profile.setProfilePictureToDefault();
                         fetchEvents(profile);
                     }
                 });

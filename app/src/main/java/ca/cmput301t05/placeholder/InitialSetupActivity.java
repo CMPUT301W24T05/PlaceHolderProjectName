@@ -68,8 +68,7 @@ public class InitialSetupActivity extends AppCompatActivity {
                 public void onSuccess(Profile profile) {
                     app.setUserProfile(userProfile);
 
-                    Bitmap defaultProfilePic = ProfileImageGenerator.defaultProfileImage(userProfile.getName());
-                    userProfile.setProfilePictureBitmap(defaultProfilePic);
+                    userProfile.setProfilePictureToDefault();
 
                     // Transition to MainActivity
                     Intent intent = new Intent(InitialSetupActivity.this, MainActivity.class);
