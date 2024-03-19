@@ -370,4 +370,8 @@ public class Profile extends DocumentSerializable {
             setProfilePictureBitmap(bmp);
         }
     }
+
+    public boolean hasProfileBitmap(){
+        return profilePictureBitmap != null;
+    }
 }
