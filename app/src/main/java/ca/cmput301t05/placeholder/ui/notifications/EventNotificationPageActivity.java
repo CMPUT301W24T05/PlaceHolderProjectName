@@ -28,6 +28,14 @@ import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
 import ca.cmput301t05.placeholder.profile.Profile;
 
+/**
+ * This is the create Notification page for events.
+ * Events can now create notifications, which are then added to every single profile who is inside of the event.
+ * Push notifications aren't added yet since they are a pain and require a lot of set up
+ *
+ * NOTE MAKE SURE TO PASS AN EVENT THROUGH CACHED EVENT IN APP.SETCACHEDEVENT() TO ACCESS THIS PAGE OR IT WILL BREAK
+ */
+
 public class EventNotificationPageActivity extends AppCompatActivity implements CreateNotificationDialog.NotificationListener {
 
     @Override

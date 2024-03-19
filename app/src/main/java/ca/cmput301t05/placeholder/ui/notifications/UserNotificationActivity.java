@@ -18,6 +18,10 @@ import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
 
+/**
+ * User notification activity, grabs from the app's preloaded notifications and displays them on the notifications screen
+ * Updates the notifications from database every time you open.
+ */
 public class UserNotificationActivity extends AppCompatActivity {
 
     private PlaceholderApp app;
