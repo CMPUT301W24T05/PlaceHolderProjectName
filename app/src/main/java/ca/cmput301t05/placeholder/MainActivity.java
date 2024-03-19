@@ -14,13 +14,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
+import ca.cmput301t05.placeholder.notifications.Notification;
+import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.qrcode.QRCode;
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
+import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
 
 
 /**
@@ -75,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
         organizedEventsAdapter = new EventAdapter(getApplicationContext(), hostedEvents);
         organizedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         organizedEventsList.setAdapter(organizedEventsAdapter);
+
+
+
+
     }
 
     private void setButtonActions() {
@@ -114,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         notificationButton = findViewById(R.id.btnNotifications);
         notificationButton.setOnClickListener(view -> {
             // Start NotificationsActivity
-            Intent intent = new Intent(MainActivity.this, NotificationsFragment.class);
+            Intent intent = new Intent(MainActivity.this, UserNotificationActivity.class);
             startActivity(intent);
         });
 

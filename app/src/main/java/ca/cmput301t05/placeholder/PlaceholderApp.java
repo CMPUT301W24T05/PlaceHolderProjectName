@@ -4,6 +4,7 @@ import android.app.Application;
 import android.net.Uri;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -15,6 +16,7 @@ import ca.cmput301t05.placeholder.database.tables.NotificationTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 /**
@@ -37,7 +39,9 @@ public class PlaceholderApp extends Application implements Serializable {
 
     private HashMap<UUID, Event> hostedEvents;
 
-    private Event cachedEvent;
+    private ArrayList<Notification> userNotifications;
+
+    private Event cachedEvent; //honestly having these cashed variables probably isnt the way to go. we should be using an observer/listener to decouple this
 
     private Uri picCache;
 
@@ -61,6 +65,7 @@ public class PlaceholderApp extends Application implements Serializable {
 
         hostedEvents = new HashMap<>();
         joinedEvents = new HashMap<>();
+        userNotifications = new ArrayList<>();
         locationManager = new LocationManager(this);
     }
 
@@ -157,6 +162,13 @@ public class PlaceholderApp extends Application implements Serializable {
         return notificationTable;
     }
 
+    public void setUserNotifications(ArrayList<Notification> userNotifications) {
+        this.userNotifications = userNotifications;
+    }
+
+    public ArrayList<Notification> getUserNotifications() {
+        return userNotifications;
+    }
     /**
      * Returns the singleton instance of LocationManager.
      * @return The LocationManager Instance.

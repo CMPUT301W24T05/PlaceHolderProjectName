@@ -7,12 +7,15 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 /**
@@ -74,7 +77,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
                 // Check if there are no events to fetch in the first place, start MainActivity immediately
                 if (eventCounter.get() == 0) {
-                    startMainActivity();
+                    fetchNotifications(profile);
                 }
             }
 
@@ -134,6 +137,25 @@ public class LoadingScreenActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+
+    private void fetchNotifications(Profile profile){
+
+
+
+        app.getNotificationTable().fetchMultipleDocuments(profile.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+            @Override
+            public void onSuccess(ArrayList<Notification> document) {
+                app.getUserNotifications().addAll(document);
+                startMainActivity();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
     }
 
     private void startMainActivity() {
