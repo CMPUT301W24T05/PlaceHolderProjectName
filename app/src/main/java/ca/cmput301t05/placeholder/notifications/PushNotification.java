@@ -27,7 +27,7 @@ public class PushNotification extends FirebaseMessagingService {
     @Override
     public void onNewToken(String token) {
         //runs whenever a new token is registered for the user
-        PlaceholderApp app = (PlaceholderApp) getApplicationContext();
+        PlaceholderApp app = (PlaceholderApp) getBaseContext().getApplicationContext();
 
         app.getUserProfile().setMessagingToken(token);
 
