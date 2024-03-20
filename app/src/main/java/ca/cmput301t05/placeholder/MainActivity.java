@@ -21,13 +21,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.ui.events.EventExplore;
+import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.EventOrganized;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
@@ -90,8 +93,7 @@ public class MainActivity extends AppCompatActivity {
         organizedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         organizedEventsList.setAdapter(organizedEventsAdapter);
 
-
-
+        
 
     }
 
