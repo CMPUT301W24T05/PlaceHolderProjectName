@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -20,9 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
-import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 
 /**
  * UploadPosterActivity allows users to upload a poster image for an event. This activity is part of the event
@@ -37,7 +34,7 @@ public class UploadPosterActivity extends AppCompatActivity {
     private Button nextPage;
     private PlaceholderApp app;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
-    private Event currEvent;
+    private Event currentEvent;
 
     private Intent fromEdit;
 
@@ -60,10 +57,10 @@ public class UploadPosterActivity extends AppCompatActivity {
         fromEdit = getIntent();
 
         // Fetches a specific event's ID from the intent passed to this activity
-        currEvent = app.getCachedEvent();
+        currentEvent = app.getCachedEvent();
 
         if(fromEdit.hasExtra("edit")){
-            app.getPosterImageHandler().getPosterPicture(currEvent, eventPoster);
+            eventPoster.setImageBitmap(currentEvent.getEventPosterBitmap());
             nextPage.setText("Update Event");
         }
 
@@ -106,7 +103,7 @@ public class UploadPosterActivity extends AppCompatActivity {
 
             //set this to the cache so on the final page we can do everything
             app.setPicCache(curPic.get());
-            currEvent.setEventPosterFromUri(curPic.get(), this);
+            currentEvent.setEventPosterFromUri(curPic.get(), this);
 
             if(nextPage.getText()== "Update Event"){
                 Intent updated = new Intent(UploadPosterActivity.this, PreviewEventActivity.class);
@@ -120,18 +117,6 @@ public class UploadPosterActivity extends AppCompatActivity {
                 finish();
             }
 
-
-
-
-
-
-
-
-
-            if(nextPage.getText()== "Update Event"){
-
-
-            }
 
         });
     }
