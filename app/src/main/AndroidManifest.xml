@@ -48,13 +48,6 @@
             android:exported="true">
         </activity>
 
-        <service
-            android:name=".notifications.PushNotification"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
 
 
 
@@ -73,6 +66,9 @@
         <activity android:name=".ui.events.ViewQRCodesActivity"/>
         <activity android:name=".ui.events.EventMenuActivity"/>
         <activity android:name=".Location.Successful_Checked_In_Activity"/>
+        <activity android:name=".ui.events.EventExplore" />
+        <activity android:name=".ui.events.EventOrganized" />
+
 
     </application>
 
