@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.content.ContextCompat;
 
+import ca.cmput301t05.placeholder.Location.Successful_Checked_In_Activity;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.qrcode.QRCodeType;
 import com.budiyev.android.codescanner.CodeScanner;
@@ -113,8 +114,10 @@ public class QRCodeScannerActivity extends AppCompatActivity{
                                 if(type == QRCodeType.CHECK_IN){
 
                                     app.setCachedEvent(event); //sets the cached event so we can use it on the next page
-                                    Intent intent = new Intent(QRCodeScannerActivity.this, ViewEventDetailsActivity.class);
-
+                                    // previously directly go to event details page
+                                    //Intent intent = new Intent(QRCodeScannerActivity.this, ViewEventDetailsActivity.class);
+                                    // now go to Successfully checked in page first
+                                    Intent intent = new Intent(QRCodeScannerActivity.this, Successful_Checked_In_Activity.class);
                                     startActivity(intent);
 
                                     finish();
