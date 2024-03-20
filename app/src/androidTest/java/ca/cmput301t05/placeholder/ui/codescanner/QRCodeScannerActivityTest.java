@@ -95,8 +95,9 @@ public class QRCodeScannerActivityTest {
     @Nested
     @RunWith(MockitoJUnitRunner.class)
     public static class QRCodeScannerPermissionDenied  {
-
-
+        // ONLY WAY THIS TEST WILL WORK IS IF YOU MANUALLY DENY
+        // PERMISSIONS IN THE EMULATOR WHEN THE TEST RUNS.
+        // NO WAY TO DO IT PROGRAMMATICALLY
 
         public QRCodeScannerPermissionDenied() {
         }
@@ -112,7 +113,6 @@ public class QRCodeScannerActivityTest {
 
             // Simulate denial of camera permissions by directly invoking the method
             scenario.onActivity(activity -> {
-
                 activity.showPermissionDeniedDialog();
             });
 
@@ -124,17 +124,6 @@ public class QRCodeScannerActivityTest {
             onView(withText("OK")).perform(click());
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
