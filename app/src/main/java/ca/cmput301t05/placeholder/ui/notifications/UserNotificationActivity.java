@@ -12,11 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+
 
 /**
  * User notification activity, grabs from the app's preloaded notifications and displays them on the notifications screen
@@ -41,8 +51,13 @@ public class UserNotificationActivity extends AppCompatActivity {
 
         setContentView(R.layout.user_notification_list);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
+
+
         app = (PlaceholderApp) getApplicationContext();
         back = findViewById(R.id.user_notification_back);
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,5 +101,23 @@ public class UserNotificationActivity extends AppCompatActivity {
 
 
 
+
     }
+    private boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_item1) {
+            // Navigate to activity_main.xml
+            startActivity(new Intent(this, MainActivity.class));
+            return true;
+        } else if (id == R.id.menu_item2) {
+            // Handle item 2 selection
+            return true;
+        } else if (id == R.id.menu_item3) {
+            // Handle item 3 selection
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

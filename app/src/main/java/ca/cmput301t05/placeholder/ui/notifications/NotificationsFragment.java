@@ -27,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import ca.cmput301t05.placeholder.database.Table;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 
@@ -56,7 +55,7 @@ public class NotificationsFragment extends AppCompatActivity {
         NotificationsViewModel notificationsViewModel =
                 new ViewModelProvider(this).get(NotificationsViewModel.class);
 
-        Button backButton = binding.backButton;
+        //Button backButton = binding.backButton;
 
 
         Button backButton = findViewById(R.id.back_button);
