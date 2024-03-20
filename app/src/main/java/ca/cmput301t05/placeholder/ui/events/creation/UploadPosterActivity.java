@@ -61,7 +61,6 @@ public class UploadPosterActivity extends AppCompatActivity {
 
         if(fromEdit.hasExtra("edit")){
             eventPoster.setImageBitmap(currentEvent.getEventPosterBitmap());
-            nextPage.setText("Update Event");
         }
 
 
@@ -105,7 +104,7 @@ public class UploadPosterActivity extends AppCompatActivity {
             app.setPicCache(curPic.get());
             currentEvent.setEventPosterFromUri(curPic.get(), this);
 
-            if(nextPage.getText()== "Update Event"){
+            if(fromEdit.hasExtra("edit")){
                 Intent updated = new Intent(UploadPosterActivity.this, PreviewEventActivity.class);
                 updated.putExtra("edit", true);
                 startActivity(updated);
