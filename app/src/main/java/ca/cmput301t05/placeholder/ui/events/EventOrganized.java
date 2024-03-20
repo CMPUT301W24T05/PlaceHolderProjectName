@@ -1,16 +1,16 @@
 package ca.cmput301t05.placeholder.ui.events;
 
-        import android.content.Intent;
-        import android.os.Bundle;
-        import android.view.MenuItem;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
 
-        import androidx.annotation.NonNull;
-        import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-        import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-        import ca.cmput301t05.placeholder.MainActivity;
-        import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.MainActivity;
+import ca.cmput301t05.placeholder.R;
 
 public class EventOrganized extends AppCompatActivity {
 
