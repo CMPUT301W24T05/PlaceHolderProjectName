@@ -23,8 +23,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
     private final Context context;
 
     public EventAdapter(Context context, ArrayList<Event> event){
-        this.eventList = new ArrayList<>();
-        this.eventList.addAll(event);
+        this.eventList = event;
         this.context = context;
     }
 
