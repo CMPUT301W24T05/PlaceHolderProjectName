@@ -158,7 +158,7 @@ public class Event extends DocumentSerializable implements Serializable {
             // Since it contains the key (this means this is user's second time checked in)
             // We will Retrieve the inner HashMap corresponding to the profile ID
             HashMap<String, Double> attendeeInfo = attendees.get(profile.getProfileID().toString());
-            Double i = attendees.get(profile.getProfileID().toString()).get("Check_in_Times");
+            Double i = attendeeInfo.get("Check_in_Times");
             attendeeInfo.put("Check_in_Times", i + 1);
             attendeeInfo.put("longitude", longitude);
             attendeeInfo.put("latitude", latitude);
