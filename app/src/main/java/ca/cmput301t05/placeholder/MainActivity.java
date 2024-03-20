@@ -1,46 +1,35 @@
 package ca.cmput301t05.placeholder;
 
+import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
-import ca.cmput301t05.placeholder.notifications.Notification;
-import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.qrcode.QRCode;
-import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
+import ca.cmput301t05.placeholder.ui.events.EventExplore;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
-import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
 import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
-
-import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
 
 
 /**
@@ -199,11 +188,12 @@ public class MainActivity extends AppCompatActivity {
     private boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_item1) {
-            // Navigate to activity_main.xml
+            // Navigate to MainActivity
             startActivity(new Intent(this, MainActivity.class));
             return true;
         } else if (id == R.id.menu_item2) {
-            // Handle item 2 selection
+            // Navigate to EventExplore
+            startActivity(new Intent(this, EventExplore.class));
             return true;
         } else if (id == R.id.menu_item3) {
             // Handle item 3 selection

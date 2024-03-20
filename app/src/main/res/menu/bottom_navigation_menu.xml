@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/menu_item2"
-        android:title="Item 2" />
+        android:title="Explore" />
 
     <item
         android:id="@+id/menu_item3"

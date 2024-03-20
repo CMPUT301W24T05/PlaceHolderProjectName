@@ -1,16 +1,20 @@
 package ca.cmput301t05.placeholder.ui.notifications;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
-import java.util.UUID;
 
 import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
@@ -18,14 +22,7 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
+import ca.cmput301t05.placeholder.ui.events.EventExplore;
 
 
 /**
@@ -51,6 +48,7 @@ public class UserNotificationActivity extends AppCompatActivity {
 
         setContentView(R.layout.user_notification_list);
 
+        // Initialize bottom navigation view
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
 
@@ -94,23 +92,16 @@ public class UserNotificationActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
-
     }
     private boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_item1) {
-            // Navigate to activity_main.xml
+            // Navigate to MainActivity
             startActivity(new Intent(this, MainActivity.class));
             return true;
         } else if (id == R.id.menu_item2) {
-            // Handle item 2 selection
+            // Navigate to EventExplore
+            startActivity(new Intent(this, EventExplore.class));
             return true;
         } else if (id == R.id.menu_item3) {
             // Handle item 3 selection
