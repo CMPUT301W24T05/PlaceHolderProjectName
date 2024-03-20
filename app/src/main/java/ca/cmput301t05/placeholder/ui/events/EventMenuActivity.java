@@ -17,6 +17,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.ui.notifications.EventNotificationPageActivity;
 
 public class EventMenuActivity extends AppCompatActivity {
 
@@ -66,6 +67,14 @@ public class EventMenuActivity extends AppCompatActivity {
                 }
             });
         }
+
+        menuAnnouncements.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(EventMenuActivity.this, EventNotificationPageActivity.class);
+                startActivity(i);
+            }
+        });
 
         accessQRCodes.setOnClickListener(new View.OnClickListener() {
             @Override
