@@ -10,5 +10,5 @@
 
     <item
         android:id="@+id/menu_item3"
-        android:title="Item 3" />
+        android:title="Organized" />
 </menu>

@@ -74,6 +74,7 @@
         <activity android:name=".ui.events.EventMenuActivity"/>
         <activity android:name=".Location.Successful_Checked_In_Activity"/>
         <activity android:name=".ui.events.EventExplore" />
+        <activity android:name=".ui.events.EventOrganized" />
 
 
     </application>

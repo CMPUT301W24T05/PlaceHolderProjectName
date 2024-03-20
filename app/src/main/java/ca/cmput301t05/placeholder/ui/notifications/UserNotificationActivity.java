@@ -23,6 +23,7 @@ import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
 import ca.cmput301t05.placeholder.ui.events.EventExplore;
+import ca.cmput301t05.placeholder.ui.events.EventOrganized;
 
 
 /**
@@ -93,6 +94,7 @@ public class UserNotificationActivity extends AppCompatActivity {
         });
 
     }
+
     private boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_item1) {
@@ -104,7 +106,8 @@ public class UserNotificationActivity extends AppCompatActivity {
             startActivity(new Intent(this, EventExplore.class));
             return true;
         } else if (id == R.id.menu_item3) {
-            // Handle item 3 selection
+            // Navigate to EventOrganized
+            startActivity(new Intent(this, EventOrganized.class));
             return true;
         } else {
             return false;
