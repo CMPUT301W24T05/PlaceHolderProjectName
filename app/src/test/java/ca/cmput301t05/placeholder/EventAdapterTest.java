@@ -1,10 +1,13 @@
-package ca.cmput301t05.placeholder.events;
+package ca.cmput301t05.placeholder;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
+
+import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.events.EventAdapter;
 
 public class EventAdapterTest {
 
