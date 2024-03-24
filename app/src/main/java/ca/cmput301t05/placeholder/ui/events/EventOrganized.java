@@ -6,18 +6,39 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
 import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.PlaceholderApp;
+import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.events.EventAdapter;
 
 public class EventOrganized extends AppCompatActivity {
+
+    private PlaceholderApp app;
+    private RecyclerView organizedEventsList;
+    private EventAdapter organizedEventsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_organized);
+
+        // Initialize PlaceholderApp instance
+        app = (PlaceholderApp) getApplicationContext();
+
+        // Set up the list of created events
+        ArrayList<Event> hostedEvents = new ArrayList<>(app.getHostedEvents().values());
+        organizedEventsList = findViewById(R.id.listCreatedEvents);
+        organizedEventsAdapter = new EventAdapter(getApplicationContext(), hostedEvents);
+        organizedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        organizedEventsList.setAdapter(organizedEventsAdapter);
 
         // Initialize bottom navigation view
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
