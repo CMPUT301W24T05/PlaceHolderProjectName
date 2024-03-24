@@ -27,12 +27,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         this.context = context;
     }
 
-
     @NonNull
     @Override
     public EventCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.event_card, parent, false);
-
         return new EventCardViewHolder(v);
     }
 
@@ -49,6 +47,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
     public int getItemCount() {
         if (eventList == null) return 0;
         else return eventList.size();
+    }
+
+    public void setEvents(ArrayList<Event> events) {
+        this.eventList = events;
+        notifyDataSetChanged();
     }
 
     public class EventCardViewHolder extends RecyclerView.ViewHolder {
@@ -82,7 +85,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
             SimpleDateFormat timeFormat = new SimpleDateFormat("h:mma", Locale.CANADA);
             String formattedTime = timeFormat.format(calendar.getTime()).toLowerCase();
             eventTime.setText(formattedTime);
-
         }
     }
 }
