@@ -17,6 +17,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewAttendeeCheckinActivity;
 import ca.cmput301t05.placeholder.ui.notifications.EventNotificationPageActivity;
 
 public class EventMenuActivity extends AppCompatActivity {
@@ -30,6 +31,7 @@ public class EventMenuActivity extends AppCompatActivity {
     private Button menuAttendance;
     private Button menuMilestones;
     private Button checkInLocations;
+    private Button backButton;
 
     @SuppressLint("MissingInflatedId")
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class EventMenuActivity extends AppCompatActivity {
         menuAttendance = findViewById(R.id.menu_attendance);
         menuMilestones = findViewById(R.id.menu_milestones);
         checkInLocations = findViewById(R.id.check_in_locations);
+        backButton = findViewById(R.id.event_menu_back);
 
         eventName.setText(curEvent.getEventName());
         if (curEvent.hasEventPosterBitmap()) {
@@ -83,6 +86,22 @@ public class EventMenuActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        menuAttendance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventMenuActivity.this, ViewAttendeeCheckinActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
     }
 }

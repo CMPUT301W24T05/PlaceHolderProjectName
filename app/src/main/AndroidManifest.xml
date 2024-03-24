@@ -50,7 +50,7 @@
 
 
 
-
+        <activity android:name=".ui.events.organizer_info.ViewAttendeeCheckinActivity" />
         <activity android:name=".InitialSetupActivity" />
         <activity android:name=".ui.events.creation.EnterEventDetailsActivity" />
         <activity android:name=".ProfileEditActivity"/>

@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.ui.events.EventExplore;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.EventOrganized;
+import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
 
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private EventAdapter organizedEventsAdapter;
 
     private TextView appNameView;
+
+    private Button testButton;
 
 
     /**
@@ -138,13 +142,20 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
 
+
+        testButton = findViewById(R.id.event_menu_test);
+
+        testButton.setOnClickListener(view -> {
+            // Start QRCodeScannerActivity
+            Intent intent = new Intent(MainActivity.this, EventMenuActivity.class);
+            startActivity(intent);
+        });
+
+
         startScannerButton = findViewById(R.id.btnJoinEvent);
-
-
-
         startScannerButton.setOnClickListener(view -> {
             // Start QRCodeScannerActivity
-            Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
+            Intent intent = new Intent(MainActivity.this, EventMenuActivity.class);
             startActivity(intent);
         });
 
