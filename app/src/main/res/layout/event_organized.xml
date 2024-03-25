@@ -4,20 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- "Open Events" TextView -->
+    <!-- "Organized Events" TextView -->
     <TextView
         android:id="@+id/textViewOpenEvents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Organized Events"
-        android:textSize="24sp"
+        android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="16dp"/>
 
-    <!-- Your existing content goes here -->
+    <!-- "Create New Event" Button -->
+    <Button
+        android:id="@+id/btnCreateEvent"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="Create New Event"
+        app:layout_constraintTop_toBottomOf="@id/textViewOpenEvents"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- List of Created Events -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listCreatedEvents"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/btnCreateEvent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation" />
 
     <!-- Bottom Navigation View -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
