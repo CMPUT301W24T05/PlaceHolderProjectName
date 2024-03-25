@@ -23,7 +23,7 @@ public class EventAdapterTest {
     public void EventAdapterReturnsTwo(){
         // Simple test to see if ArrayAdapter returns correct number of events
         ArrayList<Event> events = mockArrayListSize2(); // Array list of size 2
-        EventAdapter eventAdapter = new EventAdapter(null, events); // null context works in this scenario
+        EventAdapter eventAdapter = new EventAdapter(null, events, EventAdapter.adapterType.HOSTED); // null context works in this scenario
         assertEquals(eventAdapter.getItemCount(), 2);
     }
 
@@ -31,7 +31,7 @@ public class EventAdapterTest {
     public void EventAdapterReturnsZero(){
         // Simple test to see if ArrayAdapter returns zero when it contains no events
         ArrayList<Event> events = new ArrayList<>(); // Empty array list
-        EventAdapter eventAdapter = new EventAdapter(null, events);
+        EventAdapter eventAdapter = new EventAdapter(null, events, EventAdapter.adapterType.HOSTED);
         assertEquals(eventAdapter.getItemCount(), 0);
     }
 
