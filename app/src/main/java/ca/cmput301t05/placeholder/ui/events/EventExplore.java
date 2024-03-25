@@ -40,7 +40,7 @@ public class EventExplore extends AppCompatActivity {
         fetchAllEvents();
 
         allEventsList = findViewById(R.id.listAllEvents);
-        allEventsAdapter = new EventAdapter(getApplicationContext(), new ArrayList<Event>());
+        //allEventsAdapter = new EventAdapter(getApplicationContext(), new ArrayList<Event>());
         allEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         allEventsList.setAdapter(allEventsAdapter);
     }

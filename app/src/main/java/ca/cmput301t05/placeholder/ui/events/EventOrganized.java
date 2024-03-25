@@ -19,7 +19,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 
-public class EventOrganized extends AppCompatActivity {
+public class EventOrganized extends AppCompatActivity implements EventAdapter.OnItemClickListener{
 
     private PlaceholderApp app;
     private RecyclerView organizedEventsList;
@@ -36,9 +36,11 @@ public class EventOrganized extends AppCompatActivity {
         // Set up the list of created events
         ArrayList<Event> hostedEvents = new ArrayList<>(app.getHostedEvents().values());
         organizedEventsList = findViewById(R.id.listCreatedEvents);
-        organizedEventsAdapter = new EventAdapter(getApplicationContext(), hostedEvents);
+        organizedEventsAdapter = new EventAdapter(getApplicationContext(), hostedEvents, EventAdapter.adapterType.HOSTED);
         organizedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         organizedEventsList.setAdapter(organizedEventsAdapter);
+
+        organizedEventsAdapter.setListener(this);
 
         // Initialize bottom navigation view
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -62,5 +64,20 @@ public class EventOrganized extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void onItemClick(Event event, EventAdapter.adapterType type) {
+
+        if (type == EventAdapter.adapterType.HOSTED){
+            app.setCachedEvent(event);
+            Intent i = new Intent(EventOrganized.this, EventMenuActivity.class);
+            startActivity(i);
+        } else if (type == EventAdapter.adapterType.ATTENDING) {
+            app.setCachedEvent(event);
+            //TODO send to the event info page for attendees
+
+        }
+
     }
 }
