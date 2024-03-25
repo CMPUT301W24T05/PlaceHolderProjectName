@@ -17,4 +17,5 @@ Donec maximus lectus aliquet sapien aliquet rutrum. Fusce vulputate, odio at int
     <string name="title_enter_event_details_activity">Enter Event Details Activity</string>
     <string name="navigation_drawer_open">Open navigation Drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer\n</string>
+    <string name="attendee_name">Name</string>
 </resources>

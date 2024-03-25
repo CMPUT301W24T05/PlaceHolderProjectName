@@ -22,25 +22,43 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
     private ArrayList<Event> eventList;
     private final Context context;
 
-    public EventAdapter(Context context, ArrayList<Event> event){
-        this.eventList = new ArrayList<>();
-        this.eventList.addAll(event);
-        this.context = context;
+    public enum adapterType{
+        HOSTED,
+        ATTENDING
+
     }
 
+    public interface OnItemClickListener{
+        void onItemClick(Event event, adapterType type);
+    }
+
+    private adapterType type;
+    private OnItemClickListener listener;
+
+
+    public EventAdapter(Context context, ArrayList<Event> event, adapterType adapterType){
+        this.eventList = event;
+        this.context = context;
+        this.type = adapterType;
+
+    }
+
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     @NonNull
     @Override
     public EventCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.event_card, parent, false);
-
         return new EventCardViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull EventCardViewHolder holder, int position) {
+
         try {
-            holder.bindView(position);
+            holder.bindView(position, listener);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,10 +70,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         else return eventList.size();
     }
 
+    public void setEvents(ArrayList<Event> events) {
+        this.eventList = events;
+        notifyDataSetChanged();
+    }
+
     public class EventCardViewHolder extends RecyclerView.ViewHolder {
 
         TextView eventName, eventLocation, eventDate, eventTime;
         CardView cardView;
+
 
         public EventCardViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,9 +90,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
             eventTime = itemView.findViewById(R.id.event_time);
 
             cardView = itemView.findViewById(R.id.event_card);
+
+
         }
 
-        public void bindView(int position){
+
+        public void bindView(int position, OnItemClickListener listener){
             Event event = eventList.get(position);
             assert event != null;
             eventName.setText(event.getEventName());
@@ -84,6 +111,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
             String formattedTime = timeFormat.format(calendar.getTime()).toLowerCase();
             eventTime.setText(formattedTime);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(event, type);
+                }
+            });
         }
     }
 }

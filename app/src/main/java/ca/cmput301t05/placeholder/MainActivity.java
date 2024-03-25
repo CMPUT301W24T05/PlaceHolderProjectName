@@ -1,37 +1,40 @@
 package ca.cmput301t05.placeholder;
 
+import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
-import ca.cmput301t05.placeholder.notifications.Notification;
-import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.qrcode.QRCode;
-import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
+import ca.cmput301t05.placeholder.ui.events.EventExplore;
+import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
+import ca.cmput301t05.placeholder.ui.events.EventOrganized;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
-import ca.cmput301t05.placeholder.ui.notifications.NotificationsFragment;
 import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
-
-import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
 
 
 /**
@@ -40,7 +43,7 @@ import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircul
  * and viewing notifications. This activity sets up the main user interface and initializes action listeners for
  * navigation buttons.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EventAdapter.OnItemClickListener {
 
     private PlaceholderApp app;
     private Button guideToEvent;
@@ -55,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView appNameView;
 
+    private Button testButton;
+
 
     /**
      * Called when the activity is starting. Initializes the application context, sets the content view,
@@ -68,7 +73,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         app = (PlaceholderApp) getApplicationContext();
+
         setContentView(R.layout.activity_main);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
 
         setButtonActions();
         setProfileIcon();
@@ -78,15 +86,18 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Event> joinedEvents = new ArrayList<Event>(app.getJoinedEvents().values());
         joinedEventsList = findViewById(R.id.listJoinedEvents);
-        joinedEventsAdapter = new EventAdapter(getApplicationContext(), joinedEvents);
+        joinedEventsAdapter = new EventAdapter(getApplicationContext(), joinedEvents, EventAdapter.adapterType.ATTENDING);
         joinedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         joinedEventsList.setAdapter(joinedEventsAdapter);
 
         ArrayList<Event> hostedEvents = new ArrayList<>(app.getHostedEvents().values());
         organizedEventsList = findViewById(R.id.listCreatedEvents);
-        organizedEventsAdapter = new EventAdapter(getApplicationContext(), hostedEvents);
+        organizedEventsAdapter = new EventAdapter(getApplicationContext(), hostedEvents, EventAdapter.adapterType.HOSTED);
         organizedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         organizedEventsList.setAdapter(organizedEventsAdapter);
+
+        joinedEventsAdapter.setListener(this);
+        organizedEventsAdapter.setListener(this);
 
 
 
@@ -134,10 +145,10 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
 
+
+
+
         startScannerButton = findViewById(R.id.btnJoinEvent);
-
-        
-
         startScannerButton.setOnClickListener(view -> {
             // Start QRCodeScannerActivity
             Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
@@ -184,5 +195,40 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-}
+    private boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_item1) {
+            // Navigate to MainActivity
+            startActivity(new Intent(this, MainActivity.class));
+            return true;
+        } else if (id == R.id.menu_item2) {
+            // Navigate to EventExplore
+            startActivity(new Intent(this, EventExplore.class));
+            return true;
+        } else if (id == R.id.menu_item3) {
+            // Navigate to EventOrganized
+            startActivity(new Intent(this, EventOrganized.class));
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+
+    @Override
+    public void onItemClick(Event event, EventAdapter.adapterType type) {
+
+        if (type == EventAdapter.adapterType.HOSTED){
+            app.setCachedEvent(event);
+            Intent i = new Intent(MainActivity.this, EventMenuActivity.class);
+            startActivity(i);
+        } else if (type == EventAdapter.adapterType.ATTENDING) {
+            app.setCachedEvent(event);
+            //TODO send to the event info page for attendees
+            Intent i = new Intent(MainActivity.this, ViewEventDetailsActivity.class);
+            startActivity(i);
+
+        }
+
+    }
+}

@@ -35,8 +35,11 @@ public class Event extends DocumentSerializable implements Serializable {
     private Calendar eventDate;
     private String eventLocation;
     private int maxAttendees;
-    private HashMap<String, Integer> attendees; //stored this way for the database
-    //string = profileID, int = # of times checked in
+    // Attendee is a dictionary (key is the profileID, value is another hashmap>
+    // The inner hashmap (key is "longitude", "latitude", "Check_in_Times", all values are double)
+    // if longitude and latitude are not shared, then it will be Null
+    // when displaying checked in times, should convert to integer
+    private HashMap<String, HashMap<String, Double>> attendees; //stored this way for the database
 
     ArrayList<String> notifications; //notifications that are sent for this specific event
 
@@ -133,7 +136,7 @@ public class Event extends DocumentSerializable implements Serializable {
             maxAttendees = document.getLong("maxAttendees").intValue();
         }
         if(document.get("attendees") != null) {
-            attendees = (HashMap<String, Integer>) document.get("attendees");
+            attendees = (HashMap<String, HashMap<String, Double>>) document.get("attendees");
         }
 
         if(document.get("notifications") != null){
@@ -146,29 +149,37 @@ public class Event extends DocumentSerializable implements Serializable {
      * Attempts to check in an attendee to the event.
      * If the maximum number of attendees has been reached, no more attendees can be checked in.
      * @param profile The profile of the attendee trying to check in.
-     * @return True if the attendee was successfully checked in, false otherwise.
+     * @param longitude The longitude of user when he checked in
+     * @param latitude The latitude of user when he checked in
      */
-    public boolean checkIn(Profile profile){
+    public void checkIn(Profile profile, Double longitude, Double latitude){
 
-        //returns false if attendee can't check in, true if can
+        if (attendees.containsKey(profile.getProfileID().toString())) {
+            // Since it contains the key (this means this is user's second time checked in)
+            // We will Retrieve the inner HashMap corresponding to the profile ID
+            HashMap<String, Double> attendeeInfo = attendees.get(profile.getProfileID().toString());
+            Double i = attendeeInfo.get("Check_in_Times");
+            attendeeInfo.put("Check_in_Times", i + 1);
+            attendeeInfo.put("longitude", longitude);
+            attendeeInfo.put("latitude", latitude);
 
+            attendees.put(profile.getProfileID().toString(), attendeeInfo);
+
+        } else {
+            // first time checking in
+            HashMap<String, Double> attendeeInfo = new HashMap<>();
+            attendeeInfo.put("Check_in_Times", 1.0);
+            attendeeInfo.put("longitude", longitude);
+            attendeeInfo.put("latitude", latitude);
+            attendees.put(profile.getProfileID().toString(), attendeeInfo);
+        }
+    }
+    // Check if maximum capacity is reached
+    public boolean reachMaxCapacity(){
         if(attendees.size() == maxAttendees){
             return false;
         }
-
-        if (attendees.containsKey(profile.getProfileID().toString())) {
-
-            Integer i = attendees.get(profile.getProfileID().toString());
-
-            attendees.put(profile.getProfileID().toString(), i + 1);
-
-        } else {
-
-            attendees.put(profile.getProfileID().toString(), 1);
-        }
-
         return true;
-
     }
 
     /**
@@ -187,8 +198,11 @@ public class Event extends DocumentSerializable implements Serializable {
      */
     public ArrayList<String> getAttendees(){
 
-
         return new ArrayList<>(attendees.keySet());
+    }
+
+    public HashMap<String, HashMap<String, Double>> getMap(){ // Need to access check in count for each attendee
+        return this.attendees;
     }
 
     //getters and setters
@@ -198,7 +212,7 @@ public class Event extends DocumentSerializable implements Serializable {
      * Sets the attendees for the event.
      * @param attendees A HashMap where the key is the attendee's profile ID as a String, and the value is the number of times they've checked in.
      */
-    public void setAttendees(HashMap<String, Integer> attendees) {
+    public void setAttendees(HashMap<String, HashMap<String, Double>> attendees) {
         this.attendees = attendees;
     }
 

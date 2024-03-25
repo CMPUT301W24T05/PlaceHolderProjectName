@@ -32,6 +32,9 @@ import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewAttendeeCheckinActivity;
+import ca.cmput301t05.placeholder.ui.notifications.EventNotificationPageActivity;
+
 
 public class EventMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -44,6 +47,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
     private Button menuAttendance;
     private Button menuMilestones;
     private Button checkInLocations;
+    private Button backButton;
 
 
     private Button buttonBack;
@@ -66,7 +70,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
         app = (PlaceholderApp) getApplicationContext();
         curEvent = app.getCachedEvent();
         setContentView(R.layout.event_menu);
-
+        
         drawerLayout = findViewById(R.id.event_menu_drawer);
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.menu_nav);
@@ -123,6 +127,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
         UUID profileId = curEvent.getEventCreator();
         app.getProfileTable().fetchDocument(profileId.toString(), new Table.DocumentCallback<Profile>() {
+
             @Override
             public void onSuccess(Profile document) {
                 textViewEventAuthor.setText(document.getName());
@@ -194,6 +199,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
         return super.onOptionsItemSelected(item);
     }
+
 }
 
 

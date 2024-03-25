@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.database;
+package ca.cmput301t05.placeholder;
 
 import static org.mockito.Mockito.mock;
 
@@ -61,7 +61,6 @@ public class ProfileImageHandlerTest {
 
     @Test
     public void testRemoveProfilePic() {
-
         Profile profile = new Profile("John", UUID.randomUUID());
         profile.setProfilePictureID(UUID.randomUUID());
         profileImageHandler.removeProfilePic(profile);
