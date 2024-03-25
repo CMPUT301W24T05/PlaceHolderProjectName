@@ -22,9 +22,29 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
     private ArrayList<Event> eventList;
     private final Context context;
 
-    public EventAdapter(Context context, ArrayList<Event> event){
+    public enum adapterType{
+        HOSTED,
+        ATTENDING
+
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(Event event, adapterType type);
+    }
+
+    private adapterType type;
+    private OnItemClickListener listener;
+
+
+    public EventAdapter(Context context, ArrayList<Event> event, adapterType adapterType){
         this.eventList = event;
         this.context = context;
+        this.type = adapterType;
+
+    }
+
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,8 +56,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
 
     @Override
     public void onBindViewHolder(@NonNull EventCardViewHolder holder, int position) {
+
         try {
-            holder.bindView(position);
+            holder.bindView(position, listener);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,6 +80,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         TextView eventName, eventLocation, eventDate, eventTime;
         CardView cardView;
 
+
         public EventCardViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -68,9 +90,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
             eventTime = itemView.findViewById(R.id.event_time);
 
             cardView = itemView.findViewById(R.id.event_card);
+
+
         }
 
-        public void bindView(int position){
+
+        public void bindView(int position, OnItemClickListener listener){
             Event event = eventList.get(position);
             assert event != null;
             eventName.setText(event.getEventName());
@@ -85,6 +110,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
             SimpleDateFormat timeFormat = new SimpleDateFormat("h:mma", Locale.CANADA);
             String formattedTime = timeFormat.format(calendar.getTime()).toLowerCase();
             eventTime.setText(formattedTime);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(event, type);
+                }
+            });
         }
     }
 }

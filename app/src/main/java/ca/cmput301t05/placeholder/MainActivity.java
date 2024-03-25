@@ -42,7 +42,7 @@ import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
  * and viewing notifications. This activity sets up the main user interface and initializes action listeners for
  * navigation buttons.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EventAdapter.OnItemClickListener {
 
     private PlaceholderApp app;
     private Button guideToEvent;
@@ -83,17 +83,21 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Event> joinedEvents = new ArrayList<Event>(app.getJoinedEvents().values());
         joinedEventsList = findViewById(R.id.listJoinedEvents);
-        joinedEventsAdapter = new EventAdapter(getApplicationContext(), joinedEvents);
+        joinedEventsAdapter = new EventAdapter(getApplicationContext(), joinedEvents, EventAdapter.adapterType.ATTENDING);
         joinedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         joinedEventsList.setAdapter(joinedEventsAdapter);
 
         ArrayList<Event> hostedEvents = new ArrayList<>(app.getHostedEvents().values());
         organizedEventsList = findViewById(R.id.listCreatedEvents);
-        organizedEventsAdapter = new EventAdapter(getApplicationContext(), hostedEvents);
+        organizedEventsAdapter = new EventAdapter(getApplicationContext(), hostedEvents, EventAdapter.adapterType.HOSTED);
         organizedEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         organizedEventsList.setAdapter(organizedEventsAdapter);
 
-        
+        joinedEventsAdapter.setListener(this);
+        organizedEventsAdapter.setListener(this);
+
+
+
 
     }
 
@@ -208,4 +212,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemClick(Event event, EventAdapter.adapterType type) {
+
+        if (type == EventAdapter.adapterType.HOSTED){
+            app.setCachedEvent(event);
+            Intent i = new Intent(MainActivity.this, EventMenuActivity.class);
+            startActivity(i);
+        } else if (type == EventAdapter.adapterType.ATTENDING) {
+            app.setCachedEvent(event);
+            //TODO send to the event info page for attendees
+
+        }
+
+    }
 }
