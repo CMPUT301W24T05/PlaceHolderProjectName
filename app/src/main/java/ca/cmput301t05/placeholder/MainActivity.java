@@ -21,10 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
-import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
@@ -222,6 +220,8 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         } else if (type == EventAdapter.adapterType.ATTENDING) {
             app.setCachedEvent(event);
             //TODO send to the event info page for attendees
+            Intent i = new Intent(MainActivity.this, EventMenuActivity.class);
+            startActivity(i);
 
         }
 

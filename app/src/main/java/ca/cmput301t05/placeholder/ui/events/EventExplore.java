@@ -20,7 +20,8 @@ import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 
-public class EventExplore extends AppCompatActivity {
+
+public class EventExplore extends AppCompatActivity implements EventAdapter.OnItemClickListener{
 
     private PlaceholderApp app;
     private RecyclerView allEventsList;
@@ -37,12 +38,14 @@ public class EventExplore extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
 
-        fetchAllEvents();
-
         allEventsList = findViewById(R.id.listAllEvents);
-        //allEventsAdapter = new EventAdapter(getApplicationContext(), new ArrayList<Event>());
+        allEventsAdapter = new EventAdapter(getApplicationContext(), new ArrayList<>(), EventAdapter.adapterType.ATTENDING); // Pass an empty ArrayList initially
         allEventsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         allEventsList.setAdapter(allEventsAdapter);
+
+        allEventsAdapter.setListener(this);
+
+        fetchAllEvents(); // Fetch events after initializing the adapter
     }
 
     private void fetchAllEvents() {
@@ -85,4 +88,19 @@ public class EventExplore extends AppCompatActivity {
             return false;
         }
     }
+
+    @Override
+    public void onItemClick(Event event, EventAdapter.adapterType type) {
+        if (type == EventAdapter.adapterType.HOSTED){
+            app.setCachedEvent(event);
+            Intent i = new Intent(EventExplore.this, EventMenuActivity.class);
+            startActivity(i);
+        } else if (type == EventAdapter.adapterType.ATTENDING) {
+            app.setCachedEvent(event);
+            //TODO send to the event info page for attendees
+            Intent i = new Intent(EventExplore.this, EventMenuActivity.class);
+            startActivity(i);
+        }
+    }
 }
+
