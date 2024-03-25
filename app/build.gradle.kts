@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Packaging
+
 plugins {
     id("com.android.application")
     // Add the Google services Gradle plugin
@@ -11,6 +13,17 @@ plugins {
 android {
     namespace = "ca.cmput301t05.placeholder"
     compileSdk = 34
+
+    packaging {
+        resources.excludes.addAll(
+                listOf(
+                        "META-INF/LICENSE.md",
+                        "META-INF/LICENSE-notice.md",
+
+        )
+        )
+    }
+
 
 
     defaultConfig {
@@ -36,16 +49,16 @@ android {
     buildFeatures {
         viewBinding = true
     }
-    testOptions {
-        // Used for Unit testing Android dependent elements in /test folder
-        unitTests.isIncludeAndroidResources  = true
-        unitTests.isReturnDefaultValues = true
-    }
+
 }
 
 dependencies {
 
-    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0") // The dependency for QR code scanning
+
+
+    testImplementation ("org.mockito:mockito-inline:5.0.0");
+
+    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0") // The dependency for QR code scannin
 
     //Implement ViewPager2 Swipe View
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
@@ -66,6 +79,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation("androidx.databinding:databinding-runtime:8.3.0")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     // implementation(fileTree(mapOf("dir" to "C:\\Users\\antho\\AppData\\Local\\Android\\Sdk\\platforms\\android-34", "include" to listOf("*.aar", "*.jar"))))
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -77,11 +91,12 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:2.7.6")
     implementation("androidx.navigation:navigation-ui:2.7.6")
 
-    // Test dependencies
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+
     androidTestImplementation("org.mockito:mockito-android:5.11.0")
     androidTestImplementation("androidx.test:monitor:1.6.1")
     androidTestImplementation("androidx.test:core:1.5.0")

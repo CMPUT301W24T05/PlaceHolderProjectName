@@ -45,6 +45,15 @@ public class EventDetailsDialogFragment extends DialogFragment {
     private Button backButton;
     private Button signupButton;
 
+    /**
+     * Creates a new instance of event_info_view_and_signup DialogFragment with the specified Event and PlaceholderApp objects.
+     * This method packages the Event and PlaceholderApp objects into a Bundle to be used when creating the fragment.
+     *
+     * @param event The Event object containing details about the event.
+     * @param app   The PlaceholderApp object for accessing application-wide resources and databases.
+     * @return A new instance of event_info_view_and_signup DialogFragment with the event and app data.
+     */
+
     //To do:
     // when scanning the QR code, implement the functionality in scanning to get the event object and pass
     // the event object when creating the fragment using the fragment object and call this object
