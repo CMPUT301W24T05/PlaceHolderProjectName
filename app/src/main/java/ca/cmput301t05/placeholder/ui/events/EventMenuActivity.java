@@ -51,7 +51,6 @@ public class EventMenuActivity extends AppCompatActivity {
         menuAttendance = findViewById(R.id.menu_attendance);
         menuMilestones = findViewById(R.id.menu_milestones);
         checkInLocations = findViewById(R.id.check_in_locations);
-        backButton = findViewById(R.id.event_menu_back);
 
         eventName.setText(curEvent.getEventName());
         if (curEvent.hasEventPosterBitmap()) {
@@ -95,12 +94,7 @@ public class EventMenuActivity extends AppCompatActivity {
             }
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
 
 
     }

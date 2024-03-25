@@ -1,11 +1,13 @@
 package ca.cmput301t05.placeholder.ui.events.organizer_info;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ public class AttendanceViewAdapter extends RecyclerView.Adapter<AttendanceViewAd
     private final Context context;
 
     public AttendanceViewAdapter(Context context, HashMap<String, Double> attendDisplayed){
+        Log.e("amirza2","IM IN ADAPTER!!");
         this.attendDisplayed = attendDisplayed;
         this.context = context;
     }
@@ -39,7 +42,7 @@ public class AttendanceViewAdapter extends RecyclerView.Adapter<AttendanceViewAd
     @NonNull
     @Override
     public AttendanceViewAdapter.AttendanceCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.event_card, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.attendee_checkin_item, parent, false);
 
         return new AttendanceViewAdapter.AttendanceCardViewHolder(v);
     }
@@ -52,16 +55,7 @@ public class AttendanceViewAdapter extends RecyclerView.Adapter<AttendanceViewAd
             e.printStackTrace();
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.checkinCount.getVisibility() == View.VISIBLE) {
-                    holder.checkinCount.setVisibility(View.GONE);
-                } else {
-                    holder.checkinCount.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+
     }
 
     @Override
@@ -73,6 +67,7 @@ public class AttendanceViewAdapter extends RecyclerView.Adapter<AttendanceViewAd
     public class AttendanceCardViewHolder extends RecyclerView.ViewHolder {
 
         TextView attendeeName, checkinCount;
+        LinearLayout hiddenLinearLayout;
         CardView cardView;
 
         public AttendanceCardViewHolder(@NonNull View itemView) {
@@ -80,7 +75,26 @@ public class AttendanceViewAdapter extends RecyclerView.Adapter<AttendanceViewAd
 
             attendeeName = itemView.findViewById(R.id.attendee_name);
             checkinCount = itemView.findViewById(R.id.hiddenCountText);
+            hiddenLinearLayout = itemView.findViewById(R.id.lytHidden);
+
             cardView = itemView.findViewById(R.id.attendee_card);
+            Log.e("amirza2","Got into this method");
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e("amirza2","CLICKED");
+
+                    if (hiddenLinearLayout.getVisibility() == View.VISIBLE) {
+                        Log.e("amirza2","1st if");
+                        hiddenLinearLayout.setVisibility(View.GONE);
+                    } else {
+                        hiddenLinearLayout.setVisibility(View.VISIBLE);
+                        Log.e("amirza2","CLICKED");
+                    }
+                }
+            });
+
+
         }
 
         public void bindView(int position){
@@ -88,7 +102,15 @@ public class AttendanceViewAdapter extends RecyclerView.Adapter<AttendanceViewAd
             List<String> keysList = new ArrayList<>(attendDisplayed.keySet());
             String name = keysList.get(position);
             attendeeName.setText(name);
-            checkinCount.setText(attendDisplayed.get(name).toString());
+            Log.e("amirza2","ABOUT TO SET THIS TEXT!");
+            int check_in_count = (int) Double.parseDouble(attendDisplayed.get(name).toString());
+            if (check_in_count == 1){
+                checkinCount.setText("Checked in "+ check_in_count+" time.");
+            }
+            else {
+                checkinCount.setText("Checked in " + check_in_count + " times.");
+                Log.e("amirza2", "SET THE TEXT!");
+            }
 
         }
     }
