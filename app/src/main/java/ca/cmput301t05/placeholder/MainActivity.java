@@ -147,19 +147,12 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         });
 
 
-//        testButton = findViewById(R.id.event_menu_test);
-//
-//        testButton.setOnClickListener(view -> {
-//            // Start QRCodeScannerActivity
-//            Intent intent = new Intent(MainActivity.this, EventMenuActivity.class);
-//            startActivity(intent);
-//        });
 
 
         startScannerButton = findViewById(R.id.btnJoinEvent);
         startScannerButton.setOnClickListener(view -> {
             // Start QRCodeScannerActivity
-            Intent intent = new Intent(MainActivity.this, EventMenuActivity.class);
+            Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
             startActivity(intent);
         });
 
