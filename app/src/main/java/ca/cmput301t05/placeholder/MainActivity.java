@@ -30,6 +30,7 @@ import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.ui.events.EventExplore;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.EventOrganized;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
 
@@ -220,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         } else if (type == EventAdapter.adapterType.ATTENDING) {
             app.setCachedEvent(event);
             //TODO send to the event info page for attendees
-            Intent i = new Intent(MainActivity.this, EventMenuActivity.class);
+            Intent i = new Intent(MainActivity.this, ViewEventDetailsActivity.class);
             startActivity(i);
 
         }

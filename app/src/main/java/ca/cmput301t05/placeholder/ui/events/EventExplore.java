@@ -98,7 +98,7 @@ public class EventExplore extends AppCompatActivity implements EventAdapter.OnIt
         } else if (type == EventAdapter.adapterType.ATTENDING) {
             app.setCachedEvent(event);
             //TODO send to the event info page for attendees
-            Intent i = new Intent(EventExplore.this, EventMenuActivity.class);
+            Intent i = new Intent(EventExplore.this, EventSignUpActivity.class);
             startActivity(i);
         }
     }
