@@ -70,7 +70,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
         app = (PlaceholderApp) getApplicationContext();
         curEvent = app.getCachedEvent();
         setContentView(R.layout.event_menu);
-        
+
         drawerLayout = findViewById(R.id.event_menu_drawer);
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.menu_nav);
@@ -183,7 +183,14 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
         } else if (itemId == R.id.accessqr) {
             Intent intentQR = new Intent(EventMenuActivity.this, ViewQRCodesActivity.class);
             startActivity(intentQR);
+        } else if (itemId == R.id.announcements) {
+            Intent intentAnnouncement = new Intent(EventMenuActivity.this, EventNotificationPageActivity.class);
+            startActivity(intentAnnouncement);
+        } else if (itemId == R.id.attendance) {
+            Intent intentAttendance = new Intent(EventMenuActivity.this, ViewAttendeeCheckinActivity.class);
+            startActivity(intentAttendance);
         }
+
         // Handle more items as needed
         return true;
     }
