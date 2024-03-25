@@ -29,6 +29,10 @@ public class PushNotification extends FirebaseMessagingService {
         //runs whenever a new token is registered for the user
         PlaceholderApp app = (PlaceholderApp) getApplicationContext();
 
+        if(!app.currentProfileExists()){
+            return;
+        }
+
         app.getUserProfile().setMessagingToken(token);
 
         app.getProfileTable().pushDocument(app.getUserProfile(), app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
