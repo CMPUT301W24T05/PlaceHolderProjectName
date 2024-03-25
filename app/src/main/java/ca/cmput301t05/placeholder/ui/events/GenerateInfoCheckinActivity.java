@@ -24,7 +24,7 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.qrcode.QRCodeType;
-import ca.cmput301t05.placeholder.ui.events.creation.PreviewEventActivity;
+import ca.cmput301t05.placeholder.ui.events.creation.UploadPosterActivity;
 
 public class GenerateInfoCheckinActivity extends AppCompatActivity {
 
@@ -137,7 +137,7 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(GenerateInfoCheckinActivity.this, PreviewEventActivity.class);
+                Intent i = new Intent(GenerateInfoCheckinActivity.this, UploadPosterActivity.class);
                 startActivity(i);
                 finish();
 

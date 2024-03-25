@@ -13,6 +13,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -146,9 +147,9 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 curEvent.setEventName(eventName.getText().toString().trim());
                 curEvent.setEventInfo(eventDescripiton.getText().toString().trim());
                 curEvent.setEventCreator(app.getUserProfile().getProfileID());
-                Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
-                posterPick.putExtra("edit", true);
-                startActivity(posterPick);
+                Intent generateqr = new Intent(EnterEventDetailsActivity.this, GenerateQRCodesActivity.class);
+                generateqr.putExtra("edit", true);
+                startActivity(generateqr);
             }else{
 
                 newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
@@ -157,8 +158,8 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
                 newEvent.setEventCreator(app.getUserProfile().getProfileID());
                 app.setCachedEvent(newEvent);
-                Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
-                startActivity(posterPick);
+                Intent generateqr = new Intent(EnterEventDetailsActivity.this, GenerateInfoCheckinActivity.class);
+                startActivity(generateqr);
             }
 
 

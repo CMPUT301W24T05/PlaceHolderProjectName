@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.ui.events.creation;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,19 +8,27 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 
 /**
  * UploadPosterActivity allows users to upload a poster image for an event. This activity is part of the event
@@ -31,7 +40,7 @@ public class UploadPosterActivity extends AppCompatActivity {
     private ImageView eventPoster;
     private Button back;
     private Button uploadPoster;
-    private Button nextPage;
+    private Button createEvent;
     private PlaceholderApp app;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private Event currentEvent;
@@ -45,6 +54,7 @@ public class UploadPosterActivity extends AppCompatActivity {
      * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
      *                           this Bundle contains the data it most recently supplied. Otherwise, it is null.
      */
+    @SuppressLint("MissingInflatedId")
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_uploadposter);
@@ -53,7 +63,7 @@ public class UploadPosterActivity extends AppCompatActivity {
         eventPoster = findViewById(R.id.eventPosterImage);
         back = findViewById(R.id.eventPoster_back);
         uploadPoster = findViewById(R.id.uploadPosterButton);
-        nextPage = findViewById(R.id.event_posternext);
+        createEvent = findViewById(R.id.event_create);
         fromEdit = getIntent();
 
         // Fetches a specific event's ID from the intent passed to this activity
@@ -77,7 +87,7 @@ public class UploadPosterActivity extends AppCompatActivity {
             }   else {
                 Log.d("PhotoPicker", "Selected URI: " + uri);
                 eventPoster.setImageURI(uri);
-                nextPage.setVisibility(View.VISIBLE);
+                createEvent.setVisibility(View.VISIBLE);
                 curPic.set(uri);
             }
         });
@@ -98,26 +108,93 @@ public class UploadPosterActivity extends AppCompatActivity {
             pickMedia.launch(request);
         });
 
-        nextPage.setOnClickListener(view -> {
+        createEvent.setOnClickListener(view -> {
 
             //set this to the cache so on the final page we can do everything
             app.setPicCache(curPic.get());
             currentEvent.setEventPosterFromUri(curPic.get(), this);
+            handleEventCreation(app, currentEvent);
 
-            if(fromEdit.hasExtra("edit")){
-                Intent updated = new Intent(UploadPosterActivity.this, PreviewEventActivity.class);
-                updated.putExtra("edit", true);
-                startActivity(updated);
-                finish();
-
-            }else{
-                Intent i = new Intent(UploadPosterActivity.this, GenerateInfoCheckinActivity.class);
-                startActivity(i);
-                finish();
-            }
 
 
         });
+    }
+
+    private void handleEventCreation(PlaceholderApp app, Event currentEvent) {
+
+        if(fromEdit.hasExtra("edit")){
+            //push changes
+            app.getPosterImageHandler().uploadPoster(app.getPicCache(), currentEvent, this); //updates the event
+
+            // Pushes the current event (currEvent) to the event table in the database
+            app.getEventTable().updateDocument(currentEvent, currentEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
+                @Override
+                public void onSuccess(Event document) {
+
+
+                    app.getProfileTable().updateDocument(app.getUserProfile(), app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+                        @Override
+                        public void onSuccess(Profile document) {
+                            // If the document was successfully updated in the database, start the Main activity and finish this activity
+                            String message = "Event, " + currentEvent.getEventName() + " , Successfully created";
+                            Toast.makeText(app.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            //change this to navigate to access qr code page
+                            Intent intent = new Intent(UploadPosterActivity.this, EventMenuActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    // TODO Handle the failure of updating the event in the database
+                }
+            });
+        }else {
+
+            //push changes
+            app.getPosterImageHandler().uploadPoster(app.getPicCache(), currentEvent, this); //updates the event
+
+            // Pushes the current event (currEvent) to the event table in the database
+            app.getEventTable().pushDocument(currentEvent, currentEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
+                @Override
+                public void onSuccess(Event document) {
+
+                    List<String> hostedEvents = app.getUserProfile().getHostedEvents();
+                    hostedEvents.add(currentEvent.getEventID().toString());
+                    app.getUserProfile().setHostedEvents(hostedEvents);
+                    app.getProfileTable().pushDocument(app.getUserProfile(), app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+                        @Override
+                        public void onSuccess(Profile document) {
+                            // If the document was successfully updated in the database, start the Main activity and finish this activity
+                            String message = "Event, " + currentEvent.getEventName() + " , Successfully created";
+                            Toast.makeText(app.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            //change this to navigate to access qr code page
+                            Intent intent = new Intent(UploadPosterActivity.this, ViewQRCodesActivity.class);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    // TODO Handle the failure of updating the event in the database
+                }
+            });
+        }
+
+
     }
 }
 
