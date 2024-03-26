@@ -23,12 +23,16 @@ public class ImageDetails extends DocumentSerializable {
     private Uri imageUri;
     private Calendar uploadTime;
     private ArrayList<String> metadata;
+    private String ImagePath;
+    private String objectID; //EVENT:ID or PROFILE:ID
 
-    public ImageDetails(Uri uploadedImageUri){
+
+    public ImageDetails(Uri uploadedImageUri, String picturePath){
         this.id = UUID.randomUUID().toString();
         this.imageUri = uploadedImageUri;
         this.uploadTime = Calendar.getInstance();
         this.metadata = new ArrayList<>();
+        this.ImagePath = picturePath;
 
     }
 
@@ -60,12 +64,29 @@ public class ImageDetails extends DocumentSerializable {
         return id;
     }
 
+
     public Uri getImageUri() {
         return imageUri;
     }
 
+    public String getImagePath() {
+        return ImagePath;
+    }
+
     public void setImageUri(Uri imageUri) {
         this.imageUri = imageUri;
+    }
+
+    public void setImagePath(String path) {
+        this.ImagePath = path;
+    }
+
+    public void setObjectID(String objectID) {
+        this.objectID = objectID;
+    }
+
+    public String getObjectID() {
+        return objectID;
     }
 
     public Map<String, Object> toDocument(){
@@ -75,7 +96,8 @@ public class ImageDetails extends DocumentSerializable {
         document.put("imageUri", this.imageUri.toString());
         document.put("uploadTime", new Timestamp(this.uploadTime.getTime()));
         document.put("metadata", this.metadata);
-
+        document.put("ImagePath", this.ImagePath);
+        document.put("objectID", this.objectID);
         return document;
     }
 
@@ -84,6 +106,8 @@ public class ImageDetails extends DocumentSerializable {
         this.id = (String) document.get("id");
         this.imageUri = Uri.parse((String) document.get("imageUri"));
         this.uploadTime.setTimeInMillis(document.getTimestamp("uploadTime").toDate().getTime());
+        this.ImagePath = (String) document.get("ImagePath");
+        this.objectID = (String) document.get("objectID");
 
         if (document.get("metadata") != null){
             this.metadata = (ArrayList<String>) document.get("metadata");

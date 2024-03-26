@@ -7,30 +7,25 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.database.ImageDetails.ImageDetails;
-import ca.cmput301t05.placeholder.database.tables.ImageDetailTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
-import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.profile.Profile;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.*;
 
 import java.io.InputStream;
-import java.util.UUID;
 import java.io.IOException;
-import java.util.function.Consumer;
 
 /**
  * The abstract base class for handling image-related operations such as uploading, retrieving,
@@ -103,6 +98,9 @@ public abstract class BaseImageHandler {
                 public void onSuccess(Uri uri) {
                     Log.d("Image Upload", "Image upload successful");
                     details.setImageUri(uri);
+                    details.setImagePath(filename);
+                    String objectIDMeta = customMetadataKey + ";" + customMetadataValue;
+                    details.setObjectID(objectIDMeta);
 
                     app.getImageDetailTable().pushDocument(details, details.getId(), new Table.DocumentCallback<ImageDetails>() {
                         @Override
@@ -177,7 +175,19 @@ public abstract class BaseImageHandler {
                 app.getImageDetailTable().deleteDocument(id, new Table.DocumentCallback() {
                     @Override
                     public void onSuccess(Object document) {
-                        Log.d("ImageDetails", "Image Details Uploaded");
+                        Log.d("ImageDetails", "Image Details Deleted");
+
+                        storageReference.delete().addOnSuccessListener(unused -> Log.d("Image Database", "Image deleted"))
+                                .addOnFailureListener(e -> {
+                                    // If the image ID is invalid or the image does not exist
+                                    Log.d("Image Database", "Error: " + e.getMessage());
+                                })
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                    }
+                                });
                     }
 
                     @Override
@@ -190,17 +200,7 @@ public abstract class BaseImageHandler {
         });
 
 
-        storageReference.delete().addOnSuccessListener(unused -> Log.d("Image Database", "Image deleted"))
-                .addOnFailureListener(e -> {
-                    // If the image ID is invalid or the image does not exist
-                    Log.d("Image Database", "Error: " + e.getMessage());
-                })
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
 
-                    }
-                });
     }
 
     /**
