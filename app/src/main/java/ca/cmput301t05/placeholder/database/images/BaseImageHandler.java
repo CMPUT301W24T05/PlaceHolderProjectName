@@ -10,14 +10,21 @@ import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.database.DatabaseManager;
+import ca.cmput301t05.placeholder.database.ImageDetails.ImageDetails;
+import ca.cmput301t05.placeholder.database.tables.ImageDetailTable;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.*;
 
 import java.io.InputStream;
@@ -63,6 +70,9 @@ public abstract class BaseImageHandler {
         String filename = folder + "/" + imageID;
         StorageReference storageRef = rootStorageRef.child(filename);
 
+        //this will be an object which we store relevant image details
+        ImageDetails details = new ImageDetails();
+
         // Use ContentResolver for content URIs, otherwise fall back to getFileMimeType
         String mimeType;
 
@@ -78,13 +88,40 @@ public abstract class BaseImageHandler {
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setCustomMetadata(customMetadataKey, customMetadataValue)
+                .setCustomMetadata("ImageDetailsKey", details.getId())
                 .setContentType(mimeType)
                 .build();
         UploadTask uploadTask = storageRef.putFile(file, metadata);
 
         uploadTask.addOnSuccessListener(taskSnapshot -> {
             // Handle successful uploads on complete
-            Log.d("Image Upload", "Image upload successful");
+
+            PlaceholderApp app = (PlaceholderApp) context.getApplicationContext();
+
+            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Log.d("Image Upload", "Image upload successful");
+                    details.setImageUri(uri);
+
+                    app.getImageDetailTable().pushDocument(details, details.getId(), new Table.DocumentCallback<ImageDetails>() {
+                        @Override
+                        public void onSuccess(ImageDetails document) {
+                            Log.d("ImageDetails", "Image Details Uploaded");
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            Log.d("ImageDetails", "Error");
+                        }
+                    });
+                }
+            });
+
+
+
+
+
         }).addOnFailureListener(e -> {
             // Handle unsuccessful uploads
             Log.d("Image Upload", "Image upload failed: " + e.getMessage());
@@ -101,7 +138,6 @@ public abstract class BaseImageHandler {
      *
      * @param imageID   The ID of the image to retrieve.
      * @param folder    The folder in which the image is located.
-     * @param imageView The ImageView to set the image into.
      */
 // Updated getImage method
     protected void getImage(String imageID, String folder, Context context, ImageCallback callback) {
@@ -128,14 +164,42 @@ public abstract class BaseImageHandler {
      * @param imageID The ID of the image to be removed.
      * @param folder  The folder in which the image is located.
      */
-    protected void removeImage(String imageID, String folder) {
+    protected void removeImage(String imageID, String folder, Context context) {
         String filename = folder + "/" + imageID;
         StorageReference storageReference = rootStorageRef.child(filename);
+
+        //delete reference to the object
+        storageReference.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+            @Override
+            public void onSuccess(StorageMetadata storageMetadata) {
+                String id = storageMetadata.getCustomMetadata("ImageDetailsKey");
+                PlaceholderApp app = (PlaceholderApp) context;
+                app.getImageDetailTable().deleteDocument(id, new Table.DocumentCallback() {
+                    @Override
+                    public void onSuccess(Object document) {
+                        Log.d("ImageDetails", "Image Details Uploaded");
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.d("ImageDetails", "Error");
+                    }
+                });
+
+            }
+        });
+
 
         storageReference.delete().addOnSuccessListener(unused -> Log.d("Image Database", "Image deleted"))
                 .addOnFailureListener(e -> {
                     // If the image ID is invalid or the image does not exist
                     Log.d("Image Database", "Error: " + e.getMessage());
+                })
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
                 });
     }
 
