@@ -27,7 +27,7 @@
             android:fontFamily="@font/coustard"
             android:foregroundGravity="center"
             android:gravity="center"
-            android:text="x Images found"
+            android:text="Images"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

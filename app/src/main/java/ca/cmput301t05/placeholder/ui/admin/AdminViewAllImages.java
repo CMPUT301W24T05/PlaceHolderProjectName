@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ca.cmput301t05.placeholder.R;
@@ -52,9 +53,11 @@ public class AdminViewAllImages extends Fragment {
         imagesRecycler.setAdapter(adapter);
         adapter.setImageRefresh(imagesRecycler);
 
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2); // 2 columns
+        imagesRecycler.setLayoutManager(layoutManager);
 
-
-
+        adapter.loadImages();
+        
     }
 
 
