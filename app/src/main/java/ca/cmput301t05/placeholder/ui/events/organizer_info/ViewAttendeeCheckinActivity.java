@@ -8,8 +8,10 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,7 +55,6 @@ public class ViewAttendeeCheckinActivity extends AppCompatActivity { // Organize
         app = (PlaceholderApp) getApplicationContext();
         Log.e("amirza2", "about to set content view");
         setContentView(R.layout.view_attendee_checkin);
-
         profileTable = app.getProfileTable();
 
         event = app.getCachedEvent();
@@ -64,6 +65,7 @@ public class ViewAttendeeCheckinActivity extends AppCompatActivity { // Organize
         attendDisplayed = new HashMap<String, Double>();
         RecyclerView checkInRecyclerView  = findViewById(R.id.attendee_checkin_);
         TextView emptyTextView = findViewById(R.id.emptyTextView);
+//        Toolbar toolbar = this.<Toolbar>findViewById(R.id.toolbarCheckins);
 
 
 
