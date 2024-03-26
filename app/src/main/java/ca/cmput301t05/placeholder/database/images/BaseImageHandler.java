@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.database.ImageDetails.ImageDetails;
+import ca.cmput301t05.placeholder.database.ImageDetails.ImageType;
 import ca.cmput301t05.placeholder.database.tables.ImageDetailTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
@@ -103,7 +104,13 @@ public abstract class BaseImageHandler {
                 public void onSuccess(Uri uri) {
                     Log.d("Image Upload", "Image upload successful");
                     details.setImageUri(uri);
+                    details.setPictureID(imageID);
 
+                    if (folder.equals("posters")){
+                        details.setType(ImageType.POSTER);
+                    }   else {
+                        details.setType(ImageType.PROFILE);
+                    }
                     app.getImageDetailTable().pushDocument(details, details.getId(), new Table.DocumentCallback<ImageDetails>() {
                         @Override
                         public void onSuccess(ImageDetails document) {

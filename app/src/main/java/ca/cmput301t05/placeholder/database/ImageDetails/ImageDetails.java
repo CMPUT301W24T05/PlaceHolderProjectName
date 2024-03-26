@@ -23,13 +23,22 @@ public class ImageDetails extends DocumentSerializable {
     private Uri imageUri;
     private Calendar uploadTime;
     private ArrayList<String> metadata;
+    private String pictureID;
 
-    public ImageDetails(Uri uploadedImageUri){
+    private String type;
+
+    public ImageDetails(Uri uploadedImageUri, String pictureID, ImageType imageType){
         this.id = UUID.randomUUID().toString();
         this.imageUri = uploadedImageUri;
         this.uploadTime = Calendar.getInstance();
         this.metadata = new ArrayList<>();
+        this.pictureID = pictureID;
 
+        if(imageType == ImageType.POSTER){
+            this.type = "POSTER";
+        }   else {
+            this.type = "PROFILE";
+        }
     }
 
     public ImageDetails(){
@@ -60,12 +69,33 @@ public class ImageDetails extends DocumentSerializable {
         return id;
     }
 
+    public void setType(ImageType type) {
+        if (type == ImageType.POSTER){
+            this.type = "POSTER";
+        }   else {
+            this.type = "PROFILE";
+        }
+
+    }
+
+    public String getType() {
+        return type;
+    }
+
     public Uri getImageUri() {
         return imageUri;
     }
 
+    public String getPictureID() {
+        return pictureID;
+    }
+
     public void setImageUri(Uri imageUri) {
         this.imageUri = imageUri;
+    }
+
+    public void setPictureID(String id) {
+        this.pictureID = id;
     }
 
     public Map<String, Object> toDocument(){
@@ -75,7 +105,8 @@ public class ImageDetails extends DocumentSerializable {
         document.put("imageUri", this.imageUri.toString());
         document.put("uploadTime", new Timestamp(this.uploadTime.getTime()));
         document.put("metadata", this.metadata);
-
+        document.put("pictureID", this.pictureID);
+        document.put("type", this.type);
         return document;
     }
 
@@ -84,6 +115,8 @@ public class ImageDetails extends DocumentSerializable {
         this.id = (String) document.get("id");
         this.imageUri = Uri.parse((String) document.get("imageUri"));
         this.uploadTime.setTimeInMillis(document.getTimestamp("uploadTime").toDate().getTime());
+        this.pictureID = (String) document.get("pictureID");
+        this.type = (String) document.get("type");
 
         if (document.get("metadata") != null){
             this.metadata = (ArrayList<String>) document.get("metadata");

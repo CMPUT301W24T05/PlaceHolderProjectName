@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.database.tables;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 
@@ -24,6 +25,10 @@ public class ImageDetailTable extends Table<ImageDetails>{
     @Override
     protected ImageDetails documentFromSnapshot(DocumentSnapshot snapshot) {
         return new ImageDetails(snapshot);
+    }
+
+    public CollectionReference getCollectionReference(){
+        return collectionReference;
     }
 
 
