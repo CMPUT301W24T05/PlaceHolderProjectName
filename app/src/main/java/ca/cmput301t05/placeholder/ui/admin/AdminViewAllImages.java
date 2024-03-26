@@ -47,6 +47,10 @@ public class AdminViewAllImages extends Fragment {
         numberImages = view.findViewById(R.id.admin_view_image_page_images_found);
         imagesRecycler = view.findViewById(R.id.admin_view_image_recycler);
 
+        ViewAllImagesAdapter adapter = new ViewAllImagesAdapter(getContext());
+
+        imagesRecycler.setAdapter(adapter);
+        adapter.setImageRefresh(imagesRecycler);
 
 
 
