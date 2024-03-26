@@ -81,6 +81,7 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
 
         public void bindView(int position) {
 
+            ImageDetails details = imageDetails.get(position);
             menu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -93,7 +94,8 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
                             if (menuItem.getItemId() == R.id.admin_image_card_menu_delete){
 
                                 //handle deleting the photo
-                                ImageDetails details = imageDetails.get(position);
+
+
 
 
                                 return true;
@@ -103,6 +105,8 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
                     });
                 }
             });
+
+
         }
     }
 
