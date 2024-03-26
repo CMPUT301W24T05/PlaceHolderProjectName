@@ -11,18 +11,24 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.ImageDetails.ImageDetails;
 import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.utils.DateStrings;
 
+
+//TODO maybe add a feature to refresh the page
 public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdapter.ViewAllImagesHolder> {
 
     private ArrayList<ImageDetails> imageDetails;
@@ -83,6 +89,22 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
         public void bindView(int position) {
 
             ImageDetails details = imageDetails.get(position);
+
+            Calendar c = details.getUploadTime();
+
+            String month = DateStrings.getMonthName(c.get(Calendar.MONTH));
+            String day = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+            String amPm = DateStrings.getAmPM(c.get(Calendar.AM_PM));
+            String hour = String.valueOf(c.get(Calendar.HOUR));
+            String year = String.valueOf(c.get(Calendar.YEAR));
+
+            String dateText = hour + amPm + " " + day + " " + month + " " + year;
+            date.setText(dateText);
+
+            //load into imageview
+            Glide.with(context).load(details.getImageUri()).centerCrop().into(picture);
+
+            //allow for deletion
             menu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -94,12 +116,12 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
 
                             if (menuItem.getItemId() == R.id.admin_image_card_menu_delete){
 
-                                //handle deleting the photo
+                                //TODO Make a confirmation dialog pop up
 
                                 app.getImageDetailTable().deleteImage(details, new Table.DocumentCallback() {
                                     @Override
                                     public void onSuccess(Object document) {
-                                        //TODO handle image deletions here
+
                                         imageDetails.remove(position);
                                         notifyDataSetChanged();
                                     }
@@ -170,6 +192,30 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
             }
 
 
+        });
+
+
+    }
+
+
+    public void setImageRefresh(RecyclerView recyclerView){
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (!(recyclerView.getLayoutManager() instanceof LinearLayoutManager)) {
+                    return; // Only works with LinearLayoutManager and its subclasses
+                }
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                if (!isLoading && totalItemCount <= (lastVisibleItemPosition + 3)) { // 3 images before end we reload images
+                    loadImages();
+                }
+            }
         });
 
     }
