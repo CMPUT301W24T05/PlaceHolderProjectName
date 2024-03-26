@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
     }
 
     private void setProfileIcon() {
+
         if (app.getUserProfile().hasProfileBitmap()){
             profileButton.setImageBitmap(getCircularBitmap(app.getUserProfile().getProfilePictureBitmap()));
         } else {

@@ -120,12 +120,13 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
                             if (menuItem.getItemId() == R.id.admin_image_card_menu_delete){
 
                                 //TODO Make a confirmation dialog pop up
+                                Log.d("menu", "Deleting image");
 
                                 app.getImageDetailTable().deleteImage(details, new Table.DocumentCallback() {
                                     @Override
                                     public void onSuccess(Object document) {
-
-                                        imageDetails.remove(position);
+                                        int curpos = getAdapterPosition();
+                                        imageDetails.remove(curpos);
                                         notifyDataSetChanged();
                                     }
 

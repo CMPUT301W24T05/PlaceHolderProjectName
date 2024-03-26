@@ -96,7 +96,7 @@ public class ImageDetails extends DocumentSerializable {
         document.put("imageUri", this.imageUri.toString());
         document.put("uploadTime", new Timestamp(this.uploadTime.getTime()));
         document.put("metadata", this.metadata);
-        document.put("picturePath", this.ImagePath);
+        document.put("ImagePath", this.ImagePath);
         document.put("objectID", this.objectID);
         return document;
     }
@@ -106,7 +106,7 @@ public class ImageDetails extends DocumentSerializable {
         this.id = (String) document.get("id");
         this.imageUri = Uri.parse((String) document.get("imageUri"));
         this.uploadTime.setTimeInMillis(document.getTimestamp("uploadTime").toDate().getTime());
-        this.ImagePath = (String) document.get("pictureID");
+        this.ImagePath = (String) document.get("ImagePath");
         this.objectID = (String) document.get("objectID");
 
         if (document.get("metadata") != null){

@@ -41,13 +41,14 @@ public class ImageDetailTable extends Table<ImageDetails>{
      * @param imageDetails
      */
     public void deleteImage(ImageDetails imageDetails, DocumentCallback callback){
-
+        Log.d("image details", String.valueOf(imageDetails.getImagePath()));
         StorageReference storageRef = DatabaseManager.getInstance().getStorage().getReference().child(imageDetails.getImagePath());
+
 
         //grab the object key so we can reset it
 
 
-        String [] objectID = imageDetails.getObjectID().split(":");
+        String [] objectID = imageDetails.getObjectID().split(";");
         DocumentReference docRef;
         String path;
 
@@ -58,8 +59,8 @@ public class ImageDetailTable extends Table<ImageDetails>{
             docRef = DatabaseManager.getInstance().getDb().collection("events").document(objectID[1]);
             path = "eventPosterID";
         }
-
-        docRef.update(path, FieldValue.delete()).addOnCompleteListener(task -> {
+        //sets profile or event poster to null
+        docRef.update(path, null).addOnCompleteListener(task -> {
 
             if (task.isSuccessful()){
 
