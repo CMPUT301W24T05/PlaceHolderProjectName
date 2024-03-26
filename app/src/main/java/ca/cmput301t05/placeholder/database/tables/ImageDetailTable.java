@@ -38,7 +38,7 @@ public class ImageDetailTable extends Table<ImageDetails>{
      * Deletes specific image from the databases
      * @param imageDetails
      */
-    public void deleteImage(ImageDetails imageDetails){
+    public void deleteImage(ImageDetails imageDetails, DocumentCallback callback){
 
         StorageReference storageRef = DatabaseManager.getInstance().getStorage().getReference().child(imageDetails.getImagePath());
 
@@ -49,10 +49,12 @@ public class ImageDetailTable extends Table<ImageDetails>{
                 @Override
                 public void onSuccess(Object document) {
                     Log.d("Image Database", "Deleted Image");
+                    callback.onSuccess(document);
                 }
 
                 @Override
                 public void onFailure(Exception e) {
+                    callback.onFailure(e);
 
                 }
             });

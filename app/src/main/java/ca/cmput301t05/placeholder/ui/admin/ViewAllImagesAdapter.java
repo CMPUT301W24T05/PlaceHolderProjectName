@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.ImageDetails.ImageDetails;
+import ca.cmput301t05.placeholder.database.tables.Table;
 
 public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdapter.ViewAllImagesHolder> {
 
@@ -95,6 +96,19 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
 
                                 //handle deleting the photo
 
+                                app.getImageDetailTable().deleteImage(details, new Table.DocumentCallback() {
+                                    @Override
+                                    public void onSuccess(Object document) {
+                                        //TODO handle image deletions here
+                                        imageDetails.remove(position);
+                                        notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception e) {
+
+                                    }
+                                });
 
 
 
