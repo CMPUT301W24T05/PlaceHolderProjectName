@@ -42,7 +42,8 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
     public ViewAllImagesAdapter(Context context){
         this.context = context;
         this.app = (PlaceholderApp) this.context.getApplicationContext();
-
+        imageDetails = new ArrayList<>();
+        loadImages();
 
     }
 
@@ -90,6 +91,7 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
 
             ImageDetails details = imageDetails.get(position);
 
+
             Calendar c = details.getUploadTime();
 
             String month = DateStrings.getMonthName(c.get(Calendar.MONTH));
@@ -108,6 +110,7 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
             menu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d("ImageAdapter", "Menu clicked at position: " + position);
                     PopupMenu popupMenu = new PopupMenu(context, view);
                     popupMenu.getMenuInflater().inflate(R.menu.admin_image_card_menu, popupMenu.getMenu());
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -139,6 +142,8 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
                             return false;
                         }
                     });
+
+                    popupMenu.show();
                 }
             });
 
@@ -146,7 +151,7 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
         }
     }
 
-    public void loadImages(){
+    private void loadImages(){
         //basically so we dont keep loading
         if (isLoading){
             return;

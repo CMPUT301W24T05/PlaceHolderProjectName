@@ -24,6 +24,7 @@ public class ImageDetails extends DocumentSerializable {
     private Calendar uploadTime;
     private ArrayList<String> metadata;
     private String ImagePath;
+    private String objectID; //EVENT:ID or PROFILE:ID
 
 
     public ImageDetails(Uri uploadedImageUri, String picturePath){
@@ -80,6 +81,14 @@ public class ImageDetails extends DocumentSerializable {
         this.ImagePath = path;
     }
 
+    public void setObjectID(String objectID) {
+        this.objectID = objectID;
+    }
+
+    public String getObjectID() {
+        return objectID;
+    }
+
     public Map<String, Object> toDocument(){
         Map<String, Object> document = new HashMap<>();
 
@@ -88,6 +97,7 @@ public class ImageDetails extends DocumentSerializable {
         document.put("uploadTime", new Timestamp(this.uploadTime.getTime()));
         document.put("metadata", this.metadata);
         document.put("picturePath", this.ImagePath);
+        document.put("objectID", this.objectID);
         return document;
     }
 
@@ -97,6 +107,7 @@ public class ImageDetails extends DocumentSerializable {
         this.imageUri = Uri.parse((String) document.get("imageUri"));
         this.uploadTime.setTimeInMillis(document.getTimestamp("uploadTime").toDate().getTime());
         this.ImagePath = (String) document.get("pictureID");
+        this.objectID = (String) document.get("objectID");
 
         if (document.get("metadata") != null){
             this.metadata = (ArrayList<String>) document.get("metadata");

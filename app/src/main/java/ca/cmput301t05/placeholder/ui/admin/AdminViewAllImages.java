@@ -18,9 +18,6 @@ import ca.cmput301t05.placeholder.R;
 
 public class AdminViewAllImages extends Fragment {
 
-    private ImageView backButton;
-    private TextView numberImages;
-
     private RecyclerView imagesRecycler;
 
 
@@ -42,10 +39,6 @@ public class AdminViewAllImages extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-
-        backButton = view.findViewById(R.id.admin_view_image_back);
-        numberImages = view.findViewById(R.id.admin_view_image_page_images_found);
         imagesRecycler = view.findViewById(R.id.admin_view_image_recycler);
 
         ViewAllImagesAdapter adapter = new ViewAllImagesAdapter(getContext());
@@ -56,8 +49,7 @@ public class AdminViewAllImages extends Fragment {
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2); // 2 columns
         imagesRecycler.setLayoutManager(layoutManager);
 
-        adapter.loadImages();
-        
+
     }
 
 

@@ -99,6 +99,8 @@ public abstract class BaseImageHandler {
                     Log.d("Image Upload", "Image upload successful");
                     details.setImageUri(uri);
                     details.setImagePath(filename);
+                    String objectIDMeta = customMetadataKey + ";" + customMetadataValue;
+                    details.setObjectID(objectIDMeta);
 
                     app.getImageDetailTable().pushDocument(details, details.getId(), new Table.DocumentCallback<ImageDetails>() {
                         @Override
