@@ -12,6 +12,7 @@ import ca.cmput301t05.placeholder.Location.LocationManager;
 import ca.cmput301t05.placeholder.database.images.EventPosterImageHandler;
 import ca.cmput301t05.placeholder.database.images.ProfileImageHandler;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
+import ca.cmput301t05.placeholder.database.tables.ImageDetailTable;
 import ca.cmput301t05.placeholder.database.tables.NotificationTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
@@ -31,6 +32,8 @@ public class PlaceholderApp extends Application implements Serializable {
     private ProfileImageHandler profileImageHandler;
     private ProfileTable profileTable;
     private EventTable eventTable;
+
+    private ImageDetailTable imageDetailTable;
 
     private NotificationTable notificationTable;
     private DeviceIDManager idManager;
@@ -58,6 +61,7 @@ public class PlaceholderApp extends Application implements Serializable {
         profileTable = new ProfileTable();
         eventTable = new EventTable();
         notificationTable = new NotificationTable();
+        imageDetailTable = new ImageDetailTable();
 
         idManager = new DeviceIDManager(this);
 
@@ -181,5 +185,9 @@ public class PlaceholderApp extends Application implements Serializable {
 
     public HashMap<UUID, Event> getInterestedEvents() {
         return interestedEvents;
+    }
+
+    public ImageDetailTable getImageDetailTable(){
+        return this.imageDetailTable;
     }
 }
