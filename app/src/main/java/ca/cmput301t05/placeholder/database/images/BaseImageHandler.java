@@ -95,23 +95,31 @@ public abstract class BaseImageHandler {
 
         uploadTask.addOnSuccessListener(taskSnapshot -> {
             // Handle successful uploads on complete
-            Log.d("Image Upload", "Image upload successful");
-            PlaceholderApp app = (PlaceholderApp) context;
 
-            Uri download = taskSnapshot.getStorage().getDownloadUrl().getResult();
-            details.setImageUri(download);
+            PlaceholderApp app = (PlaceholderApp) context.getApplicationContext();
 
-            app.getImageDetailTable().pushDocument(details, details.getId(), new Table.DocumentCallback<ImageDetails>() {
+            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
-                public void onSuccess(ImageDetails document) {
+                public void onSuccess(Uri uri) {
+                    Log.d("Image Upload", "Image upload successful");
+                    details.setImageUri(uri);
 
-                }
+                    app.getImageDetailTable().pushDocument(details, details.getId(), new Table.DocumentCallback<ImageDetails>() {
+                        @Override
+                        public void onSuccess(ImageDetails document) {
+                            Log.d("ImageDetails", "Image Details Uploaded");
+                        }
 
-                @Override
-                public void onFailure(Exception e) {
-
+                        @Override
+                        public void onFailure(Exception e) {
+                            Log.d("ImageDetails", "Error");
+                        }
+                    });
                 }
             });
+
+
+
 
 
         }).addOnFailureListener(e -> {
@@ -130,7 +138,6 @@ public abstract class BaseImageHandler {
      *
      * @param imageID   The ID of the image to retrieve.
      * @param folder    The folder in which the image is located.
-     * @param imageView The ImageView to set the image into.
      */
 // Updated getImage method
     protected void getImage(String imageID, String folder, Context context, ImageCallback callback) {
@@ -170,12 +177,12 @@ public abstract class BaseImageHandler {
                 app.getImageDetailTable().deleteDocument(id, new Table.DocumentCallback() {
                     @Override
                     public void onSuccess(Object document) {
-
+                        Log.d("ImageDetails", "Image Details Uploaded");
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-
+                        Log.d("ImageDetails", "Error");
                     }
                 });
 
