@@ -18,9 +18,12 @@ import androidx.fragment.app.DialogFragment;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
+import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.profile.Profile;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.List;
 
 import ca.cmput301t05.placeholder.events.Event;
 
@@ -42,6 +45,15 @@ public class EventDetailsDialogFragment extends DialogFragment {
     private Button backButton;
     private Button signupButton;
 
+    /**
+     * Creates a new instance of event_info_view_and_signup DialogFragment with the specified Event and PlaceholderApp objects.
+     * This method packages the Event and PlaceholderApp objects into a Bundle to be used when creating the fragment.
+     *
+     * @param event The Event object containing details about the event.
+     * @param app   The PlaceholderApp object for accessing application-wide resources and databases.
+     * @return A new instance of event_info_view_and_signup DialogFragment with the event and app data.
+     */
+
     //To do:
     // when scanning the QR code, implement the functionality in scanning to get the event object and pass
     // the event object when creating the fragment using the fragment object and call this object
@@ -54,14 +66,6 @@ public class EventDetailsDialogFragment extends DialogFragment {
         return fragment;
     }
 
-    /**
-     * Creates a new instance of event_info_view_and_signup DialogFragment with the specified Event and PlaceholderApp objects.
-     * This method packages the Event and PlaceholderApp objects into a Bundle to be used when creating the fragment.
-     *
-     * @param event The Event object containing details about the event.
-     * @param app   The PlaceholderApp object for accessing application-wide resources and databases.
-     * @return A new instance of event_info_view_and_signup DialogFragment with the event and app data.
-     */
     @NotNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         setupView(getLayoutInflater());
@@ -88,50 +92,74 @@ public class EventDetailsDialogFragment extends DialogFragment {
         event = (Event) eventSerialized;
     }
 
-    private void setupEventDetails(){
+    private void setupEventDetails() {
         if (event != null) {
             eventName.setText(event.getEventName());
-            if (event.getEventPosterID() != null) {
-                if(event.hasEventPosterBitmap()){
-                    eventPoster.setImageBitmap(event.getEventPosterBitmap());
-                } else {
-                    app.getPosterImageHandler().getPosterPicture(event, getContext(), new BaseImageHandler.ImageCallback() {
-                        @Override
-                        public void onImageLoaded(Bitmap bitmap) {
-                            eventPoster.setImageBitmap(bitmap);
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            // Handle error
-                            Log.e("EventDetailsDialogFragment", "Error loading image: " + e.getMessage());
-                        }
-                    });
-                }
-            }
+            loadEventPoster();
             eventDescription.setText(event.getEventInfo());
             // TODO: organizer.setText(event.);
         }
     }
 
+    private void loadEventPoster() {
+        if (event.getEventPosterID() != null) {
+            if(event.hasEventPosterBitmap()){
+                // Preferred way
+                eventPoster.setImageBitmap(event.getEventPosterBitmap());
+            } else {
+                // Load from remote server
+                loadPosterFromServer();
+            }
+        }
+    }
+
+    private void loadPosterFromServer() {
+        app.getPosterImageHandler().getPosterPicture(event, getContext(), new BaseImageHandler.ImageCallback() {
+            @Override
+            public void onImageLoaded(Bitmap bitmap) {
+                eventPoster.setImageBitmap(bitmap);
+            }
+            @Override
+            public void onError(Exception e) {
+                // Handle error
+                Log.e("EventDetailsDialogFragment", "Error loading image: " + e.getMessage());
+            }
+        });
+    }
+
     private AlertDialog setupDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        return builder.setView(getLayoutInflater().inflate(R.layout.event_infor_view_and_signup, null)).create();
+        return new AlertDialog.Builder(getContext())
+                .setView(getLayoutInflater().inflate(R.layout.event_infor_view_and_signup, null))
+                .create();
     }
 
     private void setupButtonActions(AlertDialog dialog) {
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Sign up to the event
+        signupButton.setOnClickListener(v -> {
+            List<String> interestedEvents = app.getUserProfile().getInterestedEvents();
+            final boolean signingUp = !interestedEvents.contains(event.getEventID().toString());
+            if (signingUp) {
+                interestedEvents.add(event.getEventID().toString());
+            } else {
+                interestedEvents.remove(event.getEventID().toString());
             }
+
+            app.getProfileTable().pushDocument(app.getUserProfile(), app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+                @Override
+                public void onSuccess(Profile document) {
+                    if (signingUp) {
+                        signupButton.setText("Un-Sign up");
+                    } else {
+                        signupButton.setText("Sign up");
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        backButton.setOnClickListener(v -> dialog.dismiss());
     }
 }

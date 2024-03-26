@@ -51,7 +51,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
     @Override
     public EventCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.event_card, parent, false);
-
         return new EventCardViewHolder(v);
     }
 
@@ -71,6 +70,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         else return eventList.size();
     }
 
+    public void setEvents(ArrayList<Event> events) {
+        this.eventList = events;
+        notifyDataSetChanged();
+    }
 
     public class EventCardViewHolder extends RecyclerView.ViewHolder {
 

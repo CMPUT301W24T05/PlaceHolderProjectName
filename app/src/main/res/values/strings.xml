@@ -15,4 +15,5 @@ Donec maximus lectus aliquet sapien aliquet rutrum. Fusce vulputate, odio at int
     <string name="cameraButtonText">Take picture of QR code</string>
     <string name="title_profile_edit_activity">Profile</string>
     <string name="title_enter_event_details_activity">Enter Event Details Activity</string>
+    <string name="attendee_name">Name</string>
 </resources>

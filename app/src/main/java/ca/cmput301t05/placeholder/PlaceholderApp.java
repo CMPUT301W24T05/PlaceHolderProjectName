@@ -38,6 +38,7 @@ public class PlaceholderApp extends Application implements Serializable {
     private HashMap<UUID, Event> joinedEvents;
 
     private HashMap<UUID, Event> hostedEvents;
+    private HashMap<UUID, Event> interestedEvents;
 
     private ArrayList<Notification> userNotifications;
 
@@ -65,6 +66,7 @@ public class PlaceholderApp extends Application implements Serializable {
 
         hostedEvents = new HashMap<>();
         joinedEvents = new HashMap<>();
+        interestedEvents = new HashMap<>();
         userNotifications = new ArrayList<>();
         locationManager = new LocationManager(this);
     }
@@ -175,5 +177,9 @@ public class PlaceholderApp extends Application implements Serializable {
      */
     public LocationManager getLocationManager() {
         return locationManager;
+    }
+
+    public HashMap<UUID, Event> getInterestedEvents() {
+        return interestedEvents;
     }
 }
