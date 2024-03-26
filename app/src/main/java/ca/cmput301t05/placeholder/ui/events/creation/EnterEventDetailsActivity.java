@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.appbar.MaterialToolbar;
+
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
@@ -51,6 +54,17 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.event_enterdetails);
 
         initializeEventDetails();
+
+        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+
+        // Enable the Up button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        // Handling the navigation icon click
+        toolbar.setNavigationOnClickListener(v -> finish());
+
         eventTime.setOnClickListener(view -> openTimePickerDialog());
         eventDate.setOnClickListener(view -> openDatePickerDialog());
 
