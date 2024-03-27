@@ -66,13 +66,14 @@ public class UploadPosterActivity extends AppCompatActivity {
         createEvent = findViewById(R.id.event_create);
         fromEdit = getIntent();
 
-        // Fetches a specific event's ID from the intent passed to this activity
-        currentEvent = app.getCachedEvent();
-
         if(fromEdit.hasExtra("edit")){
+            currentEvent = app.getCachedEvent();
             eventPoster.setImageBitmap(currentEvent.getEventPosterBitmap());
             createEvent.setText("Update Event");
             createEvent.setVisibility(View.VISIBLE);
+        } else{
+            // Fetches a specific event's ID from the intent passed to this activity
+            currentEvent = app.getCachedEvent();
         }
 
 

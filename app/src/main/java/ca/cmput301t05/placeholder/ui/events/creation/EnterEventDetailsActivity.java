@@ -76,6 +76,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         eventCapacity = findViewById(R.id.enterEventCapacity);
         app = (PlaceholderApp) getApplicationContext();
 
+
         if(fromEdit.hasExtra("edit")){
             curEvent = app.getCachedEvent();
             cal = curEvent.getEventDate();
@@ -103,6 +104,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
      */
     private void openTimePickerDialog() {
         if (cal == null) return;
+        cal = curEvent.getEventDate();
 
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
@@ -116,7 +118,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
      * Opens a dialog for picking the date of the event. Initializes the dialog with the current year, month, and day.
      */
     private void openDatePickerDialog() {
-        cal = Calendar.getInstance();
+        cal = curEvent.getEventDate();
 
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
@@ -141,7 +143,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
 
 
             if(fromEdit.hasExtra("edit")){
-
+                curEvent = app.getCachedEvent();
                 curEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
                 curEvent.setEventDate(cal);
                 curEvent.setEventName(eventName.getText().toString().trim());
@@ -149,7 +151,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 curEvent.setEventCreator(app.getUserProfile().getProfileID());
                 curEvent.setEventLocation(eventLocation.getText().toString().trim());
                 Intent generateqr = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
-                generateqr.putExtra("edit", true);
+                generateqr.putExtra("edit", curEvent);
                 startActivity(generateqr);
             }else{
 

@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder;
 
+
 import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
 
 import android.content.Intent;
@@ -24,8 +25,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
+import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.ui.events.EventExplore;
@@ -98,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
 
         joinedEventsAdapter.setListener(this);
         organizedEventsAdapter.setListener(this);
+
 
 
 
@@ -221,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         if (type == EventAdapter.adapterType.HOSTED){
             app.setCachedEvent(event);
             Intent i = new Intent(MainActivity.this, EventMenuActivity.class);
+            i.putExtra("myEvent", event);
             startActivity(i);
         } else if (type == EventAdapter.adapterType.ATTENDING) {
             app.setCachedEvent(event);
@@ -231,4 +236,8 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         }
 
     }
+
+
+
+
 }

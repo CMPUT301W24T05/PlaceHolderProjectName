@@ -72,6 +72,7 @@
         <activity android:name=".Location.Successful_Checked_In_Activity"/>
         <activity android:name=".ui.events.EventExplore" />
         <activity android:name=".ui.events.EventOrganized" />
+        <activity android:name="ca.cmput301t05.placeholder.ui.events.ViewMilestonesActivity" />
 
 
     </application>

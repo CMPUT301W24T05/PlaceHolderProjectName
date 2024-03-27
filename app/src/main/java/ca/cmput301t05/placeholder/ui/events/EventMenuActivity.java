@@ -41,14 +41,6 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
     private TextView eventName;
     private ImageView eventPoster;
-    private Button editEvent;
-    private Button checkRegister;
-    private Button accessQRCodes;
-    private Button menuAnnouncements;
-    private Button menuAttendance;
-    private Button menuMilestones;
-    private Button checkInLocations;
-    private Button backButton;
 
 
     private Button buttonBack;
@@ -63,6 +55,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
     NavigationView navigationView;
     Toolbar toolbar;
     ActionBarDrawerToggle toggle;
+    Intent fromIntent;
 
 
     @SuppressLint({"MissingInflatedId", "NonConstantResourceId"})
@@ -72,6 +65,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
         curEvent = app.getCachedEvent();
         setContentView(R.layout.event_menu);
         buttonBack = findViewById(R.id.event_menu_back);
+        fromIntent = getIntent();
 
         drawerLayout = findViewById(R.id.event_menu_drawer);
         toolbar = findViewById(R.id.toolbar);
@@ -121,6 +115,8 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
     }
 
     private void setEventDetails() {
+        //curEvent = app.getCachedEvent();
+        curEvent = (Event) fromIntent.getSerializableExtra("myEvent");
         eventName = findViewById(R.id.event_menu_name);
         textViewEventDate = findViewById(R.id.event_menu_eventDate);
         textViewEventLocation = findViewById(R.id.event_preview_eventlocation);
@@ -189,6 +185,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        app.setCachedEvent(curEvent);
         int itemId = item.getItemId();
         if (itemId == R.id.edit) {
             Intent intentEdit = new Intent(EventMenuActivity.this, EnterEventDetailsActivity.class);
