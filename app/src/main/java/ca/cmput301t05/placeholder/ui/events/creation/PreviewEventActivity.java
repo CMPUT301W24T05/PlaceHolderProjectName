@@ -25,7 +25,7 @@ import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
-
+import androidx.appcompat.widget.Toolbar;
 public class PreviewEventActivity extends AppCompatActivity {
     private Button buttonCreateEvent;
     private Button buttonBack;
@@ -35,6 +35,7 @@ public class PreviewEventActivity extends AppCompatActivity {
     private TextView textViewEventAuthor;
     private TextView textViewEventName;
     private ImageView imageViewEventPoster;
+    private Toolbar toolbar;
 
     private PlaceholderApp app;
     private Event currentEvent;
@@ -50,13 +51,14 @@ public class PreviewEventActivity extends AppCompatActivity {
         setUpViews();
         setEventDetails();
 
-        buttonBack.setOnClickListener(view -> finish());
+        toolbar.setNavigationOnClickListener(view -> finish());
         buttonCreateEvent.setOnClickListener(view -> handleEventCreation(app, currentEvent));
     }
 
     private void setUpViews() {
         buttonCreateEvent = findViewById(R.id.preview_create);
-        buttonBack = findViewById(R.id.event_preview_back);
+
+        toolbar = findViewById(R.id.toolbarEventPreview);
         textViewEventName = findViewById(R.id.preview_name);
         textViewEventDate = findViewById(R.id.event_preview_eventDate);
         textViewEventLocation = findViewById(R.id.event_preview_eventlocation);
@@ -105,6 +107,7 @@ public class PreviewEventActivity extends AppCompatActivity {
 
     private String generateEventDateTime() {
         Calendar eventCalendar = currentEvent.getEventDate();
+        Log.e("amirza2", String.valueOf(eventCalendar));
         int year = eventCalendar.get(Calendar.YEAR);
         int month = eventCalendar.get(Calendar.MONTH) + 1; //January is 0
         int day = eventCalendar.get(Calendar.DAY_OF_MONTH);
@@ -116,6 +119,8 @@ public class PreviewEventActivity extends AppCompatActivity {
 
         String time = hour12 + timePeriod;
         String date = day + ", " + month + ", " + year;
+
+        Log.e("amirza2", date);
         return time + " - " + date;
     }
 
