@@ -107,9 +107,9 @@ public class ViewQRCodesActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() { // This is the the button in the tool bar
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(ViewQRCodesActivity.this, EventMenuActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
