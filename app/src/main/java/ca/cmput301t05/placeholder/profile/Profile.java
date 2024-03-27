@@ -242,6 +242,10 @@ public class Profile extends DocumentSerializable {
 
     public void setInterestedEvents(List<String> interestedEvents) { this.interestedEvents = interestedEvents; }
 
+    public void addInterestedEvents(Event event){
+        interestedEvents.add(event.getEventID().toString());
+    }
+
     /**
      * Sets the name of the profile.
      *

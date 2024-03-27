@@ -26,6 +26,9 @@ import java.util.Calendar;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.MainActivity;
+
+import ca.cmput301t05.placeholder.Location.MapDisplay_activity;
+
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
@@ -142,7 +145,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
             public void onFailure(Exception e) {
             }
         });
-
+      
         if (curEvent.hasEventPosterBitmap()) {
             eventPoster.setImageBitmap(curEvent.getEventPosterBitmap());
         } else {
@@ -200,7 +203,9 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
         } else if (itemId == R.id.attendance) {
             Intent intentAttendance = new Intent(EventMenuActivity.this, ViewAttendeeCheckinActivity.class);
             startActivity(intentAttendance);
-        }
+        }else if (itemId == R.id.check_in_locations) {
+            Intent intentLoc = new Intent(EventMenuActivity.this, MapDisplay_activity.class);
+                startActivity(intentLoc);
 
 
         // Handle more items as needed
