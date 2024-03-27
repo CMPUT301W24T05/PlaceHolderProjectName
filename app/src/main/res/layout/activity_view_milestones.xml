@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:text="First Attendee"
         android:layout_marginBottom="20dp"
+        android:clickable="false"
         />
 
     <CheckBox
@@ -34,18 +35,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="First Signup"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:clickable="false"/>
 
     <CheckBox
         android:id="@+id/checkBox_halfway"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Halfway"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:clickable="false"/>
 
     <CheckBox
         android:id="@+id/checkBox_full_capacity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Full Capacity" />
+        android:text="Full Capacity"
+        android:clickable="false"/>
+
+    <TextView
+        android:id="@+id/custom_milestone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Milestones"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="30dp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="181dp" />
+
+    <Button
+        android:id="@+id/create_milestone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="10dp"
+        android:text="Create Custom Milestone" />
 </LinearLayout>

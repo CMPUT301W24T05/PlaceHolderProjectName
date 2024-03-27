@@ -142,6 +142,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             }
 
 
+
             if(fromEdit.hasExtra("edit")){
                 curEvent = app.getCachedEvent();
                 curEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));

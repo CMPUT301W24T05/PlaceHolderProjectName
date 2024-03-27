@@ -16,6 +16,7 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Milestone;
 import ca.cmput301t05.placeholder.notifications.MilestoneType;
 import ca.cmput301t05.placeholder.notifications.Notification;
+import android.util.Log;
 
 public class ViewMilestonesActivity extends AppCompatActivity {
 
@@ -57,6 +58,8 @@ public class ViewMilestonesActivity extends AppCompatActivity {
         capacity = curEvent.getMaxAttendees();
         numRegistered = curEvent.getRegisteredUsers().size();
 
+        Log.d("Test", "num of attendees is " + String.valueOf(numAttendees));
+
 
         setMilestones();
         setCheckBoxes();
@@ -75,6 +78,7 @@ public class ViewMilestonesActivity extends AppCompatActivity {
     }
 
     public void setMilestones(){
+        //needs to auto push notifications
         if (numAttendees / capacity == 2 && !containsMilestoneType(MilestoneType.HALFWAY)) {
             Milestone mHalfway = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY);
             milestones.add(mHalfway); // Add the milestone to the milestones array
@@ -92,6 +96,7 @@ public class ViewMilestonesActivity extends AppCompatActivity {
             milestones.add(mFirstAttendee); // Add the milestone to the milestones array
             notifications.add(mFirstAttendee); // Add the milestone to the notifications array
         }
+
         if (numRegistered >= 1 && !containsMilestoneType(MilestoneType.FIRSTSIGNUP)) {
             Milestone mFirstSignup = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP);
             milestones.add(mFirstSignup); // Add the milestone to the milestones array
@@ -127,7 +132,7 @@ public class ViewMilestonesActivity extends AppCompatActivity {
                 milestones.add((Milestone) notification);
             }
         }
-        return milestones.isEmpty() ? null : milestones;
+        return milestones;
     }
 
     public boolean containsMilestoneType(MilestoneType type) {

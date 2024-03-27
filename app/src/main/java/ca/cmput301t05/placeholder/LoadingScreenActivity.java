@@ -197,4 +197,6 @@ public class LoadingScreenActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+
 }
