@@ -70,21 +70,20 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
         locationManager.setLocationPermissionListener(this);
         locationManager.requestLocationPermission(this);
 
-        // should do like this/.....................................................
-        //event = app.getCachedEvent();
+        event = app.getCachedEvent();
 
         // for testing:
-        app.getEventTable().fetchDocument("917812f0-4400-420e-8260-f566943ac624", new Table.DocumentCallback<Event>() {
-            @Override
-            public void onSuccess(Event event1){
-                app.setCachedEvent(event1); //sets the cached event so we can use it on the next pag
-                event = app.getCachedEvent();
-            }
-            @Override
-            public void onFailure(Exception e){
-                // Failed to get fetch the event for eventId with exception e
-            }
-        });
+//        app.getEventTable().fetchDocument("917812f0-4400-420e-8260-f566943ac624", new Table.DocumentCallback<Event>() {
+//            @Override
+//            public void onSuccess(Event event1){
+//                app.setCachedEvent(event1); //sets the cached event so we can use it on the next pag
+//                event = app.getCachedEvent();
+//            }
+//            @Override
+//            public void onFailure(Exception e){
+//                // Failed to get fetch the event for eventId with exception e
+//            }
+//        });
 
     }
     @Override
