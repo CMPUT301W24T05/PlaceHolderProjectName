@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.OutputStream;
+import java.util.function.Consumer;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
@@ -24,139 +25,77 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.qrcode.QRCodeType;
-import ca.cmput301t05.placeholder.ui.events.creation.UploadPosterActivity;
+import ca.cmput301t05.placeholder.ui.events.creation.PreviewEventFragment;
 
 public class GenerateInfoCheckinActivity extends AppCompatActivity {
+    private Button generateCheckin, generateInfo, next, back;
+    private ImageView checkInQrCodeImageView, InfoQrCodeImageView;
+    private String qrTypeToSave;
+    private ActivityResultLauncher<Intent> createDocumentLauncher;
 
-    private Button generate1;
-
-    private Button generate2;
-
-    private Button next;
-
-    private ImageView qrCode1;
-
-    private ImageView qrCode2;
-
-    private String qrToSave;
-    private Button back;
-
-    private ActivityResultLauncher<String> createDocumentLauncher;
     @SuppressLint("MissingInflatedId")
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         PlaceholderApp app = (PlaceholderApp) getApplicationContext();
-        Event curEvent = app.getCachedEvent();
-
+        Event currentEvent = app.getCachedEvent();
         setContentView(R.layout.event_generate_info_checkin);
+        QRCodeManager qrCodeManager = new QRCodeManager();
 
-        QRCodeManager qrm = new QRCodeManager();
-
-        //gen1 = Checkin
-        generate1 = findViewById(R.id.event_generate_genBtn1);
-
-        //gen2 = info
-        generate2 = findViewById(R.id.event_generate_generate2);
-
-
+        generateCheckin = findViewById(R.id.event_generate_genBtn1);
+        generateInfo = findViewById(R.id.event_generate_generate2);
         next = findViewById(R.id.event_generate_qr_next);
-        qrCode1 = findViewById(R.id.event_generate_qrcode1);
-        qrCode2 = findViewById(R.id.event_generate_qr2);
+        checkInQrCodeImageView = findViewById(R.id.event_generate_qrcode1);
+        InfoQrCodeImageView = findViewById(R.id.event_generate_qr2);
         back = findViewById(R.id.event_generate_back);
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
+        QRCode checkInQr = qrCodeManager.generateQRCode(currentEvent, "checkIn");
+        QRCode infoQr = qrCodeManager.generateQRCode(currentEvent, "eventInfo");
+
+        createDocumentLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult()
+                , result -> {
+                    if (result.getData() != null)
+                        qrToUri((qrTypeToSave.equals("checkIn")) ? checkInQr : infoQr, result.getData().getData());
+                });
+
+        setUpViewListeners(checkInQr, infoQr, currentEvent);
+    }
+
+    private void setUpViewListeners(QRCode checkInQr, QRCode infoQr, Event currentEvent) {
+        back.setOnClickListener(v -> finish());
+        next.setOnClickListener(v -> {
+//            startActivity(new Intent(GenerateInfoCheckinActivity.this, PreviewEventFragment.class));
+            finish();
         });
 
-        QRCode checkIn = qrm.generateQRCode(curEvent, "checkIn");
-        QRCode info = qrm.generateQRCode(curEvent, "eventInfo");
+        generateCheckin.setOnClickListener(v -> generateOrExportQRCode(generateCheckin, checkInQrCodeImageView, checkInQr, currentEvent::setCheckInQR, "checkIn"));
+        generateInfo.setOnClickListener(v -> generateOrExportQRCode(generateInfo, InfoQrCodeImageView, infoQr, currentEvent::setInfoQRCode, "info"));
+    }
 
-        createDocumentLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument("image/jpeg"), uri -> {
-            if (uri != null) {
-                // Your logic to save the bitmap to the uri
+    private void generateOrExportQRCode(Button generateButton, ImageView qrCodeImageView, QRCode qr, Consumer<String> saveMethod, String qrType) {
+        if (generateButton.getText().equals("Generate")) {
+            qrCodeImageView.setImageBitmap(qr.getBitmap());
+            generateButton.setText("Export QR Code");
+            saveMethod.accept(qr.getRawText());
+        } else {
+            exportQrCode(qrType);
+        }
+    }
 
-                if ("checkIn".equals(qrToSave)){
-                    qrToUri(checkIn, uri);
-                }   else if ("info".equals(qrToSave)){
-                    qrToUri(info,uri);
-                }
-
-            }
-        });
-
-        //check in
-        generate1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (generate1.getText().equals("Generate")){
-
-
-                    qrCode1.setImageBitmap(checkIn.getBitmap());
-                    generate1.setText("Export QR Code");
-                    curEvent.setCheckInQR(checkIn.getRawText());
-
-
-                }   else {
-
-                    //export code goes
-                    qrToSave = "checkIn";
-                    createDocumentLauncher.launch("checkInQRCode.jpeg");
-
-                }
-            }
-        });
-
-
-        generate2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (generate2.getText().equals("Generate")){
-
-
-                    qrCode2.setImageBitmap(info.getBitmap());
-                    generate2.setText("Export QR Code");
-                    curEvent.setInfoQRCode(info.getRawText());
-
-
-                }   else {
-
-                    //export code goes here
-                    qrToSave = "info";
-                    createDocumentLauncher.launch("infoQRCode.jpeg");
-
-
-                }
-            }
-        });
-
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(GenerateInfoCheckinActivity.this, UploadPosterActivity.class);
-                startActivity(i);
-                finish();
-
-            }
-        });
-
-
-
+    private void exportQrCode(String qrType) {
+        qrTypeToSave = qrType;
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("JPEG");
+        intent.putExtra(Intent.EXTRA_TITLE, qrType + "QRCode.jpeg");
+        createDocumentLauncher.launch(intent);
     }
 
     private void qrToUri(QRCode qr, Uri uri) {
-        //essentially converts qr codes and puts them @ the uri
-        try {
-            OutputStream os = getContentResolver().openOutputStream(uri);
-            qr.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, os);
-            os.close();
-
+        try (OutputStream os = getContentResolver().openOutputStream(uri)) {
+            if (os != null) {
+                qr.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, os);
+            }
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }

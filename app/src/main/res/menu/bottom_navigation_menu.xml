@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_item1"
+        android:id="@+id/home_menu_item"
+        android:enabled="true"
+        android:icon="@drawable/home_icon"
         android:title="Home" />
 
     <item
-        android:id="@+id/menu_item2"
+        android:id="@+id/explore_menu_item"
+        android:enabled="true"
+        android:icon="@drawable/explore_icon"
         android:title="Explore" />
 
     <item
-        android:id="@+id/menu_item3"
+        android:id="@+id/organized_menu_item"
+        android:enabled="true"
+        android:icon="@drawable/organized_icon"
         android:title="Organized" />
 </menu>

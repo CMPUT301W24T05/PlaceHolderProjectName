@@ -20,12 +20,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import ca.cmput301t05.placeholder.MainActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Calendar;
 import java.util.UUID;
-
-import ca.cmput301t05.placeholder.MainActivity;
 
 import ca.cmput301t05.placeholder.Location.MapDisplay_activity;
 
