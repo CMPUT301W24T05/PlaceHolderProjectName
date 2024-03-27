@@ -81,10 +81,6 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
 
 
 
-
-    private void setProfileIcon() {
-
-
     }
 
     private void setButtonActions() {
@@ -118,7 +114,17 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
     @Override
     public void onItemClick(Event event, EventAdapter.adapterType type) {
 
+        if (type == EventAdapter.adapterType.HOSTED){
+            app.setCachedEvent(event);
+            Intent i = new Intent(MainActivity.this, EventMenuActivity.class);
+            i.putExtra("myEvent", event);
+            startActivity(i);
+        } else if (type == EventAdapter.adapterType.ATTENDING) {
+            app.setCachedEvent(event);
+            //TODO send to the event info page for attendees
+            Intent i = new Intent(MainActivity.this, ViewEventDetailsActivity.class);
+            startActivity(i);
 
+        }
 
     }
-}

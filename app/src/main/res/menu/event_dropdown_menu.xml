@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/edit"
+            android:title="Edit"
+            android:icon="@drawable/baseline_edit_24"/>
+
+        <item
+            android:id="@+id/registry"
+            android:title="Registry"
+            android:icon="@drawable/baseline_registry_24"/>
+
+        <item
+            android:id="@+id/accessqr"
+            android:title="Access QR Codes"
+            android:icon="@drawable/baseline_qr_code_24"/>
+
+        <item
+            android:id="@+id/announcements"
+            android:title="Announcements"
+            android:icon="@drawable/baseline_announcement_24"/>
+
+        <item
+            android:id="@+id/attendance"
+            android:title="Attendance"
+            android:icon="@drawable/baseline_attendance_24"/>
+
+        <item
+            android:id="@+id/milestones"
+            android:title="Milestones"
+            android:icon="@drawable/baseline_milestone_24"/>
+
+        <item
+            android:id="@+id/check_in_locations"
+            android:title="Check in Locations"
+            android:icon="@drawable/baseline_location_pin_24"/>
+    </group>
+</menu>

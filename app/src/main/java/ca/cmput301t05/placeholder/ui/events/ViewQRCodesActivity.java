@@ -1,5 +1,5 @@
 package ca.cmput301t05.placeholder.ui.events;
-
+import androidx.appcompat.widget.Toolbar;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,8 +68,8 @@ public class ViewQRCodesActivity extends AppCompatActivity {
         setContentView(R.layout.event_viewqr);
         PlaceholderApp app = (PlaceholderApp) getApplicationContext();
         Event curEvent = app.getCachedEvent();
+        Toolbar toolbar = findViewById(R.id.toolbarViewQRcode);
 
-        back = findViewById(R.id.back_viewqr);
         shareButton = findViewById(R.id.share_qr);
         title = new ArrayList<>();
         qrImage = new ArrayList<>();
@@ -103,12 +104,12 @@ public class ViewQRCodesActivity extends AppCompatActivity {
             }
         });
 
-        back.setOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() { // This is the the button in the tool bar
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(ViewQRCodesActivity.this, EventMenuActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 

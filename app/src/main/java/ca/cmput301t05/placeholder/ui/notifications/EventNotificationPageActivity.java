@@ -193,7 +193,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             }
         });
 
-        //grab notifications is event isnt empty
+        //grab notifications if event isnt empty
         if (!curEvent.getNotifications().isEmpty()) {
 
             app.getNotificationTable().fetchMultipleDocuments(curEvent.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {

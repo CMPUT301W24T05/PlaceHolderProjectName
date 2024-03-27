@@ -119,5 +119,8 @@ dependencies {
     // Import google play service for geolocation
     implementation ("com.google.android.gms:play-services-location:19.0.1")
 
+    // Import street map view
+    implementation ("org.osmdroid:osmdroid-android:6.1.18")
+
 
 }

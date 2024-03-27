@@ -100,5 +100,23 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
         }
     }
 
-    // Rest of your code for shareQRCode method, etc...
+    private void shareQRCode(QRCode qr){
+        String text;
+        if(qr.getType() == QRCodeType.INFO){
+            text = "My Event Info QR code";
+        }
+        else{
+            text = "My CheckIn QR code";
+        }
+
+        String stringPath = MediaStore.Images.Media
+                .insertImage(this.getContentResolver(), qr.getBitmap(), text, null);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(stringPath));
+        startActivity(Intent.createChooser(intent, "Share this qr code"));
+    }
+
+
 }

@@ -50,10 +50,12 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     private ImageView posterImage;
     private PlaceholderApp app;
 
-    private Event newEvent;
+    private Event newEvent, curEvent;
     private Calendar cal;
     private Uri currentImage;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+
+    private Intent fromEdit;
 
     /**
      * Called when the activity is starting. Initializes the UI components, sets up click listeners
@@ -66,6 +68,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_enterdetails);
+        fromEdit = getIntent();
 
         initializeEventDetails();
         newEvent = new Event();
@@ -118,6 +121,28 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.eventDetailNextPage);
 
         app = (PlaceholderApp) getApplicationContext();
+
+
+        if(fromEdit.hasExtra("edit")){
+            curEvent = app.getCachedEvent();
+            cal = curEvent.getEventDate();
+
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int minute = cal.get(Calendar.MINUTE);
+
+            eventName.setText(curEvent.getEventName());
+            eventLocation.setText(curEvent.getEventLocation());
+            eventDate.setText(String.format(Locale.getDefault(), "%02d-%02d-%04d", day, month, year));
+            eventTime.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+            eventCapacity.setText(String.valueOf(curEvent.getMaxAttendees()));
+            eventDescripiton.setText(curEvent.getEventInfo());
+            // TODO LOAD POSTER
+
+        }
     }
 
     private void openPosterSelectSheet() {
@@ -168,12 +193,24 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 return;
             }
 
-            newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
-            newEvent.setEventDate(cal);
-            newEvent.setEventName(eventName.getText().toString().trim());
-            newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
-            newEvent.setEventCreator(app.getUserProfile().getProfileID());
-            newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
+            if(fromEdit.hasExtra("edit")){
+                curEvent = app.getCachedEvent();
+                curEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
+                curEvent.setEventDate(cal);
+                curEvent.setEventName(eventName.getText().toString().trim());
+                curEvent.setEventInfo(eventDescripiton.getText().toString().trim());
+                curEvent.setEventCreator(app.getUserProfile().getProfileID());
+                curEvent.setEventLocation(eventLocation.getText().toString().trim());
+                //TODO SET POSTER (IF CHOSEN)
+            }else{
+                newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
+                newEvent.setEventDate(cal);
+                newEvent.setEventName(eventName.getText().toString().trim());
+                newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
+                newEvent.setEventCreator(app.getUserProfile().getProfileID());
+                newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
+                newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
+            }
 
             app.setCachedEvent(newEvent);
             Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, GenerateInfoCheckinActivity.class);
