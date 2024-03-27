@@ -3,7 +3,6 @@ package ca.cmput301t05.placeholder.ui.events;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,161 +11,128 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.UUID;
+import java.util.Locale;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
+import ca.cmput301t05.placeholder.database.images.EventPosterImageHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
+//FIXME Do we mean to join an event through this activity or 'mark event as interested'?
+
 public class EventSignUpActivity extends AppCompatActivity {
 
-    private Button back;
+    private Button backButton;
 
+    private TextView eventDateView;
+    private TextView eventLocationView;
+    private TextView eventDetailsView;
+    private TextView eventAuthorView;
 
-    private TextView event_date;
+    private ImageView eventPosterView;
 
-    private TextView event_location;
-
-    private TextView event_details;
-
-    private TextView event_author;
-
-    private ImageView event_poster;
-
-    private Button interested;
+    private Button interestedButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         //ASSUMING THAT WE HAVE CACHE THE EVENT WE JUST LOADED
         PlaceholderApp app = (PlaceholderApp) getApplicationContext();
         Event displayEvent = app.getCachedEvent();
 
-
         setContentView(R.layout.event_signupevent);
 
+        initialiseEventDetailsUI();
 
-        back = findViewById(R.id.event_signup_back);
+        backButton.setOnClickListener(view -> finish());
 
-        event_date = findViewById(R.id.event_signup_eventDate);
-        event_location = findViewById(R.id.event_signup_eventlocation);
+        updateEventDetails(displayEvent);
 
-        event_details = findViewById(R.id.event_signup_eventinfo);
-        event_author = findViewById(R.id.event_signup_author);
+        handleEventButton(app, displayEvent);
+    }
 
-        event_poster = findViewById(R.id.event_signup_poster);
+    private void initialiseEventDetailsUI() {
+        backButton = findViewById(R.id.event_signup_back);
+        eventDateView = findViewById(R.id.event_signup_eventDate);
+        eventLocationView = findViewById(R.id.event_signup_eventlocation);
+        eventDetailsView = findViewById(R.id.event_signup_eventinfo);
+        eventAuthorView = findViewById(R.id.event_signup_author);
+        eventPosterView = findViewById(R.id.event_signup_poster);
+        interestedButton = findViewById(R.id.event_signup_interested);
+    }
 
-        interested = findViewById(R.id.event_signup_interested);
+    private void updateEventDetails(Event displayEvent) {
+        PlaceholderApp app = (PlaceholderApp) getApplicationContext();
 
+        eventDateView.setText(formatEventDate(displayEvent.getEventDate()));
+        eventLocationView.setText(displayEvent.getLocation());
+        eventDetailsView.setText(displayEvent.getEventInfo());
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish(); //go back to last page
-            }
-        });
-
-
-        Log.d("Event_Check", String.valueOf(displayEvent.getEventName()));
-        //get date
-        Log.e("Event_Check", String.valueOf(displayEvent.getEventDate()));
-
-        Calendar calendar = displayEvent.getEventDate();
-
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1; //January is 0
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        // Or get the hour for 12-hour format
-        int hour12 = calendar.get(Calendar.HOUR);
-        // Get AM or PM
-        int amPm = calendar.get(Calendar.AM_PM);
-
-        String amOrPm;
-        if (amPm == Calendar.AM) {
-            amOrPm = " AM";
-        } else {
-            amOrPm = " PM";
-        }
-
-
-        String time = String.valueOf(hour12) + amOrPm;
-        String date = String.valueOf(day) + ", " + String.valueOf(month) + ", " + String.valueOf(year);
-
-        String dateTime = time + " - " + date;
-
-        event_date.setText(dateTime);
-
-        event_location.setText(displayEvent.getLocation());
-
-        event_details.setText(displayEvent.getEventInfo());
-
-        UUID profile_id = displayEvent.getEventCreator();
-
-        app.getProfileTable().fetchDocument(profile_id.toString(), new Table.DocumentCallback<Profile>() {
+        app.getProfileTable().fetchDocument(displayEvent.getEventCreator().toString(), new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile document) {
-                event_author.setText(document.getName());
+                eventAuthorView.setText(document.getName());
             }
 
             @Override
             public void onFailure(Exception e) {
-
             }
         });
 
-        if(displayEvent.hasEventPosterBitmap()){
-            event_poster.setImageBitmap(displayEvent.getEventPosterBitmap());
+        updateEventPoster(displayEvent, app.getPosterImageHandler());
+    }
+
+    private String formatEventDate(Calendar eventDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh a - dd, MM, yyyy", Locale.getDefault());
+        return dateFormat.format(eventDate.getTime());
+    }
+
+    private void updateEventPoster(Event displayEvent, EventPosterImageHandler posterHandler) {
+        if (displayEvent.hasEventPosterBitmap()) {
+            eventPosterView.setImageBitmap(displayEvent.getEventPosterBitmap());
         } else {
-            app.getPosterImageHandler().getPosterPicture(displayEvent, this, new BaseImageHandler.ImageCallback() {
+            posterHandler.getPosterPicture(displayEvent, this, new BaseImageHandler.ImageCallback() {
                 @Override
                 public void onImageLoaded(Bitmap bitmap) {
-                    event_poster.setImageBitmap(bitmap);
+                    eventPosterView.setImageBitmap(bitmap);
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    // Handle error
                     Log.e("EventDetailsDialogFragment", "Error loading image: " + e.getMessage());
                 }
             });
         }
-        interested.setOnClickListener(new View.OnClickListener() {
+    }
+
+    private void handleEventButton(PlaceholderApp app, Event displayEvent) {
+        interestedButton.setOnClickListener(view -> joinEvent(app, displayEvent));
+    }
+
+    private void joinEvent(PlaceholderApp app, Event displayEvent) {
+        app.getUserProfile().joinEvent(displayEvent);
+        app.getJoinedEvents().put(displayEvent.getEventID(), displayEvent);
+        app.getUserProfile().toDocument();
+        app.getProfileTable().pushDocument(app.getUserProfile(), app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
             @Override
-            public void onClick(View view) {
-                //basically when we click we join the event
+            public void onSuccess(Profile document) {
+            }
 
-                app.getUserProfile().joinEvent(displayEvent);
-                app.getJoinedEvents().put(displayEvent.getEventID(),displayEvent);
-
-                app.getUserProfile().toDocument();
-
-                app.getProfileTable().pushDocument(app.getUserProfile(), app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
-                    @Override
-                    public void onSuccess(Profile document) {
-
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-
-                    }
-                });
-
-                String message = "Joined Event: " + displayEvent.getEventName();
-
-                Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
-                toast.show();
-
-                finish();
-
+            @Override
+            public void onFailure(Exception e) {
             }
         });
+        showMessageAndFinish("Joined Event: " + displayEvent.getEventName());
+    }
+
+    private void showMessageAndFinish(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

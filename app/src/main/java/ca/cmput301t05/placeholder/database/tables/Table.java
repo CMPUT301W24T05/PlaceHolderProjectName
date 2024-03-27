@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder.database.tables;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -208,5 +209,19 @@ public abstract class Table<T extends DocumentSerializable> {
      */
     protected abstract T documentFromSnapshot(DocumentSnapshot snapshot);
 
+    /**
+     * Deletes document from the database
+     * @param documentID
+     * @param callback
+     */
+    public void deleteDocument(String documentID, DocumentCallback callback){
+        collectionReference.document(documentID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                callback.onSuccess(unused);
+            }
+        });
+
+    }
 
 }

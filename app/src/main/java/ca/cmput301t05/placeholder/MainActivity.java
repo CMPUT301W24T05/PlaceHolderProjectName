@@ -28,7 +28,9 @@ import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
-import ca.cmput301t05.placeholder.notifications.Notification;
+
+import ca.cmput301t05.placeholder.ui.admin.AdminViewAllImages;
+
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.ui.events.EventExplore;
@@ -105,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
 
 
 
-
     }
 
     @Override
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
     }
 
     private void setProfileIcon() {
+
         if (app.getUserProfile().hasProfileBitmap()){
             profileButton.setImageBitmap(getCircularBitmap(app.getUserProfile().getProfilePictureBitmap()));
         } else {

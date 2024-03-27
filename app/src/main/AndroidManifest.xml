@@ -75,6 +75,7 @@
         <activity android:name="ca.cmput301t05.placeholder.ui.events.ViewMilestonesActivity" />
 
 
+
     </application>
 
 

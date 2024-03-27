@@ -30,11 +30,9 @@ public class Profile extends DocumentSerializable {
     private UUID profilePictureID;
     private List<String> hostedEvents;
     private List<String> joinedEvents;
+    private List<String> interestedEvents;
     private ArrayList<String> notifications;
-
-
     boolean isAdmin = false;
-
     private String messagingToken; //for notifications
 
     /**
@@ -55,6 +53,7 @@ public class Profile extends DocumentSerializable {
         this.profileID = profileID;
         this.joinedEvents = new ArrayList<>();
         this.hostedEvents = new ArrayList<>();
+        this.interestedEvents = new ArrayList<>();
         this.notifications = new ArrayList<>();
     }
 
@@ -139,6 +138,8 @@ public class Profile extends DocumentSerializable {
     public List<String> getJoinedEvents() {
         return joinedEvents;
     }
+
+    public List<String> getInterestedEvents() { return interestedEvents; }
 
     /**
      * Retrieves the list of notifications for this profile.
@@ -239,6 +240,8 @@ public class Profile extends DocumentSerializable {
         this.joinedEvents = joinedEvents;
     }
 
+    public void setInterestedEvents(List<String> interestedEvents) { this.interestedEvents = interestedEvents; }
+
     /**
      * Sets the name of the profile.
      *
@@ -305,8 +308,9 @@ public class Profile extends DocumentSerializable {
         }   else {
             document.put("profilePictureID", profilePictureID.toString());
         }
-        document.put("hostedEvents", hostedEvents); // Assumes Event class can be serialized
-        document.put("joinedEvents", joinedEvents); // Assumes Event class can be serialized
+        document.put("hostedEvents", hostedEvents);
+        document.put("joinedEvents", joinedEvents);
+        document.put("interestedEvents", interestedEvents);
         document.put("notifications", notifications); // Assumes UserNotification can be serialized
         document.put("isAdmin", isAdmin);
         document.put("messagingToken", messagingToken);
@@ -340,9 +344,18 @@ public class Profile extends DocumentSerializable {
 
         if(document.get("hostedEvents") != null) {
             hostedEvents = (List<String>) document.get("hostedEvents");
+        } else {
+            hostedEvents = new ArrayList<>();
         }
         if(document.get("joinedEvents") != null) {
             joinedEvents = (List<String>)document.get("joinedEvents");
+        } else {
+            joinedEvents = new ArrayList<>();
+        }
+        if(document.get("interestedEvents") != null) {
+            interestedEvents = (List<String>)document.get("interestedEvents");
+        } else {
+            interestedEvents = new ArrayList<>();
         }
         if(document.get("notifications") != null) {
             notifications = (ArrayList<String>)document.get("notifications");
