@@ -19,6 +19,7 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewAttendeeCheckinActivity;
+import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewSignUpsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.EventNotificationPageActivity;
 
 public class EventMenuActivity extends AppCompatActivity {
@@ -26,7 +27,7 @@ public class EventMenuActivity extends AppCompatActivity {
     private TextView eventName;
     private ImageView eventPoster;
     private Button editEvent;
-    private Button checkRegister;
+    private Button checkSignUps;
     private Button accessQRCodes;
     private Button menuAnnouncements;
     private Button menuAttendance;
@@ -46,7 +47,7 @@ public class EventMenuActivity extends AppCompatActivity {
         eventName = findViewById(R.id.event_menu_name);
         eventPoster = findViewById(R.id.event_menu_poster);
         editEvent = findViewById(R.id.edit_event);
-        checkRegister = findViewById(R.id.check_register);
+        checkSignUps = findViewById(R.id.check_signUps);
         accessQRCodes = findViewById(R.id.access_qr_codes);
         menuAnnouncements = findViewById(R.id.menu_announcements);
         menuAttendance = findViewById(R.id.menu_attendance);
@@ -107,6 +108,14 @@ public class EventMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EventMenuActivity.this, MapDisplay_activity.class);
+                startActivity(intent);
+            }
+        });
+
+        checkSignUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventMenuActivity.this, ViewSignUpsActivity.class);
                 startActivity(intent);
             }
         });

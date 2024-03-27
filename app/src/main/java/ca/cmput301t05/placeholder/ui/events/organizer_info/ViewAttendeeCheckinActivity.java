@@ -77,7 +77,7 @@ public class ViewAttendeeCheckinActivity extends AppCompatActivity { // Organize
             }
         });
 
-//        Log.e("amirza2", String.valueOf(attendee_list.size()));
+   Log.e("amirza2", String.valueOf(attendee_list.size()));
         if (attendee_list.size() == 0){
             Toast.makeText(ViewAttendeeCheckinActivity.this, "You have no attendees!", Toast.LENGTH_SHORT).show();
             emptyTextView.setVisibility(View.VISIBLE);

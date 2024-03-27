@@ -47,12 +47,12 @@
             android:text="Edit My Event" />
 
         <Button
-            android:id="@+id/check_register"
+            android:id="@+id/check_signUps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20dp"
-            android:text="Registration" />
+            android:text="Check signups" />
 
         <Button
             android:id="@+id/access_qr_codes"

@@ -50,7 +50,7 @@
             android:exported="true">
         </activity>
 
-
+        <activity android:name=".ui.events.organizer_info.ViewSignUpsActivity"/>
 
         <activity android:name=".ui.events.organizer_info.ViewAttendeeCheckinActivity" />
         <activity android:name=".InitialSetupActivity" />
