@@ -140,12 +140,23 @@ public abstract class Table<T extends DocumentSerializable> {
     public void pushDocument(T document, String documentId, DocumentCallback<T> callback) {
         collectionReference.document(documentId).set(document.toDocument())
                 .addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                callback.onSuccess(document);
-            } else {
-                callback.onFailure(task.getException());
-            }
-        });
+                    if (task.isSuccessful()) {
+                        callback.onSuccess(document);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+    }
+
+    public void updateDocument(T document, String documentId, DocumentCallback<T> callback) {
+        collectionReference.document(documentId).update(document.toDocument())
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess(document);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
     }
 
     /**

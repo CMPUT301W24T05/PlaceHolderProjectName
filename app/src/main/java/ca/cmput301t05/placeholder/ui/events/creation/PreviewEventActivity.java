@@ -60,7 +60,7 @@ public class PreviewEventActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarEventPreview);
         textViewEventName = findViewById(R.id.preview_name);
-        textViewEventDate = findViewById(R.id.event_preview_eventDate);
+//        textViewEventDate = findViewById(R.id.event_preview_eventDate);
         textViewEventLocation = findViewById(R.id.event_preview_eventlocation);
         textViewEventDetails = findViewById(R.id.event_preview_eventinfo);
         textViewEventAuthor = findViewById(R.id.event_preview_author);
