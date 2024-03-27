@@ -43,18 +43,19 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/create_event_poster"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="300dp"
+                    android:layout_height="268dp"
                     android:background="@color/md_theme_secondaryContainer"
                     android:paddingStart="16dp"
                     android:paddingTop="0dp"
                     android:paddingEnd="16dp"
-                    android:paddingBottom="16dp"
+                    android:paddingBottom="0dp"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toTopOf="@id/guidelineMaxHeight"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
                     app:shapeAppearanceOverlay="@style/RoundedImageView" />
 
                 <androidx.constraintlayout.widget.Guideline
@@ -64,30 +65,43 @@
                     android:orientation="horizontal"
                     app:layout_constraintGuide_begin="350dp" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/floatingActionButton"
-                    style="?floatingActionButtonSmallTertiaryStyle"
+<!--                <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--                    android:id="@+id/floatingActionButton"-->
+<!--                    style="?floatingActionButtonSmallTertiaryStyle"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:clickable="true"-->
+<!--                    android:focusable="true"-->
+<!--                    android:src="@drawable/edit_icon"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/create_event_poster"-->
+<!--                    app:layout_constraintEnd_toEndOf="@+id/create_event_poster" />-->
+
+                <Button
+                    android:id="@+id/open_poster_dialog"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/edit_icon"
-                    app:layout_constraintBottom_toBottomOf="@+id/create_event_poster"
-                    app:layout_constraintEnd_toEndOf="@+id/create_event_poster" />
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="?attr/colorTertiaryContainer"
+                    android:text="Select Poster"
+                    app:icon="@drawable/edit_icon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/create_event_poster" />
 
                 <ImageView
                     android:id="@+id/create_event_name_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="16dp"
                     android:padding="8dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:scaleType="centerInside"
 
+                    android:scaleType="centerInside"
                     app:layout_constraintBottom_toTopOf="@+id/enterLocationLayout"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/create_event_poster"
+                    app:layout_constraintTop_toBottomOf="@+id/open_poster_dialog"
                     app:srcCompat="@drawable/event_name_icon"
                     app:tint="?attr/colorOnSurfaceVariant" />
 

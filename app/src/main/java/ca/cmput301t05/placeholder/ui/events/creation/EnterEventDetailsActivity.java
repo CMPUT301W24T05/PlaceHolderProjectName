@@ -3,10 +3,15 @@ package ca.cmput301t05.placeholder.ui.events.creation;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,7 +32,7 @@ import java.util.Locale;
  * This activity includes date and time pickers to facilitate the entry of date and time information.
  * After entering the details, the user can proceed to the next step which involves uploading an event poster.
  */
-public class EnterEventDetailsActivity extends AppCompatActivity {
+public class EnterEventDetailsActivity extends AppCompatActivity implements UploadPosterActivity.OnPosterImageSelectedListener {
 
     private EditText eventName;
     private EditText eventLocation;
@@ -36,11 +41,13 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     private EditText eventCapacity;
     private EditText eventDescripiton;
     private ExtendedFloatingActionButton nextButton;
-
+    private Button openPosterDialog;
+    private ImageView posterImage;
     private PlaceholderApp app;
 
     private Event newEvent;
     private Calendar cal;
+    private Uri currentImage;
 
     /**
      * Called when the activity is starting. Initializes the UI components, sets up click listeners
@@ -68,6 +75,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
 
         eventTime.setOnClickListener(view -> openTimePickerDialog());
         eventDate.setOnClickListener(view -> openDatePickerDialog());
+        openPosterDialog.setOnClickListener(view -> openPosterSelectSheet());
 
         nextButton = findViewById(R.id.eventDetailNextPage);
 
@@ -85,7 +93,21 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         eventTime = findViewById(R.id.enterTime);
         eventDescripiton = findViewById(R.id.enterEventDescription);
         eventCapacity = findViewById(R.id.enterEventCapacity);
+        openPosterDialog = findViewById(R.id.open_poster_dialog);
+        posterImage = findViewById(R.id.create_event_poster);
         app = (PlaceholderApp) getApplicationContext();
+    }
+
+    private void openPosterSelectSheet() {
+        UploadPosterActivity posterDialog = new UploadPosterActivity();
+
+        if(currentImage != null){
+            Bundle args = new Bundle();
+            args.putString("imageUri", currentImage.toString());
+            posterDialog.setArguments(args);
+        }
+
+        posterDialog.show(getSupportFragmentManager(), posterDialog.getTag());
     }
 
     /**
@@ -183,6 +205,36 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             public void onFailure(Exception e) {
                 // TODO Handle the failure of uploading the new event to the database
             }
+        });
+    }
+
+    @Override
+    public void onImageSelected(Uri imageUri) {
+        newEvent.setEventPosterFromUri(imageUri, getApplicationContext());
+        currentImage = imageUri;
+        posterImage.setImageURI(currentImage);
+        cropPosterToImage();
+    }
+
+    private void cropPosterToImage() {
+        posterImage.post(() -> {
+            // Get the Drawable's dimensions
+            Drawable drawable = posterImage.getDrawable();
+            int imageHeight = drawable.getIntrinsicHeight();
+            int imageWidth = drawable.getIntrinsicWidth();
+
+            // Calculate the aspect ratio
+            float aspectRatio = (float) imageWidth / (float) imageHeight;
+
+            // Assuming you have a fixed maximum height
+            int imageViewHeight = posterImage.getHeight(); // or a specific value in pixels
+            int imageViewWidth = Math.round(imageViewHeight * aspectRatio);
+
+            // Set the ImageView's dimensions
+            ViewGroup.LayoutParams params = posterImage.getLayoutParams();
+            params.width = imageViewWidth;
+            params.height = imageViewHeight; // You can keep this as is if it's already constrained
+            posterImage.setLayoutParams(params);
         });
     }
 }
