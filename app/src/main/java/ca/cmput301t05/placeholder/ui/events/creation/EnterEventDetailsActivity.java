@@ -11,7 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +26,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -32,7 +37,7 @@ import java.util.Locale;
  * This activity includes date and time pickers to facilitate the entry of date and time information.
  * After entering the details, the user can proceed to the next step which involves uploading an event poster.
  */
-public class EnterEventDetailsActivity extends AppCompatActivity implements UploadPosterActivity.OnPosterImageSelectedListener {
+public class EnterEventDetailsActivity extends AppCompatActivity {
 
     private EditText eventName;
     private EditText eventLocation;
@@ -48,6 +53,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity implements Uplo
     private Event newEvent;
     private Calendar cal;
     private Uri currentImage;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
     /**
      * Called when the activity is starting. Initializes the UI components, sets up click listeners
@@ -62,6 +68,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity implements Uplo
         setContentView(R.layout.event_enterdetails);
 
         initializeEventDetails();
+        newEvent = new Event();
 
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
@@ -71,18 +78,31 @@ public class EnterEventDetailsActivity extends AppCompatActivity implements Uplo
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Handling the navigation icon click
-        toolbar.setNavigationOnClickListener(v -> finish());
+        toolbar.setNavigationOnClickListener(v -> backAction());
+
+        pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+            if (uri == null) {
+                Log.d("PhotoPicker", "No media selected");
+            } else {
+                Log.d("PhotoPicker", "Selected URI: " + uri);
+                posterImage.setImageURI(uri);
+                cropPosterToImage();
+                currentImage = uri;
+            }
+        });
 
         eventTime.setOnClickListener(view -> openTimePickerDialog());
         eventDate.setOnClickListener(view -> openDatePickerDialog());
         openPosterDialog.setOnClickListener(view -> openPosterSelectSheet());
 
-        nextButton = findViewById(R.id.eventDetailNextPage);
-
-        newEvent = new Event();
-
         setupNextButtonClick();
     }
+
+    private void backAction(){
+        Log.d("CreateEvent", "Back nav action activated!");
+        finish();
+    }
+
     /**
      * Initializes the UI components used for entering event details and retrieves the application context.
      */
@@ -95,19 +115,16 @@ public class EnterEventDetailsActivity extends AppCompatActivity implements Uplo
         eventCapacity = findViewById(R.id.enterEventCapacity);
         openPosterDialog = findViewById(R.id.open_poster_dialog);
         posterImage = findViewById(R.id.create_event_poster);
+        nextButton = findViewById(R.id.eventDetailNextPage);
+
         app = (PlaceholderApp) getApplicationContext();
     }
 
     private void openPosterSelectSheet() {
-        UploadPosterActivity posterDialog = new UploadPosterActivity();
-
-        if(currentImage != null){
-            Bundle args = new Bundle();
-            args.putString("imageUri", currentImage.toString());
-            posterDialog.setArguments(args);
-        }
-
-        posterDialog.show(getSupportFragmentManager(), posterDialog.getTag());
+        PickVisualMediaRequest request = new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build();
+        pickMedia.launch(request);
     }
 
     /**
@@ -156,11 +173,11 @@ public class EnterEventDetailsActivity extends AppCompatActivity implements Uplo
             newEvent.setEventName(eventName.getText().toString().trim());
             newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
             newEvent.setEventCreator(app.getUserProfile().getProfileID());
+            newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
 
             app.setCachedEvent(newEvent);
-            Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
-            startActivity(posterPick);
-
+            Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, GenerateInfoCheckinActivity.class);
+            startActivity(genQRActivity);
         });
     }
 
@@ -170,7 +187,22 @@ public class EnterEventDetailsActivity extends AppCompatActivity implements Uplo
      * @return true if all details are valid, false otherwise.
      */
     private boolean hasValidEventDetails() {
-        return validateEditTextNotEmpty(eventName) && validateEditTextNotEmpty(eventLocation) && validateEditTextNotEmpty(eventDate) && validateEditTextNotEmpty(eventTime) && validateEditTextNotEmpty(eventDescripiton) && validateEditTextNotEmpty(eventCapacity) && cal != null;
+        return validateEditTextNotEmpty(eventName)
+                && validateEditTextNotEmpty(eventLocation)
+                && validateEditTextNotEmpty(eventDate)
+                && validateEditTextNotEmpty(eventTime)
+                && validateEditTextNotEmpty(eventDescripiton)
+                && validateEditTextNotEmpty(eventCapacity)
+                && cal != null
+                && validateImageHasBeenChosen();
+    }
+
+    private boolean validateImageHasBeenChosen(){
+        boolean imageChosen = currentImage != null;
+        if(!imageChosen)
+            Toast.makeText(getApplicationContext(), "Must choose an event poster!", Toast.LENGTH_SHORT).show();
+
+        return imageChosen;
     }
 
     /**
@@ -185,35 +217,6 @@ public class EnterEventDetailsActivity extends AppCompatActivity implements Uplo
             return false;
         }
         return true;
-    }
-
-    /**
-     * Adds the event to the database and transitions to the UploadPosterActivity on success.
-     */
-    private void addEventToDatabase() {
-        app.getEventTable().pushDocument(newEvent, newEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
-            @Override
-            public void onSuccess(Event document) {
-                String eventID = newEvent.getEventID().toString();
-                Log.d("Event_ID", eventID);
-                Intent posterPick = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
-                posterPick.putExtra("created_event_ID", eventID);
-                startActivity(posterPick);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                // TODO Handle the failure of uploading the new event to the database
-            }
-        });
-    }
-
-    @Override
-    public void onImageSelected(Uri imageUri) {
-        newEvent.setEventPosterFromUri(imageUri, getApplicationContext());
-        currentImage = imageUri;
-        posterImage.setImageURI(currentImage);
-        cropPosterToImage();
     }
 
     private void cropPosterToImage() {

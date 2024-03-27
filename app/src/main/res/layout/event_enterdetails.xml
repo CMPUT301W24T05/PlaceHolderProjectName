@@ -25,11 +25,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +39,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="72dp">
+                android:paddingTop="8dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/create_event_poster"
@@ -65,28 +65,27 @@
                     android:orientation="horizontal"
                     app:layout_constraintGuide_begin="350dp" />
 
-<!--                <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--                    android:id="@+id/floatingActionButton"-->
-<!--                    style="?floatingActionButtonSmallTertiaryStyle"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:clickable="true"-->
-<!--                    android:focusable="true"-->
-<!--                    android:src="@drawable/edit_icon"-->
-<!--                    app:layout_constraintBottom_toBottomOf="@+id/create_event_poster"-->
-<!--                    app:layout_constraintEnd_toEndOf="@+id/create_event_poster" />-->
+                <!--                <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+                <!--                    android:id="@+id/floatingActionButton"-->
+                <!--                    style="?floatingActionButtonSmallTertiaryStyle"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:clickable="true"-->
+                <!--                    android:focusable="true"-->
+                <!--                    android:src="@drawable/edit_icon"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="@+id/create_event_poster"-->
+                <!--                    app:layout_constraintEnd_toEndOf="@+id/create_event_poster" />-->
 
                 <Button
                     android:id="@+id/open_poster_dialog"
                     style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:backgroundTint="?attr/colorTertiaryContainer"
                     android:text="Select Poster"
                     app:icon="@drawable/edit_icon"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/create_event_poster"
+                    app:layout_constraintStart_toStartOf="@+id/create_event_poster"
                     app:layout_constraintTop_toBottomOf="@+id/create_event_poster" />
 
                 <ImageView
