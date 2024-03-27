@@ -67,7 +67,7 @@ public class PreviewEventFragment extends Fragment {
 
     private void setUpViews(View view) {
         buttonCreateEvent = view.findViewById(R.id.preview_create);
-        buttonBack = view.findViewById(R.id.event_preview_back);
+//        buttonBack = view.findViewById(R.id.event_preview_back);
         textViewEventName = view.findViewById(R.id.preview_name);
         textViewEventDate = view.findViewById(R.id.event_menu_eventDate);
         textViewEventLocation = view.findViewById(R.id.event_preview_eventlocation);

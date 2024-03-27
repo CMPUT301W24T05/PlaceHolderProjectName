@@ -45,17 +45,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
     private TextView eventName;
     private ImageView eventPoster;
-<<<<<<< HEAD
-    private Button editEvent;
-    private Button checkSignUps;
-    private Button accessQRCodes;
-    private Button menuAnnouncements;
-    private Button menuAttendance;
-    private Button menuMilestones;
-    private Button checkInLocations;
-    private Button backButton;
-=======
->>>>>>> fcfa63012ec86b4d6d775ced33c062ff85f2d6b3
+
 
 
     private Button buttonBack;
@@ -79,48 +69,10 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
         app = (PlaceholderApp) getApplicationContext();
         curEvent = app.getCachedEvent();
         setContentView(R.layout.event_menu);
-        buttonBack = findViewById(R.id.event_menu_back);
+//        buttonBack = findViewById(R.id.event_menu_back);
         fromIntent = getIntent();
 
-<<<<<<< HEAD
-        eventName = findViewById(R.id.event_menu_name);
-        eventPoster = findViewById(R.id.event_menu_poster);
-        editEvent = findViewById(R.id.edit_event);
-        checkSignUps = findViewById(R.id.check_signUps);
-        accessQRCodes = findViewById(R.id.access_qr_codes);
-        menuAnnouncements = findViewById(R.id.menu_announcements);
-        menuAttendance = findViewById(R.id.menu_attendance);
-        menuMilestones = findViewById(R.id.menu_milestones);
-        checkInLocations = findViewById(R.id.check_in_locations);
-        backButton = findViewById(R.id.event_menu_back);
-=======
-        drawerLayout = findViewById(R.id.event_menu_drawer);
-        toolbar = findViewById(R.id.toolbar);
-        navigationView = findViewById(R.id.menu_nav);
-        setSupportActionBar(toolbar);
 
-        // Set up hamburger icon
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-        //navigation actions
-        navigationView.setNavigationItemSelectedListener(this);
-
-
-
-        setEventDetails();
-
-        buttonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(EventMenuActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
->>>>>>> fcfa63012ec86b4d6d775ced33c062ff85f2d6b3
 
         if (curEvent.hasEventPosterBitmap()) {
             eventPoster.setImageBitmap(curEvent.getEventPosterBitmap());
@@ -139,58 +91,12 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
             });
         }
 
-<<<<<<< HEAD
-        menuAnnouncements.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(EventMenuActivity.this, EventNotificationPageActivity.class);
-                startActivity(i);
-            }
-        });
-
-        accessQRCodes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EventMenuActivity.this, ViewQRCodesActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        menuAttendance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EventMenuActivity.this, ViewAttendeeCheckinActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        checkInLocations.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EventMenuActivity.this, MapDisplay_activity.class);
-                startActivity(intent);
-            }
-        });
-
-        checkSignUps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EventMenuActivity.this, ViewSignUpsActivity.class);
-                startActivity(intent);
-            }
-        });
 
 
 
-=======
->>>>>>> fcfa63012ec86b4d6d775ced33c062ff85f2d6b3
+
+
+
 
     }
 
