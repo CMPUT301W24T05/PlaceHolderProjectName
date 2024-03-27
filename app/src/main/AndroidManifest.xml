@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"  />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -68,6 +70,7 @@
         <activity android:name=".Location.Successful_Checked_In_Activity"/>
         <activity android:name=".ui.events.EventExplore" />
         <activity android:name=".ui.events.EventOrganized" />
+        <activity android:name=".Location.MapDisplay_activity"/>
 
 
 
