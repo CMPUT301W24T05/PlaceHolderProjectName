@@ -14,7 +14,7 @@
             app:titleMarginEnd="32dp"
 
             app:title="Signups for your event"
-            app:layout_alignParentTop="true"
+
             android:layout_alignParentTop="true"
             />
 <!--132dp just a random # I came up with to center title    -->
