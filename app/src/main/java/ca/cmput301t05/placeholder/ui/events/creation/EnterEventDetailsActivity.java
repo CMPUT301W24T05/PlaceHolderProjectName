@@ -19,6 +19,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import ca.cmput301t05.placeholder.database.tables.EventTable;
+import ca.cmput301t05.placeholder.database.tables.ProfileTable;
+import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
@@ -29,6 +34,7 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -50,12 +56,12 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     private ImageView posterImage;
     private PlaceholderApp app;
 
-    private Event newEvent, curEvent;
+    private Event newEvent;
     private Calendar cal;
     private Uri currentImage;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
-    private Intent fromEdit;
+    private boolean isEditing;
 
     /**
      * Called when the activity is starting. Initializes the UI components, sets up click listeners
@@ -68,10 +74,9 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_enterdetails);
-        fromEdit = getIntent();
 
         initializeEventDetails();
-        newEvent = new Event();
+        loadCachedEvent();
 
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
@@ -101,7 +106,35 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         setupNextButtonClick();
     }
 
-    private void backAction(){
+    private void loadCachedEvent() {
+        Intent fromEdit = getIntent();
+        isEditing = fromEdit.hasExtra("edit");
+        if (isEditing) {
+            newEvent = app.getCachedEvent();
+            cal = newEvent.getEventDate();
+
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int minute = cal.get(Calendar.MINUTE);
+
+            eventName.setText(newEvent.getEventName());
+            eventLocation.setText(newEvent.getEventLocation());
+            eventDate.setText(String.format(Locale.getDefault(), "%02d-%02d-%04d", day, month, year));
+            eventTime.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+            eventCapacity.setText(String.valueOf(newEvent.getMaxAttendees()));
+            eventDescripiton.setText(newEvent.getEventInfo());
+            if (newEvent.hasEventPosterBitmap()) {
+                posterImage.setImageBitmap(newEvent.getEventPosterBitmap());
+                cropPosterToImage();
+            }
+        } else {
+            newEvent = new Event();
+        }
+    }
+
+    private void backAction() {
         Log.d("CreateEvent", "Back nav action activated!");
         finish();
     }
@@ -121,28 +154,6 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.eventDetailNextPage);
 
         app = (PlaceholderApp) getApplicationContext();
-
-
-        if(fromEdit.hasExtra("edit")){
-            curEvent = app.getCachedEvent();
-            cal = curEvent.getEventDate();
-
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int minute = cal.get(Calendar.MINUTE);
-
-            eventName.setText(curEvent.getEventName());
-            eventLocation.setText(curEvent.getEventLocation());
-            eventDate.setText(String.format(Locale.getDefault(), "%02d-%02d-%04d", day, month, year));
-            eventTime.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-            eventCapacity.setText(String.valueOf(curEvent.getMaxAttendees()));
-            eventDescripiton.setText(curEvent.getEventInfo());
-            // TODO LOAD POSTER
-
-        }
     }
 
     private void openPosterSelectSheet() {
@@ -189,32 +200,22 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
      */
     private void setupNextButtonClick() {
         nextButton.setOnClickListener(view -> {
-            if (!hasValidEventDetails()){
+            if (!hasValidEventDetails()) {
                 return;
             }
 
-            if(fromEdit.hasExtra("edit")){
-                curEvent = app.getCachedEvent();
-                curEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
-                curEvent.setEventDate(cal);
-                curEvent.setEventName(eventName.getText().toString().trim());
-                curEvent.setEventInfo(eventDescripiton.getText().toString().trim());
-                curEvent.setEventCreator(app.getUserProfile().getProfileID());
-                curEvent.setEventLocation(eventLocation.getText().toString().trim());
-                //TODO SET POSTER (IF CHOSEN)
-            }else{
-                newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
-                newEvent.setEventDate(cal);
-                newEvent.setEventName(eventName.getText().toString().trim());
-                newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
-                newEvent.setEventCreator(app.getUserProfile().getProfileID());
-                newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
+            newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
+            newEvent.setEventDate(cal);
+            newEvent.setEventName(eventName.getText().toString().trim());
+            newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
+            newEvent.setEventCreator(app.getUserProfile().getProfileID());
+            newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
+            if (currentImage != null) {
                 newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
             }
 
             app.setCachedEvent(newEvent);
-            Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, GenerateInfoCheckinActivity.class);
-            startActivity(genQRActivity);
+            handleEventCreation();
         });
     }
 
@@ -234,9 +235,12 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 && validateImageHasBeenChosen();
     }
 
-    private boolean validateImageHasBeenChosen(){
+    private boolean validateImageHasBeenChosen() {
+        if(isEditing)
+            return true;
+
         boolean imageChosen = currentImage != null;
-        if(!imageChosen)
+        if (!imageChosen)
             Toast.makeText(getApplicationContext(), "Must choose an event poster!", Toast.LENGTH_SHORT).show();
 
         return imageChosen;
@@ -275,6 +279,68 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             params.width = imageViewWidth;
             params.height = imageViewHeight; // You can keep this as is if it's already constrained
             posterImage.setLayoutParams(params);
+        });
+    }
+
+    private void handleEventCreation() {
+        if(currentImage != null) {
+            // Initiate uploading of event poster
+            app.getPosterImageHandler().uploadPoster(currentImage, newEvent, getApplicationContext());
+        }
+
+        // Use a single event handling path for both edit and new event creation
+        EventTable eventTable = app.getEventTable();
+        Table.DocumentCallback<Event> eventCallback = new Table.DocumentCallback<Event>() {
+            @Override
+            public void onSuccess(Event document) {
+                if(!isEditing) {
+                    AddHostedEventToProfile(document);
+                }
+                else{
+                    Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, EventMenuActivity.class);
+                    startActivity(genQRActivity);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Handle the failure of updating the event in the database
+            }
+        };
+
+        // Update or push event document based on event type
+        if (isEditing) {
+            eventTable.updateDocument(newEvent, newEvent.getEventID().toString(), eventCallback);
+        } else {
+            eventTable.pushDocument(newEvent, newEvent.getEventID().toString(), eventCallback);
+        }
+
+    }
+
+    private void AddHostedEventToProfile(Event currentEvent) {
+        String currentEventId = currentEvent.getEventID().toString();
+        List<String> hostedEvents = app.getUserProfile().getHostedEvents();
+        hostedEvents.add(currentEventId);
+        app.getUserProfile().setHostedEvents(hostedEvents);
+
+        // Update or push profile document
+        ProfileTable profileTable = app.getProfileTable();
+        profileTable.pushDocument(app.getUserProfile(), app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+            @Override
+            public void onSuccess(Profile document) {
+                String message = "Event, " + currentEvent.getEventName() + " , Successfully created";
+                Toast.makeText(app.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                // Navigate to access QR code page
+                Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, GenerateInfoCheckinActivity.class);
+                startActivity(genQRActivity);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Handle failure of updating the profile in the database
+            }
         });
     }
 }

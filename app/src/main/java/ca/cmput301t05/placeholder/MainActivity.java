@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -8,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import ca.cmput301t05.placeholder.events.Event;
@@ -49,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         }
         setupBottomNavigationView();
         setButtonActions();
-        setProfileIcon();
 
         Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
         Log.i("MainActivityJoinedEvents", "Number of joined events: " + app.getJoinedEvents().size());
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
             } else if (id == R.id.explore_menu_item) {
                 selectedFragment = new EventExploreFragment();
             } else if (id == R.id.organized_menu_item) {
-                 selectedFragment = new EventOrganizedFragment();
+                selectedFragment = new EventOrganizedFragment();
             }
 
             if (selectedFragment != null) {
@@ -79,12 +81,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         });
     }
 
-
-
-    }
-
     private void setButtonActions() {
-
 
 
 //        //HANDLE FRAGMENT POP UP HERE
@@ -97,10 +94,9 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
 //        }
 
 
-
     }
 
-    public void openEventFrag(){
+    public void openEventFrag() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         EventDetailsDialogFragment infoViewAndSignup = new EventDetailsDialogFragment();
@@ -114,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
     @Override
     public void onItemClick(Event event, EventAdapter.adapterType type) {
 
-        if (type == EventAdapter.adapterType.HOSTED){
+        if (type == EventAdapter.adapterType.HOSTED) {
             app.setCachedEvent(event);
             Intent i = new Intent(MainActivity.this, EventMenuActivity.class);
             i.putExtra("myEvent", event);
@@ -128,3 +124,4 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         }
 
     }
+}
