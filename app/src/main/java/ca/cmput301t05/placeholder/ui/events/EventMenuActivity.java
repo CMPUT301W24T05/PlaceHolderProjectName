@@ -119,7 +119,6 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
     private void setEventDetails() {
         //curEvent = app.getCachedEvent();
-        curEvent = (Event) fromIntent.getSerializableExtra("myEvent");
         eventName = findViewById(R.id.event_menu_name);
         textViewEventDate = findViewById(R.id.event_menu_eventDate);
         textViewEventLocation = findViewById(R.id.event_preview_eventlocation);
@@ -203,26 +202,33 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
         } else if (itemId == R.id.attendance) {
             Intent intentAttendance = new Intent(EventMenuActivity.this, ViewAttendeeCheckinActivity.class);
             startActivity(intentAttendance);
-        }else if (itemId == R.id.check_in_locations) {
+        } else if (itemId == R.id.check_in_locations) {
             Intent intentLoc = new Intent(EventMenuActivity.this, MapDisplay_activity.class);
-                startActivity(intentLoc);
-
-
-        // Handle more items as needed
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle
-        if (toggle.onOptionsItemSelected(item)) {
-            return true;
+            startActivity(intentLoc);
+        } else if (itemId == R.id.milestones) {
+            Intent intentMiles = new Intent(EventMenuActivity.this, ViewMilestonesActivity.class);
+            startActivity(intentMiles);
         }
 
-        // Handle your other action bar items here if needed
 
-        return super.onOptionsItemSelected(item);
+
+            // Handle more items as needed
+            return true;
+
     }
+
+        @Override
+        public boolean onOptionsItemSelected (MenuItem item){
+            // Pass the event to ActionBarDrawerToggle
+            if (toggle.onOptionsItemSelected(item)) {
+                return true;
+            }
+
+            // Handle your other action bar items here if needed
+
+            return super.onOptionsItemSelected(item);
+        }
+
 
 
 

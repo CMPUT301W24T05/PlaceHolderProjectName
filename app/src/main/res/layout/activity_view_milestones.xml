@@ -8,5 +8,44 @@
         android:id="@+id/back_milestones"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="back" />
+
+    <TextView
+        android:id="@+id/header_milestone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Milestones"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="30dp"
+        />
+
+    <CheckBox
+        android:id="@+id/checkBox_first_attendee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Attendee"
+        android:layout_marginBottom="20dp"
+        />
+
+    <CheckBox
+        android:id="@+id/checkBox_first_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Signup"
+        android:layout_marginBottom="20dp"/>
+
+    <CheckBox
+        android:id="@+id/checkBox_halfway"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Halfway"
+        android:layout_marginBottom="20dp"/>
+
+    <CheckBox
+        android:id="@+id/checkBox_full_capacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Full Capacity" />
 </LinearLayout>
