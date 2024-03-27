@@ -63,7 +63,7 @@ public class ProfileImageHandlerTest {
     public void testRemoveProfilePic() {
         Profile profile = new Profile("John", UUID.randomUUID());
         profile.setProfilePictureID(UUID.randomUUID());
-        profileImageHandler.removeProfilePic(profile);
+        profileImageHandler.removeProfilePic(profile, mockContext.getApplicationContext());
         assertNull(profile.getProfilePictureID());
 
     }

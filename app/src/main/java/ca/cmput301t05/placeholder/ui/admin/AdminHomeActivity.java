@@ -8,6 +8,9 @@ import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentTransaction;
+
 import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.R;
 
@@ -16,49 +19,18 @@ import ca.cmput301t05.placeholder.R;
  * like browsing events, profiles, and images.
  */
 public class AdminHomeActivity extends AppCompatActivity {
-    private ImageButton homeButton;
-    private Button buttonBrowseEvents;
-    private Button buttonBrowseProfiles;
-    private Button buttonBrowseImages;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_admin_mainpage);
+        setContentView(R.layout.admin_mainpage);
 
-        homeButton = findViewById(R.id.button_home);
-        buttonBrowseEvents = findViewById(R.id.button_browseEvents);
-        buttonBrowseImages = findViewById(R.id.button_browseImages);
-        buttonBrowseProfiles = findViewById(R.id.button_browseProfiles);
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.admin_fragment_container, AdminViewAllImages.class, null)
+                .commit();
 
-        // When click on homeButton, go back to the
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AdminHomeActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        //:
-        buttonBrowseProfiles.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        buttonBrowseEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        buttonBrowseImages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
     }
 }

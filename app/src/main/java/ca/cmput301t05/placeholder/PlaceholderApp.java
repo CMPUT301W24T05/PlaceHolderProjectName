@@ -12,6 +12,7 @@ import ca.cmput301t05.placeholder.Location.LocationManager;
 import ca.cmput301t05.placeholder.database.images.EventPosterImageHandler;
 import ca.cmput301t05.placeholder.database.images.ProfileImageHandler;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
+import ca.cmput301t05.placeholder.database.tables.ImageDetailTable;
 import ca.cmput301t05.placeholder.database.tables.NotificationTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
@@ -32,12 +33,15 @@ public class PlaceholderApp extends Application implements Serializable {
     private ProfileTable profileTable;
     private EventTable eventTable;
 
+    private ImageDetailTable imageDetailTable;
+
     private NotificationTable notificationTable;
     private DeviceIDManager idManager;
 
     private HashMap<UUID, Event> joinedEvents;
 
     private HashMap<UUID, Event> hostedEvents;
+    private HashMap<UUID, Event> interestedEvents;
 
     private ArrayList<Notification> userNotifications;
 
@@ -57,6 +61,7 @@ public class PlaceholderApp extends Application implements Serializable {
         profileTable = new ProfileTable();
         eventTable = new EventTable();
         notificationTable = new NotificationTable();
+        imageDetailTable = new ImageDetailTable();
 
         idManager = new DeviceIDManager(this);
 
@@ -65,6 +70,7 @@ public class PlaceholderApp extends Application implements Serializable {
 
         hostedEvents = new HashMap<>();
         joinedEvents = new HashMap<>();
+        interestedEvents = new HashMap<>();
         userNotifications = new ArrayList<>();
         locationManager = new LocationManager(this);
     }
@@ -175,5 +181,13 @@ public class PlaceholderApp extends Application implements Serializable {
      */
     public LocationManager getLocationManager() {
         return locationManager;
+    }
+
+    public HashMap<UUID, Event> getInterestedEvents() {
+        return interestedEvents;
+    }
+
+    public ImageDetailTable getImageDetailTable(){
+        return this.imageDetailTable;
     }
 }
