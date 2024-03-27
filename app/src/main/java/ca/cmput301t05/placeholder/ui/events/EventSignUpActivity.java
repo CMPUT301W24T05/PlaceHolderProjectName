@@ -1,8 +1,11 @@
 package ca.cmput301t05.placeholder.ui.events;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import ca.cmput301t05.placeholder.Location.Successful_Checked_In_Activity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
@@ -37,6 +41,7 @@ public class EventSignUpActivity extends AppCompatActivity {
     private ImageView eventPosterView;
 
     private Button interestedButton;
+    private static final long SPLASH_DELAY = 3000; // 3 seconds d
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,7 +117,50 @@ public class EventSignUpActivity extends AppCompatActivity {
     }
 
     private void handleEventButton(PlaceholderApp app, Event displayEvent) {
-        interestedButton.setOnClickListener(view -> joinEvent(app, displayEvent));
+        // sign up for an event
+        interestedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // put the profileID to the list of regsitered Users
+                boolean successful = displayEvent.userSignup(app.getUserProfile());
+                if (successful) {
+                    Toast.makeText(app, "Successfully signed up for this Event!", Toast.LENGTH_SHORT).show();
+                    // update the database
+                    app.getEventTable().pushDocument(displayEvent, displayEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
+                        @Override
+                        public void onSuccess(Event document) {
+                            // Do something after the event is successfully uploaded
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            // Event upload failed, handle failure
+                        }
+                    });
+                    app.getUserProfile().addInterestedEvents(displayEvent);
+                    app.getProfileTable().pushDocument(app.getUserProfile(), app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+                        @Override
+                        public void onSuccess(Profile user) {
+                            // Do something after the event is successfully uploaded
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            // Event upload failed, handle failure
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(app, "You have already signed up!", Toast.LENGTH_SHORT).show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    }, SPLASH_DELAY);
+                }
+            }
+        });
     }
 
     private void joinEvent(PlaceholderApp app, Event displayEvent) {
