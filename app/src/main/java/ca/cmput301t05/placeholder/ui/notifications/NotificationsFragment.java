@@ -3,7 +3,6 @@ package ca.cmput301t05.placeholder.ui.notifications;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -14,27 +13,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.UUID;
-
 import ca.cmput301t05.placeholder.MainActivity;
-import ca.cmput301t05.placeholder.PlaceholderApp;
-import ca.cmput301t05.placeholder.R;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.databinding.FragmentNotificationsBinding;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.notifications.Notification;
-import ca.cmput301t05.placeholder.profile.Profile;
 
 public class NotificationsFragment extends AppCompatActivity {
 
@@ -102,14 +87,14 @@ public class NotificationsFragment extends AppCompatActivity {
 
     private boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.menu_item1) {
+        if (id == R.id.home_menu_item) {
             // Navigate to activity_main.xml
             startActivity(new Intent(this, MainActivity.class));
             return true;
-        } else if (id == R.id.menu_item2) {
+        } else if (id == R.id.explore_menu_item) {
             // Handle item 2 selection
             return true;
-        } else if (id == R.id.menu_item3) {
+        } else if (id == R.id.organized_menu_icon) {
             // Handle item 3 selection
             return true;
         } else {

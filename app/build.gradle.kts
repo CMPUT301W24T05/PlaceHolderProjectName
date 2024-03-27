@@ -56,6 +56,7 @@ dependencies {
 
     // Material UI Library
     implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
     testImplementation ("org.mockito:mockito-inline:5.0.0");
 

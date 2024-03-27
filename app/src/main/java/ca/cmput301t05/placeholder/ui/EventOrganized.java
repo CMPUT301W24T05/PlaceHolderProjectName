@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.ui.events;
+package ca.cmput301t05.placeholder.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
+import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 
 public class EventOrganized extends AppCompatActivity implements EventAdapter.OnItemClickListener{
 
@@ -49,15 +50,15 @@ public class EventOrganized extends AppCompatActivity implements EventAdapter.On
 
     private boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.menu_item1) {
+        if (id == R.id.home_menu_item) {
             // Navigate to MainActivity
             startActivity(new Intent(this, MainActivity.class));
             return true;
-        } else if (id == R.id.menu_item2) {
+        } else if (id == R.id.explore_menu_item) {
             // Navigate to EventExplore
             startActivity(new Intent(this, EventExplore.class));
             return true;
-        } else if (id == R.id.menu_item3) {
+        } else if (id == R.id.organized_menu_icon) {
             // Navigate to EventOrganized
             startActivity(new Intent(this, EventOrganized.class));
             return true;
