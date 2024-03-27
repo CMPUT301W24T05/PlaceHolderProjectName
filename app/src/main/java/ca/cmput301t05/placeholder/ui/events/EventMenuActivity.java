@@ -20,12 +20,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import ca.cmput301t05.placeholder.MainActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Calendar;
 import java.util.UUID;
-
-import ca.cmput301t05.placeholder.MainActivity;
 
 import ca.cmput301t05.placeholder.Location.MapDisplay_activity;
 
@@ -45,7 +44,6 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
     private TextView eventName;
     private ImageView eventPoster;
-
 
 
     private Button buttonBack;
@@ -72,6 +70,24 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 //        buttonBack = findViewById(R.id.event_menu_back);
         fromIntent = getIntent();
 
+        drawerLayout = findViewById(R.id.event_menu_drawer);
+        toolbar = findViewById(R.id.toolbar);
+        navigationView = findViewById(R.id.menu_nav);
+        setSupportActionBar(toolbar);
+
+        // Set up hamburger icon
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        //navigation actions
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+
+        setEventDetails();
+
 
 
         if (curEvent.hasEventPosterBitmap()) {
@@ -90,12 +106,6 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
                 }
             });
         }
-
-
-
-
-
-
 
 
     }
@@ -127,7 +137,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
             public void onFailure(Exception e) {
             }
         });
-      
+
         if (curEvent.hasEventPosterBitmap()) {
             eventPoster.setImageBitmap(curEvent.getEventPosterBitmap());
         } else {
@@ -185,7 +195,12 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
         } else if (itemId == R.id.attendance) {
             Intent intentAttendance = new Intent(EventMenuActivity.this, ViewAttendeeCheckinActivity.class);
             startActivity(intentAttendance);
-        } else if (itemId == R.id.check_in_locations) {
+        }
+        else if (itemId == R.id.registry){
+            Intent intentAttendance = new Intent(EventMenuActivity.this,ViewSignUpsActivity.class);
+            startActivity(intentAttendance);
+        }
+        else if (itemId == R.id.check_in_locations) {
             Intent intentLoc = new Intent(EventMenuActivity.this, MapDisplay_activity.class);
             startActivity(intentLoc);
         } else if (itemId == R.id.milestones) {
@@ -195,26 +210,24 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
 
 
-            // Handle more items as needed
-            return true;
+        // Handle more items as needed
+        return true;
 
     }
 
-        @Override
-        public boolean onOptionsItemSelected (MenuItem item){
-            // Pass the event to ActionBarDrawerToggle
-            if (toggle.onOptionsItemSelected(item)) {
-                return true;
-            }
-
-            // Handle your other action bar items here if needed
-
-            return super.onOptionsItemSelected(item);
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item){
+        // Pass the event to ActionBarDrawerToggle
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
         }
+
+        // Handle your other action bar items here if needed
+
+        return super.onOptionsItemSelected(item);
+    }
 
 
 
 
 }
-
-

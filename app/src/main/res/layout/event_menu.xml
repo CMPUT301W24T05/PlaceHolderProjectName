@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.events.EventMenuActivity"
     android:fitsSystemWindows="true"
-    tools:openDrawer="strt"
+    tools:openDrawer="start"
     android:id="@+id/event_menu_drawer"
     android:clickable="true"
     android:focusable="true">
