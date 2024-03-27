@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -32,6 +33,9 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.qrcode.QRCodeType;
+import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
+import ca.cmput301t05.placeholder.ui.events.EventSignUpActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 
 public class MapDisplay_activity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
@@ -66,7 +70,22 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
         locationManager.setLocationPermissionListener(this);
         locationManager.requestLocationPermission(this);
 
-        event = app.getCachedEvent();
+        // should do like this/.....................................................
+        //event = app.getCachedEvent();
+
+        // for testing:
+        app.getEventTable().fetchDocument("917812f0-4400-420e-8260-f566943ac624", new Table.DocumentCallback<Event>() {
+            @Override
+            public void onSuccess(Event event1){
+                app.setCachedEvent(event1); //sets the cached event so we can use it on the next pag
+                event = app.getCachedEvent();
+            }
+            @Override
+            public void onFailure(Exception e){
+                // Failed to get fetch the event for eventId with exception e
+            }
+        });
+
     }
     @Override
     public void onResume() {
@@ -108,7 +127,7 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
                     marker.setPosition(startPoint);
                     marker.setTitle("You");
                     map.getOverlays().add(marker);
-                    //showAttendees();
+                    showAttendees();
                     map.invalidate();
                 }
             }
@@ -126,24 +145,27 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
         }, SPLASH_DELAY);
     }
 
-    public void showAttendees(){
+    public void showAttendees() {
         HashMap<String, HashMap<String, Double>> attendees = event.getMap();
-        attendees.forEach((key, value) -> {
-            String attendeeID = key;
-            if (value.get("latitude") != null && value.get("longitude") != null){
-                double latitude = value.get("latitude");
-                double longitude = value.get("longitude");
-                addMarker(latitude, longitude, attendeeID);
-            }
-        });
-
+        ArrayList<Marker> markers = new ArrayList<>();
+        if (attendees != null && !attendees.isEmpty()) {
+            attendees.forEach((key, value) -> {
+                if (value.get("latitude") != null && value.get("longitude") != null) {
+                    double latitude = value.get("latitude");
+                    double longitude = value.get("longitude");
+                    String attendeeID = key;
+                    markers.add(createMarker(latitude, longitude, attendeeID));
+                }
+            });
+            map.getOverlays().addAll(markers);
+            map.invalidate();
+        }
     }
-    private void addMarker(double latitude, double longitude, String title) {
+    private Marker createMarker(double latitude, double longitude, String title) {
         Marker marker = new Marker(map);
         marker.setPosition(new GeoPoint(latitude, longitude));
         marker.setTitle(title);
-        marker.setIcon(ContextCompat.getDrawable(context, R.drawable.baseline_attendee_map_icon));
-        map.getOverlays().add(marker);
+        marker.setIcon(ContextCompat.getDrawable(this, R.drawable.baseline_attendee_map_icon));
+        return marker;
     }
-
 }
