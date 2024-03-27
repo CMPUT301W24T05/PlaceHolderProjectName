@@ -106,7 +106,9 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
                     mapController.setCenter(startPoint);
                     Marker marker = new Marker(map);
                     marker.setPosition(startPoint);
+                    marker.setTitle("You");
                     map.getOverlays().add(marker);
+                    //showAttendees();
                     map.invalidate();
                 }
             }
@@ -126,7 +128,22 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
 
     public void showAttendees(){
         HashMap<String, HashMap<String, Double>> attendees = event.getMap();
+        attendees.forEach((key, value) -> {
+            String attendeeID = key;
+            if (value.get("latitude") != null && value.get("longitude") != null){
+                double latitude = value.get("latitude");
+                double longitude = value.get("longitude");
+                addMarker(latitude, longitude, attendeeID);
+            }
+        });
 
+    }
+    private void addMarker(double latitude, double longitude, String title) {
+        Marker marker = new Marker(map);
+        marker.setPosition(new GeoPoint(latitude, longitude));
+        marker.setTitle(title);
+        marker.setIcon(ContextCompat.getDrawable(context, R.drawable.baseline_attendee_map_icon));
+        map.getOverlays().add(marker);
     }
 
 }
