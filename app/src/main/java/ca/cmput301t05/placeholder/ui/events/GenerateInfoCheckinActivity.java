@@ -25,7 +25,7 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.qrcode.QRCodeType;
-import ca.cmput301t05.placeholder.ui.events.creation.PreviewEventActivity;
+import ca.cmput301t05.placeholder.ui.events.creation.PreviewEventFragment;
 
 public class GenerateInfoCheckinActivity extends AppCompatActivity {
     private Button generateCheckin, generateInfo, next, back;
@@ -63,7 +63,7 @@ public class GenerateInfoCheckinActivity extends AppCompatActivity {
     private void setUpViewListeners(QRCode checkInQr, QRCode infoQr, Event currentEvent) {
         back.setOnClickListener(v -> finish());
         next.setOnClickListener(v -> {
-            startActivity(new Intent(GenerateInfoCheckinActivity.this, PreviewEventActivity.class));
+//            startActivity(new Intent(GenerateInfoCheckinActivity.this, PreviewEventFragment.class));
             finish();
         });
 
