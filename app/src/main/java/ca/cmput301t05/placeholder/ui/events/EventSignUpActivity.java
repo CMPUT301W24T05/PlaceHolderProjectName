@@ -137,6 +137,18 @@ public class EventSignUpActivity extends AppCompatActivity {
                             // Event upload failed, handle failure
                         }
                     });
+                    app.getUserProfile().addInterestedEvents(displayEvent);
+                    app.getProfileTable().pushDocument(app.getUserProfile(), app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+                        @Override
+                        public void onSuccess(Profile user) {
+                            // Do something after the event is successfully uploaded
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            // Event upload failed, handle failure
+                        }
+                    });
                 }
                 else{
                     Toast.makeText(app, "You have already signed up!", Toast.LENGTH_SHORT).show();
