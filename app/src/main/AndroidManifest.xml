@@ -70,6 +70,7 @@
         <activity android:name=".ui.events.EventOrganized" />
 
 
+
     </application>
 
 
