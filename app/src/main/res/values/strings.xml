@@ -3,11 +3,11 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="enter_event_name">Name</string>
+    <string name="enter_event_name">Event Title</string>
     <string name="enter_event_location">Location</string>
     <string name="enter_event_date">Date</string>
     <string name="enter_event_time">Time</string>
-    <string name="enter_event_capacity">Capacity</string>
+    <string name="enter_event_capacity">Event Capacity</string>
     <string name="enter_event_description">Description</string>
     <string name="event_example_details">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec imperdiet at dui eget ultricies. Donec at lectus ultrices ipsum convallis aliquam. Aliquam vel sapien semper, posuere ligula eu, condimentum augue. Mauris tristique quam a nunc congue, eu elementum metus ullamcorper. Suspendisse rutrum dolor quis neque posuere maximus. Nunc varius diam vitae enim sagittis pharetra. Praesent id augue interdum, suscipit ipsum at, facilisis risus. Donec pellentesque dolor risus, in laoreet lorem bibendum et. Donec dapibus aliquam efficitur. Curabitur a elit semper, efficitur metus at, aliquet augue. Donec id lacus sit amet odio scelerisque consequat ac in arcu. Aliquam sed sapien sit amet dui porta pellentesque nec at nisl.
 

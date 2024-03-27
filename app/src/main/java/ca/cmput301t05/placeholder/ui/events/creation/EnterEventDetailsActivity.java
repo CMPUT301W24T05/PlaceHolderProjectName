@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
@@ -34,7 +35,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     private EditText eventTime;
     private EditText eventCapacity;
     private EditText eventDescripiton;
-    private Button nextButton;
+    private ExtendedFloatingActionButton nextButton;
 
     private PlaceholderApp app;
 
