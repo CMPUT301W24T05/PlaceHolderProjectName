@@ -208,6 +208,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             newEvent.setEventDate(cal);
             newEvent.setEventName(eventName.getText().toString().trim());
             newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
+            newEvent.setEventLocation(eventLocation.getText().toString().trim());
             newEvent.setEventCreator(app.getUserProfile().getProfileID());
             newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
             if (currentImage != null) {
