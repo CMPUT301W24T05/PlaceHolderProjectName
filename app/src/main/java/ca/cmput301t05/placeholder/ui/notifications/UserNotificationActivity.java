@@ -22,8 +22,8 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
-import ca.cmput301t05.placeholder.ui.EventExplore;
-import ca.cmput301t05.placeholder.ui.EventOrganized;
+import ca.cmput301t05.placeholder.ui.EventExploreFragment;
+import ca.cmput301t05.placeholder.ui.EventOrganizedFragment;
 
 
 /**
@@ -103,11 +103,11 @@ public class UserNotificationActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.explore_menu_item) {
             // Navigate to EventExplore
-            startActivity(new Intent(this, EventExplore.class));
+            startActivity(new Intent(this, EventExploreFragment.class));
             return true;
-        } else if (id == R.id.organized_menu_icon) {
+        } else if (id == R.id.organized_menu_item) {
             // Navigate to EventOrganized
-            startActivity(new Intent(this, EventOrganized.class));
+            startActivity(new Intent(this, EventOrganizedFragment.class));
             return true;
         } else {
             return false;

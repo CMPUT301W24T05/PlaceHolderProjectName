@@ -94,7 +94,7 @@ public class NotificationsFragment extends AppCompatActivity {
         } else if (id == R.id.explore_menu_item) {
             // Handle item 2 selection
             return true;
-        } else if (id == R.id.organized_menu_icon) {
+        } else if (id == R.id.organized_menu_item) {
             // Handle item 3 selection
             return true;
         } else {

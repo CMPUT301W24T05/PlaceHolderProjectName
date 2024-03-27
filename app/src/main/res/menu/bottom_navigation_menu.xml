@@ -13,7 +13,7 @@
         android:title="Explore" />
 
     <item
-        android:id="@+id/organized_menu_icon"
+        android:id="@+id/organized_menu_item"
         android:enabled="true"
         android:icon="@drawable/organized_icon"
         android:title="Organized" />

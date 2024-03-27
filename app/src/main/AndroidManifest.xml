@@ -65,8 +65,6 @@
         <activity android:name=".ui.events.ViewQRCodesActivity"/>
         <activity android:name=".ui.events.EventMenuActivity"/>
         <activity android:name=".Location.Successful_Checked_In_Activity"/>
-        <activity android:name=".ui.EventExplore" />
-        <activity android:name=".ui.EventOrganized" />
 
 
 

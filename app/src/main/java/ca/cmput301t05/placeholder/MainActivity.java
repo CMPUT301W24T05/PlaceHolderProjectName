@@ -1,39 +1,21 @@
 package ca.cmput301t05.placeholder;
 
-import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
-
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-
-import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.ui.HomeFragment;
-import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
-import ca.cmput301t05.placeholder.ui.EventExplore;
-import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
-import ca.cmput301t05.placeholder.ui.EventOrganized;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
-import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
-import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
+import ca.cmput301t05.placeholder.ui.EventExploreFragment;
+import ca.cmput301t05.placeholder.ui.EventOrganizedFragment;
 
 
 /**
@@ -65,15 +47,38 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
                     .replace(R.id.fragment_container, new HomeFragment())
                     .commit();
         }
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
-
+        setupBottomNavigationView();
         setButtonActions();
         setProfileIcon();
 
         Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
         Log.i("MainActivityJoinedEvents", "Number of joined events: " + app.getJoinedEvents().size());
     }
+
+    private void setupBottomNavigationView() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            Fragment selectedFragment = null;
+
+            if (id == R.id.home_menu_item) {
+                selectedFragment = new HomeFragment();
+            } else if (id == R.id.explore_menu_item) {
+                selectedFragment = new EventExploreFragment();
+            } else if (id == R.id.organized_menu_item) {
+                 selectedFragment = new EventOrganizedFragment();
+            }
+
+            if (selectedFragment != null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                return true;
+            }
+
+            return false;
+        });
+    }
+
 
 
 
@@ -109,26 +114,6 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         fragmentTransaction.commit();
 
     }
-
-    private boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.home_menu_item) {
-            // Navigate to MainActivity
-            startActivity(new Intent(this, MainActivity.class));
-            return true;
-        } else if (id == R.id.explore_menu_item) {
-            // Navigate to EventExplore
-            startActivity(new Intent(this, EventExplore.class));
-            return true;
-        } else if (id == R.id.organized_menu_icon) {
-            // Navigate to EventOrganized
-            startActivity(new Intent(this, EventOrganized.class));
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 
     @Override
     public void onItemClick(Event event, EventAdapter.adapterType type) {
