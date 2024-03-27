@@ -120,7 +120,7 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
 
                     //move the map on a default view point (where the organizer are)
                     IMapController mapController = map.getController();
-                    mapController.setZoom(9.5);
+                    mapController.setZoom(14.5);
                     GeoPoint startPoint = new GeoPoint(latitude, longitude);
                     mapController.setCenter(startPoint);
                     Marker marker = new Marker(map);
