@@ -6,44 +6,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarViewQRcode"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:titleTextColor="@android:color/white"
+            app:titleMarginStart="65dp"
+            app:titleMarginEnd="32dp"
+            app:title="Access QR codes"
+            app:layout_constraintBottom_toTopOf="@+id/swipe_fragment"
+            android:layout_alignParentTop="true"
+            app:navigationIcon="@drawable/back"
+            />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/back_viewqr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Go to Event Menu"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Access QR codes"
-                android:textAlignment="textEnd"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/back_viewqr"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.511"
-                android:textSize="30dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
         <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/swipe_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:paddingTop="50dp"
-            android:id="@+id/swipe_fragment"/>
+            app:layout_constraintTop_toBottomOf="@+id/toolbarViewQRcode" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -75,7 +76,7 @@
         android:layout_height="40dp"
         android:id="@+id/swipe_indicator"
         android:layout_alignParentBottom="true"
-        android:background="#1E88E5"/>
+        android:background="#65558E"/>
 
 
 
