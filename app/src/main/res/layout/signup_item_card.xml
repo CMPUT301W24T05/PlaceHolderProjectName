@@ -9,8 +9,7 @@
     android:layout_marginHorizontal="10dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="8dp"
-    android:id="@+id/signup_card"
-    android:clickable="true">
+    android:id="@+id/signup_card">
 
 
 

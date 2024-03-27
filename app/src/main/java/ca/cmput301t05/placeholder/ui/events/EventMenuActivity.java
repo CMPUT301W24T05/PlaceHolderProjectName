@@ -36,6 +36,7 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewAttendeeCheckinActivity;
+import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewSignUpsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.EventNotificationPageActivity;
 
 
@@ -66,7 +67,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
         app = (PlaceholderApp) getApplicationContext();
         curEvent = app.getCachedEvent();
         setContentView(R.layout.event_menu);
-        buttonBack = findViewById(R.id.event_menu_back);
+//        buttonBack = findViewById(R.id.event_menu_back);
         fromIntent = getIntent();
 
         drawerLayout = findViewById(R.id.event_menu_drawer);
@@ -87,14 +88,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
         setEventDetails();
 
-        buttonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(EventMenuActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
+
 
         if (curEvent.hasEventPosterBitmap()) {
             eventPoster.setImageBitmap(curEvent.getEventPosterBitmap());
@@ -143,7 +137,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
             public void onFailure(Exception e) {
             }
         });
-      
+
         if (curEvent.hasEventPosterBitmap()) {
             eventPoster.setImageBitmap(curEvent.getEventPosterBitmap());
         } else {
@@ -201,7 +195,12 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
         } else if (itemId == R.id.attendance) {
             Intent intentAttendance = new Intent(EventMenuActivity.this, ViewAttendeeCheckinActivity.class);
             startActivity(intentAttendance);
-        } else if (itemId == R.id.check_in_locations) {
+        }
+        else if (itemId == R.id.registry){
+            Intent intentAttendance = new Intent(EventMenuActivity.this,ViewSignUpsActivity.class);
+            startActivity(intentAttendance);
+        }
+        else if (itemId == R.id.check_in_locations) {
             Intent intentLoc = new Intent(EventMenuActivity.this, MapDisplay_activity.class);
             startActivity(intentLoc);
         } else if (itemId == R.id.milestones) {
@@ -211,26 +210,24 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
 
 
-            // Handle more items as needed
-            return true;
+        // Handle more items as needed
+        return true;
 
     }
 
-        @Override
-        public boolean onOptionsItemSelected (MenuItem item){
-            // Pass the event to ActionBarDrawerToggle
-            if (toggle.onOptionsItemSelected(item)) {
-                return true;
-            }
-
-            // Handle your other action bar items here if needed
-
-            return super.onOptionsItemSelected(item);
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item){
+        // Pass the event to ActionBarDrawerToggle
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
         }
+
+        // Handle your other action bar items here if needed
+
+        return super.onOptionsItemSelected(item);
+    }
 
 
 
 
 }
-
-

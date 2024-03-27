@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.events.EventMenuActivity"
     android:fitsSystemWindows="true"
-    tools:openDrawer="strt"
+    tools:openDrawer="start"
     android:id="@+id/event_menu_drawer"
     android:clickable="true"
     android:focusable="true">
@@ -29,17 +29,12 @@
             />
 
 
-        <Button
-            android:id="@+id/event_menu_back"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:text="Back" />
+
+
 
 
         <TextView
             android:id="@+id/event_menu_name"
-            android:layout_below="@id/event_menu_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Event Name"
