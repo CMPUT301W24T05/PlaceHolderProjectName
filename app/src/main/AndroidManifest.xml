@@ -59,10 +59,9 @@
 
         <activity android:name=".ui.events.organizer_info.ViewAttendeeCheckinActivity" />
         <activity android:name=".InitialSetupActivity" />
-        <activity android:name=".ui.events.creation.EnterEventDetailsActivity" />
+        <activity android:name=".ui.events.creation.EnterEventDetailsActivity" android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ProfileEditActivity"/>
         <activity android:name=".ui.admin.AdminHomeActivity"/>
-        <activity android:name=".ui.events.creation.UploadPosterActivity"/>
         <activity android:name=".ui.notifications.NotificationsFragment"/>
         <activity android:name=".ui.events.ViewEventDetailsActivity"/>
         <activity android:name=".ui.events.EventSignUpActivity"/>
@@ -72,8 +71,6 @@
         <activity android:name=".ui.events.ViewQRCodesActivity"/>
         <activity android:name=".ui.events.EventMenuActivity"/>
         <activity android:name=".Location.Successful_Checked_In_Activity"/>
-        <activity android:name=".ui.events.EventExplore" />
-        <activity android:name=".ui.events.EventOrganized" />
 
         <activity android:name=".ui.events.ViewMilestonesActivity" />
 
