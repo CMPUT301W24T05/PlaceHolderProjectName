@@ -1,10 +1,14 @@
 package ca.cmput301t05.placeholder.Location;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,11 +17,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.library.BuildConfig;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.Manifest;
 import ca.cmput301t05.placeholder.PlaceholderApp;
@@ -33,20 +41,32 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
     private LocationManager locationManager;
     private double latitude;
     private double longitude;
+    private Context context;
+    private Event event;
     private static final long SPLASH_DELAY = 3000; // 3 seconds d
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map_display);
         app = (PlaceholderApp) getApplicationContext();
+        context = getApplicationContext();
+
+        // set your user agent to prevent getting banned from the osm servers
+        // do this before setContentView(R.layout.map_display)
+        SharedPreferences sharedPrefs = context.getSharedPreferences("PlaceholderAppPrefs", Context.MODE_PRIVATE);
+        Configuration.getInstance().load(context, sharedPrefs);
+        Configuration.getInstance().setUserAgentValue(BuildConfig.BUILD_TYPE);
+
+        setContentView(R.layout.map_display);
 
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
-
+        map.setMultiTouchControls(true);
 
         // create locationManager object to know the location of the organizer
         locationManager = app.getLocationManager();
         locationManager.setLocationPermissionListener(this);
         locationManager.requestLocationPermission(this);
+
+        event = app.getCachedEvent();
     }
     @Override
     public void onResume() {
@@ -80,10 +100,14 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
                     Toast.makeText(MapDisplay_activity.this, message, Toast.LENGTH_SHORT).show();
 
                     //move the map on a default view point (where the organizer are)
-//                    IMapController mapController = map.getController();
-//                    mapController.setZoom(9.5);
-//                    GeoPoint startPoint = new GeoPoint(latitude, longitude);
-//                    mapController.setCenter(startPoint);
+                    IMapController mapController = map.getController();
+                    mapController.setZoom(9.5);
+                    GeoPoint startPoint = new GeoPoint(latitude, longitude);
+                    mapController.setCenter(startPoint);
+                    Marker marker = new Marker(map);
+                    marker.setPosition(startPoint);
+                    map.getOverlays().add(marker);
+                    map.invalidate();
                 }
             }
         });
@@ -92,13 +116,17 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
     public void onLocationPermissionDenied(){
         Toast.makeText(this, "onLocationPermissionDenied, cannot see the map", Toast.LENGTH_SHORT).show();
         // when location is denied, wait for 3 seconds and directly go to the event details page
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 finish();
             }
         }, SPLASH_DELAY);
+    }
+
+    public void showAttendees(){
+        HashMap<String, HashMap<String, Double>> attendees = event.getMap();
+
     }
 
 }
