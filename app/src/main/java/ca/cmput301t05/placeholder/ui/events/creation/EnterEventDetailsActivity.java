@@ -147,7 +147,8 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 curEvent.setEventName(eventName.getText().toString().trim());
                 curEvent.setEventInfo(eventDescripiton.getText().toString().trim());
                 curEvent.setEventCreator(app.getUserProfile().getProfileID());
-                Intent generateqr = new Intent(EnterEventDetailsActivity.this, GenerateQRCodesActivity.class);
+                curEvent.setEventLocation(eventLocation.getText().toString().trim());
+                Intent generateqr = new Intent(EnterEventDetailsActivity.this, UploadPosterActivity.class);
                 generateqr.putExtra("edit", true);
                 startActivity(generateqr);
             }else{
@@ -157,6 +158,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 newEvent.setEventName(eventName.getText().toString().trim());
                 newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
                 newEvent.setEventCreator(app.getUserProfile().getProfileID());
+                newEvent.setEventLocation(eventLocation.getText().toString().trim());
                 app.setCachedEvent(newEvent);
                 Intent generateqr = new Intent(EnterEventDetailsActivity.this, GenerateInfoCheckinActivity.class);
                 startActivity(generateqr);

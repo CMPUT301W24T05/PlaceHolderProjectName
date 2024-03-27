@@ -147,6 +147,17 @@ public abstract class Table<T extends DocumentSerializable> {
                 });
     }
 
+    public void updateDocument(T document, String documentId, DocumentCallback<T> callback) {
+        collectionReference.document(documentId).update(document.toDocument())
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess(document);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+    }
+
     /**
      * allows us to push multiple documents to the cloud. Does not work for array lists > 50
      *

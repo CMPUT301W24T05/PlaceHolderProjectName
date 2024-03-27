@@ -25,6 +25,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.Calendar;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
@@ -70,6 +71,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
         app = (PlaceholderApp) getApplicationContext();
         curEvent = app.getCachedEvent();
         setContentView(R.layout.event_menu);
+        buttonBack = findViewById(R.id.event_menu_back);
 
         drawerLayout = findViewById(R.id.event_menu_drawer);
         toolbar = findViewById(R.id.toolbar);
@@ -88,6 +90,15 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
 
         setEventDetails();
+
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(EventMenuActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         if (curEvent.hasEventPosterBitmap()) {
             eventPoster.setImageBitmap(curEvent.getEventPosterBitmap());
@@ -110,8 +121,6 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
     }
 
     private void setEventDetails() {
-
-        buttonBack = findViewById(R.id.event_menu_back);
         eventName = findViewById(R.id.event_menu_name);
         textViewEventDate = findViewById(R.id.event_menu_eventDate);
         textViewEventLocation = findViewById(R.id.event_preview_eventlocation);
@@ -158,19 +167,24 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
     }
 
     private String generateEventDateTime() {
-        Calendar eventCalendar = curEvent.getEventDate();
-        int year = eventCalendar.get(Calendar.YEAR);
-        int month = eventCalendar.get(Calendar.MONTH) + 1; //January is 0
-        int day = eventCalendar.get(Calendar.DAY_OF_MONTH);
-        // Or get the hour for 12-hour format
-        int hour12 = eventCalendar.get(Calendar.HOUR);
-        // Get AM or PM
-        int amOrPm = eventCalendar.get(Calendar.AM_PM);
-        String timePeriod = amOrPm == Calendar.AM ? " AM" : " PM";
+        if (curEvent != null) {
+            Calendar eventCalendar = curEvent.getEventDate();
+            int year = eventCalendar.get(Calendar.YEAR);
+            int month = eventCalendar.get(Calendar.MONTH) + 1; //January is 0
+            int day = eventCalendar.get(Calendar.DAY_OF_MONTH);
+            // Or get the hour for 12-hour format
+            int hour12 = eventCalendar.get(Calendar.HOUR);
+            // Get AM or PM
+            int amOrPm = eventCalendar.get(Calendar.AM_PM);
+            String timePeriod = amOrPm == Calendar.AM ? " AM" : " PM";
 
-        String time = hour12 + timePeriod;
-        String date = day + ", " + month + ", " + year;
-        return time + " - " + date;
+            String time = hour12 + timePeriod;
+            String date = day + ", " + month + ", " + year;
+            return time + " - " + date;
+        } else {
+            return "Event date is not available";
+        }
+
     }
 
     @Override
@@ -191,6 +205,7 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
             startActivity(intentAttendance);
         }
 
+
         // Handle more items as needed
         return true;
     }
@@ -206,6 +221,8 @@ public class EventMenuActivity extends AppCompatActivity implements NavigationVi
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 }
 

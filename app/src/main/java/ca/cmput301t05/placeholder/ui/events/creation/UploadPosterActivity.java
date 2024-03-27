@@ -71,6 +71,8 @@ public class UploadPosterActivity extends AppCompatActivity {
 
         if(fromEdit.hasExtra("edit")){
             eventPoster.setImageBitmap(currentEvent.getEventPosterBitmap());
+            createEvent.setText("Update Event");
+            createEvent.setVisibility(View.VISIBLE);
         }
 
 
@@ -87,7 +89,7 @@ public class UploadPosterActivity extends AppCompatActivity {
             }   else {
                 Log.d("PhotoPicker", "Selected URI: " + uri);
                 eventPoster.setImageURI(uri);
-                createEvent.setVisibility(View.VISIBLE);
+                if(!fromEdit.hasExtra("edit")){createEvent.setVisibility(View.VISIBLE);}
                 curPic.set(uri);
             }
         });
@@ -141,7 +143,7 @@ public class UploadPosterActivity extends AppCompatActivity {
                             //change this to navigate to access qr code page
                             Intent intent = new Intent(UploadPosterActivity.this, EventMenuActivity.class);
                             startActivity(intent);
-                            finish();
+
                         }
 
                         @Override
