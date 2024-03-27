@@ -105,6 +105,10 @@ public class LoadingScreenActivity extends AppCompatActivity {
             eventCounter.addAndGet(profile.getJoinedEvents().size());
             fetchEvents(profile, "joinedEvents", eventCounter);
         }
+        if (profile.getInterestedEvents() != null) {
+            eventCounter.addAndGet(profile.getInterestedEvents().size());
+            fetchEvents(profile, "interestedEvents", eventCounter);
+        }
 
         // Check if there are no events to fetch in the first place, start MainActivity immediately
         if (eventCounter.get() == 0) {
@@ -112,20 +116,21 @@ public class LoadingScreenActivity extends AppCompatActivity {
         }
     }
 
-    private void fetchProfilePicture(Profile profile){
-
-    }
-
     private void fetchEvents(Profile profile, String event, AtomicInteger eventCounter) {
         List<String> events;
 
-        boolean hosted = event.equals("hostedEvents");
-
-        if (hosted) {
-            events = profile.getHostedEvents();
-        } else {
-
-            events = profile.getJoinedEvents();
+        switch (event) {
+            case "hostedEvents":
+                events = profile.getHostedEvents();
+                break;
+            case "joinedEvents":
+                events = profile.getJoinedEvents();
+                break;
+            case "interestedEvents":
+                events = profile.getInterestedEvents();
+                break;
+            default:
+                return; // Method invoked with an invalid event string
         }
 
         if (events == null) {
@@ -139,10 +144,16 @@ public class LoadingScreenActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Event document) {
 
-                    if (hosted) {
-                        app.getHostedEvents().put(UUID.fromString(id.trim()), document);
-                    } else {
-                        app.getJoinedEvents().put(UUID.fromString(id.trim()), document);
+                    switch (event) {
+                        case "hostedEvents":
+                            app.getHostedEvents().put(UUID.fromString(id.trim()), document);
+                            break;
+                        case "joinedEvents":
+                            app.getJoinedEvents().put(UUID.fromString(id.trim()), document);
+                            break;
+                        case "interestedEvents":
+                            app.getInterestedEvents().put(UUID.fromString(id.trim()), document);
+                            break;
                     }
 
                     // Decrease the counter once an event is fetched
@@ -162,9 +173,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
         }
     }
 
-
-    private void fetchNotifications(Profile profile){
-
+    private void fetchNotifications(Profile profile) {
 
 
         app.getNotificationTable().fetchMultipleDocuments(profile.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
@@ -183,7 +192,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
     private void startMainActivity() {
         Log.i("Placeholder App", String.format("Profile with id %s and name %s has been loaded!",
-                  app.getUserProfile().getProfileID(), app.getUserProfile().getName()));
+                app.getUserProfile().getProfileID(), app.getUserProfile().getName()));
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         finish();

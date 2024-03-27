@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
+import ca.cmput301t05.placeholder.ui.admin.AdminViewAllImages;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.ui.events.EventExplore;
@@ -101,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
 
 
 
-
     }
 
     @Override
@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
     }
 
     private void setProfileIcon() {
+
         if (app.getUserProfile().hasProfileBitmap()){
             profileButton.setImageBitmap(getCircularBitmap(app.getUserProfile().getProfilePictureBitmap()));
         } else {
@@ -146,19 +147,12 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         });
 
 
-//        testButton = findViewById(R.id.event_menu_test);
-//
-//        testButton.setOnClickListener(view -> {
-//            // Start QRCodeScannerActivity
-//            Intent intent = new Intent(MainActivity.this, EventMenuActivity.class);
-//            startActivity(intent);
-//        });
 
 
         startScannerButton = findViewById(R.id.btnJoinEvent);
         startScannerButton.setOnClickListener(view -> {
             // Start QRCodeScannerActivity
-            Intent intent = new Intent(MainActivity.this, EventMenuActivity.class);
+            Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
             startActivity(intent);
         });
 

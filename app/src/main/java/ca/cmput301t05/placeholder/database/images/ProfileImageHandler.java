@@ -80,11 +80,11 @@ public class ProfileImageHandler extends BaseImageHandler {
      *
      * @param profile The profile whose profile picture will be removed.
      */
-    public void removeProfilePic(Profile profile) {
+    public void removeProfilePic(Profile profile, Context context) {
         if (profile.getProfilePictureID() == null) {
             return;
         }
-        removeImage(profile.getProfilePictureID().toString(), "profiles");
+        removeImage(profile.getProfilePictureID().toString(), "profiles", context);
         profile.setProfilePictureID(null);
     }
 }

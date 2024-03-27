@@ -87,6 +87,9 @@ public class ViewAttendeeCheckinActivity extends AppCompatActivity { // Organize
             AtomicInteger fetchCount = new AtomicInteger(0);
             // Define a variable to store the total number of fetch operations
             int totalFetches = attendee_list.size();
+            Log.e("amirza2", "Number of attendees is:");
+
+            Log.e("amirza2", String.valueOf(attendee_list.size()));
 
             for (int i = 0; i < attendee_list.size(); i++) { // they have attendees
                 String uuid = attendee_list.get(i); // get their uuid to get their name

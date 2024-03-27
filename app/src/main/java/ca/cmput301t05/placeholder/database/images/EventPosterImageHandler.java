@@ -63,12 +63,12 @@ public class EventPosterImageHandler extends BaseImageHandler {
      *
      * @param event The event object for which the poster image is being removed.
      */
-    public void removeEventPoster(Event event) {
+    public void removeEventPoster(Event event, Context context) {
         if (event.getEventPosterID() == null) {
             return;
         }
 
-        removeImage(event.getEventPosterID().toString(), "posters");
+        removeImage(event.getEventPosterID().toString(), "posters", context);
 
         event.setEventPosterID(null);
     }
