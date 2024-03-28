@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.qrcode.QRCode;
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -237,6 +239,14 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
             if (currentImage != null) {
                 newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
+            }
+
+            if(!isEditing){
+                QRCodeManager codeManager = new QRCodeManager();
+                QRCode checkInQr = codeManager.generateQRCode(newEvent, "checkIn");
+                QRCode infoQr = codeManager.generateQRCode(newEvent, "eventInfo");
+                newEvent.setCheckInQR(checkInQr.getRawText());
+                newEvent.setInfoQRCode(infoQr.getRawText());
             }
 
             app.setCachedEvent(newEvent);
