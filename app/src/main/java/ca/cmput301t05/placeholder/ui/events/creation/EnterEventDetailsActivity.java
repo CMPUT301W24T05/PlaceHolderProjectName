@@ -220,6 +220,9 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 return;
             }
 
+            // Grab the values from eventDate and eventTime if selectedYear, month, day, etc are 0
+            checkAndSetDateAndTime();
+
             // Set the Calendar instance to the selected date and time
             cal.set(Calendar.YEAR, selectedYear);
             cal.set(Calendar.MONTH, selectedMonth);
@@ -250,6 +253,23 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             app.setCachedEvent(newEvent);
             handleEventCreation();
         });
+    }
+
+    private void checkAndSetDateAndTime() {
+        if (selectedYear == 0 && selectedMonth == 0 && selectedDay == 0) {
+            // values in editText are in format: dd-mm-yyyy
+            String[] dateParts = eventDate.getText().toString().split("-");
+            selectedDay = Integer.valueOf(dateParts[0]);
+            selectedMonth = Integer.valueOf(dateParts[1]) - 1; // 0-indexed month
+            selectedYear = Integer.valueOf(dateParts[2]);
+        }
+
+        if (selectedHour == 0 && selectedMinute == 0) {
+            // values in editText are in format: hh:mm
+            String[] timeParts = eventTime.getText().toString().split(":");
+            selectedHour = Integer.valueOf(timeParts[0]);
+            selectedMinute = Integer.valueOf(timeParts[1]);
+        }
     }
 
     /**
