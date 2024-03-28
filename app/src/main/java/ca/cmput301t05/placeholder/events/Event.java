@@ -104,6 +104,7 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("eventDate", eventDate != null ? new Timestamp(eventDate.getTime()) : null);
         document.put("maxAttendees", maxAttendees);
         document.put("attendees", attendees);
+        document.put("eventLocation", eventLocation);
         document.put("eventCreator", eventCreator.toString());
         document.put("eventLocation", eventLocation.toString());
         document.put("notifications", this.notifications);
