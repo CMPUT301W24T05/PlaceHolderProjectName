@@ -61,6 +61,13 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     private Uri currentImage;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
+    // Declare instance variables to store the date and time from DatePicker and TimePicker
+    private int selectedHour;
+    private int selectedMinute;
+    private int selectedDay;
+    private int selectedMonth;
+    private int selectedYear;
+
     private boolean isEditing;
 
     /**
@@ -172,7 +179,11 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(EnterEventDetailsActivity.this, (view, hourOfDay, minuteOfHour) -> eventTime.setText(String.format(Locale.CANADA, "%d:%d", hourOfDay, minuteOfHour)), hour, minute, false);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(EnterEventDetailsActivity.this, (view, hourOfDay, minuteOfHour) -> {
+            selectedHour = hourOfDay;
+            selectedMinute = minuteOfHour;
+            eventTime.setText(String.format(Locale.CANADA, "%d:%d", hourOfDay, minuteOfHour));
+        }, hour, minute, false);
 
         timePickerDialog.show();
     }
@@ -189,7 +200,12 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 // on below line we are passing context.
-                EnterEventDetailsActivity.this, (view1, year1, monthOfYear1, dayOfMonth1) -> eventDate.setText(String.format(Locale.CANADA, "%d-%d-%d", dayOfMonth1, monthOfYear1 + 1, year1)), year, month, day);
+                EnterEventDetailsActivity.this, (view1, year1, monthOfYear1, dayOfMonth1) -> {
+                    selectedDay = dayOfMonth1;
+                    selectedMonth = monthOfYear1;
+                    selectedYear = year1;
+                    eventDate.setText(String.format(Locale.CANADA, "%d-%d-%d", dayOfMonth1, monthOfYear1 + 1, year1));
+                }, year, month, day);
 
         datePickerDialog.show();
     }
@@ -204,11 +220,19 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 return;
             }
 
+            // Set the Calendar instance to the selected date and time
+            cal.set(Calendar.YEAR, selectedYear);
+            cal.set(Calendar.MONTH, selectedMonth);
+            cal.set(Calendar.DAY_OF_MONTH, selectedDay);
+            cal.set(Calendar.HOUR_OF_DAY, selectedHour);
+            cal.set(Calendar.MINUTE, selectedMinute);
+
             newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
             newEvent.setEventDate(cal);
             newEvent.setEventName(eventName.getText().toString().trim());
             newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
             newEvent.setEventCreator(app.getUserProfile().getProfileID());
+            newEvent.setEventLocation(eventLocation.getText().toString());
             newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
             if (currentImage != null) {
                 newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
