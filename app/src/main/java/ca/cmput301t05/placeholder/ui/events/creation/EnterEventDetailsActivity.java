@@ -24,7 +24,6 @@ import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
-import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -33,7 +32,6 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -332,8 +330,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                     AddHostedEventToProfile(document);
                 }
                 else{
-                    Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, EventMenuActivity.class);
-                    startActivity(genQRActivity);
+                    finish();
                 }
             }
 
@@ -367,7 +364,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 Toast.makeText(app.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                 // Navigate to access QR code page
-                Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, GenerateInfoCheckinActivity.class);
+                Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, ViewQRCodesActivity.class);
                 startActivity(genQRActivity);
                 finish();
             }

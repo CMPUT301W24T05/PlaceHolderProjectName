@@ -65,7 +65,6 @@
         <activity android:name=".ui.notifications.NotificationsFragment"/>
         <activity android:name=".ui.events.ViewEventDetailsActivity"/>
         <activity android:name=".ui.events.EventSignUpActivity"/>
-        <activity android:name=".ui.events.GenerateInfoCheckinActivity"/>
         <activity android:name=".ui.notifications.EventNotificationPageActivity"/>
         <activity android:name=".ui.notifications.UserNotificationActivity"/>
         <activity android:name=".ui.events.ViewQRCodesActivity"/>
