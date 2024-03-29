@@ -1,11 +1,9 @@
-package ca.cmput301t05.placeholder.Location;
+package ca.cmput301t05.placeholder.ui.events.checkin;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,17 +12,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import ca.cmput301t05.placeholder.MainActivity;
+import ca.cmput301t05.placeholder.Location.LocationManager;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 
-public class Successful_Checked_In_Activity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
+public class SuccessfulCheckinActivity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
     private LocationManager locationManager;
     private PlaceholderApp app;
     private Button next_button;
@@ -61,10 +58,10 @@ public class Successful_Checked_In_Activity extends AppCompatActivity implements
                 if (isShared == true){
                     // if choose to share location, update database
                     event.checkIn(profile, longitude, latitude);
-                    Toast.makeText(Successful_Checked_In_Activity.this, "Location Shared", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SuccessfulCheckinActivity.this, "Location Shared", Toast.LENGTH_SHORT).show();
                 }else{
                     event.checkIn(profile, null, null);
-                    Toast.makeText(Successful_Checked_In_Activity.this, "Location Not Shared", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SuccessfulCheckinActivity.this, "Location Not Shared", Toast.LENGTH_SHORT).show();
                 }
                 // update the database!
                 eventTable.pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
@@ -77,7 +74,7 @@ public class Successful_Checked_In_Activity extends AppCompatActivity implements
                         // Event upload failed, handle failure
                     }
                 });
-                Intent intent = new Intent(Successful_Checked_In_Activity.this, ViewEventDetailsActivity.class);
+                Intent intent = new Intent(SuccessfulCheckinActivity.this, ViewEventDetailsActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -116,7 +113,7 @@ public class Successful_Checked_In_Activity extends AppCompatActivity implements
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
                     String message = "Latitude: "+latitude + " Longitude: " + longitude;
-                    Toast.makeText(Successful_Checked_In_Activity.this, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SuccessfulCheckinActivity.this, message, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -142,7 +139,7 @@ public class Successful_Checked_In_Activity extends AppCompatActivity implements
                         // Event upload failed, handle failure
                     }
                 });
-                Intent intent = new Intent(Successful_Checked_In_Activity.this, ViewEventDetailsActivity.class);
+                Intent intent = new Intent(SuccessfulCheckinActivity.this, ViewEventDetailsActivity.class);
                 startActivity(intent);
                 finish();
             }

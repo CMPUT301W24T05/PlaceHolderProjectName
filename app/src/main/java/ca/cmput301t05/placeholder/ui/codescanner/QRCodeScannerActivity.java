@@ -1,12 +1,10 @@
 package ca.cmput301t05.placeholder.ui.codescanner;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import android.util.Log;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -15,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.content.ContextCompat;
 
-import ca.cmput301t05.placeholder.Location.Successful_Checked_In_Activity;
+import ca.cmput301t05.placeholder.ui.events.checkin.SuccessfulCheckinActivity;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.qrcode.QRCodeType;
 import com.budiyev.android.codescanner.CodeScanner;
@@ -121,7 +119,7 @@ public class QRCodeScannerActivity extends AppCompatActivity {
 
         Intent intent;
         if (type == QRCodeType.CHECK_IN) {
-            intent = new Intent(QRCodeScannerActivity.this, Successful_Checked_In_Activity.class);
+            intent = new Intent(QRCodeScannerActivity.this, SuccessfulCheckinActivity.class);
             startActivity(intent);
         } else if (type == QRCodeType.INFO) {
             intent = new Intent(QRCodeScannerActivity.this, EventSignUpActivity.class);
