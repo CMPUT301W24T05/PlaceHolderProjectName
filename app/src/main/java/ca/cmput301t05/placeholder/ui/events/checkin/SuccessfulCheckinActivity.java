@@ -1,6 +1,8 @@
 package ca.cmput301t05.placeholder.ui.events.checkin;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.core.content.ContextCompat;
 import ca.cmput301t05.placeholder.Location.LocationManager;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
@@ -58,6 +61,28 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         initializeApp();
         setupButtonClickHandling();
         checkAndHandleEventMaxCapacity();
+    }
+
+    /**
+     * Overrides the {@code onStart} method of the parent class. This method is called when the activity is starting.
+     * This method checks the permission for accessing fine location. If the permission is granted,
+     * it calls the {@code getLastLocation} method of the {@code locationManager} object to retrieve the last known location.
+     * If the location is not null, it calls the {@code handleLocationReceived} method with the location as a parameter.
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.getLastLocation(new LocationManager.LocationCallback() {
+                @Override
+                public void onLocationReceived(Location location) {
+                    if (location != null) {
+                        handleLocationReceived(location);
+                    }
+                }
+            });
+        }
     }
 
     /**
