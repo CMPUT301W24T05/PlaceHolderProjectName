@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.ui;
+package ca.cmput301t05.placeholder.ui.mainscreen;
 
 import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
 

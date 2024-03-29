@@ -9,16 +9,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.mainscreen.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
-import ca.cmput301t05.placeholder.ui.HomeFragment;
+import ca.cmput301t05.placeholder.ui.mainscreen.HomeFragment;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
-import ca.cmput301t05.placeholder.ui.EventExploreFragment;
-import ca.cmput301t05.placeholder.ui.EventOrganizedFragment;
+import ca.cmput301t05.placeholder.ui.mainscreen.EventExploreFragment;
+import ca.cmput301t05.placeholder.ui.mainscreen.EventOrganizedFragment;
 
 
 /**
@@ -70,6 +72,11 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
                 selectedFragment = new EventExploreFragment();
             } else if (id == R.id.organized_menu_item) {
                 selectedFragment = new EventOrganizedFragment();
+            } else if (id == R.id.profile_menu_item){
+                selectedFragment = new ProfileFragment();
+            } else if (id == R.id.scan_menu_item){
+                Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
+                startActivity(intent);
             }
 
             if (selectedFragment != null) {

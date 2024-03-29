@@ -22,8 +22,8 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
-import ca.cmput301t05.placeholder.ui.EventExploreFragment;
-import ca.cmput301t05.placeholder.ui.EventOrganizedFragment;
+import ca.cmput301t05.placeholder.ui.mainscreen.EventExploreFragment;
+import ca.cmput301t05.placeholder.ui.mainscreen.EventOrganizedFragment;
 
 
 /**
