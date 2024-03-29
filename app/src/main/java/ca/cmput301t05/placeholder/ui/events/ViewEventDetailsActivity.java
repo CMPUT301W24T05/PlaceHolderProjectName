@@ -24,136 +24,108 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 public class ViewEventDetailsActivity extends AppCompatActivity {
-
-    private Button back;
-
-    private Button profile_button;
-
-    private TextView event_date;
-
-    private TextView event_location;
-
-    private TextView event_details;
-
-    private TextView event_author;
-
-    private ImageView event_poster;
-
+    private Button backButton;
+    private Button profileButton;
+    private TextView eventDateTextView;
+    private TextView eventLocationTextView;
+    private TextView eventDetailsTextView;
+    private TextView eventAuthorTextView;
+    private ImageView eventPosterImageView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-        //ASSUMING THAT WE HAVE CACHE THE EVENT WE JUST LOADED
+        super.onCreate(savedInstanceState); // Getting event from the application context
         PlaceholderApp app = (PlaceholderApp) getApplicationContext();
-        Event displayEvent = app.getCachedEvent();
-
-
-
-
+        Event displayEvent = app.getCachedEvent(); // Initialize UI
         setContentView(R.layout.event_vieweventdetails);
+        initButtons();
+        initTextViews();
+        initImageView(); // Set button click listeners
+        setBackButtonHandler();
+        setProfileButtonHandler(); // Show event details
+        setEventDetails(displayEvent); // Show event poster
+        setEventPoster(app, displayEvent);
+    }
 
+    private void initButtons() {
+        backButton = findViewById(R.id.event_signup_back);
+        profileButton = findViewById(R.id.vieweventdetails_profile);
+    }
 
-        back = findViewById(R.id.event_signup_back);
-        profile_button = findViewById(R.id.vieweventdetails_profile);
+    private void initTextViews() {
+        eventDateTextView = findViewById(R.id.event_signup_eventDate);
+        eventLocationTextView = findViewById(R.id.event_signup_eventlocation);
+        eventDetailsTextView = findViewById(R.id.event_signup_eventinfo);
+        eventAuthorTextView = findViewById(R.id.event_signup_author);
+    }
 
-        event_date = findViewById(R.id.event_signup_eventDate);
-        event_location = findViewById(R.id.event_signup_eventlocation);
+    private void initImageView() {
+        eventPosterImageView = findViewById(R.id.event_signup_poster);
+    }
 
-        event_details = findViewById(R.id.event_signup_eventinfo);
-        event_author = findViewById(R.id.event_signup_author);
-
-        event_poster = findViewById(R.id.event_signup_poster);
-
-
-
-
-
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish(); //go back to last page
-            }
+    private void setBackButtonHandler() {
+        backButton.setOnClickListener(view -> {
+            finish(); //go back to last page
         });
+    }
 
-        profile_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //open profile
-                Intent i = new Intent(ViewEventDetailsActivity.this, ProfileEditActivity.class);
-                startActivity(i);
-            }
+    private void setProfileButtonHandler() {
+        profileButton.setOnClickListener(view -> { //open profile
+            Intent i = new Intent(ViewEventDetailsActivity.this, ProfileEditActivity.class);
+            startActivity(i);
         });
+    }
 
-
-        Log.d("Event_Check", String.valueOf(displayEvent.getEventName()));
-        //get date
-        Log.e("Event_Check",String.valueOf(displayEvent.getEventDate()));
-
+    private void setEventDetails(Event displayEvent) {
+        Log.d("Event_Check", String.valueOf(displayEvent.getEventName())); //get date
+        Log.e("Event_Check", String.valueOf(displayEvent.getEventDate()));
         Calendar calendar = displayEvent.getEventDate();
-
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1; //January is 0
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        // Or get the hour for 12-hour format
-        int hour12 = calendar.get(Calendar.HOUR);
-        // Get AM or PM
+        int day = calendar.get(Calendar.DAY_OF_MONTH); // Or get the hour for 12-hour format
+        int hour12 = calendar.get(Calendar.HOUR); // Get AM or PM
         int amPm = calendar.get(Calendar.AM_PM);
-
         String amOrPm;
-        if (amPm == Calendar.AM){
+        if (amPm == Calendar.AM) {
             amOrPm = " AM";
-        }   else {
+        } else {
             amOrPm = " PM";
         }
-
-
-        String time = String.valueOf(hour12) + amOrPm;
-        String date = String.valueOf(day) + ", " + String.valueOf(month) + ", " + String.valueOf(year);
-
+        String time = hour12 + amOrPm;
+        String date = day + ", " + month + ", " + year;
         String dateTime = time + " - " + date;
-
-        event_date.setText(dateTime);
-
-        event_location.setText(displayEvent.getLocation());
-
-        event_details.setText(displayEvent.getEventInfo());
-
-        UUID profile_id = displayEvent.getEventCreator();
-
-        app.getProfileTable().fetchDocument(profile_id.toString(), new Table.DocumentCallback<Profile>() {
+        eventDateTextView.setText(dateTime);
+        eventLocationTextView.setText(displayEvent.getLocation());
+        eventDetailsTextView.setText(displayEvent.getEventInfo());
+        PlaceholderApp app = (PlaceholderApp) getApplicationContext();
+        UUID profileID = displayEvent.getEventCreator();
+        app.getProfileTable().fetchDocument(profileID.toString(), new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile document) {
-                event_author.setText(document.getName());
+                eventAuthorTextView.setText(document.getName());
             }
 
             @Override
             public void onFailure(Exception e) {
-
             }
         });
+    }
 
-        if(displayEvent.hasEventPosterBitmap()){
-            event_poster.setImageBitmap(displayEvent.getEventPosterBitmap());
+    private void setEventPoster(PlaceholderApp app, Event displayEvent) {
+        if (displayEvent.hasEventPosterBitmap()) {
+            eventPosterImageView.setImageBitmap(displayEvent.getEventPosterBitmap());
         } else {
             app.getPosterImageHandler().getPosterPicture(displayEvent, this, new BaseImageHandler.ImageCallback() {
                 @Override
                 public void onImageLoaded(Bitmap bitmap) {
-                    event_poster.setImageBitmap(bitmap);
+                    eventPosterImageView.setImageBitmap(bitmap);
                 }
 
                 @Override
-                public void onError(Exception e) {
-                    // Handle error
+                public void onError(Exception e) { // Handle error
                     Log.e("EventDetailsDialogFragment", "Error loading image: " + e.getMessage());
                 }
             });
         }
-
-
-
     }
 }
