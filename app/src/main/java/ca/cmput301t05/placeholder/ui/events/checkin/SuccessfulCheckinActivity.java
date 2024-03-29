@@ -21,128 +21,240 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 
+/**
+ * This class represents an activity that is displayed after a successful check-in process.
+ * It extends the AppCompatActivity class and implements the LocationManager.LocationPermissionListener interface.
+ * The SuccessfulCheckinActivity class is responsible for handling the check-in process,
+ * updating the database, and navigating to the event details activity.
+ *
+ * @see LocationManager.LocationPermissionListener
+ */
 public class SuccessfulCheckinActivity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
+    private static final int SPLASH_DELAY = 3000;
     private LocationManager locationManager;
     private PlaceholderApp app;
     private Button next_button;
     private CheckBox shareLocation;
     private Event event;
     private Profile profile;
-    private boolean isShared;
     private double latitude;
     private double longitude;
     private EventTable eventTable;
-    // Used to make a page stay there a 1.5 second if choose not to share location
-    private static final long SPLASH_DELAY = 3000; // 3 seconds d
+    private static final String LOCATION_SHARED_TOAST = "Location Shared";
+    private static final String LOCATION_NOT_SHARED_TOAST = "Location Not Shared";
+
+    /**
+     * Called when the activity is starting. This method initializes the app, sets up the button click handling,
+     * and checks and handles the event max capacity.
+     *
+     * @param savedInstanceState The last saved instance state of the activity, or null if this is the first creation.
+     */
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initializeApp();
+        setupButtonClickHandling();
+        checkAndHandleEventMaxCapacity();
+    }
+
+    /**
+     * Initializes the app by setting up various fields and views.
+     * <p>
+     * This method initializes the {@code app} field by getting the application context. It also sets the content view to
+     * the checked_in_page layout. Additionally, it initializes the {@code locationManager} field, {@code event} field,
+     * {@code profile} field, {@code eventTable} field, {@code next_button} field, and {@code shareLocation} view by
+     * getting them from the app object and finding them by id in the layout.
+     * </p>
+     */
+    private void initializeApp() {
         app = (PlaceholderApp) getApplicationContext();
         setContentView(R.layout.checked_in_page);
-
         locationManager = app.getLocationManager();
-        locationManager.setLocationPermissionListener(this);
-        // Request Location Permission by showing the pop up windows, this will automatically call OnRequestPermissionsResult()
-        locationManager.requestLocationPermission(this);
         event = app.getCachedEvent();
         profile = app.getUserProfile();
         eventTable = app.getEventTable();
-
         next_button = findViewById(R.id.go_to_event_button);
         shareLocation = findViewById(R.id.checkbox_share_location);
+    }
 
-        // when click on next button, check the status of share location, update the event object appropriately
-        next_button.setOnClickListener(new View.OnClickListener() {
+    /**
+     * Sets up the click handling for the button.
+     * <p>
+     * This method sets an OnClickListener for the next_button view. When the button is clicked,
+     * it calls the handleButtonClick() method.
+     */
+    private void setupButtonClickHandling() {
+        next_button.setOnClickListener(v -> handleButtonClick());
+    }
+
+    /**
+     * Checks if the maximum capacity for an event has been reached and handles the scenario accordingly.
+     * <p>
+     * This method checks if the maximum capacity for the event has been reached by calling the reachMaxCapacity()
+     * method on the event object. If the maximum capacity has not been reached, it calls the handleMaxCapacityReached() method.
+     */
+    private void checkAndHandleEventMaxCapacity() {
+        if (!event.reachMaxCapacity()) {
+            handleMaxCapacityReached();
+        }
+    }
+
+    /**
+     * Handles the button click event.
+     * <p>
+     * This method checks if the shareLocation checkbox is checked.
+     * If it is, it updates the database by calling the checkIn method on the event object with the profile, longitude, and latitude parameters.
+     * It displays a toast message indicating that the location has been shared.
+     * If the shareLocation checkbox is not checked, it calls the checkIn method on the event object with the profile, null, and null parameters.
+     * It displays a toast message indicating that the location has not been shared.
+     * Finally, it calls the updateProfile method to update the profile and then returns.
+     * </p>
+     */
+    private void handleButtonClick() {
+        boolean isShared = shareLocation.isChecked();
+        if (isShared) {
+            // if choose to share location, update database
+            event.checkIn(profile, longitude, latitude);
+            Toast.makeText(SuccessfulCheckinActivity.this, LOCATION_SHARED_TOAST, Toast.LENGTH_SHORT).show();
+        } else {
+            event.checkIn(profile, null, null);
+            Toast.makeText(SuccessfulCheckinActivity.this, LOCATION_NOT_SHARED_TOAST, Toast.LENGTH_SHORT).show();
+        }
+        updateProfile();
+    }
+
+    /**
+     * Updates the profile document in the profile table.
+     * <p>
+     * This method calls the updateDocument method on the profile table instance retrieved from the app object.
+     * It updates the specified document with the profile object and its unique ID.
+     * If the update operation is successful, it calls navigateToEventDetails().
+     * If the update operation fails, it does nothing.
+     * </p>
+     */
+    private void updateProfile(){
+        app.getProfileTable().updateDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
             @Override
-            public void onClick(View v) {
-                isShared = shareLocation.isChecked();
-                if (isShared == true){
-                    // if choose to share location, update database
-                    event.checkIn(profile, longitude, latitude);
-                    Toast.makeText(SuccessfulCheckinActivity.this, "Location Shared", Toast.LENGTH_SHORT).show();
-                }else{
-                    event.checkIn(profile, null, null);
-                    Toast.makeText(SuccessfulCheckinActivity.this, "Location Not Shared", Toast.LENGTH_SHORT).show();
-                }
-                // update the database!
-                eventTable.pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
-                    @Override
-                    public void onSuccess(Event document){
-                        // Do something after the event is successfully uploaded
-                    }
-                    @Override
-                    public void onFailure(Exception e){
-                        // Event upload failed, handle failure
-                    }
-                });
+            public void onSuccess(Profile document) {
+                navigateToEventDetails();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Profile update failure, handle failure
+            }
+        });
+    }
+
+    /**
+     * Navigates to the event details activity.
+     * <p>
+     * This method pushes the document to the Firestore collection using the event table,
+     * calls the onSuccess callback method if the push operation is successful,
+     * and calls the onFailure callback method if the push operation fails.
+     * <p>
+     * After that, it creates and starts an intent to navigate to the ViewEventDetailsActivity,
+     * finishes the current activity, and takes the user to the event details activity.
+     */
+    private void navigateToEventDetails() {
+        eventTable.pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
+            @Override
+            public void onSuccess(Event document) {
                 Intent intent = new Intent(SuccessfulCheckinActivity.this, ViewEventDetailsActivity.class);
                 startActivity(intent);
                 finish();
             }
-        });
 
-        // check if maximum capacity is reached, if reached, return false
-        if (!event.reachMaxCapacity()){
-            TextView message = findViewById(R.id.textView4);
-            message.setText("Maximum Capacity has been reached!");
-            next_button.setVisibility(View.INVISIBLE);
-            shareLocation.setVisibility(View.INVISIBLE);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                }
-            }, SPLASH_DELAY);
-        }
+            @Override
+            public void onFailure(Exception e) {
+                // Event upload failed, handle failure
+            }
+        });
     }
 
-    // Overriden method from the activity class, will call the onRequestPermissionsResult in LocationManagerClass
+    /**
+     * Handles the scenario when the maximum capacity for an event has been reached.
+     * This method sets the text of a TextView to indicate that the maximum capacity has been reached,
+     * and hides two buttons: next_button and shareLocation.
+     * It then schedules a delay using Handler's postDelayed() method to finish the current activity
+     * after a specified delay defined by the SPLASH_DELAY constant.
+     */
+    private void handleMaxCapacityReached() {
+        TextView message = findViewById(R.id.textView4);
+        message.setText("Maximum Capacity has been reached!");
+        next_button.setVisibility(View.INVISIBLE);
+        shareLocation.setVisibility(View.INVISIBLE);
+        new Handler().postDelayed(this::finish, SPLASH_DELAY);
+    }
+
+    /**
+     * Handles the result of a permission request for location.
+     *
+     * @param requestCode The request code passed to requestPermissions().
+     * @param permissions The requested permissions. This array is not null.
+     * @param grantResults The grant results for the corresponding permissions, which is either PERMISSION_GRANTED or PERMISSION_DENIED. This array is not null.
+     */
+    // Override method from the activity class, will call the onRequestPermissionsResult in LocationManagerClass
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward the permission request results to the LocationManager
         locationManager.onRequestPermissionsResult(requestCode, grantResults);
     }
 
-    public void onLocationPermissionGranted(){
+    /**
+     * Handles the scenario when the location permission is granted.
+     * This method displays a toast message and calls the getLastLocation method on the locationManager object.
+     * The getLastLocation method takes a LocationCallback as a parameter and will asynchronously call the onLocationReceived method
+     * with the received location object if it is not null.
+     */
+    @Override
+    public void onLocationPermissionGranted() {
         Toast.makeText(this, "onLocationPermissionGranted", Toast.LENGTH_SHORT).show();
         locationManager.getLastLocation(new LocationManager.LocationCallback() {
             @Override
             public void onLocationReceived(Location location) {
-                if (location!=null){
-                    // testing to see my location on screen
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-                    String message = "Latitude: "+latitude + " Longitude: " + longitude;
-                    Toast.makeText(SuccessfulCheckinActivity.this, message, Toast.LENGTH_SHORT).show();
+                if (location != null) {
+                    handleLocationReceived(location);
                 }
             }
         });
-    };
+    }
 
-    public void onLocationPermissionDenied(){
+    /**
+     * Handles the received location.
+     * This method displays a toast message with the latitude and longitude values.
+     *
+     * @param location The received location object
+     */
+    private void handleLocationReceived(Location location) {
+        // testing to see my location on screen
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        String message = "Latitude: " + latitude + " Longitude: " + longitude;
+        Toast.makeText(SuccessfulCheckinActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Handles the scenario when the location permission is denied.
+     * This method displays a toast message, hides the shareLocation and next_button views,
+     * calls the checkIn method on the event object with profile as a parameter and setting the longitude and latitude as null,
+     * and then navigates to the event details activity after a delay.
+     */
+    @Override
+    public void onLocationPermissionDenied() {
         Toast.makeText(this, "onLocationPermissionDenied", Toast.LENGTH_SHORT).show();
-        // when location is denied, wait for 3 seconds and directly go to the event details page
         shareLocation.setVisibility(View.INVISIBLE);
         next_button.setVisibility(View.INVISIBLE);
         event.checkIn(profile, null, null);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                eventTable.pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
-                    @Override
-                    public void onSuccess(Event document){
-                        // Do something after the event is successfully uploaded
-                    }
+        navigateToEventDetailsAfterDelay();
+    }
 
-                    @Override
-                    public void onFailure(Exception e){
-                        // Event upload failed, handle failure
-                    }
-                });
-                Intent intent = new Intent(SuccessfulCheckinActivity.this, ViewEventDetailsActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }, SPLASH_DELAY);
+    /**
+     * Navigates to the event details activity after a specified delay.
+     * This method uses a Handler to post a runnable that calls the navigateToEventDetails method
+     * after a delay defined by the SPLASH_DELAY constant.
+     */
+    private void navigateToEventDetailsAfterDelay() {
+        new Handler().postDelayed(this::navigateToEventDetails, SPLASH_DELAY);
     }
 }
