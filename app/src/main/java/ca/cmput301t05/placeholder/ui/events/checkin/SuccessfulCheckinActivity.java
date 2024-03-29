@@ -21,6 +21,9 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class represents an activity that is displayed after a successful check-in process.
  * It extends the AppCompatActivity class and implements the LocationManager.LocationPermissionListener interface.
@@ -133,6 +136,9 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
      * </p>
      */
     private void updateProfile(){
+        List<String> joinedEvents = profile.getJoinedEvents();
+        joinedEvents.add(event.getEventID().toString());
+        profile.setJoinedEvents(joinedEvents);
         app.getProfileTable().updateDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile document) {

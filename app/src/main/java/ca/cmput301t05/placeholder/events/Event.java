@@ -175,7 +175,7 @@ public class Event extends DocumentSerializable implements Serializable {
             attendeeInfo.put("longitude", longitude);
             attendeeInfo.put("latitude", latitude);
 
-            attendees.put(profile.getProfileID().toString(), attendeeInfo);
+            attendees.replace(profile.getProfileID().toString(), attendeeInfo);
 
         } else {
             // first time checking in
