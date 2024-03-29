@@ -22,7 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
+import ca.cmput301t05.placeholder.qrcode.QRCode;
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -31,7 +32,6 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -220,6 +220,9 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 return;
             }
 
+            // Grab the values from eventDate and eventTime if selectedYear, month, day, etc are 0
+            checkAndSetDateAndTime();
+
             // Set the Calendar instance to the selected date and time
             cal.set(Calendar.YEAR, selectedYear);
             cal.set(Calendar.MONTH, selectedMonth);
@@ -231,6 +234,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             newEvent.setEventDate(cal);
             newEvent.setEventName(eventName.getText().toString().trim());
             newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
+            newEvent.setEventLocation(eventLocation.getText().toString().trim());
             newEvent.setEventCreator(app.getUserProfile().getProfileID());
             newEvent.setEventLocation(eventLocation.getText().toString());
             newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
@@ -238,9 +242,34 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
             }
 
+            if(!isEditing){
+                QRCodeManager codeManager = new QRCodeManager();
+                QRCode checkInQr = codeManager.generateQRCode(newEvent, "checkIn");
+                QRCode infoQr = codeManager.generateQRCode(newEvent, "eventInfo");
+                newEvent.setCheckInQR(checkInQr.getRawText());
+                newEvent.setInfoQRCode(infoQr.getRawText());
+            }
+
             app.setCachedEvent(newEvent);
             handleEventCreation();
         });
+    }
+
+    private void checkAndSetDateAndTime() {
+        if (selectedYear == 0 && selectedMonth == 0 && selectedDay == 0) {
+            // values in editText are in format: dd-mm-yyyy
+            String[] dateParts = eventDate.getText().toString().split("-");
+            selectedDay = Integer.valueOf(dateParts[0]);
+            selectedMonth = Integer.valueOf(dateParts[1]) - 1; // 0-indexed month
+            selectedYear = Integer.valueOf(dateParts[2]);
+        }
+
+        if (selectedHour == 0 && selectedMinute == 0) {
+            // values in editText are in format: hh:mm
+            String[] timeParts = eventTime.getText().toString().split(":");
+            selectedHour = Integer.valueOf(timeParts[0]);
+            selectedMinute = Integer.valueOf(timeParts[1]);
+        }
     }
 
     /**
@@ -321,8 +350,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                     AddHostedEventToProfile(document);
                 }
                 else{
-                    Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, EventMenuActivity.class);
-                    startActivity(genQRActivity);
+                    finish();
                 }
             }
 
@@ -356,7 +384,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 Toast.makeText(app.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                 // Navigate to access QR code page
-                Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, GenerateInfoCheckinActivity.class);
+                Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, ViewQRCodesActivity.class);
                 startActivity(genQRActivity);
                 finish();
             }
