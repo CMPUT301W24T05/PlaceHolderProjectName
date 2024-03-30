@@ -26,10 +26,12 @@ public class AdminHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_mainpage);
 
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .add(R.id.admin_fragment_container, AdminViewAllImages.class, null)
-                .commit();
+
+
+//        getSupportFragmentManager().beginTransaction()
+//                .setReorderingAllowed(true)
+//                .add(R.id.admin_fragment_container, AdminViewAllImages.class, null)
+//                .commit();
 
 
     }

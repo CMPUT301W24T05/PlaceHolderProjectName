@@ -1,25 +1,19 @@
 package ca.cmput301t05.placeholder.ui.admin;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ca.cmput301t05.placeholder.R;
 
 public class AdminViewAllImages extends Fragment {
-
-    private RecyclerView imagesRecycler;
-
 
 
     public AdminViewAllImages(){
@@ -39,7 +33,7 @@ public class AdminViewAllImages extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        imagesRecycler = view.findViewById(R.id.admin_view_image_recycler);
+        RecyclerView imagesRecycler = view.findViewById(R.id.admin_view_image_recycler);
 
         ViewAllImagesAdapter adapter = new ViewAllImagesAdapter(getContext());
 
