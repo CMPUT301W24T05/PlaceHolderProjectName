@@ -84,18 +84,13 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/admin_main_created"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/coustard"
-        android:gravity="center"
-        android:paddingTop="20dp"
-        android:text="Created"
-        android:textSize="24sp" />
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/admin_fragment_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>
