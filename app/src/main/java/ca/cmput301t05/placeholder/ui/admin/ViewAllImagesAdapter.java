@@ -126,12 +126,12 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
 
                                 //TODO Make a confirmation dialog pop up
                                 Log.d("menu", "Deleting image");
+                                Log.d("ImageDetails_ADAPTER", details.getId());
 
                                 app.getImageDetailTable().deleteImage(details, new Table.DocumentCallback() {
                                     @Override
-                                    public void onSuccess(Object document) {
-                                        int curpos = getAdapterPosition();
-                                        imageDetails.remove(curpos);
+                                    public void onSuccess(Object document) {;
+                                        imageDetails.remove(position);
                                         notifyDataSetChanged();
                                     }
 
