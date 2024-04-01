@@ -15,6 +15,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.database.ImageDetails.ImageDetails;
 import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.events.Event;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -106,6 +107,10 @@ public abstract class BaseImageHandler {
                         @Override
                         public void onSuccess(ImageDetails document) {
                             Log.d("ImageDetails", "Image Details Uploaded");
+
+                            //now set event or profile imageDetails to this object
+
+
                         }
 
                         @Override
