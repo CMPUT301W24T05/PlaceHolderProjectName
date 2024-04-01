@@ -215,12 +215,18 @@ public abstract class Table<T extends DocumentSerializable> {
      * @param callback
      */
     public void deleteDocument(String documentID, DocumentCallback callback){
-        collectionReference.document(documentID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                callback.onSuccess(unused);
+        collectionReference.document(documentID).delete().addOnCompleteListener(task -> {
+
+            if (task.isSuccessful()){
+                callback.onSuccess(null);
+            }   else {
+
+                Log.d("Delete_DOC", task.getException().getMessage());
             }
+
+
         });
+
 
     }
 

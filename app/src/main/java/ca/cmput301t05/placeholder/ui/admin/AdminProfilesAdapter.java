@@ -136,11 +136,12 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
                              if (menuItem.getItemId() == R.id.admin_image_card_menu_delete){
 
                                  //TODO Make a confirmation dialog pop up
-                                 Log.d("menu", "Deleting profile");
-                                 Log.d("profile_ADAPTER", profile.getProfileID().toString());
 
-                                 if (profile.getProfileID() != null){
+
+                                 if (profile.getProfilePictureID() != null){
                                      //remove image
+                                     Log.d("menu", "Deleting profile picture");
+                                     Log.d("profile_ADAPTER", profile.getProfileID().toString());
 
                                      app.getProfileImageHandler().removeProfilePic(profile, context, new BaseImageHandler.ImageDeletionCallback() {
                                          @Override
@@ -172,6 +173,7 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
 
                                  }  else {
 
+                                     Log.d("IMAGE_NO_PROFILE", profile.getProfileID().toString());
                                      app.getProfileTable().deleteDocument(profile.getProfileID().toString(), new Table.DocumentCallback() {
                                          @Override
                                          public void onSuccess(Object document) {
@@ -181,7 +183,7 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
 
                                          @Override
                                          public void onFailure(Exception e) {
-
+                                             Log.d("Profile", e.getMessage());
                                          }
                                      });
                                  }
