@@ -154,7 +154,7 @@ public class Event extends DocumentSerializable implements Serializable {
             notifications = (ArrayList<String>) document.get("notifications");
         }
         if(document.get("registeredUsers") != null){
-            registeredUsers = (ArrayList<String>) document.get("notifications");
+            registeredUsers = (ArrayList<String>) document.get("registeredUsers");
         }
 
     }
