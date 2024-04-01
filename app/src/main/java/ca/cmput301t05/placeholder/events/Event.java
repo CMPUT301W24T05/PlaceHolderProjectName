@@ -46,6 +46,8 @@ public class Event extends DocumentSerializable implements Serializable {
 
     ArrayList<String> notifications; //notifications that are sent for this specific event
 
+    private String imageDetailsID;
+
     /**
      * Default constructor that generates a new event with unique ID and empty attendee list.
      */
@@ -104,10 +106,11 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("eventDate", eventDate != null ? new Timestamp(eventDate.getTime()) : null);
         document.put("maxAttendees", maxAttendees);
         document.put("attendees", attendees);
+        document.put("eventLocation", eventLocation);
         document.put("eventCreator", eventCreator.toString());
+        document.put("eventLocation", eventLocation.toString());
         document.put("notifications", this.notifications);
         document.put("registeredUsers", this.registeredUsers);
-
         return document;
     }
 
@@ -134,6 +137,7 @@ public class Event extends DocumentSerializable implements Serializable {
         eventPosterID = getUUIDFromDocument(document, "eventPosterID");
         infoQRCode = getStringValueFromDocument(document, "infoQRCode");
         checkInQR = getStringValueFromDocument(document, "checkInQR");
+        eventLocation = getStringValueFromDocument(document, "eventLocation");
 
         if(document.getTimestamp("eventDate") != null) {
             eventDate = Calendar.getInstance();
@@ -152,6 +156,7 @@ public class Event extends DocumentSerializable implements Serializable {
         if(document.get("registeredUsers") != null){
             registeredUsers = (ArrayList<String>) document.get("registeredUsers");
         }
+
     }
 
 

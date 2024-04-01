@@ -22,7 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
+import ca.cmput301t05.placeholder.qrcode.QRCode;
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -31,7 +32,6 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.ui.events.GenerateInfoCheckinActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -60,6 +60,13 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     private Calendar cal;
     private Uri currentImage;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+
+    // Declare instance variables to store the date and time from DatePicker and TimePicker
+    private int selectedHour;
+    private int selectedMinute;
+    private int selectedDay;
+    private int selectedMonth;
+    private int selectedYear;
 
     private boolean isEditing;
 
@@ -172,7 +179,11 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(EnterEventDetailsActivity.this, (view, hourOfDay, minuteOfHour) -> eventTime.setText(String.format(Locale.CANADA, "%d:%d", hourOfDay, minuteOfHour)), hour, minute, false);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(EnterEventDetailsActivity.this, (view, hourOfDay, minuteOfHour) -> {
+            selectedHour = hourOfDay;
+            selectedMinute = minuteOfHour;
+            eventTime.setText(String.format(Locale.CANADA, "%d:%d", hourOfDay, minuteOfHour));
+        }, hour, minute, false);
 
         timePickerDialog.show();
     }
@@ -189,7 +200,12 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 // on below line we are passing context.
-                EnterEventDetailsActivity.this, (view1, year1, monthOfYear1, dayOfMonth1) -> eventDate.setText(String.format(Locale.CANADA, "%d-%d-%d", dayOfMonth1, monthOfYear1 + 1, year1)), year, month, day);
+                EnterEventDetailsActivity.this, (view1, year1, monthOfYear1, dayOfMonth1) -> {
+                    selectedDay = dayOfMonth1;
+                    selectedMonth = monthOfYear1;
+                    selectedYear = year1;
+                    eventDate.setText(String.format(Locale.CANADA, "%d-%d-%d", dayOfMonth1, monthOfYear1 + 1, year1));
+                }, year, month, day);
 
         datePickerDialog.show();
     }
@@ -204,19 +220,56 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 return;
             }
 
+            // Grab the values from eventDate and eventTime if selectedYear, month, day, etc are 0
+            checkAndSetDateAndTime();
+
+            // Set the Calendar instance to the selected date and time
+            cal.set(Calendar.YEAR, selectedYear);
+            cal.set(Calendar.MONTH, selectedMonth);
+            cal.set(Calendar.DAY_OF_MONTH, selectedDay);
+            cal.set(Calendar.HOUR_OF_DAY, selectedHour);
+            cal.set(Calendar.MINUTE, selectedMinute);
+
             newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
             newEvent.setEventDate(cal);
             newEvent.setEventName(eventName.getText().toString().trim());
             newEvent.setEventInfo(eventDescripiton.getText().toString().trim());
+            newEvent.setEventLocation(eventLocation.getText().toString().trim());
             newEvent.setEventCreator(app.getUserProfile().getProfileID());
+            newEvent.setEventLocation(eventLocation.getText().toString());
             newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
             if (currentImage != null) {
                 newEvent.setEventPosterFromUri(currentImage, getApplicationContext());
             }
 
+            if(!isEditing){
+                QRCodeManager codeManager = new QRCodeManager();
+                QRCode checkInQr = codeManager.generateQRCode(newEvent, "checkIn");
+                QRCode infoQr = codeManager.generateQRCode(newEvent, "eventInfo");
+                newEvent.setCheckInQR(checkInQr.getRawText());
+                newEvent.setInfoQRCode(infoQr.getRawText());
+            }
+
             app.setCachedEvent(newEvent);
             handleEventCreation();
         });
+    }
+
+    private void checkAndSetDateAndTime() {
+        if (selectedYear == 0 && selectedMonth == 0 && selectedDay == 0) {
+            // values in editText are in format: dd-mm-yyyy
+            String[] dateParts = eventDate.getText().toString().split("-");
+            selectedDay = Integer.valueOf(dateParts[0]);
+            selectedMonth = Integer.valueOf(dateParts[1]) - 1; // 0-indexed month
+            selectedYear = Integer.valueOf(dateParts[2]);
+        }
+
+        if (selectedHour == 0 && selectedMinute == 0) {
+            // values in editText are in format: hh:mm
+            String[] timeParts = eventTime.getText().toString().split(":");
+            selectedHour = Integer.valueOf(timeParts[0]);
+            selectedMinute = Integer.valueOf(timeParts[1]);
+        }
     }
 
     /**
@@ -297,8 +350,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                     AddHostedEventToProfile(document);
                 }
                 else{
-                    Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, EventMenuActivity.class);
-                    startActivity(genQRActivity);
+                    finish();
                 }
             }
 
@@ -332,7 +384,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 Toast.makeText(app.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                 // Navigate to access QR code page
-                Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, GenerateInfoCheckinActivity.class);
+                Intent genQRActivity = new Intent(EnterEventDetailsActivity.this, ViewQRCodesActivity.class);
                 startActivity(genQRActivity);
                 finish();
             }

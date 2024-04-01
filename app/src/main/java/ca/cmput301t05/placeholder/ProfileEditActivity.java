@@ -194,7 +194,16 @@ public class ProfileEditActivity extends AppCompatActivity {
         profile.setHomePage(editHomepage.getText().toString());
 
         if (removePic) {
-            app.getProfileImageHandler().removeProfilePic(profile, getApplicationContext());
+            app.getProfileImageHandler().removeProfilePic(profile, getApplicationContext(), new BaseImageHandler.ImageDeletionCallback() {
+                @Override
+                public void onImageDeleted() {
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
             profile.setProfilePictureToDefault();
         }
 
