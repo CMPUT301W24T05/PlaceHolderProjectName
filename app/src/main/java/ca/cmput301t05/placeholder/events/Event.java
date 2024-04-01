@@ -104,7 +104,9 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("eventDate", eventDate != null ? new Timestamp(eventDate.getTime()) : null);
         document.put("maxAttendees", maxAttendees);
         document.put("attendees", attendees);
+        document.put("eventLocation", eventLocation);
         document.put("eventCreator", eventCreator.toString());
+        document.put("eventLocation", eventLocation.toString());
         document.put("notifications", this.notifications);
         document.put("registeredUsers", this.registeredUsers);
 
@@ -134,6 +136,7 @@ public class Event extends DocumentSerializable implements Serializable {
         eventPosterID = getUUIDFromDocument(document, "eventPosterID");
         infoQRCode = getStringValueFromDocument(document, "infoQRCode");
         checkInQR = getStringValueFromDocument(document, "checkInQR");
+        eventLocation = getStringValueFromDocument(document, "eventLocation");
 
         if(document.getTimestamp("eventDate") != null) {
             eventDate = Calendar.getInstance();

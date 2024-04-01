@@ -41,7 +41,10 @@ public class ImageDetailTable extends Table<ImageDetails>{
      * @param imageDetails
      */
     public void deleteImage(ImageDetails imageDetails, DocumentCallback callback){
-        Log.d("image details", String.valueOf(imageDetails.getImagePath()));
+
+        assert imageDetails != null;
+
+        Log.d("Image_Details_Delete", imageDetails.getImagePath());
         StorageReference storageRef = DatabaseManager.getInstance().getStorage().getReference().child(imageDetails.getImagePath());
 
 
