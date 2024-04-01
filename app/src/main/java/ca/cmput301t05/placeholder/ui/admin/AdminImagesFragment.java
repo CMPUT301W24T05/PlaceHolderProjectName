@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import ca.cmput301t05.placeholder.R;
 
-public class AdminViewAllImages extends Fragment {
+public class AdminImagesFragment extends Fragment {
 
 
-    public AdminViewAllImages(){
+    public AdminImagesFragment(){
         super(R.layout.admin_view_image_page);
     }
 
