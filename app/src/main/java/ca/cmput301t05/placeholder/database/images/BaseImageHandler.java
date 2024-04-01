@@ -40,6 +40,13 @@ public abstract class BaseImageHandler {
         void onError(Exception e);
     }
 
+    public interface ImageDeletionCallback{
+
+        void onImageDeleted();
+
+        void onError(Exception e);
+    }
+
     protected StorageReference rootStorageRef = DatabaseManager.getInstance().getStorage().getReference();
 
     /**
@@ -167,7 +174,7 @@ public abstract class BaseImageHandler {
      * @param imageID The ID of the image to be removed.
      * @param folder  The folder in which the image is located.
      */
-    protected void removeImage(String imageID, String folder, Context context) {
+    protected void removeImage(String imageID, String folder, Context context, ImageDeletionCallback imageDeletionCallback) {
         String filename = folder + "/" + imageID;
         StorageReference storageReference = rootStorageRef.child(filename);
 
@@ -185,12 +192,12 @@ public abstract class BaseImageHandler {
                         storageReference.delete().addOnSuccessListener(unused -> Log.d("Image Database", "Image deleted"))
                                 .addOnFailureListener(e -> {
                                     // If the image ID is invalid or the image does not exist
-                                    Log.d("Image Database", "Error: " + e.getMessage());
+                                    imageDeletionCallback.onError(e);
                                 })
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-
+                                        imageDeletionCallback.onImageDeleted();
                                     }
                                 });
                     }

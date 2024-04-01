@@ -67,7 +67,7 @@ public class EventPosterImageHandler extends BaseImageHandler {
      *
      * @param event The event object for which the poster image is being removed.
      */
-    public void removeEventPoster(Event event, Context context) {
+    public void removeEventPoster(Event event, Context context, ImageDeletionCallback imageDeletionCallback) {
         if (event.getEventPosterID() == null) {
             return;
         }
@@ -75,9 +75,20 @@ public class EventPosterImageHandler extends BaseImageHandler {
         DatabaseManager.getInstance().getDb().collection("events").document(event.getEventID().toString()).update("eventPosterID", null).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                removeImage(event.getEventPosterID().toString(), "posters", context);
+                removeImage(event.getEventPosterID().toString(), "posters", context, new ImageDeletionCallback() {
+                    @Override
+                    public void onImageDeleted() {
+                        event.setEventPosterID(null);
+                        imageDeletionCallback.onImageDeleted();
+                    }
 
-                event.setEventPosterID(null);
+                    @Override
+                    public void onError(Exception e) {
+                        imageDeletionCallback.onError(e);
+                    }
+                });
+
+
             }
         });
 

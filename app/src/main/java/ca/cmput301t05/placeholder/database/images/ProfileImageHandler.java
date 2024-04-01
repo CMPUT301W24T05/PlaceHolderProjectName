@@ -84,15 +84,26 @@ public class ProfileImageHandler extends BaseImageHandler {
      *
      * @param profile The profile whose profile picture will be removed.
      */
-    public void removeProfilePic(Profile profile, Context context) {
+    public void removeProfilePic(Profile profile, Context context, ImageDeletionCallback imageDeletionCallback) {
         if (profile.getProfilePictureID() == null) {
             return;
         }
         DatabaseManager.getInstance().getDb().collection("profiles").document(profile.getProfileID().toString()).update("profilePictureID", null).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                removeImage(profile.getProfilePictureID().toString(), "profiles", context);
-                profile.setProfilePictureID(null);
+                removeImage(profile.getProfilePictureID().toString(), "profiles", context, new ImageDeletionCallback() {
+                    @Override
+                    public void onImageDeleted() {
+                        profile.setProfilePictureID(null);
+                        imageDeletionCallback.onImageDeleted();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        imageDeletionCallback.onError(e);
+                    }
+                });
+
             }
         });
 
