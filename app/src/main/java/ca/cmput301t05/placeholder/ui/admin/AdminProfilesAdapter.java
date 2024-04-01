@@ -146,15 +146,19 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
                                          @Override
                                          public void onImageDeleted() {
 
+                                             Log.d("profile_image", "IN PROFILE");
+
                                              app.getProfileTable().deleteDocument(profile.getProfileID().toString(), new Table.DocumentCallback() {
                                                  @Override
                                                  public void onSuccess(Object document) {
+                                                     profiles.remove(position);
+                                                     notifyDataSetChanged();
 
                                                  }
 
                                                  @Override
                                                  public void onFailure(Exception e) {
-
+                                                     Log.d("Profile", e.getMessage());
                                                  }
                                              });
 
@@ -162,7 +166,7 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
 
                                          @Override
                                          public void onError(Exception e) {
-
+                                             Log.d("Profile", e.getMessage());
                                          }
                                      });
 
@@ -171,7 +175,8 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
                                      app.getProfileTable().deleteDocument(profile.getProfileID().toString(), new Table.DocumentCallback() {
                                          @Override
                                          public void onSuccess(Object document) {
-
+                                             profiles.remove(position);
+                                             notifyDataSetChanged();
                                          }
 
                                          @Override
@@ -183,9 +188,14 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
 
                                  return true;
                              }
+
+
                              return true;
                          }
+
+
                      });
+                     popupMenu.show();
 
                  }
              });
