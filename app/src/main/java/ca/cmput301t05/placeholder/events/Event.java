@@ -46,6 +46,8 @@ public class Event extends DocumentSerializable implements Serializable {
 
     ArrayList<String> notifications; //notifications that are sent for this specific event
 
+    private String imageDetailsID;
+
     /**
      * Default constructor that generates a new event with unique ID and empty attendee list.
      */
@@ -109,7 +111,6 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("eventLocation", eventLocation.toString());
         document.put("notifications", this.notifications);
         document.put("registeredUsers", this.registeredUsers);
-
         return document;
     }
 
@@ -153,8 +154,9 @@ public class Event extends DocumentSerializable implements Serializable {
             notifications = (ArrayList<String>) document.get("notifications");
         }
         if(document.get("registeredUsers") != null){
-            registeredUsers = (ArrayList<String>) document.get("notifications");
+            registeredUsers = (ArrayList<String>) document.get("registeredUsers");
         }
+
     }
 
 

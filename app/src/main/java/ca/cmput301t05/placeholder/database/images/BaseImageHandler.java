@@ -15,6 +15,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.database.ImageDetails.ImageDetails;
 import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.events.Event;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -36,6 +37,13 @@ public abstract class BaseImageHandler {
     // Callback interface for image retrieval
     public interface ImageCallback {
         void onImageLoaded(Bitmap bitmap);
+        void onError(Exception e);
+    }
+
+    public interface ImageDeletionCallback{
+
+        void onImageDeleted();
+
         void onError(Exception e);
     }
 
@@ -106,6 +114,10 @@ public abstract class BaseImageHandler {
                         @Override
                         public void onSuccess(ImageDetails document) {
                             Log.d("ImageDetails", "Image Details Uploaded");
+
+                            //now set event or profile imageDetails to this object
+
+
                         }
 
                         @Override
@@ -162,7 +174,7 @@ public abstract class BaseImageHandler {
      * @param imageID The ID of the image to be removed.
      * @param folder  The folder in which the image is located.
      */
-    protected void removeImage(String imageID, String folder, Context context) {
+    protected void removeImage(String imageID, String folder, Context context, ImageDeletionCallback imageDeletionCallback) {
         String filename = folder + "/" + imageID;
         StorageReference storageReference = rootStorageRef.child(filename);
 
@@ -180,12 +192,12 @@ public abstract class BaseImageHandler {
                         storageReference.delete().addOnSuccessListener(unused -> Log.d("Image Database", "Image deleted"))
                                 .addOnFailureListener(e -> {
                                     // If the image ID is invalid or the image does not exist
-                                    Log.d("Image Database", "Error: " + e.getMessage());
+                                    imageDeletionCallback.onError(e);
                                 })
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-
+                                        imageDeletionCallback.onImageDeleted();
                                     }
                                 });
                     }

@@ -36,6 +36,8 @@ public class Profile extends DocumentSerializable {
     private String messagingToken; //for notifications
     
 
+
+
     /**
      * Default constructor creating an empty profile.
      */

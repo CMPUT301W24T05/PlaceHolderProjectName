@@ -4,7 +4,9 @@ import static org.mockito.Mockito.mock;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
+import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.images.ProfileImageHandler;
 import ca.cmput301t05.placeholder.profile.Profile;
 
@@ -63,7 +65,17 @@ public class ProfileImageHandlerTest {
     public void testRemoveProfilePic() {
         Profile profile = new Profile("John", UUID.randomUUID());
         profile.setProfilePictureID(UUID.randomUUID());
-        profileImageHandler.removeProfilePic(profile, mockContext.getApplicationContext());
+        profileImageHandler.removeProfilePic(profile, mockContext.getApplicationContext(), new BaseImageHandler.ImageDeletionCallback() {
+            @Override
+            public void onImageDeleted() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e("Image_Deletion", e.getMessage());
+            }
+        });
         assertNull(profile.getProfilePictureID());
 
     }
