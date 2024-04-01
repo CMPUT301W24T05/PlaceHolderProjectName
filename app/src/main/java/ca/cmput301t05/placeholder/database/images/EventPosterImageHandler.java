@@ -5,6 +5,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.events.Event;
 
 import java.io.IOException;
@@ -63,13 +67,33 @@ public class EventPosterImageHandler extends BaseImageHandler {
      *
      * @param event The event object for which the poster image is being removed.
      */
-    public void removeEventPoster(Event event, Context context) {
+    public void removeEventPoster(Event event, Context context, ImageDeletionCallback imageDeletionCallback) {
         if (event.getEventPosterID() == null) {
             return;
         }
 
-        removeImage(event.getEventPosterID().toString(), "posters", context);
+        DatabaseManager.getInstance().getDb().collection("events").document(event.getEventID().toString()).update("eventPosterID", null).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                removeImage(event.getEventPosterID().toString(), "posters", context, new ImageDeletionCallback() {
+                    @Override
+                    public void onImageDeleted() {
+                        event.setEventPosterID(null);
+                        imageDeletionCallback.onImageDeleted();
+                    }
 
-        event.setEventPosterID(null);
+                    @Override
+                    public void onError(Exception e) {
+                        imageDeletionCallback.onError(e);
+                    }
+                });
+
+
+            }
+        });
+
+
+
+
     }
 }

@@ -4,6 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 
@@ -80,11 +84,28 @@ public class ProfileImageHandler extends BaseImageHandler {
      *
      * @param profile The profile whose profile picture will be removed.
      */
-    public void removeProfilePic(Profile profile, Context context) {
+    public void removeProfilePic(Profile profile, Context context, ImageDeletionCallback imageDeletionCallback) {
         if (profile.getProfilePictureID() == null) {
             return;
         }
-        removeImage(profile.getProfilePictureID().toString(), "profiles", context);
-        profile.setProfilePictureID(null);
+        DatabaseManager.getInstance().getDb().collection("profiles").document(profile.getProfileID().toString()).update("profilePictureID", null).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                removeImage(profile.getProfilePictureID().toString(), "profiles", context, new ImageDeletionCallback() {
+                    @Override
+                    public void onImageDeleted() {
+                        profile.setProfilePictureID(null);
+                        imageDeletionCallback.onImageDeleted();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        imageDeletionCallback.onError(e);
+                    }
+                });
+
+            }
+        });
+
     }
 }

@@ -35,6 +35,8 @@ public class Profile extends DocumentSerializable {
     boolean isAdmin = false;
     private String messagingToken; //for notifications
 
+
+
     /**
      * Default constructor creating an empty profile.
      */
@@ -371,6 +373,7 @@ public class Profile extends DocumentSerializable {
         if(document.get("messagingToken") != null){
             messagingToken = document.getString("messagingToken");
         }
+
     }
 
     public Bitmap getProfilePictureBitmap() {
