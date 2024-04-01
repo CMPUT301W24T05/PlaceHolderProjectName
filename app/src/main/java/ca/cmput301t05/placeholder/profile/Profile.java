@@ -43,6 +43,10 @@ public class Profile extends DocumentSerializable {
 
     }
 
+    public Profile(DocumentSnapshot snapshot){
+        this.fromDocument(snapshot);
+    }
+
     /**
      * This constructor creates a new Profile with the given name and profileID.
      *
