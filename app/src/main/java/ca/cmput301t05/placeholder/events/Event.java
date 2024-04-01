@@ -44,9 +44,10 @@ public class Event extends DocumentSerializable implements Serializable {
     private HashMap<String, HashMap<String, Double>> attendees; //stored this way for the database
     private ArrayList<String> registeredUsers;
 
+    private Long attendeesNum, registeredUsersNum; //used so we can show how many people are attending / registered
+
     ArrayList<String> notifications; //notifications that are sent for this specific event
 
-    private String imageDetailsID;
 
     /**
      * Default constructor that generates a new event with unique ID and empty attendee list.
@@ -69,6 +70,8 @@ public class Event extends DocumentSerializable implements Serializable {
         this.attendees = new HashMap<>();
         this.notifications = new ArrayList<>();
         this.registeredUsers = new ArrayList<>();
+        this.attendeesNum = new Long(0);
+        this.registeredUsersNum = new Long(0);
     }
 
     /**
@@ -87,6 +90,8 @@ public class Event extends DocumentSerializable implements Serializable {
         this.attendees = new HashMap<>();
         this.notifications = new ArrayList<>();
         this.registeredUsers = new ArrayList<>();
+        this.attendeesNum = new Long(0);
+        this.registeredUsersNum = new Long(0);
     }
 
     /**
@@ -111,6 +116,8 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("eventLocation", eventLocation.toString());
         document.put("notifications", this.notifications);
         document.put("registeredUsers", this.registeredUsers);
+        document.put("attendeesNum", this.attendeesNum);
+        document.put("registeredUsersNum", this.registeredUsersNum);
         return document;
     }
 
@@ -157,6 +164,9 @@ public class Event extends DocumentSerializable implements Serializable {
             registeredUsers = (ArrayList<String>) document.get("registeredUsers");
         }
 
+        this.attendeesNum = document.getLong("attendeesNum");
+        this.registeredUsersNum = document.getLong("registeredUsersNum");
+
     }
 
 
@@ -187,6 +197,7 @@ public class Event extends DocumentSerializable implements Serializable {
             attendeeInfo.put("longitude", longitude);
             attendeeInfo.put("latitude", latitude);
             attendees.put(profile.getProfileID().toString(), attendeeInfo);
+            this.attendeesNum += 1;
         }
     }
     // Check if maximum capacity is reached
@@ -204,6 +215,7 @@ public class Event extends DocumentSerializable implements Serializable {
     public void removeAttendee(Profile profile){
 
         attendees.remove(profile.getProfileID().toString());
+        this.attendeesNum -= 1;
     }
 
     /**
@@ -228,6 +240,7 @@ public class Event extends DocumentSerializable implements Serializable {
     public boolean userSignup(Profile user){
         if (!this.registeredUsers.contains(user.getProfileID().toString())){
             this.registeredUsers.add(user.getProfileID().toString());
+            this.registeredUsersNum += 1;
             return true;
         }
         else{
@@ -248,6 +261,7 @@ public class Event extends DocumentSerializable implements Serializable {
      */
     public void setAttendees(HashMap<String, HashMap<String, Double>> attendees) {
         this.attendees = attendees;
+        this.attendeesNum = (long) attendees.size();
     }
 
 
@@ -409,6 +423,14 @@ public class Event extends DocumentSerializable implements Serializable {
 
     public ArrayList<String> getNotifications() {
         return notifications;
+    }
+
+    public Long getAttendeesNum() {
+        return attendeesNum;
+    }
+
+    public Long getRegisteredUsersNum() {
+        return registeredUsersNum;
     }
 }
 
