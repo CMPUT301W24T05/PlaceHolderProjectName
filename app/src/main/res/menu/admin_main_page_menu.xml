@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/admin_menu_home"
+        android:icon="@drawable/home_thumb"
+        android:title="Home" />
+    <item
+        android:id="@+id/admin_menu_images"
+        android:icon="@drawable/viewimages_thumb"
+        android:title="Images" />
+    <item
+        android:id="@+id/admin_menu_profiles"
+        android:icon="@drawable/multiple_profile_thumb"
+        android:title="Profiles" />
+    <item
+        android:id="@+id/admin_menu_events"
+        android:icon="@drawable/events_thumb"
+        android:title="Events" />
+</menu>

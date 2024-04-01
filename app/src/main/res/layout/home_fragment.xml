@@ -45,7 +45,7 @@
 
 
         <TextView
-            android:id="@+id/main_app_name"
+            android:id="@+id/main_admin_page_AdminTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
