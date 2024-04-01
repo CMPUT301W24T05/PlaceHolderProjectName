@@ -140,14 +140,11 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
 
                                  if (profile.getProfilePictureID() != null){
                                      //remove image
-                                     Log.d("menu", "Deleting profile picture");
-                                     Log.d("profile_ADAPTER", profile.getProfileID().toString());
 
                                      app.getProfileImageHandler().removeProfilePic(profile, context, new BaseImageHandler.ImageDeletionCallback() {
                                          @Override
                                          public void onImageDeleted() {
 
-                                             Log.d("profile_image", "IN PROFILE");
 
                                              app.getProfileTable().deleteDocument(profile.getProfileID().toString(), new Table.DocumentCallback() {
                                                  @Override
@@ -173,7 +170,6 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
 
                                  }  else {
 
-                                     Log.d("IMAGE_NO_PROFILE", profile.getProfileID().toString());
                                      app.getProfileTable().deleteDocument(profile.getProfileID().toString(), new Table.DocumentCallback() {
                                          @Override
                                          public void onSuccess(Object document) {
