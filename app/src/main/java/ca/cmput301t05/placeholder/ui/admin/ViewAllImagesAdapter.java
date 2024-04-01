@@ -145,7 +145,7 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
 
                                 return true;
                             }
-                            return false;
+                            return true;
                         }
                     });
 

@@ -12,6 +12,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -141,17 +142,48 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
                                  if (profile.getProfileID() != null){
                                      //remove image
 
-                                     app.getProfileImageHandler().removeProfilePic(profile, context);
+                                     app.getProfileImageHandler().removeProfilePic(profile, context, new BaseImageHandler.ImageDeletionCallback() {
+                                         @Override
+                                         public void onImageDeleted() {
 
+                                             app.getProfileTable().deleteDocument(profile.getProfileID().toString(), new Table.DocumentCallback() {
+                                                 @Override
+                                                 public void onSuccess(Object document) {
+
+                                                 }
+
+                                                 @Override
+                                                 public void onFailure(Exception e) {
+
+                                                 }
+                                             });
+
+                                         }
+
+                                         @Override
+                                         public void onError(Exception e) {
+
+                                         }
+                                     });
+
+                                 }  else {
+
+                                     app.getProfileTable().deleteDocument(profile.getProfileID().toString(), new Table.DocumentCallback() {
+                                         @Override
+                                         public void onSuccess(Object document) {
+
+                                         }
+
+                                         @Override
+                                         public void onFailure(Exception e) {
+
+                                         }
+                                     });
                                  }
-
-
-
-
 
                                  return true;
                              }
-                             return false;
+                             return true;
                          }
                      });
 
@@ -213,4 +245,29 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
 
 
     }
+
+    public void setProfileRefresh(RecyclerView recyclerView){
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (!(recyclerView.getLayoutManager() instanceof LinearLayoutManager)) {
+                    return; // Only works with LinearLayoutManager and its subclasses
+                }
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                if (!isLoading && totalItemCount <= (lastVisibleItemPosition + 3)) { // 3 images before end we reload images
+                    loadProfiles();
+                }
+            }
+        });
+
+
+    }
 }
+
+
