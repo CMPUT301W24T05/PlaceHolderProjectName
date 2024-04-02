@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
@@ -104,7 +105,11 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
             date.setText(dateText);
 
             //load into imageview
-            Glide.with(context).load(details.getImageUri()).centerCrop().into(picture);
+            Glide.with(context)
+                    .load(details.getImageUri())
+                    .centerCrop()
+                    .apply(new RequestOptions().override(800, 800))
+                    .into(picture);
 
             //allow for deletion
             menu.setOnClickListener(new View.OnClickListener() {
@@ -121,12 +126,12 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
 
                                 //TODO Make a confirmation dialog pop up
                                 Log.d("menu", "Deleting image");
+                                Log.d("ImageDetails_ADAPTER", details.getId());
 
                                 app.getImageDetailTable().deleteImage(details, new Table.DocumentCallback() {
                                     @Override
-                                    public void onSuccess(Object document) {
-                                        int curpos = getAdapterPosition();
-                                        imageDetails.remove(curpos);
+                                    public void onSuccess(Object document) {;
+                                        imageDetails.remove(position);
                                         notifyDataSetChanged();
                                     }
 
@@ -140,7 +145,7 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
 
                                 return true;
                             }
-                            return false;
+                            return true;
                         }
                     });
 

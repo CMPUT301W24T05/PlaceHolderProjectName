@@ -3,6 +3,8 @@ package ca.cmput301t05.placeholder.events;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.widget.Toast;
+
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 import ca.cmput301t05.placeholder.profile.Profile;
@@ -40,8 +42,11 @@ public class Event extends DocumentSerializable implements Serializable {
     // if longitude and latitude are not shared, then it will be Null
     // when displaying checked in times, should convert to integer
     private HashMap<String, HashMap<String, Double>> attendees; //stored this way for the database
+    private ArrayList<String> registeredUsers;
 
     ArrayList<String> notifications; //notifications that are sent for this specific event
+
+    private String imageDetailsID;
 
     /**
      * Default constructor that generates a new event with unique ID and empty attendee list.
@@ -50,6 +55,7 @@ public class Event extends DocumentSerializable implements Serializable {
         this.eventID = UUID.randomUUID();
         this.attendees = new HashMap<>();
         this.notifications = new ArrayList<>();
+        this.registeredUsers = new ArrayList<>();
     }
 
     /**
@@ -62,6 +68,7 @@ public class Event extends DocumentSerializable implements Serializable {
         this.eventID = eventID;
         this.attendees = new HashMap<>();
         this.notifications = new ArrayList<>();
+        this.registeredUsers = new ArrayList<>();
     }
 
     /**
@@ -79,6 +86,7 @@ public class Event extends DocumentSerializable implements Serializable {
         this.maxAttendees = maxAttendees;
         this.attendees = new HashMap<>();
         this.notifications = new ArrayList<>();
+        this.registeredUsers = new ArrayList<>();
     }
 
     /**
@@ -98,9 +106,11 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("eventDate", eventDate != null ? new Timestamp(eventDate.getTime()) : null);
         document.put("maxAttendees", maxAttendees);
         document.put("attendees", attendees);
+        document.put("eventLocation", eventLocation);
         document.put("eventCreator", eventCreator.toString());
+        document.put("eventLocation", eventLocation.toString());
         document.put("notifications", this.notifications);
-
+        document.put("registeredUsers", this.registeredUsers);
         return document;
     }
 
@@ -127,6 +137,7 @@ public class Event extends DocumentSerializable implements Serializable {
         eventPosterID = getUUIDFromDocument(document, "eventPosterID");
         infoQRCode = getStringValueFromDocument(document, "infoQRCode");
         checkInQR = getStringValueFromDocument(document, "checkInQR");
+        eventLocation = getStringValueFromDocument(document, "eventLocation");
 
         if(document.getTimestamp("eventDate") != null) {
             eventDate = Calendar.getInstance();
@@ -142,6 +153,10 @@ public class Event extends DocumentSerializable implements Serializable {
         if(document.get("notifications") != null){
             notifications = (ArrayList<String>) document.get("notifications");
         }
+        if(document.get("registeredUsers") != null){
+            registeredUsers = (ArrayList<String>) document.get("registeredUsers");
+        }
+
     }
 
 
@@ -199,6 +214,25 @@ public class Event extends DocumentSerializable implements Serializable {
     public ArrayList<String> getAttendees(){
 
         return new ArrayList<>(attendees.keySet());
+    }
+
+    public ArrayList<String> getRegisteredUsers() {
+        return registeredUsers;
+    }
+
+    /**
+     * put user ID to a list of registered users of an event in eventTable
+     *
+     * @return boolean (true if succesful sign up, false if the user have already signed up
+     */
+    public boolean userSignup(Profile user){
+        if (!this.registeredUsers.contains(user.getProfileID().toString())){
+            this.registeredUsers.add(user.getProfileID().toString());
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public HashMap<String, HashMap<String, Double>> getMap(){ // Need to access check in count for each attendee

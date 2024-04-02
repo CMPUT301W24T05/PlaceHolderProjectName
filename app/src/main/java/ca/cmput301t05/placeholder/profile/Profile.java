@@ -34,12 +34,19 @@ public class Profile extends DocumentSerializable {
     private ArrayList<String> notifications;
     boolean isAdmin = false;
     private String messagingToken; //for notifications
+    
+
+
 
     /**
      * Default constructor creating an empty profile.
      */
     public Profile(){
 
+    }
+
+    public Profile(DocumentSnapshot snapshot){
+        this.fromDocument(snapshot);
     }
 
     /**
@@ -242,6 +249,10 @@ public class Profile extends DocumentSerializable {
 
     public void setInterestedEvents(List<String> interestedEvents) { this.interestedEvents = interestedEvents; }
 
+    public void addInterestedEvents(Event event){
+        interestedEvents.add(event.getEventID().toString());
+    }
+
     /**
      * Sets the name of the profile.
      *
@@ -367,6 +378,7 @@ public class Profile extends DocumentSerializable {
         if(document.get("messagingToken") != null){
             messagingToken = document.getString("messagingToken");
         }
+
     }
 
     public Bitmap getProfilePictureBitmap() {
@@ -391,4 +403,5 @@ public class Profile extends DocumentSerializable {
     public boolean hasProfileBitmap(){
         return profilePictureBitmap != null;
     }
+
 }

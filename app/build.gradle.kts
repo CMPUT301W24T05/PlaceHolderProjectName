@@ -1,4 +1,4 @@
-import com.android.build.api.dsl.Packaging
+
 
 plugins {
     id("com.android.application")
@@ -54,9 +54,11 @@ android {
 
 dependencies {
 
+    // Material UI Library
+    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
-
-    testImplementation ("org.mockito:mockito-inline:5.0.0");
+    testImplementation ("org.mockito:mockito-inline:5.0.0")
 
     implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0") // The dependency for QR code scannin
 
@@ -66,8 +68,8 @@ dependencies {
 
 
     // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
-    implementation("com.google.firebase:firebase-firestore:24.10.3")
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation("com.google.firebase:firebase-firestore:24.11.0")
     implementation("com.google.firebase:firebase-storage")
 
 
@@ -78,7 +80,7 @@ dependencies {
     //implement the image downloading library
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.google.firebase:firebase-database:20.3.1")
-    implementation("androidx.databinding:databinding-runtime:8.3.0")
+    implementation("androidx.databinding:databinding-runtime:8.3.1")
     androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     // implementation(fileTree(mapOf("dir" to "C:\\Users\\antho\\AppData\\Local\\Android\\Sdk\\platforms\\android-34", "include" to listOf("*.aar", "*.jar"))))
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
@@ -86,10 +88,10 @@ dependencies {
 
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.navigation:navigation-fragment:2.7.6")
-    implementation("androidx.navigation:navigation-ui:2.7.6")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.navigation:navigation-fragment:2.7.7")
+    implementation("androidx.navigation:navigation-ui:2.7.7")
 
 
     testImplementation("junit:junit:4.13.2")
@@ -105,8 +107,8 @@ dependencies {
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
 
     //this is for image picker for uploading event poster
-    implementation("androidx.activity:activity-ktx:1.2.0")
-    implementation("androidx.fragment:fragment-ktx:1.3.0")
+    implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     //Import the image picker library from Github
     implementation ("com.github.dhaval2404:imagepicker:2.1")
@@ -115,7 +117,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging")
 
     // Import google play service for geolocation
-    implementation ("com.google.android.gms:play-services-location:19.0.1")
+    implementation ("com.google.android.gms:play-services-location:21.2.0")
 
     // Import street map view
     implementation ("org.osmdroid:osmdroid-android:6.1.18")

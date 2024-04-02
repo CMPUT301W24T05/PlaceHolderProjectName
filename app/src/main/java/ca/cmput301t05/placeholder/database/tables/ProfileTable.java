@@ -2,6 +2,8 @@ package ca.cmput301t05.placeholder.database.tables;
 
 import ca.cmput301t05.placeholder.database.utils.Collections;
 import ca.cmput301t05.placeholder.profile.Profile;
+
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 /**
@@ -26,5 +28,9 @@ public class ProfileTable extends Table<Profile> {
         Profile profile = new Profile();
         profile.fromDocument(snapshot);
         return profile;
+    }
+
+    public CollectionReference getCollectionReference(){
+        return collectionReference;
     }
 }

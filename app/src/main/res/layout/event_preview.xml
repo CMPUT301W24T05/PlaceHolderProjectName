@@ -5,39 +5,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarEventPreview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:titleTextColor="@android:color/white"
+        app:titleMarginStart="50dp"
+        app:titleMarginEnd="32dp"
+        app:title="Preview of your Event"
+        app:layout_constraintBottom_toTopOf="@+id/preview_name"
+        android:layout_alignParentTop="true"
+        app:navigationIcon="@drawable/back"
+        />
 
-        <Button
-            android:id="@+id/event_preview_back"
-            android:layout_width="11dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1"
-            android:text="Back" />
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal">-->
 
-        <TextView
-            android:id="@+id/previewText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="1"
-            android:text="Event Preview" />
+<!--        <Button-->
+<!--            android:id="@+id/event_preview_back"-->
+<!--            android:layout_width="11dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginRight="20dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Back" />-->
 
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/previewText"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Event Preview" />-->
+
+<!--    </LinearLayout>-->
 
 
     <TextView
         android:id="@+id/preview_name"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarEventPreview"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Event Name"
-        android:layout_marginTop="20dp"
+        android:textStyle="bold"
         android:layout_marginBottom="20dp"
+        android:text="Event Name"
         android:textAlignment="center"
-        android:textSize="40dp"/>
+        android:textSize="30sp"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,18 +62,19 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/event_preview_eventDate"
+            android:id="@+id/event_menu_eventDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Event Date"
+            android:layout_weight="1"
+            android:layout_marginStart="20dp"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/event_preview_eventlocation"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:text="Event Location"
             android:textSize="20sp" />
     </LinearLayout>
@@ -64,23 +82,23 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottomllytEventPrevie">
 
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/event_preview_poster"
-                    android:layout_width="match_parent"
-                    android:layout_height="368dp"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/pizzanight" />
+            <ImageView
+                android:id="@+id/event_preview_poster"
+                android:layout_width="match_parent"
+                android:layout_height="430dp"
+                android:layout_weight="1"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/pizzanight" />
 
                 <TextView
                     android:id="@+id/event_preview_eventinfo"
@@ -116,6 +134,14 @@
 
     </ScrollView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/bottomllytEventPreview">
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/preview_create"
         android:layout_width="match_parent"
@@ -123,6 +149,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
+
         android:text="Create Event" />
 
 

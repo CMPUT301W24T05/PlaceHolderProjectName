@@ -5,6 +5,11 @@
 <!--    Declaring that the app uses hardware on the phone, in our case the phone's camera -->
 <!--    <uses-feature android:name="android.hardware.camera.any"/>-->
     <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
@@ -50,27 +55,26 @@
             android:exported="true">
         </activity>
 
-
+        <activity android:name=".ui.events.organizer_info.ViewSignUpsActivity"/>
 
         <activity android:name=".ui.events.organizer_info.ViewAttendeeCheckinActivity" />
         <activity android:name=".InitialSetupActivity" />
-        <activity android:name=".ui.events.creation.EnterEventDetailsActivity" />
+        <activity android:name=".ui.events.creation.EnterEventDetailsActivity" android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ProfileEditActivity"/>
         <activity android:name=".ui.admin.AdminHomeActivity"/>
-        <activity android:name=".ui.events.creation.UploadPosterActivity"/>
         <activity android:name=".ui.notifications.NotificationsFragment"/>
         <activity android:name=".ui.events.ViewEventDetailsActivity"/>
         <activity android:name=".ui.events.EventSignUpActivity"/>
-        <activity android:name=".ui.events.GenerateInfoCheckinActivity"/>
         <activity android:name=".ui.notifications.EventNotificationPageActivity"/>
         <activity android:name=".ui.notifications.UserNotificationActivity"/>
-        <activity android:name=".ui.events.creation.PreviewEventActivity" />
         <activity android:name=".ui.events.ViewQRCodesActivity"/>
         <activity android:name=".ui.events.EventMenuActivity"/>
         <activity android:name=".Location.Successful_Checked_In_Activity"/>
-        <activity android:name=".ui.events.EventExplore" />
-        <activity android:name=".ui.events.EventOrganized" />
+
+        <activity android:name=".ui.events.ViewMilestonesActivity" />
+
         <activity android:name=".Location.MapDisplay_activity"/>
+
 
 
 

@@ -70,7 +70,7 @@ public class ImageDetails extends DocumentSerializable {
     }
 
     public String getImagePath() {
-        return ImagePath;
+        return this.ImagePath;
     }
 
     public void setImageUri(Uri imageUri) {
