@@ -33,6 +33,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.qrcode.QRCodeType;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventSignUpActivity;
@@ -71,19 +72,6 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
         locationManager.requestLocationPermission(this);
 
         event = app.getCachedEvent();
-
-        // for testing:
-//        app.getEventTable().fetchDocument("917812f0-4400-420e-8260-f566943ac624", new Table.DocumentCallback<Event>() {
-//            @Override
-//            public void onSuccess(Event event1){
-//                app.setCachedEvent(event1); //sets the cached event so we can use it on the next pag
-//                event = app.getCachedEvent();
-//            }
-//            @Override
-//            public void onFailure(Exception e){
-//                // Failed to get fetch the event for eventId with exception e
-//            }
-//        });
 
     }
     @Override
@@ -134,14 +122,16 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
     };
 
     public void onLocationPermissionDenied(){
-        Toast.makeText(this, "onLocationPermissionDenied, cannot see the map", Toast.LENGTH_SHORT).show();
-        // when location is denied, wait for 3 seconds and directly go to the event details page
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finish();
-            }
-        }, SPLASH_DELAY);
+        Toast.makeText(this, "onLocationPermissionDenied", Toast.LENGTH_SHORT).show();
+        // when location is denied, set a default center point (UA area)
+        IMapController mapController = map.getController();
+        mapController.setZoom(14.5);
+        double la = 53.519101618978745;
+        double lo = -113.52437329734187;
+        GeoPoint startPoint = new GeoPoint(la, lo);
+        mapController.setCenter(startPoint);
+        showAttendees();
+        map.invalidate();
     }
 
     public void showAttendees() {
@@ -153,11 +143,27 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
                     double latitude = value.get("latitude");
                     double longitude = value.get("longitude");
                     String attendeeID = key;
-                    markers.add(createMarker(latitude, longitude, attendeeID));
+                    // set the marker's title to be the name of the attendee
+                    Toast.makeText(this, "showAttendees", Toast.LENGTH_SHORT).show();
+                    app.getProfileTable().fetchDocument(key, new Table.DocumentCallback<Profile>() {
+                        @Override
+                        public void onSuccess(Profile document) {
+                            String attendeeName = document.getName();
+                            markers.add(createMarker(latitude, longitude, attendeeName));
+                            Toast.makeText(MapDisplay_activity.this, "onSuccess", Toast.LENGTH_SHORT).show();
+                            map.getOverlays().addAll(markers);
+                            map.invalidate();
+                        }
+                        @Override
+                        public void onFailure(Exception e) {
+                            markers.add(createMarker(latitude, longitude, attendeeID));
+                            Toast.makeText(MapDisplay_activity.this, "onFailure", Toast.LENGTH_SHORT).show();
+                            map.getOverlays().addAll(markers);
+                            map.invalidate();
+                        }
+                    });
                 }
             });
-            map.getOverlays().addAll(markers);
-            map.invalidate();
         }
     }
     private Marker createMarker(double latitude, double longitude, String title) {
