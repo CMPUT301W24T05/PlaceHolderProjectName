@@ -31,10 +31,10 @@ public class AdminEventFragment extends Fragment {
 
         RecyclerView imagesRecycler = view.findViewById(R.id.admin_view_image_recycler);
 
-        AdminProfilesAdapter adapter = new AdminProfilesAdapter(getContext());
+        AdminEventAdapter adapter = new AdminEventAdapter(getContext());
 
         imagesRecycler.setAdapter(adapter);
-        adapter.setProfileRefresh(imagesRecycler);
+        adapter.setEventRefresh(imagesRecycler);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2); // 2 columns
         imagesRecycler.setLayoutManager(layoutManager);
