@@ -59,6 +59,10 @@ public class Event extends DocumentSerializable implements Serializable {
         this.registeredUsers = new ArrayList<>();
     }
 
+    public Event(DocumentSnapshot snapshot){
+        this.fromDocument(snapshot);
+    }
+
     /**
      * Constructor that initializes an event with a specific UUID.
      * Intended for use when retrieving an existing event from the database.
@@ -116,8 +120,6 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("eventLocation", eventLocation.toString());
         document.put("notifications", this.notifications);
         document.put("registeredUsers", this.registeredUsers);
-        document.put("attendeesNum", this.attendeesNum);
-        document.put("registeredUsersNum", this.registeredUsersNum);
         return document;
     }
 
@@ -164,8 +166,8 @@ public class Event extends DocumentSerializable implements Serializable {
             registeredUsers = (ArrayList<String>) document.get("registeredUsers");
         }
 
-        this.attendeesNum = document.getLong("attendeesNum");
-        this.registeredUsersNum = document.getLong("registeredUsersNum");
+        this.registeredUsersNum = (long) registeredUsers.size();
+        this.attendeesNum = (long) attendees.size();
 
     }
 

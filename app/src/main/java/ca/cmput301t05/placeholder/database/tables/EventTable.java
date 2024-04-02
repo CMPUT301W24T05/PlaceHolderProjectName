@@ -1,8 +1,10 @@
 package ca.cmput301t05.placeholder.database.tables;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.stream.DoubleStream;
 
 import ca.cmput301t05.placeholder.database.utils.Collections;
 import ca.cmput301t05.placeholder.events.Event;
@@ -44,6 +46,11 @@ public class EventTable extends Table<Event> {
                 callback.onFailure(task.getException());
             }
         });
+    }
+
+    public CollectionReference getCollectionReference() {
+
+        return collectionReference;
     }
 }
 
