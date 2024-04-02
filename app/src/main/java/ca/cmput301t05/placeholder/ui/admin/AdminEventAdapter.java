@@ -64,11 +64,7 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
 
     @Override
     public void onBindViewHolder(@NonNull EventHolder holder, int position) {
-        try {
-            holder.bindView(position);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        holder.bindView(position);
     }
 
     @Override
@@ -138,7 +134,7 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
 
                 @Override
                 public void onFailure(Exception e) {
-
+                    Log.e("Event_Adapter_Profile", e.getMessage());
                 }
             });
 
@@ -191,7 +187,7 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
 
                                                 @Override
                                                 public void onFailure(Exception e) {
-                                                    Log.d("Profile", e.getMessage());
+                                                    Log.d("Event", e.getMessage());
                                                 }
                                             });
 
@@ -199,7 +195,7 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
 
                                         @Override
                                         public void onError(Exception e) {
-                                            Log.d("Profile", e.getMessage());
+                                            Log.d("Event", e.getMessage());
                                         }
                                     });
 
@@ -214,7 +210,7 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
 
                                         @Override
                                         public void onFailure(Exception e) {
-                                            Log.d("Profile", e.getMessage());
+                                            Log.d("Event", e.getMessage());
                                         }
                                     });
                                 }
@@ -244,6 +240,8 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
         if (isLoading){
             return;
         }
+
+        Log.d("Event_Adapter", "Loading Events");
 
         isLoading = true;
 

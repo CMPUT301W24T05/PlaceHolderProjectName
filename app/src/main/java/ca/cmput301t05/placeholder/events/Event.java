@@ -166,8 +166,19 @@ public class Event extends DocumentSerializable implements Serializable {
             registeredUsers = (ArrayList<String>) document.get("registeredUsers");
         }
 
-        this.registeredUsersNum = (long) registeredUsers.size();
-        this.attendeesNum = (long) attendees.size();
+        if (registeredUsers != null){
+            this.registeredUsersNum = (long) registeredUsers.size();
+        }   else {
+            this.registeredUsersNum = 0L;
+        }
+
+        if (attendees != null){
+            this.attendeesNum = (long) attendees.size();
+        }   else {
+            this.attendeesNum = 0L;
+        }
+
+
 
     }
 
