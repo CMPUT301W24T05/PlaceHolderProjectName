@@ -83,6 +83,10 @@ public class AdminHomeActivity extends AppCompatActivity {
                     }
                     
                 } else if (menuItem.getItemId() == R.id.admin_menu_events) {
+
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.admin_fragment_container, new AdminEventFragment(), "EVENTS_FRAGMENT")
+                            .commit();
                     
                 }
 
