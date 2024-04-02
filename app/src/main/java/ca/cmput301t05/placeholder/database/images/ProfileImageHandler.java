@@ -88,13 +88,17 @@ public class ProfileImageHandler extends BaseImageHandler {
         if (profile.getProfilePictureID() == null) {
             return;
         }
-        DatabaseManager.getInstance().getDb().collection("profiles").document(profile.getProfileID().toString()).update("profilePictureID", null).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                removeImage(profile.getProfilePictureID().toString(), "profiles", context, new ImageDeletionCallback() {
+
+        Log.d("profile_image_deletion", profile.getProfileID().toString());
+
+        DatabaseManager.getInstance().getDb().collection("profiles").document(profile.getProfileID().toString()).update("profilePictureID", null).addOnCompleteListener(task -> {
+
+            if (task.isSuccessful()){
+
+                removeImage(profile.getProfileID().toString(), "profiles", context, new ImageDeletionCallback() {
                     @Override
                     public void onImageDeleted() {
-                        profile.setProfilePictureID(null);
+                        Log.d("Profile_Image_deletion", "Image Deleted");
                         imageDeletionCallback.onImageDeleted();
                     }
 
@@ -104,8 +108,17 @@ public class ProfileImageHandler extends BaseImageHandler {
                     }
                 });
 
+
+            }   else {
+
+                Log.d("Profile_Image_deletion", task.getException().getMessage());
             }
+
         });
+
+
+
+
 
     }
 }

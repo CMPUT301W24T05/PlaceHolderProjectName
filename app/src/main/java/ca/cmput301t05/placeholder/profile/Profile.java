@@ -34,6 +34,7 @@ public class Profile extends DocumentSerializable {
     private ArrayList<String> notifications;
     boolean isAdmin = false;
     private String messagingToken; //for notifications
+    
 
 
 
@@ -42,6 +43,10 @@ public class Profile extends DocumentSerializable {
      */
     public Profile(){
 
+    }
+
+    public Profile(DocumentSnapshot snapshot){
+        this.fromDocument(snapshot);
     }
 
     /**
@@ -398,4 +403,5 @@ public class Profile extends DocumentSerializable {
     public boolean hasProfileBitmap(){
         return profilePictureBitmap != null;
     }
+
 }
