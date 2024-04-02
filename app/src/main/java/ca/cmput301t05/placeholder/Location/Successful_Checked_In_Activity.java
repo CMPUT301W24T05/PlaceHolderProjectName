@@ -36,7 +36,7 @@ public class Successful_Checked_In_Activity extends AppCompatActivity implements
     private double longitude;
     private EventTable eventTable;
     // Used to make a page stay there a 1.5 second if choose not to share location
-    private static final long SPLASH_DELAY = 3000; // 3 seconds d
+    private static final long SPLASH_DELAY = 3500; // 3 seconds d
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (PlaceholderApp) getApplicationContext();
