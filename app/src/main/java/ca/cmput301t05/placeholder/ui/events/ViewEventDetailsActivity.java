@@ -24,8 +24,6 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 public class ViewEventDetailsActivity extends AppCompatActivity {
-    private Button backButton;
-    private Button profileButton;
     private TextView eventDateTextView;
     private TextView eventLocationTextView;
     private TextView eventDetailsTextView;
@@ -38,18 +36,10 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         PlaceholderApp app = (PlaceholderApp) getApplicationContext();
         Event displayEvent = app.getCachedEvent(); // Initialize UI
         setContentView(R.layout.event_vieweventdetails);
-        initButtons();
         initTextViews();
         initImageView(); // Set button click listeners
-        setBackButtonHandler();
-        setProfileButtonHandler(); // Show event details
         setEventDetails(displayEvent); // Show event poster
         setEventPoster(app, displayEvent);
-    }
-
-    private void initButtons() {
-        backButton = findViewById(R.id.event_signup_back);
-        profileButton = findViewById(R.id.vieweventdetails_profile);
     }
 
     private void initTextViews() {
@@ -61,19 +51,6 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
     private void initImageView() {
         eventPosterImageView = findViewById(R.id.event_signup_poster);
-    }
-
-    private void setBackButtonHandler() {
-        backButton.setOnClickListener(view -> {
-            finish(); //go back to last page
-        });
-    }
-
-    private void setProfileButtonHandler() {
-        profileButton.setOnClickListener(view -> { //open profile
-            Intent i = new Intent(ViewEventDetailsActivity.this, ProfileEditActivity.class);
-            startActivity(i);
-        });
     }
 
     private void setEventDetails(Event displayEvent) {
