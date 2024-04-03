@@ -26,7 +26,7 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
 
@@ -153,7 +153,7 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         } else if (type == EventAdapter.adapterType.ATTENDING) {
             app.setCachedEvent(event);
             //TODO send to the event info page for attendees
-            Intent i = new Intent(getActivity(), ViewEventDetailsActivity.class);
+            Intent i = new Intent(getActivity(), ViewEventDetailsFragment.class);
             startActivity(i);
         }
     }

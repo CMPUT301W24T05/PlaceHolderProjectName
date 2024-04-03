@@ -1,19 +1,18 @@
 package ca.cmput301t05.placeholder.ui.events;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -28,10 +27,8 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
 
-public class ViewEventDetailsActivity extends AppCompatActivity {
+public class ViewEventDetailsFragment extends Fragment {
     private static final String LOG_TAG = "EventDetailsDialogFragment";
-    private static final String AM = " AM";
-    private static final String PM = " PM";
 
     private TextView eventTitleView;
     private TextView eventDateView;
@@ -44,29 +41,30 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
     private PlaceholderApp app;
 
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.event_vieweventdetails, container, false);
 
-        app = (PlaceholderApp) getApplicationContext();
+        app = (PlaceholderApp) getActivity().getApplicationContext();
         Event displayEvent = app.getCachedEvent();
 
-        setContentView(R.layout.event_vieweventdetails);
-
-        initTextViews();
+        initTextViews(view);
         updateEventDetails(displayEvent);
         updateEventPoster(displayEvent);
+
+        return view;
     }
 
-    private void initTextViews() {
-        eventTitleView = findViewById(R.id.event_view_title);
-        eventDateView = findViewById(R.id.event_view_date);
-        eventLocationView = findViewById(R.id.event_view_location);
-        eventPosterImage = findViewById(R.id.event_view_poster);
-        eventInterestCountView = findViewById(R.id.event_view_interest_count);
-        eventOrganizerView = findViewById(R.id.event_view_creator);
-        eventDescriptionView = findViewById(R.id.event_view_description);
-        eventOrganizerProfileImage = findViewById(R.id.event_view_creator_image);
+    private void initTextViews(View view) {
+        eventTitleView = view.findViewById(R.id.event_view_title);
+        eventDateView = view.findViewById(R.id.event_view_date);
+        eventLocationView = view.findViewById(R.id.event_view_location);
+        eventPosterImage = view.findViewById(R.id.event_view_poster);
+        eventInterestCountView = view.findViewById(R.id.event_view_interest_count);
+        eventOrganizerView = view.findViewById(R.id.event_view_creator);
+        eventDescriptionView = view.findViewById(R.id.event_view_description);
+        eventOrganizerProfileImage = view.findViewById(R.id.event_view_creator_image);
     }
 
     private void updateEventDetails(Event displayEvent) {
@@ -106,7 +104,7 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         if (organizerProfile.hasProfileBitmap()) {
             eventOrganizerProfileImage.setImageBitmap(getCircularBitmap(organizerProfile.getProfilePictureBitmap()));
         } else {
-            app.getProfileImageHandler().getProfilePicture(organizerProfile, getApplicationContext(), new BaseImageHandler.ImageCallback() {
+            app.getProfileImageHandler().getProfilePicture(organizerProfile, getActivity(), new BaseImageHandler.ImageCallback() {
                 @Override
                 public void onImageLoaded(Bitmap bitmap) {
                     eventOrganizerProfileImage.setImageBitmap(getCircularBitmap(bitmap));
@@ -131,7 +129,7 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
     }
 
     private void retrieveAndSetPosterImage(Event displayEvent) {
-        app.getPosterImageHandler().getPosterPicture(displayEvent, this,
+        app.getPosterImageHandler().getPosterPicture(displayEvent, getContext(),
                 new BaseImageHandler.ImageCallback() {
                     @Override
                     public void onImageLoaded(Bitmap bitmap) {

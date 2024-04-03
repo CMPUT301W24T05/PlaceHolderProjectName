@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         } else if (type == EventAdapter.adapterType.ATTENDING) {
             app.setCachedEvent(event);
             //TODO send to the event info page for attendees
-            Intent i = new Intent(MainActivity.this, ViewEventDetailsActivity.class);
+            Intent i = new Intent(MainActivity.this, ViewEventDetailsFragment.class);
             startActivity(i);
 
         }
