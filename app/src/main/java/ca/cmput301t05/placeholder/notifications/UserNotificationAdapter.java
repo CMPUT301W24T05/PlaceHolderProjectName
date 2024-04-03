@@ -20,6 +20,8 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.utils.CompareByDate;
 import ca.cmput301t05.placeholder.utils.DateStrings;
 import ca.cmput301t05.placeholder.utils.StringManip;
 import ca.cmput301t05.placeholder.utils.holdNotiEvent;
@@ -42,48 +44,18 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
 
     private Map<Integer, Boolean> itemExpanded; //used to track which are expanded
 
-    UserNotificationAdapter(Context context, ArrayList<Notification> notifications, UserNotificationCallback callback){
+    public UserNotificationAdapter(Context context, ArrayList<holdNotiEvent> notifiEvents){
+
         this.context = context;
-        this.notiEvents = new ArrayList<>();
+
+        this.notiEvents = notifiEvents;
+        this.notiEvents.sort(new CompareByDate());
+
         app = (PlaceholderApp) context.getApplicationContext();
         itemExpanded = new HashMap<>();
 
-
-        HashMap<String, Notification> eventIDs = new HashMap<>();
-        //grab events from the notifications
-        for (Notification n : notifications){
-
-            eventIDs.put(n.getFromEventID().toString(), n);
-
-        }
-
-        //implemented this way -> get a callback when we're done + fetch documents might not bring it in order
-
-        app.getEventTable().fetchMultipleDocuments(new ArrayList<String>(eventIDs.keySet()), new Table.DocumentCallback<ArrayList<Event>>() {
-            @Override
-            public void onSuccess(ArrayList<Event> document) {
-
-                for (Event e : document){
-
-                    holdNotiEvent hNE = new holdNotiEvent(eventIDs.get(e.getEventID().toString()), e);
-                    notiEvents.add(hNE);
-
-                    for (int i = 0; i < notiEvents.size(); i++){
-                        itemExpanded.put(i, false);
-                    }
-                }
-
-                callback.onFinish();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                callback.onError(e);
-            }
-        });
-
-
     }
+
 
     @NonNull
     @Override
@@ -174,5 +146,58 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
             notificationTime.setText(formatNotifTime);
 
         }
+    }
+
+    public void updateList(UserNotificationCallback callback){
+
+        app.getProfileTable().fetchDocument(app.getUserProfile().getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+            @Override
+            public void onSuccess(Profile document) {
+
+                app.getNotificationTable().fetchMultipleDocuments(document.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+                    @Override
+                    public void onSuccess(ArrayList<Notification> document) {
+                        ArrayList<String> notificationStrings = new ArrayList<>();
+                        ArrayList<Notification> curNotifications = document;
+                        //grabbing event info
+                        for (Notification n : curNotifications){
+                            notificationStrings.add(n.getFromEventID().toString());
+                        }
+
+                        app.getEventTable().fetchMultipleDocuments(notificationStrings, new Table.DocumentCallback<ArrayList<Event>>() {
+                            @Override
+                            public void onSuccess(ArrayList<Event> document) {
+
+                                notiEvents.clear();
+                                notiEvents = holdNotiEvent.getQuickList(curNotifications, document);
+                                notiEvents.sort(new CompareByDate());
+                                notifyDataSetChanged();
+                                callback.onFinish();
+
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+
+                            }
+                        });
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
     }
 }
