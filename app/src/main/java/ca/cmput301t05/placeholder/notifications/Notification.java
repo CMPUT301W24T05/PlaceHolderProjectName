@@ -22,32 +22,34 @@ public class Notification extends DocumentSerializable {
     /**
      * The unique identifier for this notification.
      */
-    UUID notificationID;
+    private UUID notificationID;
 
     /**
      * The time at which the notification was created.
      */
-    Calendar timeCreated;
+    private Calendar timeCreated;
 
     /**
      * The unique identifier of the user who created the notification.
      */
-    UUID creatorID;
+    private UUID creatorID;
 
     /**
      * The unique identifier of the event from which the notification originated.
      */
-    UUID fromEventID;
+    private UUID fromEventID;
 
     /**
      * The message content of the notification.
      */
-    String message;
+    private String message;
 
     /**
      * Used for sorting the top by pinned
      */
-    boolean isPinned;
+    private boolean isPinned;
+
+    private boolean isRead;
 
     /**
      * Constructs a new Notification with nothing inside of it, please always use generic constructor, not this
@@ -76,6 +78,7 @@ public class Notification extends DocumentSerializable {
         this.notificationID = UUID.randomUUID();
 
         this.isPinned = false;
+        this.isRead = false;
 
     }
 
@@ -99,6 +102,8 @@ public class Notification extends DocumentSerializable {
 
         document.put("isPinned", this.isPinned);
 
+        document.put("isRead", this.isRead);
+
         return document;
     }
 
@@ -119,6 +124,12 @@ public class Notification extends DocumentSerializable {
         this.timeCreated.setTimeInMillis(document.getTimestamp("timeCreated").toDate().getTime());
 
         this.isPinned = document.getBoolean("isPinned");
+
+        if (document.get("isRead") == null){
+            this.isRead = false; //for data migration
+        }   else {
+            this.isRead = document.getBoolean("isRead");
+        }
 
     }
 
@@ -145,7 +156,7 @@ public class Notification extends DocumentSerializable {
     }
 
     public Boolean isPinned(){
-        return isPinned;
+        return this.isPinned;
     }
 
     public void setCreatorID(UUID creatorID) {
@@ -172,5 +183,11 @@ public class Notification extends DocumentSerializable {
         isPinned = pinned;
     }
 
+    public boolean isRead() {
+        return isRead;
+    }
 
+    public void setRead(boolean read) {
+        isRead = read;
+    }
 }

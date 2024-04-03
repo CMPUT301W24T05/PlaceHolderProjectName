@@ -1,23 +1,16 @@
 package ca.cmput301t05.placeholder.ui.notifications;
 
-import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.checkerframework.checker.units.qual.C;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
@@ -25,7 +18,7 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Notification;
-import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
+import ca.cmput301t05.placeholder.notifications.EventNotificationAdapter;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 /**
@@ -61,7 +54,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         });
 
 
-        notificationAdapter.notifyDataSetChanged();
+        eventNotificationAdapter.notifyDataSetChanged();
 
         //send the notification to the database
         app.getNotificationTable().pushDocument(notification, notification.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
@@ -152,7 +145,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
     private ArrayList<Notification> notifications;
 
-    private NotificationAdapter notificationAdapter;
+    private EventNotificationAdapter eventNotificationAdapter;
 
 
 
@@ -177,9 +170,9 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
 
         notificationList = findViewById(R.id.event_notification_page_recyclerview);
-        notificationAdapter = new NotificationAdapter(this, notifications);
+        eventNotificationAdapter = new EventNotificationAdapter(this, notifications);
         notificationList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        notificationList.setAdapter(notificationAdapter);
+        notificationList.setAdapter(eventNotificationAdapter);
 
 
 
@@ -189,7 +182,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             @Override
             public void onClick(View view) {
                 //TODO maybe make is so that when you swipe up it changes
-                notificationAdapter.notifyDataSetChanged();
+                eventNotificationAdapter.notifyDataSetChanged();
             }
         });
 
@@ -222,7 +215,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
                         }
                     });
 
-                    notificationAdapter.notifyDataSetChanged(); //this error is fine since we're basically loading everything
+                    eventNotificationAdapter.notifyDataSetChanged(); //this error is fine since we're basically loading everything
                 }
 
                 @Override
@@ -236,6 +229,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 finish();
             }
         });
