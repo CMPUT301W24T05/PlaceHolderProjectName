@@ -5,6 +5,7 @@ import static java.nio.file.Paths.get;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,8 @@ public class ViewAttendeeCheckinActivity extends AppCompatActivity { // Organize
     private Toolbar toolbar;
 
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +73,7 @@ public class ViewAttendeeCheckinActivity extends AppCompatActivity { // Organize
                 finish(); // Handle back button click event
             }
         });
+
 
 
         eventTable.fetchDocument(String.valueOf(eventID),  new Table.DocumentCallback<Event>() {

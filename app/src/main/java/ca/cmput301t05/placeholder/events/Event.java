@@ -265,6 +265,10 @@ public class Event extends DocumentSerializable implements Serializable {
         return this.attendees;
     }
 
+    public int getNumAttendees(){
+        return new ArrayList<>(attendees.keySet()).size();
+    }
+
     //getters and setters
 
 
