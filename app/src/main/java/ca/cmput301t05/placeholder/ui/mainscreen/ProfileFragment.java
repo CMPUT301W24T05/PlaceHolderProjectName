@@ -144,7 +144,7 @@ public class ProfileFragment extends Fragment {
         // set up the profile picture
         profile = app.getUserProfile();
 
-        if(profile.hasProfileBitmap()){
+        if (profile.hasProfileBitmap()) {
             profilePic.setImageBitmap(profile.getProfilePictureBitmap());
         } else {
             app.getProfileImageHandler().getProfilePicture(profile, getContext(), new BaseImageHandler.ImageCallback() {
@@ -187,8 +187,17 @@ public class ProfileFragment extends Fragment {
         profile.setHomePage(editHomepage.getText().toString());
 
         if (removePic) {
-            app.getProfileImageHandler().removeProfilePic(profile, getContext());
-            profile.setProfilePictureToDefault();
+            app.getProfileImageHandler().removeProfilePic(profile, getContext(), new BaseImageHandler.ImageDeletionCallback() {
+                @Override
+                public void onImageDeleted() {
+                    profile.setProfilePictureToDefault();
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
         }
 
         if (profilePicUri != null) {
