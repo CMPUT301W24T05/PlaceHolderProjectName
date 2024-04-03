@@ -311,7 +311,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:text="Add Event"
-        app:icon="@android:drawable/ic_input_add"
+        app:icon="@drawable/add_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

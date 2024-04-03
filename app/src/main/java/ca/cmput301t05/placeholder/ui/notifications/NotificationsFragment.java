@@ -34,9 +34,6 @@ public class NotificationsFragment extends AppCompatActivity {
         binding = FragmentNotificationsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        BottomNavigationView bottomNavigationView = binding.bottomNavigation;
-        bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
-
         NotificationsViewModel notificationsViewModel =
                 new ViewModelProvider(this).get(NotificationsViewModel.class);
 
@@ -83,22 +80,5 @@ public class NotificationsFragment extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
-    }
-
-    private boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.home_menu_item) {
-            // Navigate to activity_main.xml
-            startActivity(new Intent(this, MainActivity.class));
-            return true;
-        } else if (id == R.id.explore_menu_item) {
-            // Handle item 2 selection
-            return true;
-        } else if (id == R.id.organized_menu_item) {
-            // Handle item 3 selection
-            return true;
-        } else {
-            return false;
-        }
     }
 }

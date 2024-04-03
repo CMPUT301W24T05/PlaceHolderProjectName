@@ -25,6 +25,7 @@ import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
+import ca.cmput301t05.placeholder.utils.ImageViewHelper;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
@@ -101,7 +102,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             } else {
                 Log.d("PhotoPicker", "Selected URI: " + uri);
                 posterImage.setImageURI(uri);
-                cropPosterToImage();
+                ImageViewHelper.cropPosterToImage(posterImage);
                 currentImage = uri;
             }
         });
@@ -134,7 +135,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             eventDescripiton.setText(newEvent.getEventInfo());
             if (newEvent.hasEventPosterBitmap()) {
                 posterImage.setImageBitmap(newEvent.getEventPosterBitmap());
-                cropPosterToImage();
+                ImageViewHelper.cropPosterToImage(posterImage);
             }
         } else {
             newEvent = new Event();
@@ -311,28 +312,6 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             return false;
         }
         return true;
-    }
-
-    private void cropPosterToImage() {
-        posterImage.post(() -> {
-            // Get the Drawable's dimensions
-            Drawable drawable = posterImage.getDrawable();
-            int imageHeight = drawable.getIntrinsicHeight();
-            int imageWidth = drawable.getIntrinsicWidth();
-
-            // Calculate the aspect ratio
-            float aspectRatio = (float) imageWidth / (float) imageHeight;
-
-            // Assuming you have a fixed maximum height
-            int imageViewHeight = posterImage.getHeight(); // or a specific value in pixels
-            int imageViewWidth = Math.round(imageViewHeight * aspectRatio);
-
-            // Set the ImageView's dimensions
-            ViewGroup.LayoutParams params = posterImage.getLayoutParams();
-            params.width = imageViewWidth;
-            params.height = imageViewHeight; // You can keep this as is if it's already constrained
-            posterImage.setLayoutParams(params);
-        });
     }
 
     private void handleEventCreation() {
