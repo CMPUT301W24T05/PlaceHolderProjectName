@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,6 +44,29 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.attendee_view_event_details_tool_bar, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.back_icon_event_view) {
+            // back button action
+            finish();
+            return true;
+        } else if (id == R.id.view_notifications_event_view) {
+            Intent i = new Intent(ViewEventDetailsActivity.this, UserNotificationActivity.class);
+            startActivity(i);
+            //Notification button action
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -56,8 +81,8 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.event_vieweventdetails);
 
 
-        back = findViewById(R.id.event_signup_back);
-        notification_button = findViewById(R.id.vieweventdetails_notifications);
+//        back = findViewById(R.id.event_signup_back);
+//        notification_button = findViewById(R.id.vieweventdetails_notifications);
 
         event_date = findViewById(R.id.event_signup_eventDate);
         event_location = findViewById(R.id.event_signup_eventlocation);
@@ -72,24 +97,24 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
 
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish(); //go back to last page
-            }
-        });
-
-
-
-        // Click to view notifications
-        notification_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //open profile
-                Intent i = new Intent(ViewEventDetailsActivity.this, UserNotificationActivity.class);
-                startActivity(i);
-            }
-        });
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish(); //go back to last page
+//            }
+//        });
+//
+//
+//
+//        // Click to view notifications
+//        notification_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //open profile
+//                Intent i = new Intent(ViewEventDetailsActivity.this, UserNotificationActivity.class);
+//                startActivity(i);
+//            }
+//        });
 
 
         Log.d("Event_Check", String.valueOf(displayEvent.getEventName()));
