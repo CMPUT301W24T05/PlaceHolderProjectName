@@ -3,6 +3,7 @@ package ca.cmput301t05.placeholder;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
 import ca.cmput301t05.placeholder.profile.Profile;
@@ -36,6 +38,8 @@ public class InitialSetupActivity extends AppCompatActivity {
                     // TODO: Inform user that that your app will not show notifications.
                 }
             });
+
+
     private EditText nameEdit;
     private FloatingActionButton submitButton;
     private DeviceIDManager idManager;
@@ -75,24 +79,40 @@ public class InitialSetupActivity extends AppCompatActivity {
         if (!name.isEmpty()) {
             UUID deviceId = idManager.getDeviceID();
             Profile userProfile = new Profile(name, deviceId);
-            app.getProfileTable().pushDocument(userProfile, userProfile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
-                @Override
-                public void onSuccess(Profile profile) {
-                    app.setUserProfile(userProfile);
 
-                    userProfile.setProfilePictureToDefault();
+            //get token then push it to servers
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
 
-                    // Transition to MainActivity
-                    Intent intent = new Intent(InitialSetupActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                if (!task.isSuccessful()){
+                    Log.d("Token_Generation", "Notification Generation was unsuccessful");
+                    return;
                 }
 
-                @Override
-                public void onFailure(Exception e) {
-                    e.printStackTrace();
-                }
+                // Get new FCM registration token
+                String token = task.getResult();
+                userProfile.setMessagingToken(token);
+
+                app.getProfileTable().pushDocument(userProfile, userProfile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+                    @Override
+                    public void onSuccess(Profile profile) {
+                        app.setUserProfile(userProfile);
+
+                        userProfile.setProfilePictureToDefault();
+
+                        // Transition to MainActivity
+                        Intent intent = new Intent(InitialSetupActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+
             });
+
         }
     }
 

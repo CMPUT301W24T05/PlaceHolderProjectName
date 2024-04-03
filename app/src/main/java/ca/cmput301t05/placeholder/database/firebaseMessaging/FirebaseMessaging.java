@@ -1,18 +1,21 @@
-package ca.cmput301t05.placeholder.notifications;
+package ca.cmput301t05.placeholder.database.firebaseMessaging;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
-import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.profile.Profile;
 
+public class FirebaseMessaging extends FirebaseMessagingService {
 
-public class PushNotification extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+
+        //we can grab notifications and then grab the object off of it and add it to the user profile
+        //Way less computation is done on the phone
+
     }
 
     /**

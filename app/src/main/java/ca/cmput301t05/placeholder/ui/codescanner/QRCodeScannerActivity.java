@@ -22,6 +22,9 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.zxing.Result;
 
 
@@ -113,6 +116,21 @@ public class QRCodeScannerActivity extends AppCompatActivity{
 
                                 if(type == QRCodeType.CHECK_IN){
 
+                                    //Add the user to the event cloud base messaging service, Events are stored according to their ID string
+                                    FirebaseMessaging.getInstance().subscribeToTopic(event.getEventID().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (!task.isSuccessful()){
+                                                Log.d("Push_notifications", "Subscribing to topic fail");
+                                                return;
+                                            }
+
+                                            Log.d("Push_notifications", "Successfully added to topic");
+
+                                        }
+                                    });
+
+                                    
                                     app.setCachedEvent(event); //sets the cached event so we can use it on the next page
                                     // previously directly go to event details page
                                     //Intent intent = new Intent(QRCodeScannerActivity.this, ViewEventDetailsActivity.class);
