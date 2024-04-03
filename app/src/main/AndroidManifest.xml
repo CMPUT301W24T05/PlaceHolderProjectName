@@ -69,7 +69,7 @@
         <activity android:name=".ui.notifications.UserNotificationActivity"/>
         <activity android:name=".ui.events.ViewQRCodesActivity"/>
         <activity android:name=".ui.events.EventMenuActivity"/>
-        <activity android:name=".Location.Successful_Checked_In_Activity"/>
+        <activity android:name=".ui.events.checkin.SuccessfulCheckinActivity"/>
 
         <activity android:name=".ui.events.ViewMilestonesActivity" />
 

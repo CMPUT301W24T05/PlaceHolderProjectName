@@ -117,7 +117,6 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("attendees", attendees);
         document.put("eventLocation", eventLocation);
         document.put("eventCreator", eventCreator.toString());
-        document.put("eventLocation", eventLocation.toString());
         document.put("notifications", this.notifications);
         document.put("registeredUsers", this.registeredUsers);
         return document;
@@ -201,7 +200,7 @@ public class Event extends DocumentSerializable implements Serializable {
             attendeeInfo.put("longitude", longitude);
             attendeeInfo.put("latitude", latitude);
 
-            attendees.put(profile.getProfileID().toString(), attendeeInfo);
+            attendees.replace(profile.getProfileID().toString(), attendeeInfo);
 
         } else {
             // first time checking in
