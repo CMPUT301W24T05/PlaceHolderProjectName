@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.CAMERA"/>
 
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -14,6 +16,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"  />
+
+
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -41,6 +45,14 @@
         <activity android:name=".ui.codescanner.QRCodeScannerActivity">
             <!-- Add any necessary intent filters or other configurations here -->
         </activity>
+
+        <service
+            android:name=".java.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name=".LoadingScreenActivity"

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,6 +26,16 @@ import java.util.UUID;
  * to the application's database.
  */
 public class InitialSetupActivity extends AppCompatActivity {
+
+    // Declare the launcher at the top of your Activity/Fragment:
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // FCM SDK (and your app) can post notifications.
+                } else {
+                    // TODO: Inform user that that your app will not show notifications.
+                }
+            });
     private EditText nameEdit;
     private FloatingActionButton submitButton;
     private DeviceIDManager idManager;
@@ -83,4 +95,5 @@ public class InitialSetupActivity extends AppCompatActivity {
             });
         }
     }
+
 }
