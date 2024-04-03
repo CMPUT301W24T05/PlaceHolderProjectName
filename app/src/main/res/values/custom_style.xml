@@ -3,4 +3,7 @@
     <style name="circular">
         <item name="cornerSize">50%</item>
     </style>
+    <style name="rounded_edge">
+        <item name="cornerSize">8%</item>
+    </style>
 </resources>
