@@ -69,19 +69,19 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/view_event_poster"
-        android:layout_width="match_parent"
-        android:layout_height="268dp"
-        android:layout_weight="1"
-        android:background="@color/md_theme_secondaryContainer"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="8dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6"
-        app:shapeAppearanceOverlay="@style/RoundedImageView" />
+            android:id="@+id/event_view_poster"
+            android:layout_width="match_parent"
+            android:layout_height="268dp"
+            android:layout_weight="1"
+            android:background="@color/md_theme_secondaryContainer"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView6"
+            app:shapeAppearanceOverlay="@style/RoundedImageView" app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
         android:id="@+id/imageView8"
@@ -91,7 +91,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_event_poster"
+        app:layout_constraintTop_toBottomOf="@+id/event_view_poster"
         app:srcCompat="@drawable/baseline_attendance_24" />
 
     <TextView
@@ -104,15 +104,15 @@
         app:layout_constraintTop_toTopOf="@+id/imageView8" />
 
     <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView8"
-        app:srcCompat="@drawable/profile_circle" />
+            android:id="@+id/event_view_creator_image"
+            android:layout_width="48dp"
+            android:layout_height="32dp"
+            android:padding="4dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView8"
+            app:srcCompat="@drawable/profile_circle"/>
 
     <TextView
         android:id="@+id/event_view_creator"
@@ -120,14 +120,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:text="Hosted by Johnanthon Smitherton"
-        app:layout_constraintStart_toEndOf="@+id/imageView7"
-        app:layout_constraintTop_toTopOf="@+id/imageView7" />
+        app:layout_constraintStart_toEndOf="@+id/event_view_creator_image"
+        app:layout_constraintTop_toTopOf="@+id/event_view_creator_image" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7">
+        app:layout_constraintTop_toBottomOf="@+id/event_view_creator_image">
 
         <LinearLayout
             android:layout_width="match_parent"
