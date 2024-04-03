@@ -22,12 +22,13 @@ import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
 
 public class ViewEventDetailsActivity extends AppCompatActivity {
 
     private Button back;
 
-    private Button profile_button;
+    private Button notification_button;
 
     private TextView event_date;
 
@@ -56,7 +57,7 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
 
 
         back = findViewById(R.id.event_signup_back);
-        profile_button = findViewById(R.id.vieweventdetails_profile);
+        notification_button = findViewById(R.id.vieweventdetails_notifications);
 
         event_date = findViewById(R.id.event_signup_eventDate);
         event_location = findViewById(R.id.event_signup_eventlocation);
@@ -78,11 +79,14 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
             }
         });
 
-        profile_button.setOnClickListener(new View.OnClickListener() {
+
+
+        // Click to view notifications
+        notification_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //open profile
-                Intent i = new Intent(ViewEventDetailsActivity.this, ProfileEditActivity.class);
+                Intent i = new Intent(ViewEventDetailsActivity.this, UserNotificationActivity.class);
                 startActivity(i);
             }
         });

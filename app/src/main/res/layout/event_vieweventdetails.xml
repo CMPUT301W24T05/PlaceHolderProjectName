@@ -21,12 +21,12 @@
             android:text="Back" />
 
         <Button
-            android:id="@+id/vieweventdetails_profile"
+            android:id="@+id/vieweventdetails_notifications"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
-            android:text="Profile" />
+            android:text="Notifications" />
 
     </LinearLayout>
 
