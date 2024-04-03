@@ -7,10 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.events.EventMenuActivity"
     android:fitsSystemWindows="true"
-    tools:openDrawer="strt"
+    tools:openDrawer="end"
     android:id="@+id/event_menu_drawer"
     android:clickable="true"
     android:focusable="true">
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,21 +27,36 @@
             app:navigationIcon="@drawable/baseline_menu_24"
             app:title="Event Menu"
             app:titleTextColor="@android:color/white"
+
             app:popupTheme="@style/AppTheme"
             />
 
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:cardCornerRadius="5dp">-->
 
-        <Button
-            android:id="@+id/event_menu_back"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:text="Back" />
+<!--            <ProgressBar-->
+<!--                style="?android:attr/progressBarStyleHorizontal"-->
+<!--                android:layout_width="400dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:scaleY="4"-->
 
+<!--                android:padding="30dp"/>-->
+
+
+<!--        </androidx.cardview.widget.CardView>-->
+
+<!--        <ProgressBar-->
+<!--            style="?android:attr/progressBarStyleHorizontal"-->
+<!--            android:layout_width="400dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:progressDrawable="@drawable/custom_progress_bar" />-->
 
         <TextView
             android:id="@+id/event_menu_name"
-            android:layout_below="@id/event_menu_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Event Name"
@@ -77,7 +94,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true"
+
             android:layout_weight="1">
+
 
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

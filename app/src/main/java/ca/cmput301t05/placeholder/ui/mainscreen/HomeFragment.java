@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.ProfileEditActivity;
 import ca.cmput301t05.placeholder.R;
@@ -58,7 +57,7 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         notificationButton = view.findViewById(R.id.btnNotifications);
         startScannerButton = view.findViewById(R.id.btnJoinEvent);
         guideToEvent = view.findViewById(R.id.btnCreateEvent);
-        appNameView = view.findViewById(R.id.main_app_name);
+        appNameView = view.findViewById(R.id.main_admin_page_AdminTxt);
 
         // Similar for RecyclerViews and adapters
         joinedEventsList = view.findViewById(R.id.listJoinedEvents);
