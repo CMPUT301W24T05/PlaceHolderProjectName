@@ -23,20 +23,19 @@
 
     <CheckBox
         android:id="@+id/checkBox_first_attendee"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="First Attendee"
         android:layout_marginBottom="20dp"
         android:clickable="false"
-        />
+        android:text="First Attendee" />
 
     <CheckBox
         android:id="@+id/checkBox_first_signup"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="First Signup"
         android:layout_marginBottom="20dp"
-        android:clickable="false"/>
+        android:clickable="false"
+        android:text="First Signup" />
 
     <CheckBox
         android:id="@+id/checkBox_halfway"

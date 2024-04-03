@@ -17,6 +17,7 @@ import ca.cmput301t05.placeholder.notifications.Milestone;
 import ca.cmput301t05.placeholder.notifications.MilestoneType;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import android.util.Log;
+import java.util.Calendar;
 
 public class ViewMilestonesActivity extends AppCompatActivity {
 
@@ -36,6 +37,8 @@ public class ViewMilestonesActivity extends AppCompatActivity {
 
     private int numRegistered;
 
+    private Calendar cal, now;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,9 +57,12 @@ public class ViewMilestonesActivity extends AppCompatActivity {
         milestones = getMilestones(notifications);
 
 
+
         numAttendees = curEvent.getAttendees().size();
         capacity = curEvent.getMaxAttendees();
         numRegistered = curEvent.getRegisteredUsers().size();
+        now = Calendar.getInstance();
+        cal = curEvent.getEventDate();
 
         Log.d("Test", "num of attendees is " + String.valueOf(numAttendees));
 
@@ -96,11 +102,17 @@ public class ViewMilestonesActivity extends AppCompatActivity {
             milestones.add(mFirstAttendee); // Add the milestone to the milestones array
             notifications.add(mFirstAttendee); // Add the milestone to the notifications array
         }
+        // change to cal validation
+        if (now.compareTo(cal) > 0 && !containsMilestoneType(MilestoneType.EVENTSTART)) {
+            Milestone mEventStart = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP);
+            milestones.add(mEventStart); // Add the milestone to the milestones array
+            notifications.add(mEventStart); // Add the milestone to the notifications array
+        }
 
-        if (numRegistered >= 1 && !containsMilestoneType(MilestoneType.FIRSTSIGNUP)) {
-            Milestone mFirstSignup = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP);
-            milestones.add(mFirstSignup); // Add the milestone to the milestones array
-            notifications.add(mFirstSignup); // Add the milestone to the notifications array
+        if (numRegistered >= 1 && !containsMilestoneType(MilestoneType.EVENTEND)) {
+            Milestone mEventEnd = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP);
+            milestones.add(mEventEnd); // Add the milestone to the milestones array
+            notifications.add(mEventEnd); // Add the milestone to the notifications array
         }
     }
 
@@ -120,6 +132,7 @@ public class ViewMilestonesActivity extends AppCompatActivity {
                     case FULLCAPACITY:
                         checkBoxFullCapacity.setChecked(true);
                         break;
+                        //add checkbox for event start
                 }
             }
         }
