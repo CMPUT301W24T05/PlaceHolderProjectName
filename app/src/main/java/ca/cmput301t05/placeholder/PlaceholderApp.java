@@ -46,7 +46,7 @@ public class PlaceholderApp extends Application implements Serializable {
     private ArrayList<Notification> userNotifications;
 
     private Event cachedEvent; //honestly having these cashed variables probably isnt the way to go. we should be using an observer/listener to decouple this
-
+    // Yea I agree, this won't update checkin list without restarting the app
     private Uri picCache;
 
     private LocationManager locationManager;

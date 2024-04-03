@@ -55,7 +55,7 @@
             android:exported="true">
         </activity>
 
-
+        <activity android:name=".ui.events.organizer_info.ViewSignUpsActivity"/>
 
         <activity android:name=".ui.events.organizer_info.ViewAttendeeCheckinActivity" />
         <activity android:name=".InitialSetupActivity" />
@@ -69,13 +69,15 @@
         <activity android:name=".ui.notifications.UserNotificationActivity"/>
         <activity android:name=".ui.events.ViewQRCodesActivity"/>
         <activity android:name=".ui.events.EventMenuActivity"/>
-        <activity android:name=".Location.Successful_Checked_In_Activity"/>
+        <activity android:name=".ui.events.checkin.SuccessfulCheckinActivity"/>
 
         <activity android:name=".ui.events.ViewMilestonesActivity" />
 
         <activity android:name=".Location.MapDisplay_activity"/>
 
-
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
 
     </application>

@@ -4,6 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 
@@ -80,11 +84,41 @@ public class ProfileImageHandler extends BaseImageHandler {
      *
      * @param profile The profile whose profile picture will be removed.
      */
-    public void removeProfilePic(Profile profile, Context context) {
+    public void removeProfilePic(Profile profile, Context context, ImageDeletionCallback imageDeletionCallback) {
         if (profile.getProfilePictureID() == null) {
             return;
         }
-        removeImage(profile.getProfilePictureID().toString(), "profiles", context);
-        profile.setProfilePictureID(null);
+
+        Log.d("profile_image_deletion", profile.getProfileID().toString());
+
+        DatabaseManager.getInstance().getDb().collection("profiles").document(profile.getProfileID().toString()).update("profilePictureID", null).addOnCompleteListener(task -> {
+
+            if (task.isSuccessful()){
+
+                removeImage(profile.getProfileID().toString(), "profiles", context, new ImageDeletionCallback() {
+                    @Override
+                    public void onImageDeleted() {
+                        Log.d("Profile_Image_deletion", "Image Deleted");
+                        imageDeletionCallback.onImageDeleted();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        imageDeletionCallback.onError(e);
+                    }
+                });
+
+
+            }   else {
+
+                Log.d("Profile_Image_deletion", task.getException().getMessage());
+            }
+
+        });
+
+
+
+
+
     }
 }

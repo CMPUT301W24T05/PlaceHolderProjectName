@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.ui;
+package ca.cmput301t05.placeholder.ui.mainscreen;
 
 import android.content.Intent;
 import android.os.Bundle;

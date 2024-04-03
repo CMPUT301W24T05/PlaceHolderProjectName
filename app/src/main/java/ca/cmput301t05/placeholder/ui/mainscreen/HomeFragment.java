@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.ui;
+package ca.cmput301t05.placeholder.ui.mainscreen;
 
 import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
 
@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import ca.cmput301t05.placeholder.MainActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.ProfileEditActivity;
 import ca.cmput301t05.placeholder.R;
@@ -58,7 +57,7 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         notificationButton = view.findViewById(R.id.btnNotifications);
         startScannerButton = view.findViewById(R.id.btnJoinEvent);
         guideToEvent = view.findViewById(R.id.btnCreateEvent);
-        appNameView = view.findViewById(R.id.main_app_name);
+        appNameView = view.findViewById(R.id.main_admin_page_AdminTxt);
 
         // Similar for RecyclerViews and adapters
         joinedEventsList = view.findViewById(R.id.listJoinedEvents);
@@ -95,7 +94,7 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
     // Remember to adjust context and startActivity calls
 
     private void setProfileIcon() {
-        if (app.getUserProfile().hasProfileBitmap()){
+        if (app.getUserProfile().hasProfileBitmap()) {
             profileButton.setImageBitmap(getCircularBitmap(app.getUserProfile().getProfilePictureBitmap()));
         } else {
             app.getProfileImageHandler().getProfilePicture(app.getUserProfile(), getActivity(), new BaseImageHandler.ImageCallback() {
@@ -110,7 +109,8 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
                     profileButton.setImageBitmap(getCircularBitmap(app.getUserProfile().getProfilePictureBitmap()));
                 }
             });
-        }    }
+        }
+    }
 
     private void setButtonActions(View fragmentView) {
         // Your existing logic for setting button actions
@@ -120,14 +120,6 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
             Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
             startActivity(intent);
         });
-
-//        appNameView = fragmentView.findViewById(R.id.main_app_name);
-//        appNameView.setOnClickListener(v -> {
-//            // Restart MainActivity
-//            Intent intent = new Intent(MainActivity.this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        });
 
         startScannerButton = fragmentView.findViewById(R.id.btnJoinEvent);
         startScannerButton.setOnClickListener(view -> {
@@ -154,7 +146,7 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
 
     @Override
     public void onItemClick(Event event, EventAdapter.adapterType type) {
-        if (type == EventAdapter.adapterType.HOSTED){
+        if (type == EventAdapter.adapterType.HOSTED) {
             app.setCachedEvent(event);
             Intent i = new Intent(getActivity(), EventMenuActivity.class);
             startActivity(i);
