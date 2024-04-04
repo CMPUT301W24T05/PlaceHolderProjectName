@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,40 +10,47 @@
         android:id="@+id/textViewOpenEvents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Organized Events"
         android:fontFamily="@font/coustard"
-        android:textSize="36sp"
+        android:padding="16dp"
+        android:text="Organized Events"
 
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- "Create New Event" Button -->
 
     <!-- List of Created Events -->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listCreatedEvents"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewOpenEvents" />
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/OrganizerEventButton"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:text="Organize"
-        app:icon="@drawable/add_icon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewOpenEvents"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listCreatedEvents"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/OrganizerEventButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:text="Organize"
+            app:icon="@drawable/add_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
-
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <!-- Bottom Navigation View -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
