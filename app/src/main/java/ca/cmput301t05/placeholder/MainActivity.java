@@ -95,4 +95,53 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
     }
+//<<<<<<< HEAD
+//
+//    private void setButtonActions() {
+//
+//
+////        //HANDLE FRAGMENT POP UP HERE
+////        Boolean openFrag = getIntent().getBooleanExtra("openFragment", false);
+////
+////        if(openFrag){
+////            //open fragment
+////            openEventFrag();
+////            getIntent().putExtra("openFragment", false);
+////        }
+//
+//
+//    }
+//
+//    public void openEventFrag() {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        EventDetailsDialogFragment infoViewAndSignup = new EventDetailsDialogFragment();
+//
+////        fragmentTransaction.replace(R.id.mainActivity_linearlayout, infoViewAndSignup);
+//
+//        fragmentTransaction.commit();
+//
+//    }
+//
+//    @Override
+//    public void onItemClick(Event event, EventAdapter.adapterType type) {
+//
+//        if (type == EventAdapter.adapterType.HOSTED) {
+//            app.setCachedEvent(event);
+//            Intent i = new Intent(MainActivity.this, EventMenuActivity.class);
+//            i.putExtra("myEvent", event);
+////            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//            startActivity(i);
+//        } else if (type == EventAdapter.adapterType.ATTENDING) {
+//            app.setCachedEvent(event);
+//            //TODO send to the event info page for attendees
+//            Intent i = new Intent(MainActivity.this, ViewEventDetailsActivity.class);
+//            startActivity(i);
+//
+//        }
+//
+//    }
+//=======
+//>>>>>>> 28e881358aec56b4784e14b2df392a2e804ac0bd
 }
