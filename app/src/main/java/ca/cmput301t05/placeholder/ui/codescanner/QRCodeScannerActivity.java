@@ -1,32 +1,25 @@
 package ca.cmput301t05.placeholder.ui.codescanner;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
 import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.core.content.ContextCompat;
-
-import ca.cmput301t05.placeholder.ui.events.checkin.SuccessfulCheckinActivity;
-import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
-import ca.cmput301t05.placeholder.qrcode.QRCodeType;
-import com.budiyev.android.codescanner.CodeScanner;
-import com.budiyev.android.codescanner.CodeScannerView;
-
-import android.Manifest;
-
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
-import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.ui.events.EventSignUpActivity;
+import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
+import ca.cmput301t05.placeholder.qrcode.QRCodeType;
+import ca.cmput301t05.placeholder.ui.events.checkin.SuccessfulCheckinActivity;
+import com.budiyev.android.codescanner.CodeScanner;
+import com.budiyev.android.codescanner.CodeScannerView;
 
 /**
  * QRcodeScanner is an activity for scanning QR codes using the device's camera. It leverages the CodeScanner library
@@ -35,6 +28,9 @@ import ca.cmput301t05.placeholder.ui.events.EventSignUpActivity;
  * QR code scans.
  */
 public class QRCodeScannerActivity extends AppCompatActivity {
+
+    public static final String QR_SCANNER_ID_KEY = "QRScannerActivityId";
+    public static final String QR_SCANNER_ID_VALUE = "QRScannerActivityEVENTINFO";
 
     CodeScanner mCodeScanner;
     ActivityResultLauncher<String> requestPermissionLauncher;
@@ -122,24 +118,13 @@ public class QRCodeScannerActivity extends AppCompatActivity {
             intent = new Intent(QRCodeScannerActivity.this, SuccessfulCheckinActivity.class);
             startActivity(intent);
         } else if (type == QRCodeType.INFO) {
-            intent = new Intent(QRCodeScannerActivity.this, EventSignUpActivity.class);
-            intent.putExtra("openFragment", true);
-            startActivity(intent);
+            app.setCachedEvent(event);
+            Intent data = new Intent();
+            data.putExtra(QR_SCANNER_ID_KEY, QR_SCANNER_ID_VALUE);
+            setResult(RESULT_OK, data);
         }
 
         finish();
-    }
-
-
-    /**
-     * This method displays a fragment that shows the event info
-     *
-     * @param event
-     * @param app
-     */
-    private void viewEventInfo(Event event, PlaceholderApp app) {
-        EventDetailsDialogFragment fragment = EventDetailsDialogFragment.newInstance(event, app);
-        fragment.show(getSupportFragmentManager(), "Show Event info");
     }
 
 

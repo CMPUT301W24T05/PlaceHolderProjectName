@@ -3,24 +3,17 @@ package ca.cmput301t05.placeholder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
-import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
-import ca.cmput301t05.placeholder.ui.mainscreen.ProfileFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.events.EventAdapter;
-import ca.cmput301t05.placeholder.ui.mainscreen.HomeFragment;
-import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventExploreFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventOrganizedFragment;
+import ca.cmput301t05.placeholder.ui.mainscreen.HomeFragment;
+import ca.cmput301t05.placeholder.ui.mainscreen.ProfileFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 /**
@@ -29,9 +22,11 @@ import ca.cmput301t05.placeholder.ui.mainscreen.EventOrganizedFragment;
  * and viewing notifications. This activity sets up the main user interface and initializes action listeners for
  * navigation buttons.
  */
-public class MainActivity extends AppCompatActivity implements EventAdapter.OnItemClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private PlaceholderApp app;
+
+    private ActivityResultLauncher<Intent> eventInfoSheetLauncher;
 
     /**
      * Called when the activity is starting. Initializes the application context, sets the content view,
@@ -53,7 +48,20 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
                     .commit();
         }
         setupBottomNavigationView();
-        setButtonActions();
+
+        eventInfoSheetLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK) {
+                Intent data = result.getData();
+                if (data != null && QRCodeScannerActivity.QR_SCANNER_ID_VALUE.equals(data.getStringExtra(QRCodeScannerActivity.QR_SCANNER_ID_KEY))) {
+                    // The Scanner activity has finished with an event_info code. Open the bottom sheet here.
+                    ViewEventDetailsFragment bottomSheet = new ViewEventDetailsFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("interestedMode", true);
+                    bottomSheet.setArguments(bundle);
+                    bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
+                }
+            }
+        });
 
         Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
         Log.i("MainActivityJoinedEvents", "Number of joined events: " + app.getJoinedEvents().size());
@@ -75,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
             } else if (id == R.id.profile_menu_item){
                 selectedFragment = new ProfileFragment();
             } else if (id == R.id.scan_menu_item){
-                Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(this, QRCodeScannerActivity.class);
+                eventInfoSheetLauncher.launch(intent);
             }
 
             if (selectedFragment != null) {
@@ -87,50 +95,53 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
             return false;
         });
     }
-
-    private void setButtonActions() {
-
-
-//        //HANDLE FRAGMENT POP UP HERE
-//        Boolean openFrag = getIntent().getBooleanExtra("openFragment", false);
+//<<<<<<< HEAD
 //
-//        if(openFrag){
-//            //open fragment
-//            openEventFrag();
-//            getIntent().putExtra("openFragment", false);
+//    private void setButtonActions() {
+//
+//
+////        //HANDLE FRAGMENT POP UP HERE
+////        Boolean openFrag = getIntent().getBooleanExtra("openFragment", false);
+////
+////        if(openFrag){
+////            //open fragment
+////            openEventFrag();
+////            getIntent().putExtra("openFragment", false);
+////        }
+//
+//
+//    }
+//
+//    public void openEventFrag() {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        EventDetailsDialogFragment infoViewAndSignup = new EventDetailsDialogFragment();
+//
+////        fragmentTransaction.replace(R.id.mainActivity_linearlayout, infoViewAndSignup);
+//
+//        fragmentTransaction.commit();
+//
+//    }
+//
+//    @Override
+//    public void onItemClick(Event event, EventAdapter.adapterType type) {
+//
+//        if (type == EventAdapter.adapterType.HOSTED) {
+//            app.setCachedEvent(event);
+//            Intent i = new Intent(MainActivity.this, EventMenuActivity.class);
+//            i.putExtra("myEvent", event);
+////            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//            startActivity(i);
+//        } else if (type == EventAdapter.adapterType.ATTENDING) {
+//            app.setCachedEvent(event);
+//            //TODO send to the event info page for attendees
+//            Intent i = new Intent(MainActivity.this, ViewEventDetailsActivity.class);
+//            startActivity(i);
+//
 //        }
-
-
-    }
-
-    public void openEventFrag() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        EventDetailsDialogFragment infoViewAndSignup = new EventDetailsDialogFragment();
-
-//        fragmentTransaction.replace(R.id.mainActivity_linearlayout, infoViewAndSignup);
-
-        fragmentTransaction.commit();
-
-    }
-
-    @Override
-    public void onItemClick(Event event, EventAdapter.adapterType type) {
-
-        if (type == EventAdapter.adapterType.HOSTED) {
-            app.setCachedEvent(event);
-            Intent i = new Intent(MainActivity.this, EventMenuActivity.class);
-            i.putExtra("myEvent", event);
-//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            startActivity(i);
-        } else if (type == EventAdapter.adapterType.ATTENDING) {
-            app.setCachedEvent(event);
-            //TODO send to the event info page for attendees
-            Intent i = new Intent(MainActivity.this, ViewEventDetailsActivity.class);
-            startActivity(i);
-
-        }
-
-    }
+//
+//    }
+//=======
+//>>>>>>> 28e881358aec56b4784e14b2df392a2e804ac0bd
 }
