@@ -249,15 +249,18 @@ public class Event extends DocumentSerializable implements Serializable {
      *
      * @return boolean (true if succesful sign up, false if the user have already signed up
      */
-    public boolean userSignup(Profile user){
-        if (!this.registeredUsers.contains(user.getProfileID().toString())){
-            this.registeredUsers.add(user.getProfileID().toString());
-            this.registeredUsersNum += 1;
-            return true;
-        }
-        else{
-            return false;
-        }
+    public void userSignup(Profile user){
+        this.registeredUsers.add(user.getProfileID().toString());
+        this.registeredUsersNum += 1;
+    }
+
+    public boolean userHasSignedUp(Profile user){
+        return this.registeredUsers.contains(user.getProfileID().toString());
+    }
+
+    public void userUnsignup(Profile user){
+        this.registeredUsers.remove(user.getProfileID().toString());
+        this.registeredUsersNum -= 1;
     }
 
     public HashMap<String, HashMap<String, Double>> getMap(){ // Need to access check in count for each attendee

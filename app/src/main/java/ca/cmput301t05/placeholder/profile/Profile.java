@@ -12,7 +12,6 @@ import android.net.Uri;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.notifications.Notification;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Exclude;
@@ -249,8 +248,12 @@ public class Profile extends DocumentSerializable {
 
     public void setInterestedEvents(List<String> interestedEvents) { this.interestedEvents = interestedEvents; }
 
-    public void addInterestedEvents(Event event){
+    public void addInterestedEvent(Event event){
         interestedEvents.add(event.getEventID().toString());
+    }
+
+    public void removeInterestedEvent(Event event) {
+        interestedEvents.remove(event.getEventID().toString());
     }
 
     /**
