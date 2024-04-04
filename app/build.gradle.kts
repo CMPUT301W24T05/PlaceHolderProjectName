@@ -122,5 +122,8 @@ dependencies {
     // Import street map view
     implementation ("org.osmdroid:osmdroid-android:6.1.18")
 
+    // swipe down to refresh
+    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
 
 }
