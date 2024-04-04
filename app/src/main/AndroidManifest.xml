@@ -31,7 +31,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:targetApi="31">
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="33">
 
 <!--    &lt;!&ndash; Configure Google Play services automatically download the scanner module-->
 <!--         to the device while the app is installed from the Play Store &ndash;&gt;-->
