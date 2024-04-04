@@ -34,7 +34,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
     public enum adapterType{
         HOSTED,
         ATTENDING
-
     }
 
     public interface OnItemClickListener{

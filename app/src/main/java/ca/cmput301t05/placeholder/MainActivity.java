@@ -21,6 +21,7 @@ import ca.cmput301t05.placeholder.ui.mainscreen.HomeFragment;
 import ca.cmput301t05.placeholder.ui.events.EventDetailsDialogFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventExploreFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventOrganizedFragment;
+import ca.cmput301t05.placeholder.ui.mainscreen.ProfileUpdatedFragment;
 
 
 /**
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
             } else if (id == R.id.organized_menu_item) {
                 selectedFragment = new EventOrganizedFragment();
             } else if (id == R.id.profile_menu_item){
-                selectedFragment = new ProfileFragment();
+                selectedFragment = new ProfileUpdatedFragment();
             } else if (id == R.id.scan_menu_item){
                 Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
                 startActivity(intent);
