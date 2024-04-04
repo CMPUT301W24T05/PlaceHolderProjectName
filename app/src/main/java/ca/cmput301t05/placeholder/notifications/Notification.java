@@ -3,6 +3,7 @@ package ca.cmput301t05.placeholder.notifications;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -22,33 +23,40 @@ public class Notification extends DocumentSerializable {
     /**
      * The unique identifier for this notification.
      */
+    @SerializedName("notification_uuid")
     private UUID notificationID;
 
     /**
      * The time at which the notification was created.
      */
+    @SerializedName("time_created")
     private Calendar timeCreated;
 
     /**
      * The unique identifier of the user who created the notification.
      */
+    @SerializedName("creator_id")
     private UUID creatorID;
 
     /**
      * The unique identifier of the event from which the notification originated.
      */
+    @SerializedName("event_uuid")
     private UUID fromEventID;
 
     /**
      * The message content of the notification.
      */
+    @SerializedName("message")
     private String message;
 
     /**
      * Used for sorting the top by pinned
      */
+    @SerializedName("is_pinned")
     private boolean isPinned;
 
+    @SerializedName("is_read")
     private boolean isRead;
 
     /**

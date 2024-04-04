@@ -124,6 +124,8 @@ dependencies {
 
     //for sending http requests to google cloud function for notifications
     implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+    //object -> json
+    implementation ("com.google.code.gson:gson:2.10.1")
 
 
 }
