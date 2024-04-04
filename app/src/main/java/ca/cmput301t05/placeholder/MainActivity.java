@@ -121,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
             app.setCachedEvent(event);
             Intent i = new Intent(MainActivity.this, EventMenuActivity.class);
             i.putExtra("myEvent", event);
+//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
             startActivity(i);
         } else if (type == EventAdapter.adapterType.ATTENDING) {
             app.setCachedEvent(event);

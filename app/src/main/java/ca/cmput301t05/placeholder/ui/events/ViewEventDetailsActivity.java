@@ -5,12 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -53,13 +55,25 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
 
         app = (PlaceholderApp) getApplicationContext();
         Event displayEvent = app.getCachedEvent();
 
         setContentView(R.layout.event_vieweventdetails);
+
+        Toolbar toolbar = findViewById(R.id.toolbar_viewing_event);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Handle back button click event
+            }
+        });
+
+        ActionBar actionBar = getSupportActionBar();
+
+
 
         initTextViews();
         updateEventDetails(displayEvent);
@@ -78,11 +92,7 @@ public class ViewEventDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        // Handle menu item clicks
-        if (id == R.id.back_icon_event_view) {
-            finish();
-            return true;
-        } else if (id == R.id.view_notifications_event_view) {
+        if (id == R.id.view_notifications_event_view) {
             Intent intent = new Intent(ViewEventDetailsActivity.this, UserNotificationActivity.class);
             startActivity(intent);
             return true;
