@@ -29,6 +29,7 @@ import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class HomeFragment extends Fragment implements EventAdapter.OnItemClickListener {
 
@@ -88,6 +89,8 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
     public void onResume() {
         super.onResume();
         setProfileIcon();
+        joinedEventsAdapter.notifyDataSetChanged();
+        organizedEventsAdapter.notifyDataSetChanged();
     }
 
     // Adapt the existing methods from MainActivity to work in the context of a Fragment
@@ -152,9 +155,8 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
             startActivity(i);
         } else if (type == EventAdapter.adapterType.ATTENDING) {
             app.setCachedEvent(event);
-            //TODO send to the event info page for attendees
-            Intent i = new Intent(getActivity(), ViewEventDetailsFragment.class);
-            startActivity(i);
+            ViewEventDetailsFragment eventDetailsFragment = new ViewEventDetailsFragment();
+            eventDetailsFragment.show(getActivity().getSupportFragmentManager(), eventDetailsFragment.getTag());
         }
     }
 }
