@@ -1,5 +1,7 @@
 package ca.cmput301t05.placeholder.database.firebaseMessaging;
 
+import android.util.Log;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -15,6 +17,8 @@ public class FirebaseMessaging extends FirebaseMessagingService {
 
         //we can grab notifications and then grab the object off of it and add it to the user profile
         //Way less computation is done on the phone
+        Log.d("noti", "Message data payload: " + remoteMessage.getData());
+
 
     }
 

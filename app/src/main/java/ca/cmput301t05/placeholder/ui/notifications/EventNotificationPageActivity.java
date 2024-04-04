@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder.ui.notifications;
 
 import android.os.Bundle;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -10,8 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+
 import java.util.ArrayList;
 import java.util.Comparator;
+
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
@@ -82,6 +86,16 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             public void onFailure(Exception e) {
             }
         });
+
+
+        //FIREBASE NOTIFICATION HANDLER
+
+        //topic users subscribe to -> events uuid to string
+        String topic = curEvent.getEventID().toString();
+
+
+
+
 
         //get all profiles inside of the event then give the notification to them, if it is a push notification we can get their firebase noti id and send
 
