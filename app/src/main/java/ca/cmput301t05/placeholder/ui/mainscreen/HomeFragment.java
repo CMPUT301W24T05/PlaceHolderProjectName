@@ -36,8 +36,6 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
     private Button guideToEvent;
     private ImageButton profileButton;
     private ImageButton notificationButton;
-    private Button startScannerButton;
-
     private RecyclerView joinedEventsList;
     private EventAdapter joinedEventsAdapter;
     private RecyclerView organizedEventsList;
@@ -56,7 +54,6 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         // Initialize your views here from the view instead of directly
         profileButton = view.findViewById(R.id.btnProfile);
         notificationButton = view.findViewById(R.id.btnNotifications);
-        startScannerButton = view.findViewById(R.id.btnJoinEvent);
         guideToEvent = view.findViewById(R.id.btnCreateEvent);
         appNameView = view.findViewById(R.id.main_admin_page_AdminTxt);
 
@@ -121,13 +118,6 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         profileButton.setOnClickListener(v -> {
             // Start ProfileEditActivity
             Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
-            startActivity(intent);
-        });
-
-        startScannerButton = fragmentView.findViewById(R.id.btnJoinEvent);
-        startScannerButton.setOnClickListener(view -> {
-            // Start QRCodeScannerActivity
-            Intent intent = new Intent(getActivity(), QRCodeScannerActivity.class);
             startActivity(intent);
         });
 
