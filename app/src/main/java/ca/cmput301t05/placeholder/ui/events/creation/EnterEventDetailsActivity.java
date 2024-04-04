@@ -3,24 +3,24 @@ package ca.cmput301t05.placeholder.ui.events.creation;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
+import ca.cmput301t05.placeholder.PlaceholderApp;
+import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
+import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
@@ -28,11 +28,6 @@ import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 import ca.cmput301t05.placeholder.utils.ImageViewHelper;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-
-import ca.cmput301t05.placeholder.PlaceholderApp;
-import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.database.tables.Table;
-import ca.cmput301t05.placeholder.events.Event;
 
 import java.util.Calendar;
 import java.util.List;
@@ -231,7 +226,12 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             cal.set(Calendar.HOUR_OF_DAY, selectedHour);
             cal.set(Calendar.MINUTE, selectedMinute);
 
-            newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
+            try {
+                newEvent.setMaxAttendees(Integer.parseInt(eventCapacity.getText().toString()));
+            } catch(NumberFormatException e){
+//                e.printStackTrace();
+                newEvent.setMaxAttendees(0);
+            }
             newEvent.setEventDate(cal);
             newEvent.setEventName(eventName.getText().toString().trim());
             newEvent.setEventInfo(eventDescripiton.getText().toString().trim());

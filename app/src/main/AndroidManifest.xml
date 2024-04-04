@@ -31,7 +31,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:targetApi="31">
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="33">
 
 <!--    &lt;!&ndash; Configure Google Play services automatically download the scanner module-->
 <!--         to the device while the app is installed from the Play Store &ndash;&gt;-->
@@ -53,6 +54,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+<!--            android:launchMode="singleTask">-->
         </activity>
 
         <activity android:name=".ui.events.organizer_info.ViewSignUpsActivity"/>
@@ -63,8 +65,6 @@
         <activity android:name=".ProfileEditActivity"/>
         <activity android:name=".ui.admin.AdminHomeActivity"/>
         <activity android:name=".ui.notifications.NotificationsFragment"/>
-        <activity android:name=".ui.events.ViewEventDetailsActivity"/>
-        <activity android:name=".ui.events.EventSignUpActivity"/>
         <activity android:name=".ui.notifications.EventNotificationPageActivity"/>
         <activity android:name=".ui.notifications.UserNotificationActivity"/>
         <activity android:name=".ui.events.ViewQRCodesActivity"/>

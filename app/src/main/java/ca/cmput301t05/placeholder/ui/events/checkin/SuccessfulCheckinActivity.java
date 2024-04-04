@@ -22,9 +22,8 @@ import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -191,7 +190,7 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         eventTable.pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
             @Override
             public void onSuccess(Event document) {
-                Intent intent = new Intent(SuccessfulCheckinActivity.this, ViewEventDetailsActivity.class);
+                Intent intent = new Intent(SuccessfulCheckinActivity.this, ViewEventDetailsFragment.class);
                 startActivity(intent);
                 finish();
             }
