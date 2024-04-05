@@ -19,12 +19,13 @@ public class FirebaseMessaging extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        //TODO ON MESAGE PAYLOAD, GRAB JSON CONSTRUCT NOTIFICATION FROM JSON AND SEND NOTIFICATION TO PHONE THROUGH THAT
-        //TODO ALSO UPDATE USER PROFILE BY ADDING THE NOTIFICATION TO THEIR PROFILE
+
 
         Map<String, String> messageData = remoteMessage.getData();
 
         Notification n = new Notification(messageData);
+
+        //TODO handle the new notifications by adding it to profile's database and then sending push notification (If we need to)
 
         Log.d("noti", "Message data payload: " + remoteMessage.getData());
 
