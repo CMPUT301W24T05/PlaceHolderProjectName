@@ -45,6 +45,8 @@ public class HttpNotificationHandler {
                 .post(body)
                 .build();
 
+        Log.d("Notification", "Sending to client");
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -54,6 +56,7 @@ public class HttpNotificationHandler {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 //potentially add some error stuff here
+                Log.d("Response", "Response from server");
             }
         });
 

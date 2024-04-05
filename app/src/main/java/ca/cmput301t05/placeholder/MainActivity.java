@@ -4,14 +4,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
+import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.UUID;
 
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
@@ -52,6 +61,28 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         }
         setupBottomNavigationView();
         setButtonActions();
+
+        UUID test_server = UUID.randomUUID();
+
+        FirebaseMessaging.getInstance().subscribeToTopic(test_server.toString())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Subscribed";
+                        if (!task.isSuccessful()) {
+                            msg = "Subscribe failed";
+                        }
+                        Log.d("Testing Subscription", msg);
+
+                        //Testing notifications
+                        Notification testHttp = new Notification("Test http message", UUID.randomUUID(), test_server);
+                        HttpNotificationHandler.sendNotificationToServer(testHttp);
+
+
+                    }
+                });
+
+
 
         Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
         Log.i("MainActivityJoinedEvents", "Number of joined events: " + app.getJoinedEvents().size());

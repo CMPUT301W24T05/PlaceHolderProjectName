@@ -3,7 +3,9 @@ package ca.cmput301t05.placeholder.notifications;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.type.DateTime;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
+import ca.cmput301t05.placeholder.utils.StringManip;
 
 /**
  * Represents a notification associated with a user event. It contains information about
@@ -68,6 +71,29 @@ public class Notification extends DocumentSerializable {
     public Notification(DocumentSnapshot snapshot){
         this.timeCreated = Calendar.getInstance();
         fromDocument(snapshot);
+    }
+
+    public Notification(Map<String,String> fromFCM){
+
+        this.notificationID = UUID.fromString(fromFCM.get("notification_uuid"));
+        this.message = fromFCM.get("message");
+        this.creatorID = UUID.fromString(fromFCM.get("creator_id"));
+        this.fromEventID = UUID.fromString(fromFCM.get("event_uuid"));
+        this.isPush = StringManip.getTrueOrFalse(fromFCM.get("is_push"));
+        this.isPinned = StringManip.getTrueOrFalse(fromFCM.get("is_pinned"));
+        this.isRead = StringManip.getTrueOrFalse(fromFCM.get("is_read"));
+
+        Gson gson = new Gson();
+
+        DateTime dateTime = gson.fromJson(fromFCM.get("time_created"), DateTime.class);
+        this.timeCreated = Calendar.getInstance();
+
+        this.timeCreated.set(Calendar.YEAR, dateTime.getYear() - 1);
+        this.timeCreated.set(Calendar.MONTH, dateTime.getMonth() - 1);
+        this.timeCreated.set(Calendar.DAY_OF_MONTH, dateTime.getDay());
+        this.timeCreated.set(Calendar.HOUR_OF_DAY, dateTime.getHours());
+        this.timeCreated.set(Calendar.SECOND, dateTime.getSeconds());
+
     }
 
 

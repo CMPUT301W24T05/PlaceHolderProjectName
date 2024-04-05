@@ -10,6 +10,7 @@ import java.util.Map;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 public class FirebaseMessaging extends FirebaseMessagingService {
@@ -22,10 +23,8 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         //TODO ALSO UPDATE USER PROFILE BY ADDING THE NOTIFICATION TO THEIR PROFILE
 
         Map<String, String> messageData = remoteMessage.getData();
-        
 
-
-
+        Notification n = new Notification(messageData);
 
         Log.d("noti", "Message data payload: " + remoteMessage.getData());
 
