@@ -11,6 +11,7 @@ import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventExploreFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventOrganizedFragment;
+import ca.cmput301t05.placeholder.ui.mainscreen.ProfileUpdatedFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.HomeFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.organized_menu_item) {
                 selectedFragment = new EventOrganizedFragment();
             } else if (id == R.id.profile_menu_item){
-                selectedFragment = new ProfileFragment();
+                selectedFragment = new ProfileUpdatedFragment();
             } else if (id == R.id.scan_menu_item){
                 Intent intent = new Intent(this, QRCodeScannerActivity.class);
                 eventInfoSheetLauncher.launch(intent);
