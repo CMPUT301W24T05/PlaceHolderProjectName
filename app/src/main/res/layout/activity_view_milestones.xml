@@ -20,13 +20,23 @@
         android:paddingTop="10dp"
         android:paddingBottom="30dp"
         />
+    <TextView
+        android:id="@+id/check_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Attendee/Capacity: "
+        android:textSize="30dp"
+        android:textAlignment="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="30dp"
+        />
 
     <CheckBox
         android:id="@+id/checkBox_first_attendee"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:clickable="false"
+        android:clickable="true"
         android:text="First Attendee" />
 
     <CheckBox
@@ -34,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:clickable="false"
+        android:clickable="true"
         android:text="First Signup" />
 
     <CheckBox

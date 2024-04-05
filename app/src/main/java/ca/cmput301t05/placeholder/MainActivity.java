@@ -9,11 +9,21 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.notifications.Milestone;
+import ca.cmput301t05.placeholder.notifications.MilestoneType;
+import ca.cmput301t05.placeholder.notifications.Notification;
+import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewMilestonesActivity;
 import ca.cmput301t05.placeholder.ui.mainscreen.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
@@ -32,6 +42,13 @@ import ca.cmput301t05.placeholder.ui.mainscreen.EventOrganizedFragment;
 public class MainActivity extends AppCompatActivity implements EventAdapter.OnItemClickListener {
 
     private PlaceholderApp app;
+    ArrayList<Notification> notifications;
+    ArrayList<Milestone> milestones;
+    int numAttendees;
+    int capacity;
+    int numRegistered;
+    Calendar now;
+    Calendar cal;
 
     /**
      * Called when the activity is starting. Initializes the application context, sets the content view,
@@ -43,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         app = (PlaceholderApp) getApplicationContext();
 
         setContentView(R.layout.activity_main);
@@ -57,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
 
         Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
         Log.i("MainActivityJoinedEvents", "Number of joined events: " + app.getJoinedEvents().size());
+
+        setMilestones();
     }
 
     private void setupBottomNavigationView() {
@@ -129,5 +147,124 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
 
         }
 
+    }
+
+    private void setMilestones(){
+        Profile profile = app.getUserProfile();
+
+        List<String> allEvents = profile.getHostedEvents();
+        List<String> joined = profile.getJoinedEvents();
+        List<String> interested = profile.getInterestedEvents();
+        allEvents.addAll(joined); allEvents.addAll(interested);
+
+        for (String event : allEvents){
+            app.getEventTable().fetchDocument(event.trim(), new Table.DocumentCallback<Event>() {
+                @Override
+                public void onSuccess(Event document) {
+                    checkMilestones(document);
+
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    //TODO handle failure
+                }
+            });
+
+        }
+    }
+
+    private void checkMilestones(Event curEvent){
+        ViewMilestonesActivity miles = new ViewMilestonesActivity();
+        notifications = app.getUserNotifications();
+        milestones = getMilestones(notifications);
+        numAttendees = curEvent.getAttendees().size();
+        capacity = curEvent.getMaxAttendees();
+        numRegistered = curEvent.getRegisteredUsers().size();
+        now = Calendar.getInstance();
+        cal = curEvent.getEventDate();
+
+
+
+        //Milestone myMiles = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY);
+        //addMilestone(myMiles, curEvent);
+
+        if ((double) numAttendees / capacity >= 3 && !containsMilestoneType(MilestoneType.HALFWAY)) {
+            Milestone mHalfway = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY, curEvent.getEventName());
+            addMilestone(mHalfway);
+        }
+
+        if (capacity == numAttendees && !containsMilestoneType(MilestoneType.FULLCAPACITY)) {
+            Milestone mFull = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FULLCAPACITY, curEvent.getEventName());
+            addMilestone(mFull);
+        }
+
+        if (numAttendees >= 1 && !containsMilestoneType(MilestoneType.FIRSTATTENDEE)) {
+            Milestone mFirstAttendee = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTATTENDEE, curEvent.getEventName());
+            addMilestone(mFirstAttendee);
+        }
+        // change to cal validation
+        if (now.compareTo(cal) > 0 && !containsMilestoneType(MilestoneType.EVENTSTART)) {
+            Milestone mEventStart = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP, curEvent.getEventName());
+            addMilestone(mEventStart);
+        }
+
+    }
+
+    public ArrayList<Milestone> getMilestones(ArrayList<Notification> notifications){
+        ArrayList<Milestone> milestones = new ArrayList<>();
+        for (Notification notification : notifications) {
+            if (notification instanceof Milestone) {
+                milestones.add((Milestone) notification);
+            }
+        }
+        return milestones;
+    }
+
+
+    public boolean containsMilestoneType(MilestoneType type) {
+        if (milestones == null) {
+            return false; // If milestones array is null, return false
+        }
+
+        for (Milestone milestone : milestones) {
+            if (milestone.getMType() == type) {
+                return true; // If milestone of specified type found, return true
+            }
+        }
+
+        return false; // If no milestone of specified type found, return false
+    }
+
+    public void addMilestone(Milestone milestone){
+
+
+        //push to notification database
+        app.getNotificationTable().pushDocument(milestone, milestone.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
+            @Override
+            public void onSuccess(Notification document) {
+                milestones.add(milestone); // Add the milestone to the milestones array
+                notifications.add(milestone); // Add the milestone to the notifications array
+
+                Profile profile = app.getUserProfile();
+                profile.addNotification(milestone.getNotificationID().toString());
+
+                app.getProfileTable().pushDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+                    @Override
+                    public void onSuccess(Profile document) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+            }
+        });
     }
 }

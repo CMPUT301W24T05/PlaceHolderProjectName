@@ -200,31 +200,11 @@ public class LoadingScreenActivity extends AppCompatActivity {
             }
         });
 
-        // sets milestones for each event
-        List<String> allEvents = profile.getHostedEvents();
-        List<String> joined = profile.getJoinedEvents();
-        List<String> interested = profile.getInterestedEvents();
-        allEvents.addAll(joined); allEvents.addAll(interested);
-
-        for (String event : allEvents){
-            app.getEventTable().fetchDocument(event.trim(), new Table.DocumentCallback<Event>() {
-                @Override
-                public void onSuccess(Event document) {
-                    checkMilestones(document);
-
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    //TODO handle failure
-                }
-            });
-
-        }
-
     }
 
     private void startMainActivity() {
+        // sets milestones for each event
+
         Log.i("Placeholder App", String.format("Profile with id %s and name %s has been loaded!",
                 app.getUserProfile().getProfileID(), app.getUserProfile().getName()));
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -232,102 +212,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
         finish();
     }
 
-    private void checkMilestones(Event curEvent){
-        ViewMilestonesActivity miles = new ViewMilestonesActivity();
-        // Call methods from ViewMilestonesActivity as needed
 
-        notifications = app.getUserNotifications();
-        milestones = getMilestones(notifications);
-        numAttendees = curEvent.getAttendees().size();
-        capacity = curEvent.getMaxAttendees();
-        numRegistered = curEvent.getRegisteredUsers().size();
-        now = Calendar.getInstance();
-        cal = curEvent.getEventDate();
-
-        Milestone myMiles = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY);
-        addMilestone(myMiles, curEvent);
-
-        if (numAttendees / capacity == 2 && !containsMilestoneType(MilestoneType.HALFWAY)) {
-            Milestone mHalfway = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY);
-            addMilestone(mHalfway, curEvent);
-        }
-
-        if (capacity == numAttendees && !containsMilestoneType(MilestoneType.FULLCAPACITY)) {
-            Milestone mFull = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FULLCAPACITY);
-            addMilestone(mFull, curEvent);
-        }
-
-        if (numAttendees >= 1 && !containsMilestoneType(MilestoneType.FIRSTATTENDEE)) {
-            Milestone mFirstAttendee = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTATTENDEE);
-            addMilestone(mFirstAttendee, curEvent);
-        }
-        // change to cal validation
-        if (now.compareTo(cal) > 0 && !containsMilestoneType(MilestoneType.EVENTSTART)) {
-            Milestone mEventStart = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP);
-            addMilestone(mEventStart, curEvent);
-        }
-
-        if (numRegistered >= 1 && !containsMilestoneType(MilestoneType.EVENTEND)) {
-            Milestone mEventEnd = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP);
-            addMilestone(mEventEnd, curEvent);
-        }
-    }
-
-    public ArrayList<Milestone> getMilestones(ArrayList<Notification> notifications){
-        ArrayList<Milestone> milestones = new ArrayList<>();
-        for (Notification notification : notifications) {
-            if (notification instanceof Milestone) {
-                milestones.add((Milestone) notification);
-            }
-        }
-        return milestones;
-    }
-
-    public boolean containsMilestoneType(MilestoneType type) {
-        if (milestones == null) {
-            return false; // If milestones array is null, return false
-        }
-
-        for (Milestone milestone : milestones) {
-            if (milestone.getMType() == type) {
-                return true; // If milestone of specified type found, return true
-            }
-        }
-
-        return false; // If no milestone of specified type found, return false
-    }
-
-    public void addMilestone(Milestone milestone, Event curEvent){
-
-
-        //push to notification database
-        app.getNotificationTable().pushDocument(milestone, milestone.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
-            @Override
-            public void onSuccess(Notification document) {
-                milestones.add(milestone); // Add the milestone to the milestones array
-                notifications.add(milestone); // Add the milestone to the notifications array
-
-                Profile profile = app.getUserProfile();
-                profile.addNotification(milestone.getNotificationID().toString());
-
-                app.getProfileTable().pushDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
-                    @Override
-                    public void onSuccess(Profile document) {
-
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-            }
-        });
-    }
 
 
 }
