@@ -37,8 +37,10 @@ import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 import ca.cmput301t05.placeholder.ui.admin.AdminHomeActivity;
+import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 
-public class ProfileUpdatedFragment extends Fragment {
+public class ProfileUpdatedFragment extends Fragment implements EventAdapter.OnItemClickListener{
 
     private static final int COMPRESSION_QUALITY = 1024;
     private static final int IMAGE_MAX_HEIGHT = 1080;
@@ -134,6 +136,7 @@ public class ProfileUpdatedFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         joinedEventsAdapter = new EventAdapter(getActivity().getApplicationContext(), joinedEvents, EventAdapter.adapterType.ATTENDING);
         joinedEventsList.setLayoutManager(linearLayoutManager);
+        joinedEventsAdapter.setListener(this);
         joinedEventsList.setAdapter(joinedEventsAdapter);
 
     }
@@ -243,6 +246,17 @@ public class ProfileUpdatedFragment extends Fragment {
                 }
             });
 
+        }
+    }
+    public void onItemClick(Event event, EventAdapter.adapterType type) {
+        if (type == EventAdapter.adapterType.HOSTED) {
+            app.setCachedEvent(event);
+            Intent i = new Intent(getActivity(), EventMenuActivity.class);
+            startActivity(i);
+        } else if (type == EventAdapter.adapterType.ATTENDING) {
+            app.setCachedEvent(event);
+            ViewEventDetailsFragment eventDetailsFragment = new ViewEventDetailsFragment();
+            eventDetailsFragment.show(getActivity().getSupportFragmentManager(), eventDetailsFragment.getTag());
         }
     }
 

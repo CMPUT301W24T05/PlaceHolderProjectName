@@ -106,7 +106,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
 
             cardView = itemView.findViewById(R.id.event_card);
 
-
         }
 
 
