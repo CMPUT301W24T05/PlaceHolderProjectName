@@ -5,10 +5,10 @@
     android:id="@+id/event_card"
     android:layout_width="match_parent"
     android:layout_height="400dp"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="15dp"
     app:cardBackgroundColor="@android:color/transparent"
     app:cardElevation="0dp"
-    android:layout_margin="30dp">
+    android:layout_margin="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="8dp"
+            android:padding="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -104,7 +104,7 @@
 
                     android:padding="2dp"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/baseline_attendance_24" />
+                    app:srcCompat="@drawable/baseline_attendee_black" />
 
                 <TextView
                     android:id="@+id/checked_Max_card"
