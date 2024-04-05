@@ -21,7 +21,7 @@
     <FrameLayout
         android:layout_below="@id/toolbarEventMenu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="230dp"
         android:id="@+id/frame_layout">
 
         <!-- ImageView -->
@@ -36,7 +36,7 @@
         <View
             android:id="@+id/view_event_menu"
             android:layout_width="match_parent"
-            android:layout_height="230dp"
+            android:layout_height="match_parent"
             android:background="@drawable/edit_event_menu_background" />
 
     </FrameLayout>
@@ -45,23 +45,23 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/toolbarEventMenu"
             >
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progress_bar_event"
                 android:layout_width="match_parent"
-                android:layout_centerHorizontal="true"
                 android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
                 android:layout_weight="1"
                 android:indeterminateOnly="false"
-                android:padding="10dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
+
+                android:paddingTop="8dp"
+                android:paddingBottom="5dp"
                 app:indicatorColor="#21005D"
                 app:indicatorInset="8dp"
-                android:layout_centerInParent="true"
                 app:indicatorSize="190dp"
                 app:trackColor="#EADDFF"
                 app:trackCornerRadius="10dp"

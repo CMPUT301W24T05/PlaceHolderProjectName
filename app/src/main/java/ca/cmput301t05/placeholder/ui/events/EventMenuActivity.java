@@ -180,6 +180,14 @@ public class EventMenuActivity extends AppCompatActivity  {
         circularProgressBar.post(runnable);
     }
 
+
+
+    /**
+     * Sets up the textview to be displayed when this activity is called. Clicking on the text
+     * will direct user to new activity to view a list of their event's attendees.
+     *
+     */
+
     private void setUpText(){
 
         attendeeFraction = findViewById(R.id.attendanceFraction);

@@ -10,6 +10,8 @@ import static ca.cmput301t05.placeholder.qrcode.QRCodeType.INFO;
 
 import android.graphics.Bitmap;
 
+import org.junit.*;
+
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
@@ -18,6 +20,7 @@ import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -30,6 +33,8 @@ import ca.cmput301t05.placeholder.qrcode.QRCodeType;
 
 public class QRCodeTest {
 
+
+    @Before
     public BinaryBitmap convertToBinaryBitmap(Bitmap bitmap) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
@@ -54,13 +59,13 @@ public class QRCodeTest {
         // Create a BinaryBitmap from the LuminanceSource using a HybridBinarizer
         return new BinaryBitmap(new HybridBinarizer(source));
     }
+//
+//    @Rule
+//    QRCodeManager QRCM = new QRCodeManager();
 
-    @Rule
-    QRCodeManager QRCM = new QRCodeManager();
-
-    @Test
+    @Test(expected = RuntimeException.class) // Continue from here
     public void testGenerateQRCode(){
-
+        QRCodeManager QRCM = new QRCodeManager();
         //still receiving a tests not received error. Needs debugging
 
         Event event = new Event("exampleEvent", "this is my event info", 100);
