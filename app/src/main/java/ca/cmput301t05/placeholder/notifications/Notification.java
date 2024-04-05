@@ -59,6 +59,9 @@ public class Notification extends DocumentSerializable {
     @SerializedName("is_read")
     private boolean isRead;
 
+    @SerializedName("is_push")
+    private boolean isPush;
+
     /**
      * Constructs a new Notification with nothing inside of it, please always use generic constructor, not this
      */
@@ -111,6 +114,7 @@ public class Notification extends DocumentSerializable {
         document.put("isPinned", this.isPinned);
 
         document.put("isRead", this.isRead);
+        document.put("isPush", this.isPush);
 
         return document;
     }
@@ -137,6 +141,12 @@ public class Notification extends DocumentSerializable {
             this.isRead = false; //for data migration
         }   else {
             this.isRead = document.getBoolean("isRead");
+        }
+
+        if (document.get("isPush") == null){
+            this.isPush = false;
+        }   else {
+            this.isPush = document.getBoolean("isPush");
         }
 
     }
@@ -197,5 +207,13 @@ public class Notification extends DocumentSerializable {
 
     public void setRead(boolean read) {
         isRead = read;
+    }
+
+    public void setPush(boolean push) {
+        isPush = push;
+    }
+
+    public boolean isPush() {
+        return isPush;
     }
 }

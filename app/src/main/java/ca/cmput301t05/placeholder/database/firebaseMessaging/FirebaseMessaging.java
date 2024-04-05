@@ -5,6 +5,9 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.profile.Profile;
@@ -15,8 +18,15 @@ public class FirebaseMessaging extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        //we can grab notifications and then grab the object off of it and add it to the user profile
-        //Way less computation is done on the phone
+        //TODO ON MESAGE PAYLOAD, GRAB JSON CONSTRUCT NOTIFICATION FROM JSON AND SEND NOTIFICATION TO PHONE THROUGH THAT
+        //TODO ALSO UPDATE USER PROFILE BY ADDING THE NOTIFICATION TO THEIR PROFILE
+
+        Map<String, String> messageData = remoteMessage.getData();
+        
+
+
+
+
         Log.d("noti", "Message data payload: " + remoteMessage.getData());
 
 

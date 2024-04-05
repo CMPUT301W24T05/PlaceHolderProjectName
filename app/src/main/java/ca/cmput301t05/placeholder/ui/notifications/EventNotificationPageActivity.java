@@ -19,6 +19,7 @@ import java.util.Comparator;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Notification;
@@ -89,63 +90,13 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
 
         //FIREBASE NOTIFICATION HANDLER
-
-        //topic users subscribe to -> events uuid to string
-        String topic = curEvent.getEventID().toString();
+        HttpNotificationHandler.sendNotificationToServer(notification);
 
 
 
 
 
-        //get all profiles inside of the event then give the notification to them, if it is a push notification we can get their firebase noti id and send
 
-
-        if (!curEvent.getAttendees().isEmpty()) {
-
-            app.getProfileTable().fetchMultipleDocuments(curEvent.getAttendees(), new Table.DocumentCallback<ArrayList<Profile>>() {
-                @Override
-                public void onSuccess(ArrayList<Profile> document) {
-
-                    ArrayList<String> profileIDS = new ArrayList<>(); //getting ready to upload everything again
-
-                    for (Profile p : document) {
-                        p.addNotification(notification.getNotificationID().toString()); //add notification to each profile
-
-                        profileIDS.add(p.getProfileID().toString());
-
-                        if (push) {
-                            //do push notification things here
-                            //THIS IS CLIENT SIDE MASS NOTIFICATIONS IN COMMON PRACTICES FOR CODING THIS IS BAD
-                            //BUT SETTING UP A SERVER IS OUT OF SCOPE SO..
-
-
-                        }
-
-                    }
-
-                    //now upload profiles back
-
-                    app.getProfileTable().pushMultipleDocuments(document, profileIDS, new Table.DocumentCallback<ArrayList<Profile>>() {
-                        @Override
-                        public void onSuccess(ArrayList<Profile> document) {
-
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-
-                }
-            });
-
-        }
 
     }
 
