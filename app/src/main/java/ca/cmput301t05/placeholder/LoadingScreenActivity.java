@@ -284,9 +284,17 @@ public class LoadingScreenActivity extends AppCompatActivity {
         //push to notification database
         Profile profile = app.getUserProfile();
         String token = profile.getMessagingToken();
-        HttpNotificationHandler.sendNotificationToUser(milestone, token);
+        HttpNotificationHandler.sendNotificationToUser(milestone, token, new HttpNotificationHandler.httpHandlercallback() {
+            @Override
+            public void onSuccess() {
+                app.getUserMilestones().add(milestone);
+            }
 
-        //MIGHT BE BAD MAY NEED TO ADD A CALLBACK BUT SHOULD BE FINE
-        app.getUserMilestones().add(milestone);
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+        
     }
 }
