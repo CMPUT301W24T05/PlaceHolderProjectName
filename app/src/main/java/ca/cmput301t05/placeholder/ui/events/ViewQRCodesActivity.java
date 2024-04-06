@@ -110,6 +110,7 @@ public class ViewQRCodesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ViewQRCodesActivity.this, ReuseQRActivity.class);
+                intent.putExtra("eventName", getIntent().getStringExtra("eventName"));
                 startActivity(intent);
             }
         });
@@ -142,4 +143,6 @@ public class ViewQRCodesActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(stringPath));
         startActivity(Intent.createChooser(intent, "Share this qr code"));
     }
+
+
 }

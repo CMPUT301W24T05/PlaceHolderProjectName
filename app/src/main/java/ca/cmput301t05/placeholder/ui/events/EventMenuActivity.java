@@ -233,19 +233,20 @@ public class EventMenuActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 Intent intentQR = new Intent(EventMenuActivity.this, ViewQRCodesActivity.class);
+                intentQR.putExtra("eventName", curEvent.getEventName());
                 startActivity(intentQR);
             }
         });
 
 // Set OnClickListener to launch ReuseQRActivity
-        viewQRCodes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EventMenuActivity.this, ReuseQRActivity.class);
-                intent.putExtra("eventName", curEvent.getEventName());
-                startActivity(intent);
-            }
-        });
+//        viewQRCodes.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(EventMenuActivity.this, ReuseQRActivity.class);
+//                intent.putExtra("eventName", curEvent.getEventName());
+//                startActivity(intent);
+//            }
+//        });
 
 
 
