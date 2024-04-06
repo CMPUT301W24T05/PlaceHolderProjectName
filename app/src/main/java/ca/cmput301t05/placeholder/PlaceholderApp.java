@@ -79,6 +79,8 @@ public class PlaceholderApp extends Application implements Serializable {
         userNotifications = new ArrayList<>();
         locationManager = new LocationManager(this);
         notificationEventHolder = new ArrayList<>();
+
+        userMilestones = new ArrayList<>();
     }
 
     /**
