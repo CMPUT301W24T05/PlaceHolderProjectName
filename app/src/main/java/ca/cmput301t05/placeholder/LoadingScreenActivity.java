@@ -8,11 +8,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
@@ -189,8 +185,6 @@ public class LoadingScreenActivity extends AppCompatActivity {
     }
 
     private void fetchNotifications(Profile profile) {
-
-
         app.getNotificationTable().fetchMultipleDocuments(profile.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
             @Override
             public void onSuccess(ArrayList<Notification> document) {
@@ -220,101 +214,87 @@ public class LoadingScreenActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Sets the milestones for all the events in the application.
+     */
     private void setMilestones() {
-        Profile profile = app.getUserProfile();
+        ArrayList<Event> allEvents = new ArrayList<>(app.getHostedEvents().values());
+        allEvents.addAll(app.getJoinedEvents().values());
+        allEvents.addAll(app.getInterestedEvents().values());
 
-        List<String> allEvents = profile.getHostedEvents();
-        List<String> joined = profile.getJoinedEvents();
-        List<String> interested = profile.getInterestedEvents();
-        allEvents.addAll(joined);
-        allEvents.addAll(interested);
-
-        for (String event : allEvents) {
-            app.getEventTable().fetchDocument(event.trim(), new Table.DocumentCallback<Event>() {
-                @Override
-                public void onSuccess(Event document) {
-                    checkMilestones(document);
-
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    //TODO handle failure
-                }
-            });
-
+        for (Event e : allEvents) {
+            checkMilestones(e);
         }
     }
 
+    /**
+     * Checks various milestones for a given event and adds them to the application if they are present.
+     *
+     * @param curEvent the event to check milestones for
+     */
     private void checkMilestones(Event curEvent) {
-        notifications = app.getUserNotifications();
-
         numAttendees = curEvent.getAttendees().size();
         capacity = curEvent.getMaxAttendees();
         numRegistered = curEvent.getRegisteredUsers().size();
         now = Calendar.getInstance();
         cal = curEvent.getEventDate();
 
-        if ((double) numAttendees / capacity >= 0.5 && !containsMilestoneType(MilestoneType.HALFWAY)) {
-            Milestone mHalfway = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY, curEvent.getEventName());
-            addMilestone(mHalfway);
-        }
-
-        if (capacity == numAttendees && !containsMilestoneType(MilestoneType.FULLCAPACITY)) {
-            Milestone mFull = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FULLCAPACITY, curEvent.getEventName());
-            addMilestone(mFull);
-        }
-
-        if (numAttendees >= 1 && !containsMilestoneType(MilestoneType.FIRSTATTENDEE)) {
-            Milestone mFirstAttendee = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTATTENDEE, curEvent.getEventName());
-            addMilestone(mFirstAttendee);
-        }
-        if (now.compareTo(cal) > 0 && !containsMilestoneType(MilestoneType.EVENTSTART)) {
-            Milestone mEventStart = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.EVENTSTART, curEvent.getEventName());
-            addMilestone(mEventStart);
-        }
-        if (numRegistered >= 1 && !containsMilestoneType(MilestoneType.FIRSTSIGNUP)) {
-            Milestone mSignup = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP, curEvent.getEventName());
-            addMilestone(mSignup);
-        }
+        addMilestoneIfPresent(getMilestoneByCondition((double) numAttendees / capacity >= 3, MilestoneType.HALFWAY, curEvent));
+        addMilestoneIfPresent(getMilestoneByCondition(capacity == numAttendees, MilestoneType.FULLCAPACITY, curEvent));
+        addMilestoneIfPresent(getMilestoneByCondition(numAttendees >= 1, MilestoneType.FIRSTATTENDEE, curEvent));
+        addMilestoneIfPresent(getMilestoneByCondition(now.compareTo(cal) > 0, MilestoneType.EVENTSTART, curEvent));
+        addMilestoneIfPresent(getMilestoneByCondition(numRegistered >= 1, MilestoneType.FIRSTSIGNUP, curEvent));
     }
 
-    public ArrayList<Milestone> getMilestones(ArrayList<Notification> notifications) {
-        ArrayList<Milestone> milestones = new ArrayList<>();
-        for (Notification notification : notifications) {
-            if (notification instanceof Milestone) {
-                milestones.add((Milestone) notification);
-            }
-        }
-        return milestones;
+    /**
+     * Private method to get a milestone based on a condition, milestone type, and event.
+     *
+     * @param condition a boolean value representing the condition for the milestone
+     * @param type the milestone type
+     * @param curEvent the event object
+     * @return an Optional object containing the milestone if the condition is met and milestone type is not already present, otherwise an empty Optional object
+     */
+    private Optional<Milestone> getMilestoneByCondition(boolean condition, MilestoneType type, Event curEvent) {
+        return !containsMilestoneType(type) && condition ?
+                Optional.of(new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), type, curEvent.getEventName())) :
+                Optional.empty();
+    }
+
+    /**
+     * Adds a milestone to the application if it is present.
+     *
+     * @param milestone an Optional object that represents a milestone event
+     */
+    private void addMilestoneIfPresent(Optional<Milestone> milestone) {
+        milestone.ifPresent(this::addMilestone);
     }
 
 
+    /**
+     * Checks if the given MilestoneType is present in the milestones list.
+     *
+     * @param type the MilestoneType to check
+     * @return true if the MilestoneType is present in the milestones list, false otherwise
+     */
     public boolean containsMilestoneType(MilestoneType type) {
-        if (milestones == null) {
-            return false;
-        }
-
-        for (Milestone milestone : milestones) {
-            if (milestone.getMType() == type) {
-                return true;
-            }
-        }
-
-        return false;
+        return milestones != null && milestones.stream().anyMatch(milestone -> milestone.getMType() == type);
     }
 
     public void addMilestone(Milestone milestone) {
         //push to notification database
-
-
         Profile profile = app.getUserProfile();
-
         String token = profile.getMessagingToken();
+        HttpNotificationHandler.sendNotificationToUser(milestone, token, new HttpNotificationHandler.httpHandlercallback() {
+            @Override
+            public void onSuccess() {
+                app.getUserMilestones().add(milestone);
+            }
 
-        HttpNotificationHandler.sendNotificationToUser(milestone, token);
+            @Override
+            public void onError(Exception e) {
 
-        //MIGHT BE BAD MAY NEED TO ADD A CALLBACK BUT SHOULD BE FINE
-        app.getUserMilestones().add(milestone);
+            }
+        });
+
     }
 }
