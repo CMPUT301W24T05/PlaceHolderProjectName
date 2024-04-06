@@ -117,6 +117,7 @@ public class QRCodeScannerActivity extends AppCompatActivity {
         if (type == QRCodeType.CHECK_IN) {
             intent = new Intent(QRCodeScannerActivity.this, SuccessfulCheckinActivity.class);
             startActivity(intent);
+            finish();
         } else if (type == QRCodeType.INFO) {
             app.setCachedEvent(event);
             Intent data = new Intent();

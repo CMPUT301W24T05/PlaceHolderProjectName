@@ -58,7 +58,7 @@ public class QRCodeTest {
         assertNotNull(qrCode.getType());
         Assert.assertEquals(qrCode.getType(), INFO); // Assert that the QR code is "info" QR code type
         String rawText = qrCode.getRawText();
-        assertTrue(qrCodeManager.getEventID(rawText) instanceof UUID); // Check that event ID is of type UUID
+        assertEquals(qrCodeManager.getEventID(rawText).getClass(), UUID.class);// Check that event ID is of type UUID
         assertEquals(eventID,qrCodeManager.getEventID(rawText)); // Assert that the QR code's UUID and the event ID match
     }
 
@@ -76,7 +76,7 @@ public class QRCodeTest {
         assertNotNull(qrCode.getType());
         Assert.assertEquals(qrCode.getType(), CHECK_IN); // Assert that the QR code is a "check-in" QR code type
         String rawText = qrCode.getRawText();
-        assertTrue(qrCodeManager.getEventID(rawText) instanceof UUID); // Check that event ID is of type UUID
+        assertEquals(qrCodeManager.getEventID(rawText).getClass(), UUID.class);// Check that event ID is of type UUID
         assertEquals(eventID,qrCodeManager.getEventID(rawText)); // Assert that the QR code's UUID and the event ID match
     }
 
