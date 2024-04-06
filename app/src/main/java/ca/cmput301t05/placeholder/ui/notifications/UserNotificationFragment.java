@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -18,7 +19,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.notifications.UserNotificationAdapter;
 
-public class UserNotificationFragment extends Fragment {
+public class UserNotificationFragment extends DialogFragment {
 
     TextView nameText;
     ImageView back;
@@ -54,9 +55,11 @@ public class UserNotificationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //hopefully this allows us to go back
-                getActivity().getOnBackPressedDispatcher();
+                dismiss();
             }
         });
+
+        nameText.setText("Notifications");
 
 
         UserNotificationAdapter adapter = new UserNotificationAdapter(context, app.getNotificationEventHolder());

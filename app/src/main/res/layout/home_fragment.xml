@@ -18,11 +18,13 @@
                 android:layout_height="?attr/collapsingToolbarLayoutMediumSize">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/main_page_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp" app:title="Welcome, %s!"
+                android:elevation="0dp"
+                app:itemIconTint="?attr/colorOnBackground"
                 app:menu="@menu/main_page_topbar_menu"
-                app:itemIconTint="?attr/colorOnBackground">
+                app:title="Welcome, %s!">
 
             </com.google.android.material.appbar.MaterialToolbar>
 

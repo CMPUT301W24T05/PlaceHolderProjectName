@@ -3,10 +3,14 @@ package ca.cmput301t05.placeholder.ui.mainscreen;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +22,9 @@ import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.notifications.UserNotificationFragment;
+
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,6 +40,8 @@ public class NewHomeFragment extends Fragment implements EventAdapter.OnItemClic
     private ExtendedFloatingActionButton createEventButton;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private MaterialToolbar topBar;
+
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
@@ -42,6 +51,7 @@ public class NewHomeFragment extends Fragment implements EventAdapter.OnItemClic
         app = (PlaceholderApp) requireActivity().getApplication();
         ArrayList<Event> attendingEvents = new ArrayList<>(app.getJoinedEvents().values());
         attendingEventsAdapter.setEvents(attendingEvents);
+
 
         createEventButton.setOnClickListener(v -> {
             // Start EnterEventDetailsActivity
@@ -69,6 +79,24 @@ public class NewHomeFragment extends Fragment implements EventAdapter.OnItemClic
         attendingEventsList.setLayoutManager(new LinearLayoutManager(getContext()));
 //        signedUpEventsList.setAdapter(signedUpEventsAdapter);
         attendingEventsList.setAdapter(attendingEventsAdapter);
+
+        topBar = view.findViewById(R.id.main_page_toolbar);
+        topBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                if (item.getItemId() == R.id.home_notification_item){
+
+                    //open user notification fragment
+                    UserNotificationFragment dialogFragment = new UserNotificationFragment();
+                    dialogFragment.show(getActivity().getSupportFragmentManager(), "notificationDialog");
+
+                }
+
+                return true;
+            }
+        });
+
 
         createEventButton = view.findViewById(R.id.btnCreateEvent);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
