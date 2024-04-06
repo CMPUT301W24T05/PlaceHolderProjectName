@@ -35,6 +35,8 @@ import java.util.List;
  * @see LocationManager.LocationPermissionListener
  */
 public class SuccessfulCheckinActivity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
+    public static final String SUCCESSFUL_CHECKIN_KEY = "SuccessfulCheckinKey";
+    public static final String SUCCESSFUL_CHECKIN_VALUE = "SUCCESS_CHECKIN";
     private static final int SPLASH_DELAY = 3000;
     private LocationManager locationManager;
     private PlaceholderApp app;
@@ -190,8 +192,10 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         eventTable.pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
             @Override
             public void onSuccess(Event document) {
-                Intent intent = new Intent(SuccessfulCheckinActivity.this, ViewEventDetailsFragment.class);
-                startActivity(intent);
+                app.setCachedEvent(event);
+                Intent data = new Intent();
+                data.putExtra(SUCCESSFUL_CHECKIN_KEY, SUCCESSFUL_CHECKIN_VALUE);
+                setResult(RESULT_OK, data);
                 finish();
             }
 

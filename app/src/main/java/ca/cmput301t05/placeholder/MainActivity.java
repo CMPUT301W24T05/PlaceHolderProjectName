@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
+import ca.cmput301t05.placeholder.ui.events.checkin.SuccessfulCheckinActivity;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventExploreFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventOrganizedFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.NewHomeFragment;
@@ -53,12 +54,19 @@ public class MainActivity extends AppCompatActivity {
         eventInfoSheetLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
                 Intent data = result.getData();
-                if (data != null && QRCodeScannerActivity.QR_SCANNER_ID_VALUE.equals(data.getStringExtra(QRCodeScannerActivity.QR_SCANNER_ID_KEY))) {
+                if (data != null && QRCodeScannerActivity.QRSCANNER_ACTIVITY_EVENTINFO.equals(data.getStringExtra(QRCodeScannerActivity.QR_SCANNER_ID_KEY))) {
                     // The Scanner activity has finished with an event_info code. Open the bottom sheet here.
                     ViewEventDetailsFragment bottomSheet = new ViewEventDetailsFragment();
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("interestedMode", true);
                     bottomSheet.setArguments(bundle);
+                    bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
+                } else if (data != null && QRCodeScannerActivity.QRSCANNER_ACTIVITY_CHECKIN.equals(data.getStringExtra(QRCodeScannerActivity.QR_SCANNER_ID_KEY))) {
+                    Intent intent = new Intent(this, SuccessfulCheckinActivity.class);
+                    eventInfoSheetLauncher.launch(intent);
+                } else if (data != null && SuccessfulCheckinActivity.SUCCESSFUL_CHECKIN_VALUE.equals(data.getStringExtra(SuccessfulCheckinActivity.SUCCESSFUL_CHECKIN_KEY))) {
+                    // The user has successfully checked into an event. Open the bottom sheet here.
+                    ViewEventDetailsFragment bottomSheet = new ViewEventDetailsFragment();
                     bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
                 }
             }

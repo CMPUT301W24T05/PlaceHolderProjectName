@@ -30,7 +30,8 @@ import com.budiyev.android.codescanner.CodeScannerView;
 public class QRCodeScannerActivity extends AppCompatActivity {
 
     public static final String QR_SCANNER_ID_KEY = "QRScannerActivityId";
-    public static final String QR_SCANNER_ID_VALUE = "QRScannerActivityEVENTINFO";
+    public static final String QRSCANNER_ACTIVITY_EVENTINFO = "QRScannerActivityEVENTINFO";
+    public static final String QRSCANNER_ACTIVITY_CHECKIN = "QRScannerActivityCHECKIN";
 
     CodeScanner mCodeScanner;
     ActivityResultLauncher<String> requestPermissionLauncher;
@@ -115,12 +116,12 @@ public class QRCodeScannerActivity extends AppCompatActivity {
 
         Intent intent;
         if (type == QRCodeType.CHECK_IN) {
-            intent = new Intent(QRCodeScannerActivity.this, SuccessfulCheckinActivity.class);
-            startActivity(intent);
-        } else if (type == QRCodeType.INFO) {
-            app.setCachedEvent(event);
             Intent data = new Intent();
-            data.putExtra(QR_SCANNER_ID_KEY, QR_SCANNER_ID_VALUE);
+            data.putExtra(QR_SCANNER_ID_KEY, QRSCANNER_ACTIVITY_CHECKIN);
+            setResult(RESULT_OK, data);
+        } else if (type == QRCodeType.INFO) {
+            Intent data = new Intent();
+            data.putExtra(QR_SCANNER_ID_KEY, QRSCANNER_ACTIVITY_EVENTINFO);
             setResult(RESULT_OK, data);
         }
 
