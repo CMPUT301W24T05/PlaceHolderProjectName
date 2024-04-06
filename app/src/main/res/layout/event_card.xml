@@ -43,7 +43,7 @@
                     app:tint="?android:attr/textColorSecondaryInverse" />
 
                 <TextView
-                    android:id="@+id/event_location"
+                    android:id="@+id/event_card_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"

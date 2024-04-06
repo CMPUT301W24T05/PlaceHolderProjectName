@@ -11,9 +11,8 @@ import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventExploreFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventOrganizedFragment;
+import ca.cmput301t05.placeholder.ui.mainscreen.NewHomeFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.ProfileUpdatedFragment;
-import ca.cmput301t05.placeholder.ui.mainscreen.HomeFragment;
-import ca.cmput301t05.placeholder.ui.mainscreen.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -43,9 +42,10 @@ public class MainActivity extends AppCompatActivity {
         app = (PlaceholderApp) getApplicationContext();
 
         setContentView(R.layout.activity_main);
+        setTheme(R.style.AppTheme);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new HomeFragment())
+                    .replace(R.id.fragment_container, new NewHomeFragment())
                     .commit();
         }
         setupBottomNavigationView();
@@ -76,14 +76,14 @@ public class MainActivity extends AppCompatActivity {
             Fragment selectedFragment = null;
 
             if (id == R.id.home_menu_item) {
-                selectedFragment = new HomeFragment();
+                selectedFragment = new NewHomeFragment();
             } else if (id == R.id.explore_menu_item) {
                 selectedFragment = new EventExploreFragment();
             } else if (id == R.id.organized_menu_item) {
                 selectedFragment = new EventOrganizedFragment();
-            } else if (id == R.id.profile_menu_item){
+            } else if (id == R.id.profile_menu_item) {
                 selectedFragment = new ProfileUpdatedFragment();
-            } else if (id == R.id.scan_menu_item){
+            } else if (id == R.id.scan_menu_item) {
                 Intent intent = new Intent(this, QRCodeScannerActivity.class);
                 eventInfoSheetLauncher.launch(intent);
             }

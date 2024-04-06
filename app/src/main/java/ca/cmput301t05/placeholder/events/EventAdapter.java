@@ -2,7 +2,6 @@ package ca.cmput301t05.placeholder.events;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +17,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Locale;
-import java.util.UUID;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
@@ -60,18 +57,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
     @Override
     public EventCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // depends on the eventType, have different cardView
+        View v = LayoutInflater.from(context).inflate(R.layout.event_card_hosted, parent, false);
         if (this.type == adapterType.HOSTED) {
-            View v = LayoutInflater.from(context).inflate(R.layout.event_card_hosted, parent, false);
             return new HostedEventCardViewHolder(v);
         } else {
-            View v = LayoutInflater.from(context).inflate(R.layout.event_card_hosted, parent, false);
             return new JoinedEventCardViewHolder(v);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull EventCardViewHolder holder, int position) {
-
         try {
             holder.bindView(position);
         } catch (Exception e) {
@@ -101,11 +96,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
 
             // Ensure the view ids exist
             try {
-                eventName = itemView.findViewById(R.id.event_name);
-                eventLocation = itemView.findViewById(R.id.event_location);
-                eventDate = itemView.findViewById(R.id.event_date);
+                eventName = itemView.findViewById(R.id.event_card_title);
+                eventLocation = itemView.findViewById(R.id.event_card_location);
+                eventDate = itemView.findViewById(R.id.event_card_date);
                 cardView = itemView.findViewById(R.id.event_card);
-                posterView = itemView.findViewById(R.id.poster_view);
+                posterView = itemView.findViewById(R.id.event_card_poster);
 
             } catch (NullPointerException e) {
                 Log.e("ViewHolderInit", "Error loading view holder: " + e.getMessage());
@@ -166,8 +161,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         public HostedEventCardViewHolder(@NonNull View itemView) {
             super(itemView);
             try {
-                interested_number = itemView.findViewById(R.id.interested_number);
-                attended_number = itemView.findViewById(R.id.checked_Max_card);
+                interested_number = itemView.findViewById(R.id.event_card_interested);
+                attended_number = itemView.findViewById(R.id.event_card_attending);
             } catch (NullPointerException e) {
                 Log.e("ViewHolderInit", "Error loading view holder: " + e.getMessage());
             }
@@ -190,14 +185,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
     }
 
     public class JoinedEventCardViewHolder extends EventCardViewHolder {
-        TextView interested_number;
-        ImageView attendedIcon;
+        TextView attending_number, interested_number;
+        ImageView attendedIcon, interestedIcon;
 
         public JoinedEventCardViewHolder(@NonNull View itemView) {
             super(itemView);
             try {
-                interested_number = itemView.findViewById(R.id.interested_number);
-                attendedIcon = itemView.findViewById(R.id.imageView4);
+                interested_number = itemView.findViewById(R.id.event_card_interested);
+                attending_number = itemView.findViewById(R.id.event_card_attending);
+                interestedIcon = itemView.findViewById(R.id.event_card_interested_icon);
+                attendedIcon = itemView.findViewById(R.id.event_card_attending_icon);
             } catch (NullPointerException e) {
                 Log.e("ViewHolderInit", "Error loading view holder: " + e.getMessage());
             }
@@ -211,6 +208,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
                 if (event != null) {
                     long interested = event.getRegisteredUsersNum();
                     interested_number.setText(String.valueOf(interested));
+                    attending_number.setVisibility(View.INVISIBLE);
                     attendedIcon.setVisibility(View.INVISIBLE);
                 }
             }
