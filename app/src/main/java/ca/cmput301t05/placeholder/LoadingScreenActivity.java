@@ -8,12 +8,16 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.utils.datafetchers.DataFetchCallback;
 import ca.cmput301t05.placeholder.utils.datafetchers.EventFetcher;
 import ca.cmput301t05.placeholder.utils.datafetchers.ProfileFetcher;
 import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 import ca.cmput301t05.placeholder.utils.holdNotiEvent;
+
+import java.util.ArrayList;
 
 /**
  * LoadingScreenActivity is an activity displayed during the startup of the application. It is responsible for
@@ -104,8 +108,6 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
     }
 
     private void fetchNotifications(Profile profile) {
-
-
         app.getNotificationTable().fetchMultipleDocuments(profile.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
             @Override
             public void onSuccess(ArrayList<Notification> document) {
