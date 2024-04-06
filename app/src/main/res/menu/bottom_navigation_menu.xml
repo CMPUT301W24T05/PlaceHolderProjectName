@@ -1,37 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/home_menu_item"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:enabled="true"
-          android:icon="@drawable/home_icon"
-          android:title="Home"/>
+    <item
+        android:id="@+id/home_menu_item"
+        android:enabled="true"
+        android:icon="@drawable/home_icon"
+        android:title="Home" />
 
-    <item android:id="@+id/explore_menu_item"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:enabled="true"
-          android:icon="@drawable/explore_icon"
-          android:title="Explore"/>
+    <item
+        android:id="@+id/explore_menu_item"
+        android:enabled="true"
+        android:icon="@drawable/explore_icon"
+        android:title="Explore" />
 
-    <item android:title="Scan"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:enabled="true"
-          android:id="@+id/scan_menu_item"
-          android:icon="@drawable/camera_icon"/>
-
-    <item android:id="@+id/organized_menu_item"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:enabled="true"
-          android:icon="@drawable/organized_icon"
-          android:title="Organized"/>
-
-    <item android:title="Profile"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:enabled="true"
-          android:id="@+id/profile_menu_item"
-          android:icon="@drawable/profile_circle"/>
+    <item
+        android:id="@+id/organized_menu_item"
+        android:enabled="true"
+        android:icon="@drawable/organized_icon"
+        android:title="Organized" />
 </menu>

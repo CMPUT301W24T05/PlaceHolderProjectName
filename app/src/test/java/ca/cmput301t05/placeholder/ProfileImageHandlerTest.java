@@ -1,8 +1,5 @@
 package ca.cmput301t05.placeholder;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 import android.content.Context;
@@ -13,13 +10,12 @@ import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.images.ProfileImageHandler;
 import ca.cmput301t05.placeholder.profile.Profile;
 
-//import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 import com.google.firebase.storage.StorageException;
 
-//import org.junit.Before;
-//import org.junit.Test;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.UUID;
@@ -30,7 +26,7 @@ public class ProfileImageHandlerTest {
     private Uri mockUri;
     private Context mockContext;
 
-//    @Before
+    @Before
     public void setUp() {
         profileImageHandler = new ProfileImageHandler();
         mockUri = mock(Uri.class);

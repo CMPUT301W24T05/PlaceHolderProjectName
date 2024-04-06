@@ -1,22 +1,24 @@
-package ca.cmput301t05.placeholder.ui.mainscreen;
+package ca.cmput301t05.placeholder.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
-
-import java.util.ArrayList;
+import ca.cmput301t05.placeholder.ui.events.EventSignUpActivity;
 
 
 public class EventExploreFragment extends Fragment implements EventAdapter.OnItemClickListener{
@@ -72,11 +74,9 @@ public class EventExploreFragment extends Fragment implements EventAdapter.OnIte
             startActivity(i);
         } else if (type == EventAdapter.adapterType.ATTENDING) {
             app.setCachedEvent(event);
-            ViewEventDetailsFragment bottomSheet = new ViewEventDetailsFragment();
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("interestedMode", true);
-            bottomSheet.setArguments(bundle);
-            bottomSheet.show(getChildFragmentManager(), getTag());
+            //TODO send to the event info page for attendees
+            Intent i = new Intent(getActivity(), EventSignUpActivity.class);
+            startActivity(i);
         }
     }
 }
