@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <Button
-        android:id="@+id/back_milestones"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="back" />
 
     <TextView
         android:id="@+id/header_milestone"
@@ -19,16 +12,7 @@
         android:textAlignment="center"
         android:paddingTop="10dp"
         android:paddingBottom="30dp"
-        />
-    <TextView
-        android:id="@+id/check_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Attendee/Capacity: "
-        android:textSize="30dp"
-        android:textAlignment="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="30dp"
+        android:layout_alignParentTop="true"
         />
 
     <CheckBox
@@ -37,7 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:clickable="true"
-        android:text="First Attendee" />
+        android:text="First Attendee"
+        android:layout_below="@id/header_milestone"
+        />
 
     <CheckBox
         android:id="@+id/checkBox_first_signup"
@@ -45,7 +31,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:clickable="true"
-        android:text="First Signup" />
+        android:text="First Signup"
+        android:layout_below="@id/checkBox_first_attendee"
+        />
 
     <CheckBox
         android:id="@+id/checkBox_halfway"
@@ -53,37 +41,28 @@
         android:layout_height="wrap_content"
         android:text="Halfway"
         android:layout_marginBottom="20dp"
-        android:clickable="false"/>
+        android:clickable="false"
+        android:layout_below="@id/checkBox_first_signup"
+        />
 
     <CheckBox
         android:id="@+id/checkBox_full_capacity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Full Capacity"
-        android:clickable="false"/>
-
-    <TextView
-        android:id="@+id/custom_milestone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="My Milestones"
-        android:textSize="20dp"
-        android:textAlignment="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="30dp"
+        android:clickable="false"
+        android:layout_below="@id/checkBox_halfway"
         />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="181dp" />
-
     <Button
-        android:id="@+id/create_milestone"
-        android:layout_width="match_parent"
+        android:id="@+id/back_milestones"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="10dp"
-        android:text="Create Custom Milestone" />
-</LinearLayout>
+        android:text="back"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        />
+
+</RelativeLayout>

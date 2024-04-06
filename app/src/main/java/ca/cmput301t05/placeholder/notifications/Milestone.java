@@ -50,6 +50,8 @@ public class Milestone extends Notification {
                 return "From: "+eventName+" YOU'RE HALFWAY TO YOUR EVENT CAPACITY!";
             case FULLCAPACITY:
                 return "From: "+eventName+" YOUR EVENT IS NOW AT FULL CAPACITY! CONGRATS!!";
+            case EVENTSTART:
+                return "From: "+eventName+" YOUR EVENT HAS BEGUN";
             default:
                 return "Default message";
         }

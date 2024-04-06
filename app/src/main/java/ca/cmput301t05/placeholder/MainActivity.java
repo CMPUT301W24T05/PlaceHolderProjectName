@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
         Log.i("MainActivityJoinedEvents", "Number of joined events: " + app.getJoinedEvents().size());
 
-        setMilestones();
+        //setMilestones();
     }
 
     private void setupBottomNavigationView() {
@@ -175,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
     }
 
     private void checkMilestones(Event curEvent){
-        ViewMilestonesActivity miles = new ViewMilestonesActivity();
         notifications = app.getUserNotifications();
         milestones = getMilestones(notifications);
         numAttendees = curEvent.getAttendees().size();
@@ -183,11 +182,6 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         numRegistered = curEvent.getRegisteredUsers().size();
         now = Calendar.getInstance();
         cal = curEvent.getEventDate();
-
-
-
-        //Milestone myMiles = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY);
-        //addMilestone(myMiles, curEvent);
 
         if ((double) numAttendees / capacity >= 3 && !containsMilestoneType(MilestoneType.HALFWAY)) {
             Milestone mHalfway = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY, curEvent.getEventName());
@@ -203,12 +197,14 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
             Milestone mFirstAttendee = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTATTENDEE, curEvent.getEventName());
             addMilestone(mFirstAttendee);
         }
-        // change to cal validation
         if (now.compareTo(cal) > 0 && !containsMilestoneType(MilestoneType.EVENTSTART)) {
-            Milestone mEventStart = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP, curEvent.getEventName());
+            Milestone mEventStart = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.EVENTSTART, curEvent.getEventName());
             addMilestone(mEventStart);
         }
-
+        if (numRegistered >= 1 && !containsMilestoneType(MilestoneType.FIRSTSIGNUP)) {
+            Milestone mSignup = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP, curEvent.getEventName());
+            addMilestone(mSignup);
+        }
     }
 
     public ArrayList<Milestone> getMilestones(ArrayList<Notification> notifications){
@@ -224,27 +220,23 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
 
     public boolean containsMilestoneType(MilestoneType type) {
         if (milestones == null) {
-            return false; // If milestones array is null, return false
+            return false;
         }
 
         for (Milestone milestone : milestones) {
             if (milestone.getMType() == type) {
-                return true; // If milestone of specified type found, return true
+                return true;
             }
         }
 
-        return false; // If no milestone of specified type found, return false
+        return false;
     }
 
     public void addMilestone(Milestone milestone){
-
-
         //push to notification database
         app.getNotificationTable().pushDocument(milestone, milestone.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
             @Override
             public void onSuccess(Notification document) {
-                milestones.add(milestone); // Add the milestone to the milestones array
-                notifications.add(milestone); // Add the milestone to the notifications array
 
                 Profile profile = app.getUserProfile();
                 profile.addNotification(milestone.getNotificationID().toString());

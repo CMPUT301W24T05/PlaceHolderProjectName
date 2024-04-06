@@ -57,7 +57,6 @@ public class ViewMilestonesActivity extends AppCompatActivity {
         checkBoxHalfway = findViewById(R.id.checkBox_halfway);
         checkBoxFullCapacity = findViewById(R.id.checkBox_full_capacity);
         back = findViewById(R.id.back_milestones);
-        check = findViewById(R.id.check_test);
         notifications = app.getUserNotifications();
         milestones = getMilestones(notifications);
 
