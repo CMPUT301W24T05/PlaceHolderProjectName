@@ -7,12 +7,10 @@ plugins {
 
 }
 
-
-
-
 android {
     namespace = "ca.cmput301t05.placeholder"
     compileSdk = 34
+
 
     packaging {
         resources.excludes.addAll(
@@ -23,6 +21,10 @@ android {
         )
         )
     }
+
+
+
+
 
 
 
@@ -54,6 +56,13 @@ android {
 
 dependencies {
 
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-params:5.10.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
+    // Robolectric
+    testImplementation ("org.robolectric:robolectric:4.12")
     // Material UI Library
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
@@ -126,6 +135,8 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.9.0")
     //object -> json
     implementation ("com.google.code.gson:gson:2.10.1")
+    // swipe down to refresh
+    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 
 }
