@@ -66,6 +66,7 @@ public class CreateNotificationDialog extends DialogFragment {
 
                         Notification newNotification = new Notification(notificationMessage,app.getUserProfile().getProfileID(), app.getCachedEvent().getEventID());
                         newNotification.setPinned(pinCheckbox.isChecked());
+                        newNotification.setPush(sendPush);
 
                         notificationListener.onNotificationCreated(newNotification, sendPush); //lets us send the notification back
 

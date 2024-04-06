@@ -3,12 +3,15 @@ package ca.cmput301t05.placeholder.notifications;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -16,7 +19,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.utils.DateStrings;
 import ca.cmput301t05.placeholder.utils.StringManip;
 
@@ -26,7 +31,7 @@ import ca.cmput301t05.placeholder.utils.StringManip;
  * TODO: Add functionality to maybe delete / pin events with the 3 dots.
  */
 
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationCardViewHolder> {
+public class EventNotificationAdapter extends RecyclerView.Adapter<EventNotificationAdapter.NotificationCardViewHolder> {
 
 
     private ArrayList<Notification> notificationList;
@@ -35,7 +40,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     private Map<Integer, Boolean> itemExpanded; //used to track which are expanded
 
-    public NotificationAdapter(Context context, ArrayList<Notification> notifications){
+    public EventNotificationAdapter(Context context, ArrayList<Notification> notifications){
 
         this.notificationList = notifications;
 
@@ -82,6 +87,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public class NotificationCardViewHolder extends RecyclerView.ViewHolder {
 
         TextView notification_time, notification_message;
+
+        CardView notification_card;
         ImageView menu, pin; //this will be used to pin
 
 
@@ -94,6 +101,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             menu = itemView.findViewById(R.id.notification_card_triple);
             pin = itemView.findViewById(R.id.notification_card_pin);
+            notification_card = itemView.findViewById(R.id.notification_card);
 
             // Listener for expanding/collapsing the text views
             View.OnClickListener expandCollapseListener = v -> {
@@ -104,6 +112,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     boolean isExpanded = itemExpanded.getOrDefault(position, false);
                     itemExpanded.put(position, !isExpanded);
 
+                    notificationList.get(position).setRead(true);
                     // Notify the adapter to rebind the view, which will update its appearance
                     notifyItemChanged(position);
                 }
@@ -112,16 +121,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             notification_time.setOnClickListener(expandCollapseListener);
             notification_message.setOnClickListener(expandCollapseListener);
 
-            menu.setOnClickListener(v -> {
-
-                int position = getAdapterPosition();
-
-                if (position != RecyclerView.NO_POSITION) {
-                    //this will open a fragment or something that will allow us to maybe view more details/pin the message
-                }
-            });
-
-
 
         }
 
@@ -129,7 +128,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             Notification n = notificationList.get(position);
             assert n != null;
 
-            if (n.isPinned){
+            PlaceholderApp app = (PlaceholderApp) context.getApplicationContext();
+
+            if (n.isPinned()){
                 pin.setVisibility(View.VISIBLE);
                 //TODO maybe set the background to a different colour too
             }   else {
@@ -163,6 +164,52 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             }   else {
                 notification_message.setText(n.getMessage());
             }
+
+            menu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    PopupMenu popupMenu = new PopupMenu(context, view);
+                    popupMenu.getMenuInflater().inflate(R.menu.admin_image_card_menu, popupMenu.getMenu());
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+
+                            if (menuItem.getItemId() == R.id.admin_image_card_menu_delete){
+
+                                //TODO Make a confirmation dialog pop up
+
+
+                                if (n.getNotificationID() != null) {
+
+
+                                    app.getNotificationTable().deleteDocument(n.getNotificationID().toString(), new Table.DocumentCallback() {
+                                        @Override
+                                        public void onSuccess(Object document) {
+                                            notificationList.remove(position);
+                                            notifyItemRemoved(position);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Exception e) {
+
+                                        }
+                                    });
+                                }
+
+                                return true;
+                            }
+
+
+                            return true;
+                        }
+
+
+                    });
+                    popupMenu.show();
+
+                }
+            });
 
 
         }
