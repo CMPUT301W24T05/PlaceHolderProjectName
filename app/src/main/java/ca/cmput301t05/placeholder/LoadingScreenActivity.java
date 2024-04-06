@@ -8,27 +8,21 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
-import ca.cmput301t05.placeholder.database.tables.Table;
-import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
+import ca.cmput301t05.placeholder.utils.datafetchers.DataFetchCallback;
+import ca.cmput301t05.placeholder.utils.datafetchers.EventFetcher;
+import ca.cmput301t05.placeholder.utils.datafetchers.ProfileFetcher;
 
 /**
  * LoadingScreenActivity is an activity displayed during the startup of the application. It is responsible for
  * determining whether a user profile exists for the current device. If a profile exists, it transitions to the
  * MainActivity. Otherwise, it directs the user to the InitialSetupActivity to create a new profile.
  */
-public class LoadingScreenActivity extends AppCompatActivity {
+public class LoadingScreenActivity extends AppCompatActivity implements DataFetchCallback {
 
     PlaceholderApp app;
+    private ProfileFetcher profileFetcher;
+    private EventFetcher eventFetcher;
 
     /**
      * Called when the activity is starting. This method sets the content view to the loading screen layout
@@ -44,150 +38,20 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
         app = (PlaceholderApp) getApplicationContext();
 
-        fetchProfileAndContinue();
+        profileFetcher = app.getProfileFetcher();
+        eventFetcher = app.getEventFetcher();
+
+        profileFetcher.addCallback(this);
+        eventFetcher.addCallback(this);
+
+        profileFetcher.fetchProfileIfDeviceIdExists();
     }
 
-    /**
-     * Attempts to fetch the user profile associated with the device's ID. If the device does not have a stored
-     * ID or the profile cannot be found in the database, the user is redirected to InitialSetupActivity to
-     * allow profile creation. If a profile is found, the application proceeds to the MainActivity.
-     */
-    private void fetchProfileAndContinue() {
-        if (!app.getIdManager().deviceHasIDStored()) {
-            Intent intent = new Intent(getApplicationContext(), InitialSetupActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
-
-        UUID deviceId = app.getIdManager().getDeviceID();
-        app.getProfileTable().fetchDocument(deviceId.toString(), new Table.DocumentCallback<Profile>() {
-            @Override
-            public void onSuccess(Profile profile) {
-                // The profile exists in firebase! We can continue to the Main activity
-                app.setUserProfile(profile);
-
-                app.getProfileImageHandler().getProfilePicture(profile, LoadingScreenActivity.this, new BaseImageHandler.ImageCallback() {
-                    @Override
-                    public void onImageLoaded(Bitmap bitmap) {
-                        profile.setProfilePictureBitmap(bitmap);
-                        fetchEvents(profile);
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        profile.setProfilePictureToDefault();
-                        fetchEvents(profile);
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                // The profile does not exist in firebase, let's ask for the name of the user
-                Log.e("App/ProfileFetch", e.toString());
-                Intent intent = new Intent(getApplicationContext(), InitialSetupActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-    }
-
-    private void fetchEvents(Profile profile) {
-        AtomicInteger eventCounter = new AtomicInteger();
-
-        if (profile.getHostedEvents() != null) {
-            eventCounter.addAndGet(profile.getHostedEvents().size());
-            fetchEvents(profile, "hostedEvents", eventCounter);
-        }
-        if (profile.getJoinedEvents() != null) {
-            eventCounter.addAndGet(profile.getJoinedEvents().size());
-            fetchEvents(profile, "joinedEvents", eventCounter);
-        }
-        if (profile.getInterestedEvents() != null) {
-            eventCounter.addAndGet(profile.getInterestedEvents().size());
-            fetchEvents(profile, "interestedEvents", eventCounter);
-        }
-
-        // Check if there are no events to fetch in the first place, start MainActivity immediately
-        if (eventCounter.get() == 0) {
-            fetchNotifications(profile);
-        }
-    }
-
-    private void fetchEvents(Profile profile, String event, AtomicInteger eventCounter) {
-        List<String> events;
-
-        switch (event) {
-            case "hostedEvents":
-                events = profile.getHostedEvents();
-                break;
-            case "joinedEvents":
-                events = profile.getJoinedEvents();
-                break;
-            case "interestedEvents":
-                events = profile.getInterestedEvents();
-                break;
-            default:
-                return; // Method invoked with an invalid event string
-        }
-
-        if (events == null) {
-            return;
-        }
-
-        //now load all the events into their respective container
-
-        for (String id : events) {
-            app.getEventTable().fetchDocument(id.trim(), new Table.DocumentCallback<Event>() {
-                @Override
-                public void onSuccess(Event document) {
-
-                    switch (event) {
-                        case "hostedEvents":
-                            app.getHostedEvents().put(UUID.fromString(id.trim()), document);
-                            break;
-                        case "joinedEvents":
-                            app.getJoinedEvents().put(UUID.fromString(id.trim()), document);
-                            break;
-                        case "interestedEvents":
-                            app.getInterestedEvents().put(UUID.fromString(id.trim()), document);
-                            break;
-                    }
-
-                    // Decrease the counter once an event is fetched
-                    eventCounter.decrementAndGet();
-                    // If all events have been fetched, start MainActivity
-                    if (eventCounter.get() == 0) {
-                        startMainActivity();
-                    }
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    //TODO handle failure
-                }
-            });
-
-        }
-    }
-
-    private void fetchNotifications(Profile profile) {
-
-
-        app.getNotificationTable().fetchMultipleDocuments(profile.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
-            @Override
-            public void onSuccess(ArrayList<Notification> document) {
-                app.getUserNotifications().addAll(document);
-                startMainActivity();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-        });
+    @Override
+    protected void onDestroy() {
+        profileFetcher.removeCallback(this);
+        eventFetcher.removeCallback(this);
+        super.onDestroy();
     }
 
     private void startMainActivity() {
@@ -196,5 +60,44 @@ public class LoadingScreenActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onProfileFetched(Profile profile) {
+        // Profile fetched successfully. To fetch events, start the method of eventFetcher
+        eventFetcher.fetchAllEvents(profile);
+    }
+
+    @Override
+    public void onPictureLoaded(Bitmap bitmap) {
+
+    }
+
+    @Override
+    public void onProfileFetchFailure(Exception exc) {
+        // If profile fetch failed, navigate to setup activity
+        Intent intent = new Intent(getApplicationContext(), InitialSetupActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onNoIdFound() {
+        // If no id found, navigate to setup activity
+        Intent intent = new Intent(getApplicationContext(), InitialSetupActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onEventFetched(Profile profile) {
+        // Events fetched successfully. Navigate to MainActivity
+        startMainActivity();
+    }
+
+    @Override
+    public void onEventFetchError(Exception exception) {
+        // Events fetched unsuccessfully, it's *probably* fine lol. Navigate to MainActivity
+        startMainActivity();
     }
 }
