@@ -110,6 +110,7 @@ public class ViewQRCodesActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(ViewQRCodesActivity.this, EventMenuActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

@@ -1,21 +1,13 @@
 package ca.cmput301t05.placeholder.Location;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.StrictMode;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import org.osmdroid.api.IMapController;
@@ -29,8 +21,6 @@ import org.osmdroid.views.overlay.Marker;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.Manifest;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
@@ -38,10 +28,6 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.qrcode.QRCodeType;
-import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
-import ca.cmput301t05.placeholder.ui.events.EventSignUpActivity;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 
 public class MapDisplay_activity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;

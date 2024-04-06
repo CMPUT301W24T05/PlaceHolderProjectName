@@ -1,118 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/toolbar_viewing_event"
+        app:title="Event Details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        app:navigationIcon="@drawable/back_button"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    </androidx.appcompat.widget.Toolbar>
 
-        <Button
-            android:id="@+id/event_signup_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1"
-            android:text="Back" />
 
-        <Button
-            android:id="@+id/vieweventdetails_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="1"
-            android:text="Profile" />
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal">-->
 
-    </LinearLayout>
+<!--        <Button-->
+<!--            android:id="@+id/event_signup_back"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginRight="20dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Back" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/vieweventdetails_notifications"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Notifications" />-->
+
+<!--    </LinearLayout>-->
+
 
     <TextView
-        android:id="@+id/event_signup_eventdetails"
-        android:layout_width="match_parent"
+        android:id="@+id/event_view_title"
+        style="@style/TextAppearance.Material3.HeadlineLarge"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Event Details"
-        android:textSize="60sp"
-        android:textStyle="bold" />
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="Team 5 Cool Event Title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:padding="4dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="4dp"
+        android:scaleType="fitCenter"
+        android:scaleX="0.75"
+        android:scaleY="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_view_title"
+        app:srcCompat="@drawable/event_date_icon" />
 
-        <TextView
-            android:id="@+id/event_signup_eventDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Event Date"
-            android:textSize="20sp" />
+    <TextView
+        android:id="@+id/event_view_date"
+        style="@style/TextAppearance.Material3.BodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="March 27, 2024 at 10:30 PM"
+        app:layout_constraintStart_toEndOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
-        <TextView
-            android:id="@+id/event_signup_eventlocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="4dp"
+        android:scaleType="fitCenter"
+        android:scaleX="0.75"
+        android:scaleY="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:srcCompat="@drawable/event_location_icon" />
+
+    <TextView
+        android:id="@+id/event_view_location"
+        style="@style/TextAppearance.Material3.BodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Edmonton Conference Center"
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/event_view_poster"
+            android:layout_width="match_parent"
+            android:layout_height="268dp"
             android:layout_weight="1"
-            android:text="Event Location"
-            android:textSize="20sp" />
-    </LinearLayout>
+            android:background="@color/md_theme_secondaryContainer"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView6"
+            app:shapeAppearanceOverlay="@style/RoundedImageView" app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_view_poster"
+        app:srcCompat="@drawable/baseline_attendance_24" />
+
+    <TextView
+        android:id="@+id/event_view_interest_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="1024 people are interested"
+        app:layout_constraintStart_toEndOf="@+id/imageView8"
+        app:layout_constraintTop_toTopOf="@+id/imageView8" />
+
+    <ImageView
+            android:id="@+id/event_view_creator_image"
+            android:layout_width="48dp"
+            android:layout_height="32dp"
+            android:padding="4dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView8"
+            app:srcCompat="@drawable/profile_circle"/>
+
+    <TextView
+        android:id="@+id/event_view_creator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Hosted by Johnanthon Smitherton"
+        app:layout_constraintStart_toEndOf="@+id/event_view_creator_image"
+        app:layout_constraintTop_toTopOf="@+id/event_view_creator_image" />
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true">
-
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/event_view_creator_image" android:minHeight="100dp"
+            app:layout_constraintHeight_min="100dp">
 
-            <ImageView
-                android:id="@+id/event_signup_poster"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:src="@drawable/pizzanight" />
+                android:orientation="vertical">
 
             <TextView
-                android:id="@+id/event_signup_eventinfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/event_example_details" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/event_signup_organizer"
+                    android:id="@+id/event_view_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingTop="20dp"
-                    android:text="Organized by:" />
-
-                <TextView
-                    android:id="@+id/event_signup_author"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingTop="20dp"
-                    android:text="John Smith" />
-            </LinearLayout>
-
+                    android:paddingStart="16dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/event_example_details"/>
         </LinearLayout>
-
     </ScrollView>
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/event_view_mark_interested"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:visibility="gone"
+            android:layout_margin="16dp"
+            android:text="I'm interested"
+            app:icon="@drawable/check_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
