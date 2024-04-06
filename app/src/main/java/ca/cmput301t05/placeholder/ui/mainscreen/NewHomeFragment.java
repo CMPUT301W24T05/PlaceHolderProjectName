@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -89,7 +90,15 @@ public class NewHomeFragment extends Fragment implements EventAdapter.OnItemClic
 
                     //open user notification fragment
                     UserNotificationFragment dialogFragment = new UserNotificationFragment();
-                    dialogFragment.show(getActivity().getSupportFragmentManager(), "notificationDialog");
+//                    dialogFragment.show(getActivity().getSupportFragmentManager(), "notificationDialog");
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    // For a polished look, specify a transition animation.
+                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    // To make it fullscreen, use the 'content' root view as the container
+                    // for the fragment, which is always the root view for the activity.
+                    transaction.add(android.R.id.content, dialogFragment)
+                            .addToBackStack(null).commit();
+
 
                 }
 

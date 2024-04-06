@@ -18,13 +18,13 @@
                 android:layout_height="?attr/collapsingToolbarLayoutMediumSize">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/main_page_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
-                app:itemIconTint="?attr/colorOnBackground"
-                app:menu="@menu/main_page_topbar_menu"
-                app:title="Welcome, %s!">
+                    android:id="@+id/main_page_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:elevation="0dp" app:itemIconTint="?attr/colorOnBackground"
+                    app:titleTextAppearance="@style/AptosTextAppearance"
+                    app:menu="@menu/main_page_topbar_menu"
+                    app:title="Welcome, %s!">
 
             </com.google.android.material.appbar.MaterialToolbar>
 
@@ -32,20 +32,29 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <TextView
+            android:text="You have %i events today"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/aptos"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:id="@+id/textView5" app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            tools:layout_editor_absoluteY="112dp"
+            android:layout_height="350dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBarLayout2">
+            app:layout_constraintTop_toBottomOf="@+id/textView5">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listJoinedEvents"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"/>
 
 
@@ -60,5 +69,11 @@
             app:icon="@drawable/add_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+            android:text="Your upcoming events"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" android:id="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/swipeRefreshLayout"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
