@@ -20,6 +20,12 @@ import ca.cmput301t05.placeholder.qrcode.QRCodeType;
 import ca.cmput301t05.placeholder.ui.events.checkin.SuccessfulCheckinActivity;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
  * QRcodeScanner is an activity for scanning QR codes using the device's camera. It leverages the CodeScanner library
@@ -116,6 +122,19 @@ public class QRCodeScannerActivity extends AppCompatActivity {
 
         Intent intent;
         if (type == QRCodeType.CHECK_IN) {
+            //Add the user to the event cloud base messaging service, Events are stored according to their ID string
+            FirebaseMessaging.getInstance().subscribeToTopic(event.getEventID().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (!task.isSuccessful()){
+                        Log.d("Push_notifications", "Subscribing to topic fail");
+                        return;
+                    }
+
+                    Log.d("Push_notifications", "Successfully added to topic");
+
+                }
+            });
             Intent data = new Intent();
             data.putExtra(QR_SCANNER_ID_KEY, QRSCANNER_ACTIVITY_CHECKIN);
             setResult(RESULT_OK, data);

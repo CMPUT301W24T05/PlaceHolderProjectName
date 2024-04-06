@@ -20,4 +20,6 @@ Donec maximus lectus aliquet sapien aliquet rutrum. Fusce vulputate, odio at int
     <string name="navigation_drawer_close">Close navigation drawer\n</string>
     <string name="attendee_name">Name</string>
     <string name="back_button">back button</string>
+    <string name="channel_name">default_channel</string>
+    <string name="channel_description">the default channel for all notifications</string>
 </resources>

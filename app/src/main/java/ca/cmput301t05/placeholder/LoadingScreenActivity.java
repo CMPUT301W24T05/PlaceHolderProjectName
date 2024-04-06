@@ -12,6 +12,8 @@ import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.utils.datafetchers.DataFetchCallback;
 import ca.cmput301t05.placeholder.utils.datafetchers.EventFetcher;
 import ca.cmput301t05.placeholder.utils.datafetchers.ProfileFetcher;
+import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
+import ca.cmput301t05.placeholder.utils.holdNotiEvent;
 
 /**
  * LoadingScreenActivity is an activity displayed during the startup of the application. It is responsible for
@@ -100,4 +102,26 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
         // Events fetched unsuccessfully, it's *probably* fine lol. Navigate to MainActivity
         startMainActivity();
     }
+
+    private void fetchNotifications(Profile profile) {
+
+
+        app.getNotificationTable().fetchMultipleDocuments(profile.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+            @Override
+            public void onSuccess(ArrayList<Notification> document) {
+                app.getUserNotifications().addAll(document);
+
+                //this is for loading notifications easily for user notifications
+                app.setNotificationEventHolder(holdNotiEvent.hashQuickList(document, app.getJoinedEvents()));
+
+                startMainActivity();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+    }
+
 }
