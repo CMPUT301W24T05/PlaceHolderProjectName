@@ -37,7 +37,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
     PlaceholderApp app;
     ArrayList<Notification> notifications;
-    ArrayList<Milestone> milestones = app.getUserMilestones();
+    ArrayList<Milestone> milestones;
     int numAttendees;
     int capacity;
     int numRegistered;
@@ -57,6 +57,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
         setContentView(R.layout.loading_screen);
 
         app = (PlaceholderApp) getApplicationContext();
+        milestones = app.getUserMilestones();
 
         fetchProfileAndContinue();
     }
