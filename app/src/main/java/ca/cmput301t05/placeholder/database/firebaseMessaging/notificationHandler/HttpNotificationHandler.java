@@ -93,7 +93,7 @@ public class HttpNotificationHandler {
 
 
         sendToUserNotification userNotification = new sendToUserNotification(notification, token);
-        String newJson = gson.toJson(userNotification, sendToUserNotification.class);
+        String newJson = gson.toJson(userNotification);
 
 
         OkHttpClient client = new OkHttpClient();
@@ -115,7 +115,7 @@ public class HttpNotificationHandler {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 //potentially add some error stuff here
-                
+
             }
         });
 

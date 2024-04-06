@@ -62,17 +62,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
         setupBottomNavigationView();
         setButtonActions();
 
-        UUID test_server = UUID.randomUUID();
-
-        //Testing notifications
-        Notification testHttp = new Notification("Test http message", UUID.randomUUID(), test_server);
-        testHttp.setPush(true);
-
-
-
-        HttpNotificationHandler.sendNotificationToUser(testHttp, "dTKGqwV9TMSyGeS3XWgPhl");
-
-
+        
 
         Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
         Log.i("MainActivityJoinedEvents", "Number of joined events: " + app.getJoinedEvents().size());
