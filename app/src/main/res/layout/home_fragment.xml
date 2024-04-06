@@ -70,6 +70,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- "Scan An Event" Button -->
+            <Button
+                android:id="@+id/btnJoinEvent"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="20dp"
+                android:text="Scan An Event" />
+
             <!-- List of Joined Events -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listJoinedEvents"

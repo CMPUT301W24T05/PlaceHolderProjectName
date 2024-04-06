@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.ui.mainscreen;
+package ca.cmput301t05.placeholder.ui;
 
 import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
 
@@ -26,16 +26,17 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class HomeFragment extends Fragment implements EventAdapter.OnItemClickListener {
 
     private Button guideToEvent;
     private ImageButton profileButton;
     private ImageButton notificationButton;
+    private Button startScannerButton;
+
     private RecyclerView joinedEventsList;
     private EventAdapter joinedEventsAdapter;
     private RecyclerView organizedEventsList;
@@ -54,6 +55,7 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         // Initialize your views here from the view instead of directly
         profileButton = view.findViewById(R.id.btnProfile);
         notificationButton = view.findViewById(R.id.btnNotifications);
+        startScannerButton = view.findViewById(R.id.btnJoinEvent);
         guideToEvent = view.findViewById(R.id.btnCreateEvent);
         appNameView = view.findViewById(R.id.main_admin_page_AdminTxt);
 
@@ -86,15 +88,13 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
     public void onResume() {
         super.onResume();
         setProfileIcon();
-        joinedEventsAdapter.notifyDataSetChanged();
-        organizedEventsAdapter.notifyDataSetChanged();
     }
 
     // Adapt the existing methods from MainActivity to work in the context of a Fragment
     // Remember to adjust context and startActivity calls
 
     private void setProfileIcon() {
-        if (app.getUserProfile().hasProfileBitmap()) {
+        if (app.getUserProfile().hasProfileBitmap()){
             profileButton.setImageBitmap(getCircularBitmap(app.getUserProfile().getProfilePictureBitmap()));
         } else {
             app.getProfileImageHandler().getProfilePicture(app.getUserProfile(), getActivity(), new BaseImageHandler.ImageCallback() {
@@ -109,8 +109,7 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
                     profileButton.setImageBitmap(getCircularBitmap(app.getUserProfile().getProfilePictureBitmap()));
                 }
             });
-        }
-    }
+        }    }
 
     private void setButtonActions(View fragmentView) {
         // Your existing logic for setting button actions
@@ -118,6 +117,21 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         profileButton.setOnClickListener(v -> {
             // Start ProfileEditActivity
             Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
+            startActivity(intent);
+        });
+
+//        appNameView = fragmentView.findViewById(R.id.main_app_name);
+//        appNameView.setOnClickListener(v -> {
+//            // Restart MainActivity
+//            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+//            startActivity(intent);
+//            finish();
+//        });
+
+        startScannerButton = fragmentView.findViewById(R.id.btnJoinEvent);
+        startScannerButton.setOnClickListener(view -> {
+            // Start QRCodeScannerActivity
+            Intent intent = new Intent(getActivity(), QRCodeScannerActivity.class);
             startActivity(intent);
         });
 
@@ -139,14 +153,15 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
 
     @Override
     public void onItemClick(Event event, EventAdapter.adapterType type) {
-        if (type == EventAdapter.adapterType.HOSTED) {
+        if (type == EventAdapter.adapterType.HOSTED){
             app.setCachedEvent(event);
             Intent i = new Intent(getActivity(), EventMenuActivity.class);
             startActivity(i);
         } else if (type == EventAdapter.adapterType.ATTENDING) {
             app.setCachedEvent(event);
-            ViewEventDetailsFragment eventDetailsFragment = new ViewEventDetailsFragment();
-            eventDetailsFragment.show(getActivity().getSupportFragmentManager(), eventDetailsFragment.getTag());
+            //TODO send to the event info page for attendees
+            Intent i = new Intent(getActivity(), ViewEventDetailsActivity.class);
+            startActivity(i);
         }
     }
 }

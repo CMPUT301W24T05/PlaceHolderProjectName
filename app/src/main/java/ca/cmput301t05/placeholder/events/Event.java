@@ -117,6 +117,7 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("attendees", attendees);
         document.put("eventLocation", eventLocation);
         document.put("eventCreator", eventCreator.toString());
+        document.put("eventLocation", eventLocation.toString());
         document.put("notifications", this.notifications);
         document.put("registeredUsers", this.registeredUsers);
         return document;
@@ -200,7 +201,7 @@ public class Event extends DocumentSerializable implements Serializable {
             attendeeInfo.put("longitude", longitude);
             attendeeInfo.put("latitude", latitude);
 
-            attendees.replace(profile.getProfileID().toString(), attendeeInfo);
+            attendees.put(profile.getProfileID().toString(), attendeeInfo);
 
         } else {
             // first time checking in
@@ -249,26 +250,19 @@ public class Event extends DocumentSerializable implements Serializable {
      *
      * @return boolean (true if succesful sign up, false if the user have already signed up
      */
-    public void userSignup(Profile user){
-        this.registeredUsers.add(user.getProfileID().toString());
-        this.registeredUsersNum += 1;
-    }
-
-    public boolean userHasSignedUp(Profile user){
-        return this.registeredUsers.contains(user.getProfileID().toString());
-    }
-
-    public void userUnsignup(Profile user){
-        this.registeredUsers.remove(user.getProfileID().toString());
-        this.registeredUsersNum -= 1;
+    public boolean userSignup(Profile user){
+        if (!this.registeredUsers.contains(user.getProfileID().toString())){
+            this.registeredUsers.add(user.getProfileID().toString());
+            this.registeredUsersNum += 1;
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public HashMap<String, HashMap<String, Double>> getMap(){ // Need to access check in count for each attendee
         return this.attendees;
-    }
-
-    public int getNumAttendees(){
-        return new ArrayList<>(attendees.keySet()).size();
     }
 
     //getters and setters
