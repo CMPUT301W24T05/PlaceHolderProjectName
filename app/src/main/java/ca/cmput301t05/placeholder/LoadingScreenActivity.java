@@ -8,11 +8,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
@@ -189,8 +185,6 @@ public class LoadingScreenActivity extends AppCompatActivity {
     }
 
     private void fetchNotifications(Profile profile) {
-
-
         app.getNotificationTable().fetchMultipleDocuments(profile.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
             @Override
             public void onSuccess(ArrayList<Notification> document) {
@@ -220,29 +214,16 @@ public class LoadingScreenActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Sets the milestones for all the events in the application.
+     */
     private void setMilestones() {
-        Profile profile = app.getUserProfile();
+        ArrayList<Event> allEvents = new ArrayList<>(app.getHostedEvents().values());
+        allEvents.addAll(app.getJoinedEvents().values());
+        allEvents.addAll(app.getInterestedEvents().values());
 
-        List<String> allEvents = profile.getHostedEvents();
-        List<String> joined = profile.getJoinedEvents();
-        List<String> interested = profile.getInterestedEvents();
-        allEvents.addAll(joined);
-        allEvents.addAll(interested);
-
-        for (String event : allEvents) {
-            app.getEventTable().fetchDocument(event.trim(), new Table.DocumentCallback<Event>() {
-                @Override
-                public void onSuccess(Event document) {
-                    checkMilestones(document);
-
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    //TODO handle failure
-                }
-            });
-
+        for (Event e : allEvents) {
+            checkMilestones(e);
         }
     }
 
@@ -306,12 +287,8 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
     public void addMilestone(Milestone milestone) {
         //push to notification database
-
-
         Profile profile = app.getUserProfile();
-
         String token = profile.getMessagingToken();
-
         HttpNotificationHandler.sendNotificationToUser(milestone, token);
 
         //MIGHT BE BAD MAY NEED TO ADD A CALLBACK BUT SHOULD BE FINE
