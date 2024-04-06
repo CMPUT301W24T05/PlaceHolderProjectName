@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -168,7 +169,9 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         app.getProfileTable().updateDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile document) {
+                Log.e("amirza2","Will call navigate to eventDetails");
                 navigateToEventDetails();
+                finish();
             }
 
             @Override

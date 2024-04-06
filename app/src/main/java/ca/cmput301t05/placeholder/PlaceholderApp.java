@@ -19,6 +19,7 @@ import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.utils.holdNotiEvent;
 import ca.cmput301t05.placeholder.utils.datafetchers.EventFetcher;
 import ca.cmput301t05.placeholder.utils.datafetchers.ProfileFetcher;
 
@@ -55,6 +56,8 @@ public class PlaceholderApp extends Application implements Serializable {
 
     private LocationManager locationManager;
 
+    private ArrayList<holdNotiEvent> notificationEventHolder;
+
     /**
      * Called when the application is starting, before any activity, service, or receiver objects (excluding content providers) have been created.
      * Initializes the tables and managers used throughout the application.
@@ -80,6 +83,7 @@ public class PlaceholderApp extends Application implements Serializable {
         interestedEvents = new HashMap<>();
         userNotifications = new ArrayList<>();
         locationManager = new LocationManager(this);
+        notificationEventHolder = new ArrayList<>();
     }
 
     /**
@@ -204,5 +208,13 @@ public class PlaceholderApp extends Application implements Serializable {
 
     public EventFetcher getEventFetcher() {
         return eventFetcher;
+    }
+
+    public ArrayList<holdNotiEvent> getNotificationEventHolder() {
+        return notificationEventHolder;
+    }
+
+    public void setNotificationEventHolder(ArrayList<holdNotiEvent> notificationEventHolder) {
+        this.notificationEventHolder = notificationEventHolder;
     }
 }

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        app:cardBackgroundColor="@color/md_theme_onTertiary"
+        app:cardBackgroundColor="@color/md_theme_inversePrimary_highContrast"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
@@ -31,6 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/coustard"
                     android:paddingStart="6dp"
                     android:text="Event Time"
                     android:textSize="20sp"
@@ -61,6 +62,7 @@
                     android:id="@+id/notification_card_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/coustard"
                     android:paddingLeft="6dp"
                     android:paddingRight="6dp"
                     android:text="" />
