@@ -14,15 +14,16 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"/>
 
-    <!-- Add TextView for displaying event name -->
+    <!-- TextView to display the event name -->
     <TextView
-        android:id="@+id/event_name_textView"
+        android:id="@+id/event_name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Event Name"
+        android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/back_button"
-        android:layout_marginStart="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
