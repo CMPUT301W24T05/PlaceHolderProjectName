@@ -12,6 +12,8 @@ import androidx.core.app.NotificationManagerCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +35,18 @@ public class FirebaseMessaging extends FirebaseMessagingService {
 
         Map<String, String> messageData = remoteMessage.getData();
 
-        Notification n = new Notification(messageData);
+        Log.d("Remote_message",remoteMessage.getData().toString());
+
+        Notification n = null;
+        try {
+            n = new Notification(messageData);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        Log.d("noti", n.getTimeCreated().toString());
+
+
 
         //TODO handle the new notifications by adding it to profile's database and then sending push notification (If we need to)
 
@@ -42,8 +55,8 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         app.getNotificationTable().pushDocument(n, n.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
             @Override
             public void onSuccess(Notification document) {
-                ArrayList<String> notifications = app.getUserProfile().getNotifications();
-                notifications.add(n.getNotificationID().toString());
+                app.getUserProfile().getNotifications().add(document.getNotificationID().toString());
+                app.getUserNotifications().add(document);
 
                 //now upload profile back
 

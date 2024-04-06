@@ -1,13 +1,20 @@
 package ca.cmput301t05.placeholder.notifications;
 
 
+import android.util.Log;
+
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.type.DateTime;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -73,7 +80,7 @@ public class Notification extends DocumentSerializable {
         fromDocument(snapshot);
     }
 
-    public Notification(Map<String,String> fromFCM){
+    public Notification(Map<String,String> fromFCM) throws JSONException {
 
         this.notificationID = UUID.fromString(fromFCM.get("notification_uuid"));
         this.message = fromFCM.get("message");
@@ -83,16 +90,26 @@ public class Notification extends DocumentSerializable {
         this.isPinned = StringManip.getTrueOrFalse(fromFCM.get("is_pinned"));
         this.isRead = StringManip.getTrueOrFalse(fromFCM.get("is_read"));
 
-        Gson gson = new Gson();
 
-        DateTime dateTime = gson.fromJson(fromFCM.get("time_created"), DateTime.class);
+        String date = fromFCM.get("time_created");
+
+        JSONObject jsonObject = new JSONObject(date);
+
+        int month = jsonObject.getInt("month");
+        int year = jsonObject.getInt("year");
+        int dayOfMonth = jsonObject.getInt("dayOfMonth");
+        int hourOfDay = jsonObject.getInt("hourOfDay");
+        int minute = jsonObject.getInt("minute");
+        int second = jsonObject.getInt("second");
+
         this.timeCreated = Calendar.getInstance();
 
-        this.timeCreated.set(Calendar.YEAR, dateTime.getYear() - 1);
-        this.timeCreated.set(Calendar.MONTH, dateTime.getMonth() - 1);
-        this.timeCreated.set(Calendar.DAY_OF_MONTH, dateTime.getDay());
-        this.timeCreated.set(Calendar.HOUR_OF_DAY, dateTime.getHours());
-        this.timeCreated.set(Calendar.SECOND, dateTime.getSeconds());
+        this.timeCreated.set(Calendar.MONTH, month);
+        this.timeCreated.set(Calendar.YEAR, year);
+        this.timeCreated.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        this.timeCreated.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        this.timeCreated.set(Calendar.MINUTE, minute);
+        this.timeCreated.set(Calendar.SECOND, second);
 
     }
 
