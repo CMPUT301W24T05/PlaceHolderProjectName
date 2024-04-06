@@ -107,6 +107,9 @@ public class InitialSetupActivity extends AppCompatActivity {
 
                         userProfile.setProfilePictureToDefault();
 
+                        //for all default notifications
+                        createNotificationChannel();
+
                         // Transition to MainActivity
                         Intent intent = new Intent(InitialSetupActivity.this, MainActivity.class);
                         startActivity(intent);
