@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Button to go back -->
     <Button
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
@@ -14,6 +15,19 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"/>
 
+    <!-- TextView to display the title -->
+    <TextView
+        android:id="@+id/title_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="REUSE CHECKIN QR CODE"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/back_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
     <!-- TextView to display the event name -->
     <TextView
         android:id="@+id/event_name_text_view"
@@ -21,7 +35,7 @@
         android:layout_height="wrap_content"
         android:text="Event Name"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@id/back_button"
+        app:layout_constraintTop_toBottomOf="@id/title_text_view"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"/>
