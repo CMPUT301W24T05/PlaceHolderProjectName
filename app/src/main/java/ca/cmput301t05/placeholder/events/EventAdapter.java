@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.events;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -36,7 +37,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         void onItemClick(Event event, adapterType type);
     }
 
-    private adapterType type;
+    private final adapterType type;
+    private final boolean horizontalLayout;
     private OnItemClickListener listener;
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm a", Locale.CANADA);
@@ -46,7 +48,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         this.eventList = event;
         this.context = context;
         this.type = adapterType;
+        this.horizontalLayout = false;
+    }
 
+    public EventAdapter(Context context, ArrayList<Event> event, adapterType adapterType, boolean isHorizontalList) {
+        this.eventList = event;
+        this.context = context;
+        this.type = adapterType;
+        this.horizontalLayout = isHorizontalList;
     }
 
     public void setListener(OnItemClickListener listener) {
@@ -57,7 +66,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
     @Override
     public EventCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // depends on the eventType, have different cardView
-        View v = LayoutInflater.from(context).inflate(R.layout.event_card_hosted, parent, false);
+        View v;
+        if(horizontalLayout){
+            v = LayoutInflater.from(context).inflate(R.layout.event_card_horizontal, parent, false);
+        } else {
+            v = LayoutInflater.from(context).inflate(R.layout.event_card_hosted, parent, false);
+        }
+
         if (this.type == adapterType.HOSTED) {
             return new HostedEventCardViewHolder(v);
         } else {
@@ -80,9 +95,50 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         else return eventList.size();
     }
 
-    public void setEvents(ArrayList<Event> events) {
+    @SuppressLint("NotifyDataSetChanged")
+    public void setEvents(ArrayList<Event> events){
         this.eventList = events;
         notifyDataSetChanged();
+    }
+
+    public void addOrUpdateEvents(ArrayList<Event> newEvents) {
+        for (Event newEvent: newEvents) {
+            int existIndex = this.eventList.indexOf(newEvent);
+            if (existIndex != -1) {
+                // event already exists, update it
+                this.eventList.set(existIndex, newEvent);
+                notifyItemChanged(existIndex);
+            } else {
+                // event does not exist, add it
+                this.eventList.add(newEvent);
+                notifyItemInserted(this.eventList.size() - 1);
+            }
+        }
+    }
+
+    public void addEvents(ArrayList<Event> newEvents) {
+        this.eventList.addAll(newEvents);
+        notifyItemRangeInserted(this.eventList.size() - newEvents.size(), newEvents.size());
+    }
+
+    public void removeEvent(Event eventToRemove) {
+        int removeIndex = this.eventList.indexOf(eventToRemove);
+        if (removeIndex != -1) {
+            this.eventList.remove(removeIndex);
+            notifyItemRemoved(removeIndex);
+        }
+    }
+
+    public void removeEvents(ArrayList<Event> eventsToRemove) {
+        for (Event event : eventsToRemove) {
+            removeEvent(event);
+        }
+    }
+
+    public void deleteAllEvents() {
+        int sizeOfList = this.eventList.size();
+        this.eventList.clear();
+        notifyItemRangeRemoved(0, sizeOfList);
     }
 
     public class EventCardViewHolder extends RecyclerView.ViewHolder {

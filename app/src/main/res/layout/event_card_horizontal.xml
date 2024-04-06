@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   xmlns:tools="http://schemas.android.com/tools"
+                                   android:id="@+id/event_card"
+                                   android:layout_width="wrap_content"
+                                   android:layout_height="match_parent"
+                                   app:cardCornerRadius="15dp"
+                                   app:cardBackgroundColor="@android:color/transparent"
+                                   app:cardElevation="0dp"
+                                   android:layout_margin="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" android:id="@+id/linearLayout5">
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/event_card_poster"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                style="@style/AppTheme"
+                app:shapeAppearanceOverlay='@style/RoundedImageView'
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintDimensionRatio="1:1"/>
+
+
+        <TextView
+                android:id="@+id/event_card_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Event Name"
+                android:fontFamily="@font/aptos"
+                android:textSize="20sp"
+                android:textStyle="bold" android:paddingTop="2dp"
+                app:layout_constraintTop_toBottomOf="@+id/event_card_poster"
+                app:layout_constraintStart_toStartOf="@+id/event_card_poster"/>
+        <ImageView
+                android:id="@+id/event_card_interested_icon"
+                android:layout_height="24dp"
+                android:layout_width="24dp"
+                android:src="@drawable/liked_heart"
+                android:scaleX="0.85"
+                android:scaleY="0.85"
+                app:layout_constraintEnd_toStartOf="@+id/event_card_interested"
+                app:layout_constraintTop_toTopOf="@+id/event_card_interested"
+                app:tint="@color/md_theme_onBackground"/>
+
+
+        <TextView
+                android:id="@+id/event_card_interested"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/aptos"
+                android:textSize="15sp"
+                android:text="23"
+                app:layout_constraintTop_toBottomOf="@+id/event_card_poster"
+                app:layout_constraintEnd_toEndOf="@+id/event_card_poster" android:includeFontPadding="true"
+                android:paddingTop="2dp" android:layout_marginTop="2dp"/>
+
+        <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="2dp"
+                android:scaleType="center"
+                app:tint="@color/md_theme_onBackground"
+                android:id="@+id/event_card_location_icon"
+                android:scaleX="0.75"
+                android:scaleY="0.75"
+                android:src="@drawable/baseline_location_pin_24"
+                android:adjustViewBounds="true" app:layout_constraintTop_toBottomOf="@+id/event_card_title"
+                app:layout_constraintStart_toStartOf="@+id/event_card_title"/>
+
+        <TextView
+                android:id="@+id/event_card_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/aptos"
+                android:text="Edmonton, AB"
+                android:textColor="#ABA4A4"
+                android:textSize="15sp"
+                app:layout_constraintStart_toEndOf="@+id/event_card_location_icon"
+                app:layout_constraintTop_toTopOf="@+id/event_card_location_icon" android:layout_marginTop="2dp"/>
+
+
+        <ImageView
+                android:id="@+id/event_card_attending_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/baseline_attendee_black"
+                app:tint="@color/md_theme_onBackground"
+                app:layout_constraintEnd_toStartOf="@+id/event_card_attending"
+                app:layout_constraintTop_toTopOf="@+id/event_card_attending"/>
+        <TextView
+                android:id="@+id/event_card_attending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/aptos"
+                android:text="6/20"
+                android:textSize="15sp"
+                app:layout_constraintTop_toBottomOf="@+id/event_card_interested_icon"
+                app:layout_constraintEnd_toEndOf="@+id/event_card_interested" android:textAllCaps="false"
+                android:includeFontPadding="true" android:paddingTop="3dp"/>
+
+        <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="2dp"
+                android:scaleType="fitCenter"
+                app:tint="@color/md_theme_onBackground"
+                android:id="@+id/event_card_date_icon"
+                app:layout_constraintTop_toBottomOf="@+id/event_card_location_icon"
+                app:layout_constraintStart_toStartOf="@+id/event_card_location_icon"
+                android:src="@drawable/event_date_icon"
+                android:scaleX="0.75" android:scaleY="0.75"/>
+        <TextView
+                android:id="@+id/event_card_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/aptos"
+                android:text="March 8, 2024 at 4:00 p.m."
+                android:layout_marginTop="2dp"
+                android:textColor="#ABA4A4"
+                android:textSize="15sp"
+                app:layout_constraintStart_toEndOf="@+id/event_card_date_icon"
+                app:layout_constraintTop_toBottomOf="@+id/event_card_location_icon"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
