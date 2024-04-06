@@ -98,6 +98,24 @@ public class Event extends DocumentSerializable implements Serializable {
         this.registeredUsersNum = new Long(0);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+
+        if (!eventCreator.equals(event.eventCreator)) return false;
+        return eventID.equals(event.eventID);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = eventCreator.hashCode();
+        result = 31 * result + eventID.hashCode();
+        return result;
+    }
+
     /**
      * Converts this event object into a Map that can be used for document storage in Firebase Firestore.
      * @return A Map representing the event's data.

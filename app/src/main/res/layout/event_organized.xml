@@ -13,16 +13,12 @@
         android:fontFamily="@font/coustard"
         android:padding="16dp"
         android:text="Organized Events"
-
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- "Create New Event" Button -->
-
     <!-- List of Created Events -->
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
@@ -32,16 +28,14 @@
         app:layout_constraintVertical_bias="0.0"
         tools:layout_editor_absoluteX="0dp">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listCreatedEvents"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/swipeRefreshLayout"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="0dp" />
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listCreatedEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/swipeRefreshLayout"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout_editor_absoluteX="0dp"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -54,6 +48,5 @@
         app:icon="@drawable/add_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-    <!-- Bottom Navigation View -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
