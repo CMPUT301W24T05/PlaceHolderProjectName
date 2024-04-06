@@ -18,92 +18,83 @@
         app:popupTheme="@style/AppTheme"
 
         />
-
-    <View
-        android:id="@+id/view_event_menu"
-        android:layout_below="@+id/toolbarEventMenu"
+    <FrameLayout
+        android:layout_below="@id/toolbarEventMenu"
         android:layout_width="match_parent"
         android:layout_height="230dp"
-        android:background="@drawable/edit_event_menu_background" >
+        android:id="@+id/frame_layout">
+
+        <!-- ImageView -->
+        <ImageView
+            android:id="@+id/imageView_event_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:scaleType="centerCrop" />
+
+        <!-- View with gradient -->
+        <View
+            android:id="@+id/view_event_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/edit_event_menu_background" />
+
+    </FrameLayout>
 
 
-    </View>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbarEventMenu"
-        android:orientation="horizontal">
 
         <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbarEventMenu"
+            >
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progress_bar_event"
-                android:layout_width="0dp"
-
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_centerInParent="true"
                 android:layout_weight="1"
+
                 android:indeterminateOnly="false"
-                android:padding="10dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="8dp"
                 app:indicatorColor="#21005D"
                 app:indicatorInset="8dp"
-
-                app:indicatorSize="180dp"
+                app:indicatorSize="190dp"
                 app:trackColor="#EADDFF"
                 app:trackCornerRadius="10dp"
-                app:trackThickness="25dp" />
+                app:trackThickness="22dp" />
 
             <TextView
                 android:id="@+id/attendanceFraction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:layout_weight="1"
                 android:fontFamily="@font/fira_mono"
                 android:gravity="center_horizontal"
-                android:paddingLeft="78dp"
-                android:paddingTop="90dp"
-                android:text="10/120"
+                android:clickable="true"
+                android:text="0/0"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textViewNumOfAttendees"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/fira_mono"
-                android:paddingLeft="215dp"
-                android:paddingTop="70dp"
-                android:text="You have 10 attendees"
-                android:textColor="#FFFFFF" />
 
-            <Button
-                android:id="@+id/editEventViewAttendance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textViewNumOfAttendees"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="23dp"
-                android:layout_marginEnd="22dp"
-                android:text="View Attendance" />
+
+
         </RelativeLayout>
 
 
-    </LinearLayout>
 
 
-    
+
+
     <GridLayout
         android:id="@+id/eventMenuGridLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/view_event_menu"
+        android:layout_below="@+id/frame_layout"
         android:columnCount="2"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
@@ -113,8 +104,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/eventMCard1"
-            android:layout_width="150dp"
-            android:layout_height ="100dp"
+            android:layout_width="0dp"
+            android:layout_height ="0dp"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
             app:cardElevation="12dp"
@@ -125,7 +116,7 @@
             android:layout_rowWeight="1"
             android:layout_row="0"
             android:layout_column="0">
-            
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -134,13 +125,13 @@
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/home_icon"
+                    android:src="@drawable/black_heart"
                     android:layout_gravity="center_horizontal"/>
-                
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text ="Sign-ins"
+                    android:text ="View Sign Ups"
                     android:layout_gravity="center_horizontal"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
@@ -150,8 +141,9 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/eventMCard2"
-            android:layout_width="150dp"
-            android:layout_height ="100dp"
+            android:layout_width="0dp"
+
+            android:layout_height ="0dp"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
             app:cardElevation="12dp"
@@ -186,8 +178,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/eventMCard3"
-            android:layout_width="150dp"
-            android:layout_height ="100dp"
+            android:layout_width="0dp"
+            android:layout_height ="0dp"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
             app:cardElevation="12dp"
@@ -223,8 +215,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/eventMCard4"
-            android:layout_width="150dp"
-            android:layout_height ="100dp"
+            android:layout_width="0dp"
+            android:layout_height ="0dp"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
             app:cardElevation="12dp"
@@ -243,7 +235,7 @@
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/baseline_attendance_24"
+                    android:src="@drawable/baseline_announcement_24"
                     android:layout_gravity="center_horizontal"/>
 
                 <TextView
@@ -260,8 +252,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/eventMCard5"
-            android:layout_width="150dp"
-            android:layout_height ="100dp"
+            android:layout_width="0dp"
+            android:layout_height ="0dp"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
             app:cardElevation="12dp"
@@ -296,8 +288,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/eventMCard6"
-            android:layout_width="150dp"
-            android:layout_height ="100dp"
+            android:layout_width="0dp"
+            android:layout_height ="0dp"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
             app:cardElevation="12dp"

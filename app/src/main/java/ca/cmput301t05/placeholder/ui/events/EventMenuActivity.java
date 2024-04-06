@@ -3,13 +3,16 @@ package ca.cmput301t05.placeholder.ui.events;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +48,7 @@ import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewAttendeeCheckinActivity;
 import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewSignUpsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.EventNotificationPageActivity;
+import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
 
 
 public class EventMenuActivity extends AppCompatActivity  {
@@ -102,31 +106,24 @@ public class EventMenuActivity extends AppCompatActivity  {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish(); // Handle back button click event
+//                Intent i = new Intent(EventMenuActivity.this, MainActivity.class);
+//                startActivity(i);
+
+                finish();
             }
         });
-
-        viewAttendanceButton = findViewById(R.id.editEventViewAttendance);
-        viewAttendanceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EventMenuActivity.this, ViewAttendeeCheckinActivity.class);
-                startActivity(intent);
-            }
-        });
-
 
         circularProgressBar = findViewById(R.id.progress_bar_event);
-//        circularProgressBar.setIndicatorInset(40);
-        Log.e("amirza2", String.valueOf(circularProgressBar.getIndicatorInset()));
-
         eventTable.fetchDocument(String.valueOf(curEvent.getEventID()),  new Table.DocumentCallback<Event>() {
                     @Override
                     public void onSuccess(Event document) {
+
                             totalProgress = document.getMaxAttendees();
                             currentProgress = document.getNumAttendees();
+                            Bitmap posterPic = document.getEventPosterBitmap();
                             setUpButtons();
                             setUpText();
+                            setUpPoster(document);
                             circularProgressBar = findViewById(R.id.progress_bar_event);
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
@@ -135,40 +132,35 @@ public class EventMenuActivity extends AppCompatActivity  {
                                     animateProgress(currentProgress, totalProgress);
                                 }
                             }, 350);
-
                     }
-
 
                     @Override
                     public void onFailure(Exception e) {
+                        Log.e("amirza2", "FAILED TO GET EVENT DATA IN eventMenuActivity!");
 
                     }
 
         });
+    }
 
-//        buttonBack = findViewById(R.id.event_menu_back);
-//        fromIntent = getIntent();
+    private void setUpPoster(Event event){
+        Log.e("amirza2", "SET UP THIS METHOD");
+        eventPoster = findViewById(R.id.imageView_event_menu);
+        if (event.hasEventPosterBitmap()) {
+            eventPoster.setImageBitmap(event.getEventPosterBitmap());
+        } else {
+            app.getPosterImageHandler().getPosterPicture(event, getApplicationContext(), new BaseImageHandler.ImageCallback() {
+                @Override
+                public void onImageLoaded(Bitmap bitmap) {
+                    eventPoster.setImageBitmap(bitmap);
+                }
 
-
-
-        //SETTING UP THE POSTER PIC- may use later
-//        if (curEvent.hasEventPosterBitmap()) {
-//            eventPoster.setImageBitmap(curEvent.getEventPosterBitmap());
-//        } else {
-//            app.getPosterImageHandler().getPosterPicture(curEvent, this, new BaseImageHandler.ImageCallback() {
-//                @Override
-//                public void onImageLoaded(Bitmap bitmap) {
-//                    eventPoster.setImageBitmap(bitmap);
-//                }
-//
-//                @Override
-//                public void onError(Exception e) {
-//                    // Handle error
-//                    Log.e("EventDetailsDialogFragment", "Error loading image: " + e.getMessage());
-//                }
-//            });
-//        }
-
+                @Override
+                public void onError(Exception e) {
+                    Log.e("Hoster_Event_card View", "Error loading image: " + e.getMessage());
+                }
+            });
+        }
     }
 
     private void animateProgress(int current, int total) {
@@ -188,20 +180,39 @@ public class EventMenuActivity extends AppCompatActivity  {
         circularProgressBar.post(runnable);
     }
 
+
+
+    /**
+     * Sets up the textview to be displayed when this activity is called. Clicking on the text
+     * will direct user to new activity to view a list of their event's attendees.
+     *
+     */
+
     private void setUpText(){
-        attendeeCount = findViewById(R.id.textViewNumOfAttendees);
-        if (currentProgress != 1) {
-            attendeeCount.setText("You have " + currentProgress + " attendees");
-        }
-        else {
-            attendeeCount.setText("You have " + currentProgress + " attendee");
-        }
+
         attendeeFraction = findViewById(R.id.attendanceFraction);
         attendeeFraction.setText(currentProgress+"/"+totalProgress);
+
+        Drawable image = EventMenuActivity.this.getDrawable( R.drawable.baseline_attendance_24 );
+        int h = image.getIntrinsicHeight();
+        int w = image.getIntrinsicWidth();
+        image.setBounds( 0, 0, w, h );
+        attendeeFraction.setCompoundDrawables( image , null, null, null );
+        attendeeFraction.setCompoundDrawablePadding(5);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        attendeeFraction.setLayoutParams(params);
+
+        attendeeFraction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventMenuActivity.this, ViewAttendeeCheckinActivity.class);
+                startActivity(intent);
+            }
+        });
+        
     }
-
-
-
 
 
     private void setUpButtons(){
@@ -271,128 +282,6 @@ public class EventMenuActivity extends AppCompatActivity  {
                 startActivity(intentLoc);
             }
         });
-
-
     }
-
-//    private void setEventDetails() {
-//        //curEvent = app.getCachedEvent();
-//        eventName = findViewById(R.id.event_menu_name);
-//        textViewEventDate = findViewById(R.id.event_menu_eventDate);
-//        textViewEventLocation = findViewById(R.id.event_preview_eventlocation);
-//        textViewEventDetails = findViewById(R.id.event_preview_eventinfo);
-//        textViewEventAuthor = findViewById(R.id.event_preview_author);
-//        eventPoster = findViewById(R.id.event_menu_poster);
-//
-//        String dateTime = generateEventDateTime();
-//        eventName.setText(curEvent.getEventName());
-//        textViewEventDate.setText(dateTime);
-//        textViewEventLocation.setText(curEvent.getLocation());
-//        textViewEventDetails.setText(curEvent.getEventInfo());
-//
-//        UUID profileId = curEvent.getEventCreator();
-//        app.getProfileTable().fetchDocument(profileId.toString(), new Table.DocumentCallback<Profile>() {
-//
-//            @Override
-//            public void onSuccess(Profile document) {
-//                textViewEventAuthor.setText(document.getName());
-//            }
-//
-//            @Override
-//            public void onFailure(Exception e) {
-//            }
-//        });
-//
-//        if (curEvent.hasEventPosterBitmap()) {
-//            eventPoster.setImageBitmap(curEvent.getEventPosterBitmap());
-//        } else {
-//            // This should never be executed, since the poster has not been uploaded yet
-//            app.getPosterImageHandler().getPosterPicture(curEvent, this, new BaseImageHandler.ImageCallback() {
-//                @Override
-//                public void onImageLoaded(Bitmap bitmap) {
-//                    eventPoster.setImageBitmap(bitmap);
-//                }
-//
-//                @Override
-//                public void onError(Exception e) {
-//                    // Handle error
-//                    Log.e("PreviewEventActivity", "Error loading image: " + e.getMessage());
-//                }
-//            });
-//        }
-//    }
-
-//    private String generateEventDateTime() {
-//        if (curEvent != null) {
-//            Calendar eventCalendar = curEvent.getEventDate();
-//            int year = eventCalendar.get(Calendar.YEAR);
-//            int month = eventCalendar.get(Calendar.MONTH) + 1; //January is 0
-//            int day = eventCalendar.get(Calendar.DAY_OF_MONTH);
-//            // Or get the hour for 12-hour format
-//            int hour12 = eventCalendar.get(Calendar.HOUR);
-//            // Get AM or PM
-//            int amOrPm = eventCalendar.get(Calendar.AM_PM);
-//            String timePeriod = amOrPm == Calendar.AM ? " AM" : " PM";
-//
-//            String time = hour12 + timePeriod;
-//            String date = day + ", " + month + ", " + year;
-//            return time + " - " + date;
-//        } else {
-//            return "Event date is not available";
-//        }
-//
-//    }
-
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        app.setCachedEvent(curEvent);
-//        int itemId = item.getItemId();
-//        if (itemId == R.id.edit) {
-//            Intent intentEdit = new Intent(EventMenuActivity.this, EnterEventDetailsActivity.class);
-//            intentEdit.putExtra("edit", true);
-//            startActivity(intentEdit);
-//        } else if (itemId == R.id.accessqr) {
-//            Intent intentQR = new Intent(EventMenuActivity.this, ViewQRCodesActivity.class);
-//            startActivity(intentQR);
-//        } else if (itemId == R.id.announcements) {
-//            Intent intentAnnouncement = new Intent(EventMenuActivity.this, EventNotificationPageActivity.class);
-//            startActivity(intentAnnouncement);
-//        } else if (itemId == R.id.attendance) {
-//            Intent intentAttendance = new Intent(EventMenuActivity.this, ViewAttendeeCheckinActivity.class);
-//            startActivity(intentAttendance);
-//        }
-//        else if (itemId == R.id.registry){
-//            Intent intentAttendance = new Intent(EventMenuActivity.this,ViewSignUpsActivity.class);
-//            startActivity(intentAttendance);
-//        }
-//        else if (itemId == R.id.check_in_locations) {
-//            Intent intentLoc = new Intent(EventMenuActivity.this, MapDisplay_activity.class);
-//            startActivity(intentLoc);
-//        } else if (itemId == R.id.milestones) {
-//            Intent intentMiles = new Intent(EventMenuActivity.this, ViewMilestonesActivity.class);
-//            startActivity(intentMiles);
-//        }
-//
-//
-//
-//        // Handle more items as needed
-//        return true;
-//
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected (MenuItem item){
-//        // Pass the event to ActionBarDrawerToggle
-//        if (toggle.onOptionsItemSelected(item)) {
-//            return true;
-//        }
-//
-//        // Handle your other action bar items here if needed
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-
-
 
 }

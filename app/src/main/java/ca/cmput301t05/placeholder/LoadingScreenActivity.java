@@ -23,7 +23,9 @@ import ca.cmput301t05.placeholder.notifications.MilestoneType;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
-import ca.cmput301t05.placeholder.ui.events.ViewMilestonesActivity;
+
+import ca.cmput301t05.placeholder.utils.holdNotiEvent;
+
 
 /**
  * LoadingScreenActivity is an activity displayed during the startup of the application. It is responsible for
@@ -191,6 +193,10 @@ public class LoadingScreenActivity extends AppCompatActivity {
             @Override
             public void onSuccess(ArrayList<Notification> document) {
                 app.getUserNotifications().addAll(document);
+
+                //this is for loading notifications easily for user notifications
+                app.setNotificationEventHolder(holdNotiEvent.hashQuickList(document, app.getJoinedEvents()));
+
                 startMainActivity();
             }
 

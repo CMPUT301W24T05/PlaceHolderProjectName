@@ -8,4 +8,13 @@ public class StringManip {
         }
         return message;
     }
+
+    public static boolean getTrueOrFalse(String message){
+
+      if (message.equals("true")){
+          return true;
+      } else {
+          return false;
+      }
+    }
 }

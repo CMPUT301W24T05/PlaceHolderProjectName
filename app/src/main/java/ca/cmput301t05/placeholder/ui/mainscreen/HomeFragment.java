@@ -26,17 +26,16 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.ui.codescanner.QRCodeScannerActivity;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class HomeFragment extends Fragment implements EventAdapter.OnItemClickListener {
 
     private Button guideToEvent;
     private ImageButton profileButton;
     private ImageButton notificationButton;
-    private Button startScannerButton;
-
     private RecyclerView joinedEventsList;
     private EventAdapter joinedEventsAdapter;
     private RecyclerView organizedEventsList;
@@ -55,7 +54,6 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         // Initialize your views here from the view instead of directly
         profileButton = view.findViewById(R.id.btnProfile);
         notificationButton = view.findViewById(R.id.btnNotifications);
-        startScannerButton = view.findViewById(R.id.btnJoinEvent);
         guideToEvent = view.findViewById(R.id.btnCreateEvent);
         appNameView = view.findViewById(R.id.main_admin_page_AdminTxt);
 
@@ -88,6 +86,8 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
     public void onResume() {
         super.onResume();
         setProfileIcon();
+        joinedEventsAdapter.notifyDataSetChanged();
+        organizedEventsAdapter.notifyDataSetChanged();
     }
 
     // Adapt the existing methods from MainActivity to work in the context of a Fragment
@@ -121,13 +121,6 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
             startActivity(intent);
         });
 
-        startScannerButton = fragmentView.findViewById(R.id.btnJoinEvent);
-        startScannerButton.setOnClickListener(view -> {
-            // Start QRCodeScannerActivity
-            Intent intent = new Intent(getActivity(), QRCodeScannerActivity.class);
-            startActivity(intent);
-        });
-
         guideToEvent = fragmentView.findViewById(R.id.btnCreateEvent);
 
         guideToEvent.setOnClickListener(view -> {
@@ -152,9 +145,8 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
             startActivity(i);
         } else if (type == EventAdapter.adapterType.ATTENDING) {
             app.setCachedEvent(event);
-            //TODO send to the event info page for attendees
-            Intent i = new Intent(getActivity(), ViewEventDetailsActivity.class);
-            startActivity(i);
+            ViewEventDetailsFragment eventDetailsFragment = new ViewEventDetailsFragment();
+            eventDetailsFragment.show(getActivity().getSupportFragmentManager(), eventDetailsFragment.getTag());
         }
     }
 }

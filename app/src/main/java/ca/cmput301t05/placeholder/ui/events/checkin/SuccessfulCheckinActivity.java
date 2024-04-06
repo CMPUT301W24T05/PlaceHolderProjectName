@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,9 +23,8 @@ import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsActivity;
+import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -167,7 +167,9 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         app.getProfileTable().updateDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
             @Override
             public void onSuccess(Profile document) {
+                Log.e("amirza2","Will call navigate to eventDetails");
                 navigateToEventDetails();
+                finish();
             }
 
             @Override
@@ -191,8 +193,9 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         eventTable.pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
             @Override
             public void onSuccess(Event document) {
-                Intent intent = new Intent(SuccessfulCheckinActivity.this, ViewEventDetailsActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(SuccessfulCheckinActivity.this, ViewEventDetailsFragment.class);
+//                startActivity(intent);
+                // FIX THIS!
                 finish();
             }
 

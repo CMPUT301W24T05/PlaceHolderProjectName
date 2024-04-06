@@ -8,12 +8,18 @@
 
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"  />
+
+
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -31,7 +37,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:targetApi="31">
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="33">
 
 <!--    &lt;!&ndash; Configure Google Play services automatically download the scanner module-->
 <!--         to the device while the app is installed from the Play Store &ndash;&gt;-->
@@ -41,6 +48,14 @@
         <activity android:name=".ui.codescanner.QRCodeScannerActivity">
             <!-- Add any necessary intent filters or other configurations here -->
         </activity>
+
+        <service
+            android:name=".database.firebaseMessaging.FirebaseMessaging"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name=".LoadingScreenActivity"
@@ -53,7 +68,17 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+<!--            android:launchMode="singleTask">-->
         </activity>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/bell_notification" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/md_theme_background" />
 
         <activity android:name=".ui.events.organizer_info.ViewSignUpsActivity"/>
 
@@ -63,8 +88,6 @@
         <activity android:name=".ProfileEditActivity"/>
         <activity android:name=".ui.admin.AdminHomeActivity"/>
         <activity android:name=".ui.notifications.NotificationsFragment"/>
-        <activity android:name=".ui.events.ViewEventDetailsActivity"/>
-        <activity android:name=".ui.events.EventSignUpActivity"/>
         <activity android:name=".ui.notifications.EventNotificationPageActivity"/>
         <activity android:name=".ui.notifications.UserNotificationActivity"/>
         <activity android:name=".ui.events.ViewQRCodesActivity"/>
@@ -81,6 +104,8 @@
 
 
     </application>
+
+
 
 
 
