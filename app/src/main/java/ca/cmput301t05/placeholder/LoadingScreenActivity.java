@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
@@ -304,33 +305,15 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
     public void addMilestone(Milestone milestone) {
         //push to notification database
-        app.getNotificationTable().pushDocument(milestone, milestone.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
-            @Override
-            public void onSuccess(Notification document) {
-                notifications.add(milestone);
-                milestones.add(milestone);
-
-                Profile profile = app.getUserProfile();
-                profile.addNotification(milestone.getNotificationID().toString());
-
-                app.getProfileTable().pushDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
-                    @Override
-                    public void onSuccess(Profile document) {
-
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-            }
-        });
 
 
+        Profile profile = app.getUserProfile();
+
+        String token = profile.getMessagingToken();
+
+        HttpNotificationHandler.sendNotificationToUser(milestone, token);
+
+        //MIGHT BE BAD MAY NEED TO ADD A CALLBACK BUT SHOULD BE FINE
+        app.getUserMilestones().add(milestone);
     }
 }
