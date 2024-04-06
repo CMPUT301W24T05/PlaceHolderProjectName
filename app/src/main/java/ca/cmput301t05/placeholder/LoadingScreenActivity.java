@@ -255,7 +255,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
         now = Calendar.getInstance();
         cal = curEvent.getEventDate();
 
-        if ((double) numAttendees / capacity >= 3 && !containsMilestoneType(MilestoneType.HALFWAY)) {
+        if ((double) numAttendees / capacity >= 0.5 && !containsMilestoneType(MilestoneType.HALFWAY)) {
             Milestone mHalfway = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY, curEvent.getEventName());
             addMilestone(mHalfway);
         }
