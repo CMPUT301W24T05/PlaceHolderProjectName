@@ -1,5 +1,5 @@
 package ca.cmput301t05.placeholder.ui.events;
-import androidx.appcompat.widget.Toolbar;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,9 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import me.relex.circleindicator.CircleIndicator3;
  */
 public class ViewQRCodesActivity extends AppCompatActivity {
 
-    Button back, shareqr;
+    Button back, shareqr, reuseQrButton;
 
     ImageView display;
 
@@ -71,6 +71,7 @@ public class ViewQRCodesActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarViewQRcode);
 
         shareButton = findViewById(R.id.share_qr);
+        reuseQrButton = findViewById(R.id.reuse_qr);
         title = new ArrayList<>();
         qrImage = new ArrayList<>();
         viewPager = findViewById(R.id.swipe_fragment);
@@ -104,10 +105,18 @@ public class ViewQRCodesActivity extends AppCompatActivity {
             }
         });
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() { // This is the the button in the tool bar
+        // Listener for the Reuse QR button
+        reuseQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(ViewQRCodesActivity.this, ReuseQRActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(ViewQRCodesActivity.this, EventMenuActivity.class);
                 startActivity(intent);
                 finish();
