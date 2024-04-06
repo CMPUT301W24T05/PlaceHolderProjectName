@@ -37,7 +37,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
     PlaceholderApp app;
     ArrayList<Notification> notifications;
-    ArrayList<Milestone> milestones;
+    ArrayList<Milestone> milestones = app.getUserMilestones();
     int numAttendees;
     int capacity;
     int numRegistered;
@@ -247,7 +247,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
     private void checkMilestones(Event curEvent) {
         notifications = app.getUserNotifications();
-        milestones = getMilestones(notifications);
+
         numAttendees = curEvent.getAttendees().size();
         capacity = curEvent.getMaxAttendees();
         numRegistered = curEvent.getRegisteredUsers().size();
