@@ -97,7 +97,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             } else {
                 Log.d("PhotoPicker", "Selected URI: " + uri);
                 posterImage.setImageURI(uri);
-                ImageViewHelper.cropPosterToImage(posterImage);
+                ImageViewHelper.cropImageToAspectRatio(posterImage);
                 currentImage = uri;
             }
         });
@@ -130,7 +130,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             eventDescripiton.setText(newEvent.getEventInfo());
             if (newEvent.hasEventPosterBitmap()) {
                 posterImage.setImageBitmap(newEvent.getEventPosterBitmap());
-                ImageViewHelper.cropPosterToImage(posterImage);
+                ImageViewHelper.cropImageToAspectRatio(posterImage);
             }
         } else {
             newEvent = new Event();

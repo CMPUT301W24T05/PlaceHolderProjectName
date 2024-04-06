@@ -1,6 +1,5 @@
 package ca.cmput301t05.placeholder.ui.events;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +16,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -211,7 +209,7 @@ public class ViewEventDetailsFragment extends BottomSheetDialogFragment {
     private void updateEventPoster(Event displayEvent) {
         if (displayEvent.hasEventPosterBitmap()) {
             eventPosterImage.setImageBitmap(displayEvent.getEventPosterBitmap());
-            ImageViewHelper.cropPosterToImage(eventPosterImage);
+            ImageViewHelper.cropImageToAspectRatio(eventPosterImage);
         } else {
             retrieveAndSetPosterImage(displayEvent);
         }
@@ -223,7 +221,7 @@ public class ViewEventDetailsFragment extends BottomSheetDialogFragment {
                     @Override
                     public void onImageLoaded(Bitmap bitmap) {
                         eventPosterImage.setImageBitmap(bitmap);
-                        ImageViewHelper.cropPosterToImage(eventPosterImage);
+                        ImageViewHelper.cropImageToAspectRatio(eventPosterImage);
                     }
 
                     @Override
