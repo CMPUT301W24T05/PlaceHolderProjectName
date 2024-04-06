@@ -19,6 +19,8 @@ import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.utils.datafetchers.EventFetcher;
+import ca.cmput301t05.placeholder.utils.datafetchers.ProfileFetcher;
 
 /**
  * PlaceholderApp extends Application to provide a centralized location for managing global application state.
@@ -32,6 +34,8 @@ public class PlaceholderApp extends Application implements Serializable {
     private ProfileImageHandler profileImageHandler;
     private ProfileTable profileTable;
     private EventTable eventTable;
+    private ProfileFetcher profileFetcher;
+    private EventFetcher eventFetcher;
 
     private ImageDetailTable imageDetailTable;
 
@@ -67,6 +71,9 @@ public class PlaceholderApp extends Application implements Serializable {
 
         posterImageHandler = new EventPosterImageHandler();
         profileImageHandler = new ProfileImageHandler();
+
+        profileFetcher = new ProfileFetcher(this, getApplicationContext());
+        eventFetcher = new EventFetcher(this, getApplicationContext());
 
         hostedEvents = new HashMap<>();
         joinedEvents = new HashMap<>();
@@ -189,5 +196,13 @@ public class PlaceholderApp extends Application implements Serializable {
 
     public ImageDetailTable getImageDetailTable(){
         return this.imageDetailTable;
+    }
+
+    public ProfileFetcher getProfileFetcher() {
+        return profileFetcher;
+    }
+
+    public EventFetcher getEventFetcher() {
+        return eventFetcher;
     }
 }
