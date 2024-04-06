@@ -3,12 +3,16 @@ package ca.cmput301t05.placeholder;
 
 import static junit.framework.TestCase.assertEquals;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import static ca.cmput301t05.placeholder.qrcode.QRCodeType.CHECK_IN;
 import static ca.cmput301t05.placeholder.qrcode.QRCodeType.INFO;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import org.junit.*;
 
@@ -24,6 +28,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.events.Event;
@@ -31,82 +38,47 @@ import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.qrcode.QRCodeType;
 
+/**
+ * Unit tests for QRCode class.
+ */
+@RunWith(RobolectricTestRunner.class)
 public class QRCodeTest {
 
-
-    @Before
-    public BinaryBitmap convertToBinaryBitmap(Bitmap bitmap) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int[] pixels = new int[width * height];
-        bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
-
-        // Convert ARGB pixels to grayscale luminance values
-        int[] luminances = new int[width * height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int pixel = pixels[y * width + x];
-                int r = (pixel >> 16) & 0xFF;
-                int g = (pixel >> 8) & 0xFF;
-                int b = pixel & 0xFF;
-                luminances[y * width + x] = (byte) ((r + g + b) / 3);
-            }
-        }
-
-        // Create a LuminanceSource from the grayscale luminance values
-        LuminanceSource source = new RGBLuminanceSource(width, height, luminances);
-
-        // Create a BinaryBitmap from the LuminanceSource using a HybridBinarizer
-        return new BinaryBitmap(new HybridBinarizer(source));
+    /**
+     * @author Anthony
+     * Tests that a info QR code is encoded with the correct UUID as the event ID
+     * and correct type of QR code; info QR code.
+     */
+    @Test
+    public void testGenerateInfoQRCode() {
+        QRCodeManager qrCodeManager = new QRCodeManager();
+        Event event = new Event("Testy Event", "this is my event info", 100);
+        UUID eventID = event.getEventID();
+        QRCode qrCode = qrCodeManager.generateQRCode(event, "eventInfo");
+        assertNotNull(qrCode.getType());
+        Assert.assertEquals(qrCode.getType(), INFO); // Assert that the QR code is "info" QR code type
+        String rawText = qrCode.getRawText();
+        assertEquals(qrCodeManager.getEventID(rawText).getClass(), UUID.class);// Check that event ID is of type UUID
+        assertEquals(eventID,qrCodeManager.getEventID(rawText)); // Assert that the QR code's UUID and the event ID match
     }
-//
-//    @Rule
-//    QRCodeManager QRCM = new QRCodeManager();
 
-    @Test(expected = RuntimeException.class) // Continue from here
-    public void testGenerateQRCode(){
-        QRCodeManager QRCM = new QRCodeManager();
-        //still receiving a tests not received error. Needs debugging
-
-        Event event = new Event("exampleEvent", "this is my event info", 100);
-        QRCode infoqr = QRCM.generateQRCode(event, "eventinfo");
-        QRCode checkInQr = QRCM.generateQRCode(event, "checkin");
-
-        BinaryBitmap infobitmap = convertToBinaryBitmap(infoqr.getBitmap());
-        MultiFormatReader inforeader = new MultiFormatReader();
-
-        BinaryBitmap checkbitmap = convertToBinaryBitmap(checkInQr.getBitmap());
-        MultiFormatReader checreader = new MultiFormatReader();
-        try {
-            Result iresult = inforeader.decode(infobitmap);
-            String infoqrText = iresult.getText();
-
-            Result cresult = inforeader.decode(infobitmap);
-            String checkqrText = cresult.getText();
-
-            //test that the QR is of the right types
-            QRCodeType infoqrType = infoqr.getType();
-            QRCodeType checkInQrType = checkInQr.getType();
-
-            assertEquals(INFO, infoqrType);
-            assertEquals(CHECK_IN, checkInQrType);
-
-
-            //Test that the qrcode includes a UUID
-            String iEventId = QRCM.getEventID(infoqrText).toString();
-            UUID iUUID = UUID.fromString(iEventId);
-            assertTrue("Value is of type UUID", iUUID instanceof UUID);
-
-            String cEventId = QRCM.getEventID(checkqrText).toString();
-            UUID cUUID = UUID.fromString(cEventId);
-            assertTrue("Value is of type UUID", cUUID instanceof UUID);
-
-
-
-        } catch (NotFoundException e) {
-            throw new RuntimeException("Failed to decode QR code", e);
-        }
-
-
+    /**
+     * @author Anthony
+     * Tests that a check-in QR code is encoded with the correct UUID as the event ID
+     * and correct type of QR code; check-in QR code.
+     */
+    @Test
+    public void testGenerateCheckInQRCode() {
+        QRCodeManager qrCodeManager = new QRCodeManager();
+        Event event = new Event("Cool Event", "Even description", 90);
+        UUID eventID = event.getEventID();
+        QRCode qrCode = qrCodeManager.generateQRCode(event, "eventCheckIn");
+        assertNotNull(qrCode.getType());
+        Assert.assertEquals(qrCode.getType(), CHECK_IN); // Assert that the QR code is a "check-in" QR code type
+        String rawText = qrCode.getRawText();
+        assertEquals(qrCodeManager.getEventID(rawText).getClass(), UUID.class);// Check that event ID is of type UUID
+        assertEquals(eventID,qrCodeManager.getEventID(rawText)); // Assert that the QR code's UUID and the event ID match
     }
+
+
 }

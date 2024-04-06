@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     bundle.putBoolean("interestedMode", true);
                     bottomSheet.setArguments(bundle);
                     bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
+
                 }
             }
         });
