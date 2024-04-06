@@ -24,7 +24,6 @@ import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.EventNotificationAdapter;
-import ca.cmput301t05.placeholder.profile.Profile;
 
 /**
  * This is the create Notification page for events.
@@ -90,7 +89,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
 
         //FIREBASE NOTIFICATION HANDLER
-        HttpNotificationHandler.sendNotificationToServer(notification);
+        HttpNotificationHandler.sendNotificationTopicToServer(notification);
 
 
 

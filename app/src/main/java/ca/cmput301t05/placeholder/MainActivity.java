@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
 
                         //Testing notifications
                         Notification testHttp = new Notification("Test http message", UUID.randomUUID(), test_server);
-                        HttpNotificationHandler.sendNotificationToServer(testHttp);
+                        HttpNotificationHandler.sendNotificationTopicToServer(testHttp);
 
 
                     }
