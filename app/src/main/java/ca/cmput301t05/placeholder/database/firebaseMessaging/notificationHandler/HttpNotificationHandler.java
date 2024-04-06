@@ -78,11 +78,11 @@ public class HttpNotificationHandler {
     }
 
     /**
-     * Uses okHtpp to send notifications to a google cloud function which allows us to send notifications through firebase Messaging
-     * Instead of sending to a topic (aka our events) sends it to a specific person
+     *
      * @param notification
+     * @param token profile.getMessagingtoken
      */
-    public static void sendNotificationToUser(Notification notification, String profileID, Context context){
+    public static void sendNotificationToUser(Notification notification, String token){
 
         //google python function
         String url = "https://us-central1-silver-adapter-419318.cloudfunctions.net/sendToUser";
@@ -92,50 +92,33 @@ public class HttpNotificationHandler {
                 .create();
 
 
+        sendToUserNotification userNotification = new sendToUserNotification(notification, token);
+        String newJson = gson.toJson(userNotification, sendToUserNotification.class);
 
 
+        OkHttpClient client = new OkHttpClient();
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
-        PlaceholderApp app = (PlaceholderApp) context.getApplicationContext();
+        RequestBody body = RequestBody.create(newJson, JSON);
 
-        app.getProfileTable().fetchDocument(profileID, new Table.DocumentCallback<Profile>() {
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onSuccess(Profile document) {
-                String token = document.getMessagingToken();
-
-                sendToUserNotification userNotification = new sendToUserNotification(notification, token);
-
-                String newJson = gson.toJson(userNotification);
-
-                OkHttpClient client = new OkHttpClient();
-                MediaType JSON = MediaType.get("application/json; charset=utf-8");
-
-                RequestBody body = RequestBody.create(newJson, JSON);
-
-                Request request = new Request.Builder()
-                        .url(url)
-                        .post(body)
-                        .build();
-
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                        Log.e("Sending_Notification", e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                        //potentially add some error stuff here
-                        Log.d("Response", "Response from server");
-                    }
-                });
-
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e("Sending_Notification", e.getMessage());
             }
 
             @Override
-            public void onFailure(Exception e) {
-
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                //potentially add some error stuff here
+                
             }
         });
+
 
 
     }

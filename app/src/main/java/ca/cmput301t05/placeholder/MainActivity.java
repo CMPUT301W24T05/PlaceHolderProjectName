@@ -64,24 +64,13 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnIt
 
         UUID test_server = UUID.randomUUID();
 
-        FirebaseMessaging.getInstance().subscribeToTopic(test_server.toString())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Subscribed";
-                        if (!task.isSuccessful()) {
-                            msg = "Subscribe failed";
-                        }
-                        Log.d("Testing Subscription", msg);
-
-                        //Testing notifications
-                        Notification testHttp = new Notification("Test http message", UUID.randomUUID(), test_server);
-                        testHttp.setPush(true);
-                        HttpNotificationHandler.sendNotificationToUser(testHttp, app.getUserProfile().getProfileID().toString(), getApplicationContext());
+        //Testing notifications
+        Notification testHttp = new Notification("Test http message", UUID.randomUUID(), test_server);
+        testHttp.setPush(true);
 
 
-                    }
-                });
+
+        HttpNotificationHandler.sendNotificationToUser(testHttp, "dTKGqwV9TMSyGeS3XWgPhl");
 
 
 

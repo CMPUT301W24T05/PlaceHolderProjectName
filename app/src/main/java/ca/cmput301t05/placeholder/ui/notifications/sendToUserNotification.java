@@ -9,6 +9,7 @@ public class sendToUserNotification extends Notification {
     private String token;
     public sendToUserNotification(Notification n, String token){
         super(n);
+        this.token = token;
     }
 
     public void setToken(String token) {
