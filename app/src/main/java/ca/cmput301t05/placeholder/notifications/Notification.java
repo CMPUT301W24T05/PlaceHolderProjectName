@@ -136,6 +136,18 @@ public class Notification extends DocumentSerializable {
 
     }
 
+    public Notification(Notification n) {
+        this.timeCreated = n.timeCreated;
+        this.isPush = n.isPush;
+        this.isRead = n.isRead;
+        this.notificationID = n.notificationID;
+        this.fromEventID = n.fromEventID;
+        this.isPinned = n.isPinned;
+        this.creatorID = n.creatorID;
+        this.message = n.message;
+
+    }
+
     /**
      * Converts this Notification object into a Map representation for storing in the firebase.
      *

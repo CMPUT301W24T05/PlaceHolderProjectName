@@ -21,6 +21,7 @@ import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.ui.notifications.sendToUserNotification;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -90,7 +91,9 @@ public class HttpNotificationHandler {
                 .serializeNulls()
                 .create();
 
-        String notiJson = gson.toJson(notification);
+
+
+
 
         PlaceholderApp app = (PlaceholderApp) context.getApplicationContext();
 
@@ -99,11 +102,9 @@ public class HttpNotificationHandler {
             public void onSuccess(Profile document) {
                 String token = document.getMessagingToken();
 
-                Type type = new TypeToken<Map<String, Object>>(){}.getType();
-                Map<String, Object> notiMap = gson.fromJson(notiJson, type);
-                notiMap.put("token", token);
+                sendToUserNotification userNotification = new sendToUserNotification(notification, token);
 
-                String newJson = gson.toJson(notiMap);
+                String newJson = gson.toJson(userNotification);
 
                 OkHttpClient client = new OkHttpClient();
                 MediaType JSON = MediaType.get("application/json; charset=utf-8");
