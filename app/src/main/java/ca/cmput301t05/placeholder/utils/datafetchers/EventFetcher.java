@@ -62,6 +62,11 @@ public class EventFetcher extends AbstractFetcher {
             return;
         }
 
+        if (eventIds.isEmpty()){
+            callbacks.forEach((DataFetchCallback c) -> c.onEventFetched(profile));
+            return;
+        }
+
         for (String id : eventIds) {
             app.getEventTable().fetchDocument(id.trim(), new Table.DocumentCallback<Event>() {
                 @Override

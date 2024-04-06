@@ -13,7 +13,7 @@ import ca.cmput301t05.placeholder.ui.events.checkin.SuccessfulCheckinActivity;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventExploreFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.EventOrganizedFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.NewHomeFragment;
-import ca.cmput301t05.placeholder.ui.mainscreen.ProfileUpdatedFragment;
+import ca.cmput301t05.placeholder.ui.mainscreen.ProfileViewFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.organized_menu_item) {
                 selectedFragment = new EventOrganizedFragment();
             } else if (id == R.id.profile_menu_item) {
-                selectedFragment = new ProfileUpdatedFragment();
+                selectedFragment = new ProfileViewFragment();
             } else if (id == R.id.scan_menu_item) {
                 Intent intent = new Intent(this, QRCodeScannerActivity.class);
                 eventInfoSheetLauncher.launch(intent);

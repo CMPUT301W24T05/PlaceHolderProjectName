@@ -31,12 +31,13 @@ import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 
-public class ProfileUpdatedFragment extends Fragment implements DataFetchCallback, EventAdapter.OnItemClickListener {
+public class ProfileViewFragment extends Fragment implements DataFetchCallback, EventAdapter.OnItemClickListener {
     private PlaceholderApp app;
     private Profile profile;
     private TextView name;
     private TextView contact;
     private TextView homepage;
+    private TextView middleSeparator;
     private ImageView profilePic;
     private RecyclerView joinedEventsList;
     private EventAdapter joinedEventsAdapter;
@@ -85,14 +86,16 @@ public class ProfileUpdatedFragment extends Fragment implements DataFetchCallbac
         homepage = view.findViewById(R.id.edit_homepage);
         contact = view.findViewById(R.id.edit_contact);
         profilePic = view.findViewById(R.id.profile_pic);
+        middleSeparator = view.findViewById(R.id.middleSeperator);
         joinedEventsList = view.findViewById(R.id.recyclerView);
         edit = view.findViewById(R.id.edit_event_buttoon);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         joinedEventsList.setLayoutManager(layoutManager);
         joinedEventsAdapter = new EventAdapter(getActivity(), new ArrayList<>(), EventAdapter.adapterType.ATTENDING, true);
         joinedEventsList.setAdapter(joinedEventsAdapter);
+        joinedEventsAdapter.setListener(this);
     }
 
     private void setupListeners() {
@@ -103,6 +106,7 @@ public class ProfileUpdatedFragment extends Fragment implements DataFetchCallbac
     }
 
     private void setProfileUpdate() {
+        boolean shouldHideMiddleSep = false;
         if (profile.hasProfileBitmap()) {
             profilePic.setImageBitmap(profile.getProfilePictureBitmap());
         } else {
@@ -111,11 +115,22 @@ public class ProfileUpdatedFragment extends Fragment implements DataFetchCallbac
         if (profile.getName() != null) {
             name.setText(profile.getName());
         }
-        if (profile.getContactInfo() != null) {
+        if (profile.getContactInfo() != null && !profile.getContactInfo().isEmpty()) {
             contact.setText(profile.getContactInfo());
+        } else {
+            contact.setText("");
+            shouldHideMiddleSep = true;
         }
-        if (profile.getHomePage() != null) {
+        if (profile.getHomePage() != null && !profile.getHomePage().isEmpty()) {
             homepage.setText(profile.getHomePage());
+        } else {
+            homepage.setText("");
+            shouldHideMiddleSep = true;
+        }
+        if (shouldHideMiddleSep){
+            middleSeparator.setVisibility(View.GONE);
+        } else {
+            middleSeparator.setVisibility(View.VISIBLE);
         }
     }
 
