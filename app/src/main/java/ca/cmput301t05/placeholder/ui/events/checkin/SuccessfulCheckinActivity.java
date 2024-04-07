@@ -63,8 +63,8 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         super.onCreate(savedInstanceState);
         initializeApp();
         setupButtonClickHandling();
-        imageViewAnimation(); // Check mark animation
         checkAndHandleEventMaxCapacity();
+        imageViewAnimation(); // Check mark animation
     }
 
     /**
