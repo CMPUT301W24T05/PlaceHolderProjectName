@@ -108,7 +108,7 @@ public class EventUnitTest {
     }
 
     /**
-     * Provides data for parameterized test method testCheckInAttendees.
+     * Provides data for parameterized test method {@code testCheckInAttendees}.
      * @return Stream of arguments to be used.
      */
     private static Stream<Arguments> attendeeDataProvider(){
