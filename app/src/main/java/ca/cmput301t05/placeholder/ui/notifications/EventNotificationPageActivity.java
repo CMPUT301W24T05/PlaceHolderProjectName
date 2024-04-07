@@ -74,7 +74,17 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
                     public void onSuccess(Event document) {
 
                         //FIREBASE NOTIFICATION HANDLER SENT TO USER
-                        HttpNotificationHandler.sendNotificationTopicToServer(notification);
+                        HttpNotificationHandler.sendNotificationTopicToServer(notification, new HttpNotificationHandler.httpHandlercallback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+
+                            }
+                        });
 
                     }
 
