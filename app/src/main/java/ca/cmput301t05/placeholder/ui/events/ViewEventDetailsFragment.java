@@ -145,9 +145,11 @@ public class ViewEventDetailsFragment extends BottomSheetDialogFragment {
     private void updateInterestedState(boolean signingUp, Event displayEvent) {
         if (signingUp) {
             app.getUserProfile().addInterestedEvent(displayEvent);
+            app.getInterestedEvents().put(displayEvent.getEventID(), displayEvent);
             displayEvent.userSignup(app.getUserProfile());
         } else {
             app.getUserProfile().removeInterestedEvent(displayEvent);
+            app.getInterestedEvents().remove(displayEvent.getEventID());
             displayEvent.userUnsignup(app.getUserProfile());
         }
     }

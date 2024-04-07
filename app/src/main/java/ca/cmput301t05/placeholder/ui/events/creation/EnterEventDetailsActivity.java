@@ -353,6 +353,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         List<String> hostedEvents = app.getUserProfile().getHostedEvents();
         hostedEvents.add(currentEventId);
         app.getUserProfile().setHostedEvents(hostedEvents);
+        app.getHostedEvents().put(currentEvent.getEventID(), currentEvent);
 
         // Update or push profile document
         ProfileTable profileTable = app.getProfileTable();
