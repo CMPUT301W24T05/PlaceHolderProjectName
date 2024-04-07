@@ -22,7 +22,9 @@ android {
         )
     }
 
-
+    tasks.withType<Test>{
+        useJUnitPlatform()
+    }
 
 
 
@@ -56,11 +58,18 @@ android {
 
 dependencies {
 
+
+
+
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-params:5.10.2")
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
+    testCompileOnly ("junit:junit:4.13.2")
+    testRuntimeOnly ("org.junit.vintage:junit-vintage-engine:5.10.2")
+
+    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+
     // Robolectric
     testImplementation ("org.robolectric:robolectric:4.12")
     // Material UI Library
@@ -90,7 +99,8 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation("androidx.databinding:databinding-runtime:8.3.1")
-    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+
+    // This is a local solution to generate javadoc for the project- do not delete!
     // implementation(fileTree(mapOf("dir" to "C:\\Users\\antho\\AppData\\Local\\Android\\Sdk\\platforms\\android-34", "include" to listOf("*.aar", "*.jar"))))
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -103,7 +113,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.7.7")
 
 
-    testImplementation("junit:junit:4.13.2")
+
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")

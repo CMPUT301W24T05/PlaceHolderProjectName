@@ -271,4 +271,5 @@ public class Notification extends DocumentSerializable {
     public boolean isPush() {
         return isPush;
     }
+
 }

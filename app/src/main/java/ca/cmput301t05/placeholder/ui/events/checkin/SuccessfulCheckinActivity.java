@@ -3,6 +3,7 @@ package ca.cmput301t05.placeholder.ui.events.checkin;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,7 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
     private double latitude;
     private double longitude;
     private EventTable eventTable;
+    private ImageView animated_checkmark;
     private static final String LOCATION_SHARED_TOAST = "Location Shared";
     private static final String LOCATION_NOT_SHARED_TOAST = "Location Not Shared";
 
@@ -63,6 +66,7 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         initializeApp();
         setupButtonClickHandling();
         checkAndHandleEventMaxCapacity();
+        imageViewAnimation(); // Check mark animation
     }
 
     /**
@@ -85,6 +89,15 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
                 }
             });
         }
+    }
+
+    /**
+     * Function handles the check mark animation.
+     */
+    private void imageViewAnimation(){
+        animated_checkmark = findViewById(R.id.imageViewSuccessCheckin);
+        AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) animated_checkmark.getDrawable();
+        animatedVectorDrawable.start();
     }
 
     /**
@@ -124,7 +137,7 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
      * method on the event object. If the maximum capacity has not been reached, it calls the handleMaxCapacityReached() method.
      */
     private void checkAndHandleEventMaxCapacity() {
-        if (!event.reachMaxCapacity()) {
+        if (event.reachMaxCapacity()) {
             handleMaxCapacityReached();
         }
     }

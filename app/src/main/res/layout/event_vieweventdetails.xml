@@ -93,7 +93,7 @@
         app:tint="@color/md_theme_onBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_view_poster"
-        app:srcCompat="@drawable/baseline_attendance_24" />
+        app:srcCompat="@drawable/liked_heart" />
 
     <TextView
         android:id="@+id/event_view_interest_count"

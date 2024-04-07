@@ -109,7 +109,7 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
                     Glide.with(context)
                             .load(bitmap)
                             .centerCrop()
-                            .apply(new RequestOptions().override(800, 800))
+                            .apply(new RequestOptions().override(500, 500))
                             .into(pic);
 
                 }

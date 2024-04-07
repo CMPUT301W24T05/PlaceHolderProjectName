@@ -7,48 +7,34 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
-
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
-import ca.cmput301t05.placeholder.MainActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.UUID;
-
 import ca.cmput301t05.placeholder.Location.MapDisplay_activity;
-
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewAttendeeCheckinActivity;
 import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewSignUpsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.EventNotificationPageActivity;
-import ca.cmput301t05.placeholder.ui.notifications.UserNotificationActivity;
 
 
 public class EventMenuActivity extends AppCompatActivity  {
@@ -245,14 +231,27 @@ public class EventMenuActivity extends AppCompatActivity  {
 
         viewQRCodes = findViewById(R.id.eventMCard3);
 
+// Set OnClickListener to launch ViewQRCodesActivity
         viewQRCodes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intentQR = new Intent(EventMenuActivity.this, ViewQRCodesActivity.class);
+                intentQR.putExtra("eventName", curEvent.getEventName());
                 startActivity(intentQR);
             }
         });
+
+// Set OnClickListener to launch ReuseQRActivity
+//        viewQRCodes.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(EventMenuActivity.this, ReuseQRActivity.class);
+//                intent.putExtra("eventName", curEvent.getEventName());
+//                startActivity(intent);
+//            }
+//        });
+
+
 
         viewAnnouncments = findViewById(R.id.eventMCard4);
 

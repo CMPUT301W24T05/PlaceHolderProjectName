@@ -220,11 +220,11 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 // on below line we are passing context.
                 EnterEventDetailsActivity.this, (view1, year1, monthOfYear1, dayOfMonth1) -> {
-                    selectedDay = dayOfMonth1;
-                    selectedMonth = monthOfYear1;
-                    selectedYear = year1;
-                    eventDate.setText(String.format(Locale.CANADA, "%d-%d-%d", dayOfMonth1, monthOfYear1 + 1, year1));
-                }, year, month, day);
+            selectedDay = dayOfMonth1;
+            selectedMonth = monthOfYear1;
+            selectedYear = year1;
+            eventDate.setText(String.format(Locale.CANADA, "%d-%d-%d", dayOfMonth1, monthOfYear1 + 1, year1));
+        }, year, month, day);
 
         datePickerDialog.show();
     }
