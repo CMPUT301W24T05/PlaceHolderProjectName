@@ -26,6 +26,8 @@ import java.util.ArrayList;
  */
 public class LoadingScreenActivity extends AppCompatActivity implements DataFetchCallback {
 
+    private static final String TAG = "PlaceholderAppLoadingScreen";
+
     PlaceholderApp app;
     private ProfileFetcher profileFetcher;
     private EventFetcher eventFetcher;
@@ -61,7 +63,7 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
     }
 
     private void startMainActivity() {
-        Log.i("Placeholder App", String.format("Profile with id %s and name %s has been loaded!",
+        Log.i(TAG, String.format("Profile with id %s and name %s has been loaded!",
                 app.getUserProfile().getProfileID(), app.getUserProfile().getName()));
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
@@ -82,6 +84,7 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
     @Override
     public void onProfileFetchFailure(Exception exc) {
         // If profile fetch failed, navigate to setup activity
+        Log.e(TAG, "Failed to fetch the profile", exc);
         Intent intent = new Intent(getApplicationContext(), InitialSetupActivity.class);
         startActivity(intent);
         finish();
@@ -90,6 +93,7 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
     @Override
     public void onNoIdFound() {
         // If no id found, navigate to setup activity
+        Log.e(TAG, "No ID found");
         Intent intent = new Intent(getApplicationContext(), InitialSetupActivity.class);
         startActivity(intent);
         finish();
@@ -98,13 +102,14 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
     @Override
     public void onEventFetched(Profile profile) {
         // Events fetched successfully. Navigate to MainActivity
-        startMainActivity();
+        fetchNotifications(profile);
     }
 
     @Override
     public void onEventFetchError(Exception exception) {
         // Events fetched unsuccessfully, it's *probably* fine lol. Navigate to MainActivity
-        startMainActivity();
+        Log.e(TAG, "Failed to fetch events", exception);
+        fetchNotifications(app.getUserProfile());
     }
 
     private void fetchNotifications(Profile profile) {
@@ -121,7 +126,8 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
 
             @Override
             public void onFailure(Exception e) {
-
+                Log.e(TAG, "Failed to fetch notifications", e);
+                startMainActivity();
             }
         });
     }

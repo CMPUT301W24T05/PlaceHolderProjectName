@@ -90,7 +90,6 @@ public class NewHomeFragment extends Fragment implements EventAdapter.OnItemClic
 
                     //open user notification fragment
                     UserNotificationFragment dialogFragment = new UserNotificationFragment();
-//                    dialogFragment.show(getActivity().getSupportFragmentManager(), "notificationDialog");
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     // For a polished look, specify a transition animation.
                     transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
