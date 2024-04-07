@@ -163,12 +163,10 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
      * </p>
      */
     private void updateProfile(){
-        List<String> joinedEvents = profile.getJoinedEvents();
-        joinedEvents.add(event.getEventID().toString());
-
         //MAKE SURE NO DUPLICATES
         if (!profile.getJoinedEvents().contains(event.getEventID().toString())){
-            profile.setJoinedEvents(joinedEvents);
+            List<String> joinedEvents = profile.getJoinedEvents();
+            joinedEvents.add(event.getEventID().toString());
             app.getProfileTable().updateDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
                 @Override
                 public void onSuccess(Profile document) {

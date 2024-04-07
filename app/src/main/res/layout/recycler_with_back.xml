@@ -27,25 +27,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="@color/md_theme_inversePrimary_highContrast"
+            app:cardCornerRadius="8dp"
+            android:id="@+id/cardView" app:layout_constraintTop_toBottomOf="@+id/recycler_page_name_text"
+            android:layout_marginBottom="20dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="20dp"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp" android:layout_marginRight="20dp">
 
-        <androidx.cardview.widget.CardView
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_page_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                app:cardCornerRadius="8dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_page_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+                android:layout_height="match_parent"
+                android:paddingBottom="16dp"
+                android:clipToPadding="false"
+        />
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
