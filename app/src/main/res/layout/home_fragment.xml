@@ -1,97 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <!-- "Notifications" Button -->
-        <ImageButton
-            android:id="@+id/btnNotifications"
-            style="@android:style/Widget.Material.ImageButton"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:cropToPadding="false"
-            android:scaleType="fitCenter"
-            android:src="@drawable/bell_notification"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- "Profile" Button -->
-        <ImageButton
-            android:id="@+id/btnProfile"
-            style="@android:style/Widget.Material.ImageButton"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:cropToPadding="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/profile_circle"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <TextView
-            android:id="@+id/main_admin_page_AdminTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/coustard"
-            android:text="PlaceHolder"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnProfile"
-            app:layout_constraintStart_toEndOf="@+id/btnNotifications"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/topLayout"
-        android:fillViewport="true">
-
-        <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:id="@+id/swipeRefreshLayout">
 
-            <!-- List of Joined Events -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/listJoinedEvents"
+        <ca.cmput301t05.placeholder.utils.CustomNestedScrollView
+                android:id="@+id/nested_scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                android:layout_height="match_parent"
+                android:fillViewport="true">
 
-            <!-- "Create New Event" Button -->
-            <Button
-                android:id="@+id/btnCreateEvent"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="20dp"
-                android:text="Create New Event" />
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <!-- List of Created Events -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/listCreatedEvents"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/main_page_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:elevation="0dp"
+                        app:itemIconTint="?attr/colorOnBackground"
+                        app:titleTextAppearance="@style/AptosTextAppearance"
+                        app:menu="@menu/main_page_topbar_menu"
+                        app:title="Welcome, %s!" />
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                        android:id="@+id/currentEventsHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/aptos"
+                        android:text="You have %i events today"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/currentEvents"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp" />
+
+                <TextView
+                        android:id="@+id/futureEventsHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/aptos"
+                        android:text="Your upcoming events"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/futureEvents"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp" />
+            </LinearLayout>
+        </ca.cmput301t05.placeholder.utils.CustomNestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

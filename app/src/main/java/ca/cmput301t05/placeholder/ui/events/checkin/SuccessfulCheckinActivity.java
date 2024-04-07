@@ -38,6 +38,8 @@ import java.util.List;
  * @see LocationManager.LocationPermissionListener
  */
 public class SuccessfulCheckinActivity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
+    public static final String SUCCESSFUL_CHECKIN_KEY = "SuccessfulCheckinKey";
+    public static final String SUCCESSFUL_CHECKIN_VALUE = "SUCCESS_CHECKIN";
     private static final int SPLASH_DELAY = 3000;
     private LocationManager locationManager;
     private PlaceholderApp app;
@@ -174,22 +176,33 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
      * </p>
      */
     private void updateProfile(){
-        List<String> joinedEvents = profile.getJoinedEvents();
-        joinedEvents.add(event.getEventID().toString());
-        profile.setJoinedEvents(joinedEvents);
-        app.getProfileTable().updateDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
-            @Override
-            public void onSuccess(Profile document) {
-                Log.e("amirza2","Will call navigate to eventDetails");
-                navigateToEventDetails();
-                finish();
-            }
+        //MAKE SURE NO DUPLICATES
+        if (!profile.getJoinedEvents().contains(event.getEventID().toString())){
+            List<String> joinedEvents = profile.getJoinedEvents();
+            joinedEvents.add(event.getEventID().toString());
+            app.getJoinedEvents().put(event.getEventID(), event);
+            app.getProfileTable().updateDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+                @Override
+                public void onSuccess(Profile document) {
+                    Log.e("amirza2","Will call navigate to eventDetails");
+                    navigateToEventDetails();
+                    finish();
+                }
 
-            @Override
-            public void onFailure(Exception e) {
-                // Profile update failure, handle failure
-            }
-        });
+                @Override
+                public void onFailure(Exception e) {
+                    // Profile update failure, handle failure
+                }
+            });
+
+        }   else {
+
+            navigateToEventDetails();
+            finish();
+        }
+
+
+
     }
 
     /**
@@ -206,9 +219,10 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         eventTable.pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
             @Override
             public void onSuccess(Event document) {
-//                Intent intent = new Intent(SuccessfulCheckinActivity.this, ViewEventDetailsFragment.class);
-//                startActivity(intent);
-                // FIX THIS!
+                app.setCachedEvent(event);
+                Intent data = new Intent();
+                data.putExtra(SUCCESSFUL_CHECKIN_KEY, SUCCESSFUL_CHECKIN_VALUE);
+                setResult(RESULT_OK, data);
                 finish();
             }
 

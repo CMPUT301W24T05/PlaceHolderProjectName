@@ -6,25 +6,49 @@ import android.widget.ImageView;
 
 public class ImageViewHelper {
 
-    public static void cropPosterToImage(ImageView poster) {
-        poster.post(() -> {
+    public static void cropImageToAspectRatio(ImageView image) {
+        image.post(() -> {
+
             // Get the Drawable's dimensions
-            Drawable drawable = poster.getDrawable();
+            Drawable drawable = image.getDrawable();
             int imageHeight = drawable.getIntrinsicHeight();
             int imageWidth = drawable.getIntrinsicWidth();
 
-            // Calculate the aspect ratio
-            float aspectRatio = (float) imageWidth / (float) imageHeight;
+            // Layout Params
+            ViewGroup.LayoutParams params = image.getLayoutParams();
 
-            // Assuming you have a fixed maximum height
-            int imageViewHeight = poster.getHeight(); // or a specific value in pixels
-            int imageViewWidth = Math.round(imageViewHeight * aspectRatio);
+            // Check if the image is vertical or horizontal
+            if(imageWidth > imageHeight){
+                // The image is horizontal
+
+                // Assuming you have a fixed maximum width
+                int imageViewWidth = image.getWidth(); // or a specific value in pixels
+
+                // Calculate the aspect ratio
+                float aspectRatio = (float) imageHeight / (float) imageWidth;
+
+                // Calculate and Set ImageView Height based on aspect ratio
+                int imageViewHeight = Math.round(imageViewWidth * aspectRatio);
+
+                params.height = imageViewHeight;
+
+            } else {
+                // The image is vertical or square
+
+                // Assuming you have a fixed maximum height
+                int imageViewHeight = image.getHeight(); // or a specific value in pixels
+
+                // Calculate the aspect ratio
+                float aspectRatio = (float) imageWidth / (float) imageHeight;
+
+                // Calculate and Set ImageView Width based on aspect ratio
+                int imageViewWidth = Math.round(imageViewHeight * aspectRatio);
+
+                params.width = imageViewWidth;
+            }
 
             // Set the ImageView's dimensions
-            ViewGroup.LayoutParams params = poster.getLayoutParams();
-            params.width = imageViewWidth;
-            params.height = imageViewHeight; // You can keep this as is if it's already constrained
-            poster.setLayoutParams(params);
+            image.setLayoutParams(params);
         });
     }
 }

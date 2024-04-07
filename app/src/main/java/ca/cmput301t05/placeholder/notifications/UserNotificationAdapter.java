@@ -60,7 +60,7 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
     @NonNull
     @Override
     public UserNotificationHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.notification_recylerlist_card, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.user_notification_card, parent, false);
 
         return new UserNotificationAdapter.UserNotificationHolder(v);
     }

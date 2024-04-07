@@ -28,6 +28,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
  * QRcodeScanner is an activity for scanning QR codes using the device's camera. It leverages the CodeScanner library
@@ -38,7 +41,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class QRCodeScannerActivity extends AppCompatActivity {
 
     public static final String QR_SCANNER_ID_KEY = "QRScannerActivityId";
-    public static final String QR_SCANNER_ID_VALUE = "QRScannerActivityEVENTINFO";
+    public static final String QRSCANNER_ACTIVITY_EVENTINFO = "QRScannerActivityEVENTINFO";
+    public static final String QRSCANNER_ACTIVITY_CHECKIN = "QRScannerActivityCHECKIN";
 
     CodeScanner mCodeScanner;
     ActivityResultLauncher<String> requestPermissionLauncher;
@@ -145,7 +149,6 @@ public class QRCodeScannerActivity extends AppCompatActivity {
 
         Intent intent;
         if (type == QRCodeType.CHECK_IN) {
-
             //Add the user to the event cloud base messaging service, Events are stored according to their ID string
             FirebaseMessaging.getInstance().subscribeToTopic(event.getEventID().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -159,14 +162,12 @@ public class QRCodeScannerActivity extends AppCompatActivity {
 
                 }
             });
-
-            intent = new Intent(QRCodeScannerActivity.this, SuccessfulCheckinActivity.class);
-            startActivity(intent);
-            finish();
-        } else if (type == QRCodeType.INFO) {
-            app.setCachedEvent(event);
             Intent data = new Intent();
-            data.putExtra(QR_SCANNER_ID_KEY, QR_SCANNER_ID_VALUE);
+            data.putExtra(QR_SCANNER_ID_KEY, QRSCANNER_ACTIVITY_CHECKIN);
+            setResult(RESULT_OK, data);
+        } else if (type == QRCodeType.INFO) {
+            Intent data = new Intent();
+            data.putExtra(QR_SCANNER_ID_KEY, QRSCANNER_ACTIVITY_EVENTINFO);
             setResult(RESULT_OK, data);
         }
 
