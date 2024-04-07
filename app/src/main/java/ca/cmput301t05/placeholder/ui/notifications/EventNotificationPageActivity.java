@@ -143,7 +143,32 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             @Override
             public void onClick(View view) {
                 //TODO maybe make is so that when you swipe up it changes
-                eventNotificationAdapter.notifyDataSetChanged();
+
+                app.getEventTable().fetchDocument(curEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
+                    @Override
+                    public void onSuccess(Event document) {
+                        app.getNotificationTable().fetchMultipleDocuments(document.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+                            @Override
+                            public void onSuccess(ArrayList<Notification> document) {
+                                notifications.clear();
+                                notifications.addAll(document);
+                                eventNotificationAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+
+
             }
         });
 
