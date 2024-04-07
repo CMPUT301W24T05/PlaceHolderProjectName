@@ -7,16 +7,16 @@
 
     <!-- "Organized Events" TextView -->
     <TextView
-        android:id="@+id/textViewOpenEvents"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/coustard"
-        android:padding="16dp"
-        android:text="Organized Events"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/textViewOpenEvents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/aptos"
+            android:padding="16dp"
+            android:text="Organized Events"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     <!-- List of Created Events -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
