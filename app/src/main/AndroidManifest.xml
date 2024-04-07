@@ -42,6 +42,9 @@
         <activity android:name=".ui.codescanner.QRCodeScannerActivity">
             <!-- Add any necessary intent filters or other configurations here -->
         </activity>
+        <activity android:name=".ui.codescanner.ReuseQRCodeScannerActivity">
+            <!-- Add any necessary intent filters or other configurations here -->
+        </activity>
 
         <activity
             android:name=".LoadingScreenActivity"
