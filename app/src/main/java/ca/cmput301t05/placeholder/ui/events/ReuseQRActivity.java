@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,12 +16,7 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.qrcode.QRCode;
-import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.codescanner.ReuseQRCodeScannerActivity;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 
 public class ReuseQRActivity extends AppCompatActivity {
 
@@ -68,11 +66,13 @@ public class ReuseQRActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Event document) {
                             // Handle success, if needed
+                            Toast.makeText(ReuseQRActivity.this, "Update successful", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onFailure(Exception e) {
                             // Handle failure, if needed
+                            Toast.makeText(ReuseQRActivity.this, "Update failed", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
