@@ -17,6 +17,7 @@ import ca.cmput301t05.placeholder.database.tables.NotificationTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.notifications.Milestone;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.utils.holdNotiEvent;
@@ -46,6 +47,7 @@ public class PlaceholderApp extends Application implements Serializable {
 
     private ArrayList<Notification> userNotifications;
 
+    private ArrayList<Milestone> userMilestones;
     private Event cachedEvent; //honestly having these cashed variables probably isnt the way to go. we should be using an observer/listener to decouple this
     // Yea I agree, this won't update checkin list without restarting the app
     private Uri picCache;
@@ -77,6 +79,8 @@ public class PlaceholderApp extends Application implements Serializable {
         userNotifications = new ArrayList<>();
         locationManager = new LocationManager(this);
         notificationEventHolder = new ArrayList<>();
+
+        userMilestones = new ArrayList<>();
     }
 
     /**
@@ -201,5 +205,13 @@ public class PlaceholderApp extends Application implements Serializable {
 
     public void setNotificationEventHolder(ArrayList<holdNotiEvent> notificationEventHolder) {
         this.notificationEventHolder = notificationEventHolder;
+    }
+
+    public ArrayList<Milestone> getUserMilestones() {
+        return userMilestones;
+    }
+
+    public void addMilestone(Milestone milestone){
+        userMilestones.add(milestone);
     }
 }

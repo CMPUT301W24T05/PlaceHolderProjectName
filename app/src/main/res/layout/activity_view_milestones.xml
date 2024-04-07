@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <Button
-        android:id="@+id/back_milestones"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="back" />
 
     <TextView
         android:id="@+id/header_milestone"
@@ -19,33 +12,57 @@
         android:textAlignment="center"
         android:paddingTop="10dp"
         android:paddingBottom="30dp"
+        android:layout_alignParentTop="true"
         />
 
     <CheckBox
         android:id="@+id/checkBox_first_attendee"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="First Attendee"
         android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:text="First Attendee"
+        android:layout_below="@id/header_milestone"
         />
 
     <CheckBox
         android:id="@+id/checkBox_first_signup"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
         android:text="First Signup"
-        android:layout_marginBottom="20dp"/>
+        android:layout_below="@id/checkBox_first_attendee"
+        />
 
     <CheckBox
         android:id="@+id/checkBox_halfway"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Halfway"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:clickable="false"
+        android:layout_below="@id/checkBox_first_signup"
+        />
 
     <CheckBox
         android:id="@+id/checkBox_full_capacity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Full Capacity" />
-</LinearLayout>
+        android:text="Full Capacity"
+        android:clickable="false"
+        android:layout_below="@id/checkBox_halfway"
+        />
+
+    <Button
+        android:id="@+id/back_milestones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="back"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        />
+
+</RelativeLayout>

@@ -3,6 +3,9 @@ package ca.cmput301t05.placeholder.notifications;
 import java.util.Calendar;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.PlaceholderApp;
+import ca.cmput301t05.placeholder.events.Event;
+
 /**
  * Represents a milestone event in the context of an event notification.
  * A milestone marks a significant achievement or progress point in an event.
@@ -15,7 +18,8 @@ public class Milestone extends Notification {
      */
     private Calendar expectedDate;
     private MilestoneType mType;
-
+    private PlaceholderApp app;
+    private String eventName;
     /**
      * Constructs a new Milestone with the specified creator's UUID, event's UUID, and milestone type.
      *
@@ -23,9 +27,11 @@ public class Milestone extends Notification {
      * @param eventID the UUID of the event associated with the milestone
      * @param mType the type of milestone achieved
      */
-    public Milestone(UUID creatorID, UUID eventID, MilestoneType mType) {
-        super(generateMessage(mType), creatorID, eventID);
+    public Milestone(UUID creatorID, UUID eventID, MilestoneType mType, String eventName) {
+        super(generateMessage(mType, eventName), creatorID, eventID);
         this.mType = mType;
+        this.eventName = eventName;
+
     }
     /**
      * Generates a message based on the milestone type.
@@ -33,18 +39,19 @@ public class Milestone extends Notification {
      * @param mType the type of milestone achieved
      * @return a message corresponding to the milestone type
      */
-    private static String generateMessage(MilestoneType mType) {
+    private static String generateMessage(MilestoneType mType, String eventName) {
         // Generate message based on the milestone type
         switch (mType) {
             case FIRSTATTENDEE:
-                return "YOU'VE GOT YOUR FIRST ATTENDEE!";
+                return "From "+eventName+": YOU'VE GOT YOUR FIRST ATTENDEE!";
             case FIRSTSIGNUP:
-                return "YOU'VE GOT YOUR FIRST PERSON THAT IS INTERESTED IN YOUR EVENT!";
+                return "From: "+eventName+" YOU'VE GOT YOUR FIRST SIGNUP!";
             case HALFWAY:
-                return "YOU'RE HALFWAY TO YOUR EVENT CAPACITY!";
-            // Add more cases for other milestone types as needed
+                return "From: "+eventName+" YOU'RE HALFWAY TO YOUR EVENT CAPACITY!";
             case FULLCAPACITY:
-                return "YOUR EVENT IS NOW AT FULL CAPACITY! CONGRATS!!";
+                return "From: "+eventName+" YOUR EVENT IS NOW AT FULL CAPACITY! CONGRATS!!";
+            case EVENTSTART:
+                return "From: "+eventName+" YOUR EVENT HAS BEGUN";
             default:
                 return "Default message";
         }
