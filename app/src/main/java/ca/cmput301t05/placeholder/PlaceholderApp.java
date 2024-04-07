@@ -15,12 +15,15 @@ import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.ImageDetailTable;
 import ca.cmput301t05.placeholder.database.tables.NotificationTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Milestone;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.utils.holdNotiEvent;
+import ca.cmput301t05.placeholder.utils.datafetchers.EventFetcher;
+import ca.cmput301t05.placeholder.utils.datafetchers.ProfileFetcher;
 
 /**
  * PlaceholderApp extends Application to provide a centralized location for managing global application state.
@@ -29,11 +32,20 @@ import ca.cmput301t05.placeholder.utils.holdNotiEvent;
  */
 public class PlaceholderApp extends Application implements Serializable {
 
+    public interface appCallback{
+
+        void onSuccess();
+
+        void onFailure();
+    }
+
     private Profile userProfile;
     private EventPosterImageHandler posterImageHandler;
     private ProfileImageHandler profileImageHandler;
     private ProfileTable profileTable;
     private EventTable eventTable;
+    private ProfileFetcher profileFetcher;
+    private EventFetcher eventFetcher;
 
     private ImageDetailTable imageDetailTable;
 
@@ -72,6 +84,9 @@ public class PlaceholderApp extends Application implements Serializable {
 
         posterImageHandler = new EventPosterImageHandler();
         profileImageHandler = new ProfileImageHandler();
+
+        profileFetcher = new ProfileFetcher(this, getApplicationContext());
+        eventFetcher = new EventFetcher(this, getApplicationContext());
 
         hostedEvents = new HashMap<>();
         joinedEvents = new HashMap<>();
@@ -199,12 +214,61 @@ public class PlaceholderApp extends Application implements Serializable {
         return this.imageDetailTable;
     }
 
+    public ProfileFetcher getProfileFetcher() {
+        return profileFetcher;
+    }
+
+    public EventFetcher getEventFetcher() {
+        return eventFetcher;
+    }
+
     public ArrayList<holdNotiEvent> getNotificationEventHolder() {
         return notificationEventHolder;
     }
 
     public void setNotificationEventHolder(ArrayList<holdNotiEvent> notificationEventHolder) {
         this.notificationEventHolder = notificationEventHolder;
+    }
+
+    public void refreshNotifications(appCallback callback){
+
+        profileTable.fetchDocument(userProfile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+            @Override
+            public void onSuccess(Profile document) {
+                notificationTable.fetchMultipleDocuments(document.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+                    @Override
+                    public void onSuccess(ArrayList<Notification> document) {
+                        userNotifications.clear();
+                        userNotifications.addAll(document);
+
+                        userProfile.getNotifications().clear();
+
+                        for (Notification n : document){
+
+                            userProfile.getNotifications().add(n.getNotificationID().toString());
+
+                        }
+
+                        notificationEventHolder.clear();
+                        notificationEventHolder.addAll(holdNotiEvent.getQuickList(document, new ArrayList<>(joinedEvents.values())));
+
+                        callback.onSuccess();
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        callback.onFailure();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
     }
 
     public ArrayList<Milestone> getUserMilestones() {

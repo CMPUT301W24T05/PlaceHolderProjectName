@@ -17,7 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import java.util.Calendar;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.DatabaseManager;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
@@ -151,7 +155,7 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
                 }
             });
 
-            app.getPosterImageHandler().getPosterPicture(event, context, new BaseImageHandler.ImageCallback() {
+            app.getPosterImageHandler().getPosterPicture(event, context.getApplicationContext(), new BaseImageHandler.ImageCallback() {
                 @Override
                 public void onImageLoaded(Bitmap bitmap) {
                     Glide.with(context)
@@ -185,16 +189,43 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
                                 if (event.getEventPosterID() != null){
                                     //remove image
 
-                                    app.getPosterImageHandler().removeEventPoster(event, context, new BaseImageHandler.ImageDeletionCallback() {
+                                    app.getPosterImageHandler().removeEventPoster(event, context.getApplicationContext(), new BaseImageHandler.ImageDeletionCallback() {
                                         @Override
                                         public void onImageDeleted() {
 
 
-                                            app.getEventTable().deleteDocument(event.getEventPosterID().toString(), new Table.DocumentCallback() {
+                                            app.getEventTable().deleteDocument(event.getEventID().toString(), new Table.DocumentCallback() {
                                                 @Override
                                                 public void onSuccess(Object document) {
                                                     events.remove(position);
                                                     notifyDataSetChanged();
+
+                                                    for (String p : event.getAttendees()){
+
+                                                        //remove the event from the profiles array list
+                                                        DocumentReference docref = DatabaseManager.getInstance().getDb().collection("profiles").document(p);
+
+                                                        docref.update("joinedEvents", FieldValue.arrayRemove(event.getEventID().toString())).addOnCompleteListener(task -> {
+
+                                                           if (!task.isSuccessful()){
+                                                               Log.d("Ghost_Event", "Could not be deleted");
+                                                           }
+
+                                                        });
+
+                                                        DatabaseManager.getInstance().getDb().collection("profiles").document(p);
+
+                                                        docref.update("hostedEvents", FieldValue.arrayRemove(event.getEventID().toString())).addOnCompleteListener(task -> {
+
+                                                            if (!task.isSuccessful()){
+                                                                Log.d("Ghost_Event", "Could not be deleted");
+                                                            }
+
+                                                        });
+
+
+
+                                                    }
 
                                                 }
 

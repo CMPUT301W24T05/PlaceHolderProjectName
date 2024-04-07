@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
@@ -24,22 +25,36 @@ public class EventExploreFragment extends Fragment implements EventAdapter.OnIte
     private PlaceholderApp app;
     private RecyclerView allEventsList;
     private EventAdapter allEventsAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.event_explore, container, false);
+        initializeApp();
+        setupSwipeRefreshLayout(view);
+        setupEventList(view);
+        fetchAllEvents(); // Fetch events after initializing the adapter
+        return view;
+    }
 
-        app = (PlaceholderApp) getActivity().getApplicationContext();
+    private void initializeApp() {
+        app = (PlaceholderApp) requireActivity().getApplicationContext();
+    }
 
+    private void setupSwipeRefreshLayout(View view) {
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            fetchAllEvents();
+            swipeRefreshLayout.setRefreshing(false);
+        });
+    }
+
+    private void setupEventList(View view) {
         allEventsList = view.findViewById(R.id.listAllEvents);
         allEventsAdapter = new EventAdapter(getContext(), new ArrayList<>(), EventAdapter.adapterType.ATTENDING); // Use getContext() here
         allEventsList.setLayoutManager(new LinearLayoutManager(getContext()));
         allEventsList.setAdapter(allEventsAdapter);
-
         allEventsAdapter.setListener(this);
-
-        fetchAllEvents(); // Fetch events after initializing the adapter
-        return view;
     }
 
     private void fetchAllEvents() {
@@ -60,18 +75,16 @@ public class EventExploreFragment extends Fragment implements EventAdapter.OnIte
 
     private void displayEvents(ArrayList<Event> events) {
         // Update the RecyclerView with fetched events
-        allEventsAdapter.setEvents(events);
-        allEventsAdapter.notifyDataSetChanged();
+        allEventsAdapter.addOrUpdateEvents(events);
     }
 
     @Override
     public void onItemClick(Event event, EventAdapter.adapterType type) {
+        app.setCachedEvent(event);
         if (type == EventAdapter.adapterType.HOSTED){
-            app.setCachedEvent(event);
-            Intent i = new Intent(getActivity(), EventMenuActivity.class);
-            startActivity(i);
+            Intent intent= new Intent(getActivity(), EventMenuActivity.class);
+            startActivity(intent);
         } else if (type == EventAdapter.adapterType.ATTENDING) {
-            app.setCachedEvent(event);
             ViewEventDetailsFragment bottomSheet = new ViewEventDetailsFragment();
             Bundle bundle = new Bundle();
             bundle.putBoolean("interestedMode", true);

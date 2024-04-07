@@ -3,126 +3,116 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.events.EventMenuActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarEventMenu"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#B78D5BE6"
-        app:titleTextColor="@android:color/white"
-        app:popupTheme="@style/AppTheme"
-        />
-
-    <View
-        android:id="@+id/view_event_menu"
-        android:layout_below="@+id/toolbarEventMenu"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@drawable/profile_purple_shape" >
+    <View android:id="@+id/view_event_menu"
+          android:layout_width="match_parent"
+          android:background="?attr/colorTertiaryContainer"
+          android:layout_height="300dp">
     </View>
 
-    <View
-        android:id="@+id/view_blank_page"
-        android:layout_marginTop="150dp"
-        android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:background="@drawable/profile_bank_shape" >
+    <View android:id="@+id/view_blank_page"
+          android:layout_marginTop="120dp"
+          android:layout_width="match_parent"
+          android:layout_height="280dp"
+          android:background="@drawable/profile_bank_shape"
+          android:backgroundTint="?attr/colorSurface">
     </View>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/profile_pic"
-                android:layout_width="220dp"
-                android:layout_height="220dp"
-                android:layout_marginTop="68dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay='@style/circular'
-                tools:srcCompat="@tools:sample/avatars" />
+                    android:id="@+id/profile_pic"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="40dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.497"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay='@style/circular'
+                    tools:srcCompat="@drawable/profile_circle"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/contact_homepage_layout"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_name">
+                <TextView
+                        android:id="@+id/edit_contact"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/aptos"
+                        android:text="contact info"
+                        android:textSize="15sp"
+                        android:layout_weight="1" android:textAlignment="viewEnd" android:paddingEnd="4dp"/>
+                <TextView
+                        android:text=" | "
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:id="@+id/middleSeperator" android:layout_weight="0.1"
+                        android:textAlignment="center"/>
+                <TextView
+                        android:id="@+id/edit_homepage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:autoLink="web|email|phone"
+                        android:fontFamily="@font/aptos"
+                        android:text="homepage"
+                        android:textSize="15sp"
+                        android:layout_weight="1" android:paddingStart="4dp"/>
+            </LinearLayout>
+            <TextView
+                    android:id="@+id/edit_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/aptos"
+                    android:text="Name/Last Name"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_pic"/>
 
             <TextView
-                android:id="@+id/edit_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/coustard"
-                android:text="Name/Last Name"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_pic" />
-
-            <TextView
-                android:id="@+id/edit_contact"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/coustard"
-                android:text=""
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_homepage" />
-
-            <TextView
-                android:id="@+id/edit_homepage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:autoLink="web|email|phone"
-                android:fontFamily="@font/coustard"
-                android:text=""
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_name" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/coustard"
-                android:text="My Attended:"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.014"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_contact" />
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/aptos"
+                    android:text="My Attended:"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.014"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/contact_homepage_layout" android:textStyle="bold"
+                    android:layout_marginStart="8dp"/>
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8"
-                app:layout_constraintVertical_bias="0.0"
-                android:nestedScrollingEnabled="true" />
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toBottomOf="@+id/textView8"
+                    android:nestedScrollingEnabled="true" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/edit_event_buttoon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="36dp"
-                android:clickable="true"
-                app:layout_constraintBottom_toBottomOf="@+id/profile_pic"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/profile_pic"
-                app:srcCompat="@drawable/edit_icon" />
+                    android:id="@+id/edit_event_buttoon"
+                    style="?attr/floatingActionButtonSmallPrimaryStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    app:srcCompat="@drawable/edit_icon"
+                    app:layout_constraintBottom_toBottomOf="@+id/profile_pic"
+                    app:layout_constraintEnd_toEndOf="@+id/profile_pic"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </RelativeLayout>

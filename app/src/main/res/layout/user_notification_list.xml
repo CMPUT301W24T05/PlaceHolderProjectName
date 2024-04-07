@@ -1,41 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   android:id="@+id/linearLayout6">
 
     <Button
-        android:id="@+id/user_notification_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="back" />
+            android:id="@+id/user_notification_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="back"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintBottom_toTopOf="@+id/textView4"/>
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/coustard"
-        android:gravity="center"
-        android:text="Notifications"
-        android:textColor="@color/md_theme_onPrimaryFixed"
-        android:textSize="48sp"
-        android:textStyle="bold" />
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/coustard"
+            android:gravity="center"
+            android:text="Notifications"
+            android:textColor="@color/md_theme_onPrimaryFixed"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/user_notification_back" android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toTopOf="@+id/cardView"
+            app:layout_constraintStart_toStartOf="parent"/>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_margin="20dp"
-        app:cardBackgroundColor="@color/md_theme_inversePrimary_highContrast"
-        app:cardCornerRadius="8dp" >
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="@color/md_theme_inversePrimary_highContrast"
+            app:cardCornerRadius="8dp"
+            android:id="@+id/cardView" app:layout_constraintTop_toBottomOf="@+id/textView4"
+            android:layout_marginBottom="20dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="20dp"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp" android:layout_marginRight="20dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/user_notification_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+                android:id="@+id/user_notification_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="16dp"
+                android:clipToPadding="false"
+        />
     </androidx.cardview.widget.CardView>
 
     <!-- Bottom Navigation View -->
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -66,11 +66,25 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             public void onSuccess(Notification document) {
                 curEvent.addNotification(document.getNotificationID().toString()); //add this to the event
 
+
                 //update the event to have the notification
 
                 app.getEventTable().pushDocument(curEvent, curEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
                     @Override
                     public void onSuccess(Event document) {
+
+                        //FIREBASE NOTIFICATION HANDLER SENT TO USER
+                        HttpNotificationHandler.sendNotificationTopicToServer(notification, new HttpNotificationHandler.httpHandlercallback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+
+                            }
+                        });
 
                     }
 
@@ -139,6 +153,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
         //ASSUMING THAT OUR EVENT IS IN THE CACHEDEVENTS
         curEvent = app.getCachedEvent();
+        Log.d("NOTIFICATION", String.valueOf(curEvent.getNotifications().size()));
 
         notifications = new ArrayList<>();
 
@@ -156,7 +171,8 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             @Override
             public void onClick(View view) {
                 //TODO maybe make is so that when you swipe up it changes
-                eventNotificationAdapter.notifyDataSetChanged();
+
+                refresh();
             }
         });
 
@@ -219,6 +235,35 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
             }
         });
+
+        refresh();
+    }
+
+    public void refresh(){
+        app.getEventTable().fetchDocument(curEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
+            @Override
+            public void onSuccess(Event document) {
+                app.getNotificationTable().fetchMultipleDocuments(document.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+                    @Override
+                    public void onSuccess(ArrayList<Notification> document) {
+                        notifications.clear();
+                        notifications.addAll(document);
+                        eventNotificationAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
 
     }
 }
