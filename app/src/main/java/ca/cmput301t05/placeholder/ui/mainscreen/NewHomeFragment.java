@@ -88,6 +88,10 @@ public class NewHomeFragment extends Fragment implements EventAdapter.OnItemClic
 
                 if (item.getItemId() == R.id.home_notification_item){
 
+                    //refreshes user notifications
+                    app.refreshNotifications();
+
+
                     //open user notification fragment
                     UserNotificationFragment dialogFragment = new UserNotificationFragment();
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

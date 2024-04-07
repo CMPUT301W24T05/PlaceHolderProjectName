@@ -15,6 +15,7 @@ import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.ImageDetailTable;
 import ca.cmput301t05.placeholder.database.tables.NotificationTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Notification;
@@ -216,5 +217,44 @@ public class PlaceholderApp extends Application implements Serializable {
 
     public void setNotificationEventHolder(ArrayList<holdNotiEvent> notificationEventHolder) {
         this.notificationEventHolder = notificationEventHolder;
+    }
+
+    public void refreshNotifications(){
+
+        profileTable.fetchDocument(userProfile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+            @Override
+            public void onSuccess(Profile document) {
+                notificationTable.fetchMultipleDocuments(document.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+                    @Override
+                    public void onSuccess(ArrayList<Notification> document) {
+                        userNotifications.clear();
+                        userNotifications.addAll(document);
+
+                        userProfile.getNotifications().clear();
+
+                        for (Notification n : document){
+
+                            userProfile.getNotifications().add(n.getNotificationID().toString());
+
+                        }
+
+                        notificationEventHolder.clear();
+                        notificationEventHolder.addAll(holdNotiEvent.getQuickList(document, new ArrayList<>(joinedEvents.values())));
+                        
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
     }
 }
