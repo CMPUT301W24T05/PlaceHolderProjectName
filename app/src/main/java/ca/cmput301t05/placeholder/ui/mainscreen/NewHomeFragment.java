@@ -102,6 +102,7 @@ public class NewHomeFragment extends Fragment implements DataFetchCallback, Even
             currentEventsHeader.setVisibility(View.GONE);
         } else {
             currentEventsView.setVisibility(View.VISIBLE);
+            currentEventsHeader.setVisibility(View.VISIBLE);
             String currentHeader = "You have " + todaysEvents.size() + " events today";
             currentEventsHeader.setText(currentHeader);
         }
