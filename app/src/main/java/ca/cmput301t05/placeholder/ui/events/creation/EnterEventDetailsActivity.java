@@ -15,6 +15,7 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
@@ -125,8 +126,12 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 posterImage.setImageBitmap(newEvent.getEventPosterBitmap());
                 ImageViewHelper.cropImageToAspectRatio(posterImage);
             }
+            nextButton.setText("Edit Event");
+            nextButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.check_icon, getTheme()));
         } else {
             newEvent = new Event();
+            nextButton.setText("Create Event");
+            nextButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.add_icon, getTheme()));
         }
     }
 
