@@ -28,6 +28,7 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.utils.DateStrings;
 import ca.cmput301t05.placeholder.utils.StringManip;
@@ -42,7 +43,13 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
 
     private Context context;
 
-
+    public interface OnItemClickListener{
+        void onItemClick(Event event);
+    }
+    private OnItemClickListener listener;
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public AdminEventAdapter(Context context){
         this.context = context;
@@ -86,7 +93,7 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
             location = itemView.findViewById(R.id.admin_event_card_event_location);
             registeredNumber = itemView.findViewById(R.id.admin_event_card_registered_num);
             attendingNumber = itemView.findViewById(R.id.admin_event_card_attending_num);
-            description = itemView.findViewById(R.id.admin_event_card_event_description);
+            //description = itemView.findViewById(R.id.admin_event_card_event_description);
             organizer = itemView.findViewById(R.id.admin_event_card_organizer);
             poster = itemView.findViewById(R.id.admin_event_card_poster);
             menu = itemView.findViewById(R.id.admin_event_card_menu);
@@ -122,8 +129,14 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
             location.setText(event.getEventLocation());
             registeredNumber.setText(String.valueOf(event.getRegisteredUsersNum()));
             attendingNumber.setText(String.valueOf(event.getAttendeesNum()));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(event);
+                }
+            });
 
-            description.setText(StringManip.truncateString(event.getEventInfo(), 50));
+            //description.setText(StringManip.truncateString(event.getEventInfo(), 50));
 
             app.getProfileTable().fetchDocument(event.getEventCreator().toString(), new Table.DocumentCallback<Profile>() {
                 @Override
