@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.ui.notifications;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.notifications.UserNotificationAdapter;
+import org.jetbrains.annotations.NotNull;
 
 public class UserNotificationFragment extends DialogFragment {
 
@@ -38,6 +41,18 @@ public class UserNotificationFragment extends DialogFragment {
                              Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.recycler_with_back, container, false);
+    }
+
+    @NonNull
+    @NotNull
+    @Override
+    public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+
+        //Disable the dialog to be dismissed when touched outside
+        dialog.setCanceledOnTouchOutside(false);
+
+        return dialog;
     }
 
     @Override
