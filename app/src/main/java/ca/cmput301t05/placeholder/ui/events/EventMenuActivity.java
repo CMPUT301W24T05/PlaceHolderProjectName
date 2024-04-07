@@ -118,6 +118,9 @@ public class EventMenuActivity extends AppCompatActivity  {
                     @Override
                     public void onSuccess(Event document) {
 
+                            //update our cached event
+                            app.setCachedEvent(document);
+
                             totalProgress = document.getMaxAttendees();
                             currentProgress = document.getNumAttendees();
                             Bitmap posterPic = document.getEventPosterBitmap();

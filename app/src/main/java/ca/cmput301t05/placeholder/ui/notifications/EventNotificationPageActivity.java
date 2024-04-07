@@ -66,11 +66,15 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             public void onSuccess(Notification document) {
                 curEvent.addNotification(document.getNotificationID().toString()); //add this to the event
 
+
                 //update the event to have the notification
 
                 app.getEventTable().pushDocument(curEvent, curEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
                     @Override
                     public void onSuccess(Event document) {
+
+                        //FIREBASE NOTIFICATION HANDLER SENT TO USER
+                        HttpNotificationHandler.sendNotificationTopicToServer(notification);
 
                     }
 
@@ -86,14 +90,6 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
             public void onFailure(Exception e) {
             }
         });
-
-
-        //FIREBASE NOTIFICATION HANDLER
-        HttpNotificationHandler.sendNotificationTopicToServer(notification);
-
-
-
-
 
 
 
@@ -129,6 +125,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
         //ASSUMING THAT OUR EVENT IS IN THE CACHEDEVENTS
         curEvent = app.getCachedEvent();
+        Log.d("NOTIFICATION", String.valueOf(curEvent.getNotifications().size()));
 
         notifications = new ArrayList<>();
 
