@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.ui.events;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,10 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Milestone;
 import ca.cmput301t05.placeholder.notifications.MilestoneType;
 import ca.cmput301t05.placeholder.notifications.Notification;
+import android.util.Log;
+import android.widget.TextView;
+
+import java.util.Calendar;
 
 public class ViewMilestonesActivity extends AppCompatActivity {
 
@@ -35,7 +40,11 @@ public class ViewMilestonesActivity extends AppCompatActivity {
 
     private int numRegistered;
 
+    private Calendar cal, now;
+    private TextView check;
 
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,17 +57,27 @@ public class ViewMilestonesActivity extends AppCompatActivity {
         checkBoxHalfway = findViewById(R.id.checkBox_halfway);
         checkBoxFullCapacity = findViewById(R.id.checkBox_full_capacity);
         back = findViewById(R.id.back_milestones);
-
         notifications = app.getUserNotifications();
         milestones = getMilestones(notifications);
+
+
 
 
         numAttendees = curEvent.getAttendees().size();
         capacity = curEvent.getMaxAttendees();
         numRegistered = curEvent.getRegisteredUsers().size();
+        now = Calendar.getInstance();
+        cal = curEvent.getEventDate();
+
+        int result = numAttendees / capacity;
+        Log.d("isHalfway?: ", String.valueOf(result));
+
+        Log.d("Test", "num of attendees is " + String.valueOf(numAttendees));
+
+        check.setText(numAttendees +" / "+ capacity);
 
 
-        setMilestones();
+        //setMilestones();
         setCheckBoxes();
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -75,27 +94,37 @@ public class ViewMilestonesActivity extends AppCompatActivity {
     }
 
     public void setMilestones(){
-        if (numAttendees / capacity == 2 && !containsMilestoneType(MilestoneType.HALFWAY)) {
-            Milestone mHalfway = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY);
+        //needs to auto push notifications
+        if ((double) numAttendees / capacity >= 0.5 && !containsMilestoneType(MilestoneType.HALFWAY)) {
+            int result = numAttendees / capacity;
+            Milestone mHalfway = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY, curEvent.getEventName());
             milestones.add(mHalfway); // Add the milestone to the milestones array
             notifications.add(mHalfway); // Add the milestone to the notifications array
+            Log.d("isHalfway?: ", String.valueOf(result));
         }
 
         if (capacity == numAttendees && !containsMilestoneType(MilestoneType.FULLCAPACITY)) {
-            Milestone mFull = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FULLCAPACITY);
+            Milestone mFull = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FULLCAPACITY, curEvent.getEventName());
             milestones.add(mFull); // Add the milestone to the milestones array
             notifications.add(mFull); // Add the milestone to the notifications array
         }
 
         if (numAttendees >= 1 && !containsMilestoneType(MilestoneType.FIRSTATTENDEE)) {
-            Milestone mFirstAttendee = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTATTENDEE);
+            Milestone mFirstAttendee = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTATTENDEE, curEvent.getEventName());
             milestones.add(mFirstAttendee); // Add the milestone to the milestones array
             notifications.add(mFirstAttendee); // Add the milestone to the notifications array
         }
-        if (numRegistered >= 1 && !containsMilestoneType(MilestoneType.FIRSTSIGNUP)) {
-            Milestone mFirstSignup = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP);
-            milestones.add(mFirstSignup); // Add the milestone to the milestones array
-            notifications.add(mFirstSignup); // Add the milestone to the notifications array
+        // change to cal validation
+        if (now.compareTo(cal) > 0 && !containsMilestoneType(MilestoneType.EVENTSTART)) {
+            Milestone mEventStart = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP, curEvent.getEventName());
+            milestones.add(mEventStart); // Add the milestone to the milestones array
+            notifications.add(mEventStart); // Add the milestone to the notifications array
+        }
+
+        if (numRegistered >= 1 && !containsMilestoneType(MilestoneType.EVENTEND)) {
+            Milestone mEventEnd = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP, curEvent.getEventName());
+            milestones.add(mEventEnd); // Add the milestone to the milestones array
+            notifications.add(mEventEnd); // Add the milestone to the notifications array
         }
     }
 
@@ -115,6 +144,7 @@ public class ViewMilestonesActivity extends AppCompatActivity {
                     case FULLCAPACITY:
                         checkBoxFullCapacity.setChecked(true);
                         break;
+                        //add checkbox for event start
                 }
             }
         }
@@ -127,7 +157,7 @@ public class ViewMilestonesActivity extends AppCompatActivity {
                 milestones.add((Milestone) notification);
             }
         }
-        return milestones.isEmpty() ? null : milestones;
+        return milestones;
     }
 
     public boolean containsMilestoneType(MilestoneType type) {

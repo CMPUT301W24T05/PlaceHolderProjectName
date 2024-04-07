@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        
+
 
         Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
         Log.i("MainActivityJoinedEvents", "Number of joined events: " + app.getJoinedEvents().size());

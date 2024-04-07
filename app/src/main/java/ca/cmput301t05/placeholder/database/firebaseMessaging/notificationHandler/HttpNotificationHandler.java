@@ -32,12 +32,22 @@ import okhttp3.Response;
 
 public class HttpNotificationHandler {
 
+    public interface httpHandlercallback{
+
+        void onSuccess();
+
+        void onError(Exception e);
+
+    }
+
+
+
     /**
      * Uses okHtpp to send notifications to a google cloud function which allows us to send notifications through firebase Messaging
      * sends it to a topic (Aka an event a user has registered for)
      * @param notification
      */
-    public static void sendNotificationTopicToServer(Notification notification){
+    public static void sendNotificationTopicToServer(Notification notification, httpHandlercallback callback){
 
         //google python function which handles sending notifications
         String url = "https://us-central1-silver-adapter-419318.cloudfunctions.net/Cmput301AppNotifications";
@@ -64,12 +74,14 @@ public class HttpNotificationHandler {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e("Sending_Notification", e.getMessage());
+                callback.onError(e);
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 //potentially add some error stuff here
                 Log.d("Response", "Response from server");
+                callback.onSuccess();
             }
         });
 
@@ -82,7 +94,7 @@ public class HttpNotificationHandler {
      * @param notification
      * @param token profile.getMessagingtoken
      */
-    public static void sendNotificationToUser(Notification notification, String token){
+    public static void sendNotificationToUser(Notification notification, String token, httpHandlercallback callback){
 
         //google python function
         String url = "https://us-central1-silver-adapter-419318.cloudfunctions.net/sendToUser";
@@ -110,11 +122,13 @@ public class HttpNotificationHandler {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e("Sending_Notification", e.getMessage());
+                callback.onError(e);
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 //potentially add some error stuff here
+                callback.onSuccess();
 
             }
         });
