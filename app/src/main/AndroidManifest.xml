@@ -8,12 +8,18 @@
 
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"  />
+
+
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -43,6 +49,14 @@
             <!-- Add any necessary intent filters or other configurations here -->
         </activity>
 
+        <service
+            android:name=".database.firebaseMessaging.FirebaseMessaging"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".LoadingScreenActivity"
             android:exported="true">
@@ -56,6 +70,15 @@
             android:exported="true">
 <!--            android:launchMode="singleTask">-->
         </activity>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/bell_notification" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/md_theme_background" />
 
         <activity android:name=".ui.events.organizer_info.ViewSignUpsActivity"/>
 
@@ -81,6 +104,8 @@
 
 
     </application>
+
+
 
 
 

@@ -19,6 +19,7 @@ import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 import ca.cmput301t05.placeholder.ui.admin.AdminHomeActivity;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.UUID;
 
@@ -193,6 +194,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         profile.setContactInfo(editContact.getText().toString());
         profile.setHomePage(editHomepage.getText().toString());
 
+
         if (removePic) {
             app.getProfileImageHandler().removeProfilePic(profile, getApplicationContext(), new BaseImageHandler.ImageDeletionCallback() {
                 @Override
@@ -212,18 +214,37 @@ public class ProfileEditActivity extends AppCompatActivity {
             profile.setProfilePictureFromUri(profilePicUri, this);
         }
 
-        app.getProfileTable().pushDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
-            @Override
-            public void onSuccess(Profile profile) {
+        //get noti token
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener( task -> {
 
-            }
+           if (!task.isSuccessful()){
+               Log.d("Profile", "Unable to upload notification token");
+               profile.setMessagingToken(null);
 
-            @Override
-            public void onFailure(Exception e) {
+           }    else {
 
-            }
+               profile.setMessagingToken(task.getResult());
+           }
+
+            app.getProfileTable().pushDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+                @Override
+                public void onSuccess(Profile profile) {
+
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+
+            });
+
+
 
         });
+
+
+
 
 
     }
