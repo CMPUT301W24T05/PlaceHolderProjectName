@@ -218,11 +218,9 @@ public class LoadingScreenActivity extends AppCompatActivity {
      * Sets the milestones for all the events in the application.
      */
     private void setMilestones() {
-        ArrayList<Event> allEvents = new ArrayList<>(app.getHostedEvents().values());
-        allEvents.addAll(app.getJoinedEvents().values());
-        allEvents.addAll(app.getInterestedEvents().values());
+        ArrayList<Event> myEvents = new ArrayList<>(app.getHostedEvents().values());
 
-        for (Event e : allEvents) {
+        for (Event e : myEvents) {
             checkMilestones(e);
         }
     }
@@ -239,7 +237,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
         now = Calendar.getInstance();
         cal = curEvent.getEventDate();
 
-        addMilestoneIfPresent(getMilestoneByCondition((double) numAttendees / capacity >= 3, MilestoneType.HALFWAY, curEvent));
+        addMilestoneIfPresent(getMilestoneByCondition((double) numAttendees / capacity >= 0.5, MilestoneType.HALFWAY, curEvent));
         addMilestoneIfPresent(getMilestoneByCondition(capacity == numAttendees, MilestoneType.FULLCAPACITY, curEvent));
         addMilestoneIfPresent(getMilestoneByCondition(numAttendees >= 1, MilestoneType.FIRSTATTENDEE, curEvent));
         addMilestoneIfPresent(getMilestoneByCondition(now.compareTo(cal) > 0, MilestoneType.EVENTSTART, curEvent));
