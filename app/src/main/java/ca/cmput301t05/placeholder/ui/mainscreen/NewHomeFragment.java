@@ -34,9 +34,9 @@ import java.util.Objects;
 
 public class NewHomeFragment extends Fragment implements EventAdapter.OnItemClickListener {
     private PlaceholderApp app;
-//    private RecyclerView signedUpEventsList;
+    private RecyclerView signedUpEventsList;
     private RecyclerView attendingEventsList;
-//    private EventAdapter signedUpEventsAdapter;
+    private EventAdapter signedUpEventsAdapter;
     private EventAdapter attendingEventsAdapter;
     private ExtendedFloatingActionButton createEventButton;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -52,6 +52,7 @@ public class NewHomeFragment extends Fragment implements EventAdapter.OnItemClic
         app = (PlaceholderApp) requireActivity().getApplication();
         ArrayList<Event> attendingEvents = new ArrayList<>(app.getJoinedEvents().values());
         attendingEventsAdapter.setEvents(attendingEvents);
+        signedUpEventsAdapter.setEvents(attendingEvents);
 
 
         createEventButton.setOnClickListener(v -> {
@@ -70,15 +71,17 @@ public class NewHomeFragment extends Fragment implements EventAdapter.OnItemClic
     }
 
     private void initializeViews(View view) {
-//        signedUpEventsList = view.findViewById(R.id.);
+        signedUpEventsList = view.findViewById(R.id.futureEvents);
         attendingEventsList = view.findViewById(R.id.listJoinedEvents);
-//        signedUpEventsAdapter = new EventAdapter(getContext(), new ArrayList<>(), EventAdapter.adapterType.HOSTED);
-        attendingEventsAdapter = new EventAdapter(getContext(), new ArrayList<>(), EventAdapter.adapterType.ATTENDING);
-//        signedUpEventsAdapter.setListener(this);
+        signedUpEventsAdapter = new EventAdapter(getContext(), new ArrayList<>(), EventAdapter.adapterType.ATTENDING);
+        attendingEventsAdapter = new EventAdapter(getContext(), new ArrayList<>(), EventAdapter.adapterType.ATTENDING, true);
+        signedUpEventsAdapter.setListener(this);
         attendingEventsAdapter.setListener(this);
-//        signedUpEventsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        attendingEventsList.setLayoutManager(new LinearLayoutManager(getContext()));
-//        signedUpEventsList.setAdapter(signedUpEventsAdapter);
+        signedUpEventsList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(requireActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        attendingEventsList.setLayoutManager(horizontalLayoutManager);
+        signedUpEventsList.setAdapter(signedUpEventsAdapter);
         attendingEventsList.setAdapter(attendingEventsAdapter);
 
         topBar = view.findViewById(R.id.main_page_toolbar);
