@@ -80,6 +80,17 @@ public class UserNotificationFragment extends DialogFragment {
             }
         });
 
+        app.refreshNotifications(new PlaceholderApp.appCallback() {
+            @Override
+            public void onSuccess() {
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
 
     }
 }

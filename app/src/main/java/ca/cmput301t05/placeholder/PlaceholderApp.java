@@ -31,6 +31,13 @@ import ca.cmput301t05.placeholder.utils.datafetchers.ProfileFetcher;
  */
 public class PlaceholderApp extends Application implements Serializable {
 
+    public interface appCallback{
+
+        void onSuccess();
+
+        void onFailure();
+    }
+
     private Profile userProfile;
     private EventPosterImageHandler posterImageHandler;
     private ProfileImageHandler profileImageHandler;
@@ -219,7 +226,7 @@ public class PlaceholderApp extends Application implements Serializable {
         this.notificationEventHolder = notificationEventHolder;
     }
 
-    public void refreshNotifications(){
+    public void refreshNotifications(appCallback callback){
 
         profileTable.fetchDocument(userProfile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
             @Override
@@ -240,12 +247,14 @@ public class PlaceholderApp extends Application implements Serializable {
 
                         notificationEventHolder.clear();
                         notificationEventHolder.addAll(holdNotiEvent.getQuickList(document, new ArrayList<>(joinedEvents.values())));
-                        
+
+                        callback.onSuccess();
+
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-
+                        callback.onFailure();
                     }
                 });
             }
