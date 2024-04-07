@@ -72,6 +72,7 @@ public class ViewQRCodesActivity extends AppCompatActivity {
      * and adds them to the ViewPager along with their corresponding titles.
      */
     private void populatePages() {
+        int pos = viewPager.getCurrentItem();
 
         List<Bitmap> qrImage = new ArrayList<>();
         Event curEvent = app.getCachedEvent();
@@ -85,6 +86,8 @@ public class ViewQRCodesActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(title, qrImage);
         viewPager.setAdapter(adapter);
         indicator3.setViewPager(viewPager);
+
+        viewPager.setCurrentItem(pos);
     }
 
     /**
@@ -92,7 +95,7 @@ public class ViewQRCodesActivity extends AppCompatActivity {
      * This method locates the views from the layout XML file and assigns them to the corresponding variables.
      * It also initializes the title ArrayList with two elements.
      */
-    private void initializeViews(){
+    private void initializeViews() {
         app = (PlaceholderApp) getApplicationContext();
         toolbar = findViewById(R.id.toolbarViewQRcode);
         shareButton = findViewById(R.id.share_qr);
@@ -158,8 +161,27 @@ public class ViewQRCodesActivity extends AppCompatActivity {
     private void updateScannedQRCode(String scannedQRCode) {
         PlaceholderApp app = (PlaceholderApp) getApplicationContext();
         final Event event = app.getCachedEvent();
-        // Set the scanned QR code as the check-in QR code of the event
-        event.setCheckInQR(scannedQRCode);
+
+        QRCodeType type;
+        int pos = viewPager.getCurrentItem();
+        if (pos == 0) {
+            type = QRCodeType.INFO;
+        } else {
+            type = QRCodeType.CHECK_IN;
+        }
+
+        if (!validateQRString(scannedQRCode, type)) {
+            scannedQRCode = scannedQRCode + ";" + type;
+        }
+
+        if (type == QRCodeType.INFO) {
+            // Set the scanned QR code as the event info QR code of the event
+            event.setInfoQRCode(scannedQRCode);
+        } else {
+            // Set the scanned QR code as the check-in QR code of the event
+            event.setCheckInQR(scannedQRCode);
+        }
+
         // Update the event in the database
         app.getEventTable().pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
             @Override
@@ -175,6 +197,12 @@ public class ViewQRCodesActivity extends AppCompatActivity {
             }
         });
         populatePages();
+    }
+
+    private boolean validateQRString(String rawText, QRCodeType type) {
+        // Verify that the rawText string ends in ;CHECK_IN for CHECK_IN type
+        // or ends in ;INFO for INFO type
+        return rawText.endsWith(";" + type.name());
     }
 
 

@@ -44,11 +44,7 @@ public class QRCode implements Serializable {
         }
 
         if (qrCode != null && !qrCode.isEmpty()) {
-            if (!validateQRString(qrCode, this.type)) {
-                qrCode = qrCode + ";" + this.type.name();
-            }
             this.rawText = qrCode;
-
         } else {
             this.eventID = event.getEventID();
             this.rawText = eventID.toString() + ";" + this.type.name();
@@ -64,13 +60,6 @@ public class QRCode implements Serializable {
             e.printStackTrace();
         }
     }
-
-    private boolean validateQRString(String rawText, QRCodeType type) {
-        // Verify that the rawText string ends in ;CHECK_IN for CHECK_IN type
-        // or ends in ;INFO for INFO type
-        return rawText.endsWith(";" + type.name());
-    }
-
 
     /**
      * Gets the type of the QR code.

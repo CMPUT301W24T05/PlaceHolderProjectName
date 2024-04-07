@@ -78,9 +78,6 @@
 
         <activity android:name=".Location.MapDisplay_activity"/>
 
-        <activity android:name=".ui.events.ReuseQRActivity"/>
-
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
