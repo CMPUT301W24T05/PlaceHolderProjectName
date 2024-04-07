@@ -42,7 +42,7 @@ public class QRCodeManager implements Serializable {
      */
     public QRCodeType checkQRcodeType(String rawQRcodeString) {
 
-        //qrcode strings are split by semi colons
+        //qrcode strings are split by semicolons
         String[] parts = rawQRcodeString.split(";");
 
         if (parts[1].equals("INFO")){
