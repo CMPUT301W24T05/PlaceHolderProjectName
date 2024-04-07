@@ -213,11 +213,9 @@ public class Event extends DocumentSerializable implements Serializable {
         }
     }
     // Check if maximum capacity is reached
+    // False
     public boolean reachMaxCapacity(){
-        if(attendees.size() == maxAttendees){
-            return false;
-        }
-        return true;
+        return (attendees.size() == maxAttendees);
     }
 
     /**

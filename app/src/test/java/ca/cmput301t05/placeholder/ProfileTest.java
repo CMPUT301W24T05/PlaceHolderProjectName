@@ -28,4 +28,6 @@ public class ProfileTest {
             userProfile.leaveEvent(event);
             assertEquals(userProfile.getJoinedEvents().size(), 0);
         }
+
+
 }

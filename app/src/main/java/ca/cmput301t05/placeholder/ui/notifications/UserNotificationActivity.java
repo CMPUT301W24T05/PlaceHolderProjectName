@@ -7,13 +7,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.notifications.Notification;
-import ca.cmput301t05.placeholder.notifications.NotificationAdapter;
+import ca.cmput301t05.placeholder.notifications.EventNotificationAdapter;
 
-import java.util.ArrayList;
 
 
 /**
@@ -32,7 +34,7 @@ public class UserNotificationActivity extends AppCompatActivity {
 
     private Button back;
 
-    private NotificationAdapter notificationAdapter;
+    private EventNotificationAdapter eventNotificationAdapter;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,9 +61,9 @@ public class UserNotificationActivity extends AppCompatActivity {
 
         //first grab the pre-loaded notifications
 
-        notificationAdapter = new NotificationAdapter(this, app.getUserNotifications());
+        eventNotificationAdapter = new EventNotificationAdapter(this, app.getUserNotifications());
         notificationList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        notificationList.setAdapter(notificationAdapter);
+        notificationList.setAdapter(eventNotificationAdapter);
 
         //now query for new notifications
         app.getNotificationTable().fetchMultipleDocuments(app.getUserProfile().getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
@@ -69,7 +71,7 @@ public class UserNotificationActivity extends AppCompatActivity {
             public void onSuccess(ArrayList<Notification> document) {
                 app.getUserNotifications().clear();
                 app.getUserNotifications().addAll(document);
-                notificationAdapter.notifyDataSetChanged();
+                eventNotificationAdapter.notifyDataSetChanged();
             }
 
             @Override

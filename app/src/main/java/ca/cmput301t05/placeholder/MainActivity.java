@@ -3,6 +3,19 @@ package ca.cmput301t05.placeholder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
+import ca.cmput301t05.placeholder.notifications.Notification;
+import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +28,9 @@ import ca.cmput301t05.placeholder.ui.mainscreen.ProfileUpdatedFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.HomeFragment;
 import ca.cmput301t05.placeholder.ui.mainscreen.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.UUID;
 
 
 /**
@@ -64,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
 
         Log.i("MainActivityProfileID", "Current profile ID:" + app.getUserProfile().getProfileID().toString());
         Log.i("MainActivityJoinedEvents", "Number of joined events: " + app.getJoinedEvents().size());
