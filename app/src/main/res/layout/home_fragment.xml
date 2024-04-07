@@ -1,106 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   xmlns:tools="http://schemas.android.com/tools"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="match_parent">
-
-    <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/appBarLayout2">
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-                style="?attr/collapsingToolbarLayoutMediumStyle"
-                android:layout_width="match_parent"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                android:layout_height="?attr/collapsingToolbarLayoutMediumSize">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/main_page_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    android:elevation="0dp" app:itemIconTint="?attr/colorOnBackground"
-                    app:titleTextAppearance="@style/AptosTextAppearance"
-                    app:menu="@menu/main_page_topbar_menu"
-                    app:title="Welcome, %s!">
-
-            </com.google.android.material.appbar.MaterialToolbar>
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBarLayout2"
-            app:layout_constraintBottom_toBottomOf="parent">
-        <androidx.core.widget.NestedScrollView
+            android:layout_height="match_parent"
+            android:id="@+id/swipeRefreshLayout">
+
+        <ca.cmput301t05.placeholder.utils.CustomNestedScrollView
+                android:id="@+id/nested_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
-                                                               android:layout_height="match_parent">
+                android:fillViewport="true">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/main_page_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:elevation="0dp"
+                        app:itemIconTint="?attr/colorOnBackground"
+                        app:titleTextAppearance="@style/AptosTextAppearance"
+                        app:menu="@menu/main_page_topbar_menu"
+                        app:title="Welcome, %s!" />
 
                 <TextView
+                        android:id="@+id/currentEventsHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/aptos"
                         android:text="You have %i events today"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/aptos"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:id="@+id/textView5" app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/listJoinedEvents"
+                        android:id="@+id/currentEvents"
                         android:layout_width="match_parent"
-                        android:layout_height="350dp"
-                        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textView5"
-                        android:layout_marginTop="10dp"/>
-
+                        android:layout_height="350dp" />
 
                 <TextView
-                        android:text="Your upcoming events"
-                        android:layout_width="0dp"
-                        android:fontFamily="@font/aptos"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:layout_height="wrap_content" android:id="@+id/textView6"
-                        app:layout_constraintTop_toBottomOf="@id/listJoinedEvents"
-                        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
-                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/futureEventsHeader"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/futureEvents"
-                        app:layout_constraintTop_toBottomOf="@+id/textView6" app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"/>
+                        android:fontFamily="@font/aptos"
+                        android:text="Your upcoming events"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/futureEvents"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp" />
+            </LinearLayout>
+        </ca.cmput301t05.placeholder.utils.CustomNestedScrollView>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/btnCreateEvent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:text="Create New Event"
-            app:icon="@drawable/add_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="24dp"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
