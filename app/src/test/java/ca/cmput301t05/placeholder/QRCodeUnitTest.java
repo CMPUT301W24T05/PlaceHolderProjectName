@@ -40,12 +40,12 @@ import ca.cmput301t05.placeholder.qrcode.QRCodeType;
 
 /**
  * Unit tests for QRCode class.
+ * @author Anthony
  */
 @RunWith(RobolectricTestRunner.class)
-public class QRCodeTest {
+public class QRCodeUnitTest {
 
     /**
-     * @author Anthony
      * Tests that a info QR code is encoded with the correct UUID as the event ID
      * and correct type of QR code; info QR code.
      */
@@ -63,7 +63,6 @@ public class QRCodeTest {
     }
 
     /**
-     * @author Anthony
      * Tests that a check-in QR code is encoded with the correct UUID as the event ID
      * and correct type of QR code; check-in QR code.
      */

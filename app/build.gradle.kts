@@ -30,6 +30,7 @@ android {
 
 
 
+
     defaultConfig {
         applicationId = "ca.cmput301t05.placeholder"
         minSdk = 24
@@ -59,15 +60,15 @@ android {
 dependencies {
 
 
+    // For notifications
+    implementation("com.google.code.gson:gson:2.10.1")
 
-
+    // Junit 5
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
-
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
     testCompileOnly ("junit:junit:4.13.2")
     testRuntimeOnly ("org.junit.vintage:junit-vintage-engine:5.10.2")
-
     androidTestImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
 
     // Robolectric
@@ -78,7 +79,7 @@ dependencies {
 
     testImplementation ("org.mockito:mockito-inline:5.0.0")
 
-    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0") // The dependency for QR code scannin
+    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0") // The dependency for QR code scanning
 
     //Implement ViewPager2 Swipe View
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
