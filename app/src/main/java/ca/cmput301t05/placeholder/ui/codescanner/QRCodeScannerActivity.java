@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -20,6 +21,10 @@ import ca.cmput301t05.placeholder.qrcode.QRCodeType;
 import ca.cmput301t05.placeholder.ui.events.checkin.SuccessfulCheckinActivity;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 /**
  * QRcodeScanner is an activity for scanning QR codes using the device's camera. It leverages the CodeScanner library
@@ -88,19 +93,41 @@ public class QRCodeScannerActivity extends AppCompatActivity {
 
         QRCodeManager manager = new QRCodeManager();
         QRCodeType type = manager.checkQRcodeType(rawText);
-        String qrEventID = manager.getEventID(rawText).toString();
 
-        app.getEventTable().fetchDocument(qrEventID, new Table.DocumentCallback<Event>() {
-            @Override
-            public void onSuccess(Event event) {
-                handleQRCodeType(type, event);
-            }
+        String field;
+        if(type == QRCodeType.CHECK_IN){
+            field = "checkInQR";
+        } else if (type == QRCodeType.INFO){
+            field = "infoQRCode";
+        } else {
+            // QRCodeType is ERROR, let's just finish and return for now
+            finish();
+            return;
+        }
 
-            @Override
-            public void onFailure(Exception e) {
-                // Failed to get fetch the event for eventId with exception e
-            }
-        });
+        app.getEventTable().getCollectionReference().whereEqualTo(field, rawText)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if(task.getResult().size() > 1){
+                            Toast.makeText(QRCodeScannerActivity.this, "Multiple events found with the same QR code", Toast.LENGTH_SHORT).show();
+                            finish();
+                            return;
+                        } else if (task.getResult().isEmpty()){
+                            Toast.makeText(QRCodeScannerActivity.this, "No event found with the scanned QR code", Toast.LENGTH_SHORT).show();
+                            finish();
+                            return;
+                        }
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("QR", document.getId() + " => " + document.getData());
+                            Event queryEvent = new Event();
+                            queryEvent.fromDocument(document);
+                            handleQRCodeType(type, queryEvent);
+                        }
+                    } else {
+                        Log.d("QR", "Error getting documents: ", task.getException());
+                    }
+                });
     }
 
     /**
