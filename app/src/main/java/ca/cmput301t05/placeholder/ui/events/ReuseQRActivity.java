@@ -85,7 +85,8 @@ public class ReuseQRActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Launch the QR code scanner activity to scan a new QR code
                 Intent intent = new Intent(ReuseQRActivity.this, ReuseQRCodeScannerActivity.class);
-                qrCodeScannerLauncher.launch(intent); // Use the launcher to start the activity
+
+
             }
         });
     }

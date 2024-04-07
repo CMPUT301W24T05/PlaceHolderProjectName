@@ -9,7 +9,10 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,10 +24,12 @@ import java.util.List;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.ViewPagerAdapter;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.qrcode.QRCodeType;
+import ca.cmput301t05.placeholder.ui.codescanner.ReuseQRCodeScannerActivity;
 import me.relex.circleindicator.CircleIndicator3;
 
 /**
@@ -50,6 +55,9 @@ public class ViewQRCodesActivity extends AppCompatActivity {
     private List<Bitmap> qrImage;
 
     CircleIndicator3 indicator3;
+
+    private ActivityResultLauncher<Intent> qrCodeScannerLauncher;
+
 
 
 
@@ -105,13 +113,45 @@ public class ViewQRCodesActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize the launcher for the QR code scanner activity
+        qrCodeScannerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK) {
+                Intent data = result.getData();
+                if (data != null) {
+                    // Retrieve the scanned QR code from the result
+                    String scannedQRCode = data.getStringExtra("scannedQRCode");
+
+                    // Retrieve the event associated with the QR code
+                    //PlaceholderApp app = (PlaceholderApp) getApplicationContext();
+                    final Event event = app.getCachedEvent();
+
+                    // Set the scanned QR code as the check-in QR code of the event
+                    event.setCheckInQR(scannedQRCode);
+
+                    // Update the event in the database
+                    app.getEventTable().pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
+                        @Override
+                        public void onSuccess(Event document) {
+                            // Handle success, if needed
+                            Toast.makeText(ViewQRCodesActivity.this, "Update successful", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            // Handle failure, if needed
+                            Toast.makeText(ViewQRCodesActivity.this, "Update failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+
         // Listener for the Reuse QR button
         reuseQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ViewQRCodesActivity.this, ReuseQRActivity.class);
-                intent.putExtra("eventName", getIntent().getStringExtra("eventName"));
-                startActivity(intent);
+                Intent intent = new Intent(ViewQRCodesActivity.this, ReuseQRCodeScannerActivity.class);
+                qrCodeScannerLauncher.launch(intent); // Use the launcher to start the activity
             }
         });
 
