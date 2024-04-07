@@ -31,7 +31,9 @@ public class AdminEventFragment extends Fragment {
 
         RecyclerView imagesRecycler = view.findViewById(R.id.admin_view_image_recycler);
 
+        //AdminEventAdapter adapter = new AdminEventAdapter(getContext());
         AdminEventAdapter adapter = new AdminEventAdapter(getContext());
+
 
         imagesRecycler.setAdapter(adapter);
         adapter.setEventRefresh(imagesRecycler);
