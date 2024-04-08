@@ -54,10 +54,32 @@ public class MilestoneConditions {
                 }   else {
                     return null;
                 }
-                
+
             default:
                 return null;
         }
+
+    }
+
+    /**
+     * Loops through event's milestones and returns true if the event already contains the milestone type
+     *
+     * @param event
+     * @param type
+     * @return
+     */
+    public static boolean alreadyContainsMilestone(Event event, MilestoneType type){
+
+        for (String m : event.getMilestones()){
+
+            String [] types = m.split(";"); //splits the id to check and see if the event already contains this
+            if (types[0].equals(String.valueOf(type.getId()))){
+                return true;
+            }
+
+        }
+
+        return false;
 
     }
 

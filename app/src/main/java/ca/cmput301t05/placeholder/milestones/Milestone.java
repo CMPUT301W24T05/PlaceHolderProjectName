@@ -34,7 +34,7 @@ public class Milestone extends DocumentSerializable{
         this.mType = type;
         this.eventID = event.getEventID().toString();
         this.eventName = event.getEventName();
-        this.id = UUID.randomUUID().toString();
+        this.id = type.getId() + ";" + eventID; //essentially milestones will be TYPE;EVENT-ID for ID
 
         this.message = generateMessage(this.mType, this.eventName);
 
