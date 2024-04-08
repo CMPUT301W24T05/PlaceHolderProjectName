@@ -28,9 +28,7 @@ public class EventTable extends Table<Event> {
      */
     @Override
     protected Event documentFromSnapshot(DocumentSnapshot snapshot) {
-        Event event = new Event();
-        event.fromDocument(snapshot);
-        return event;
+        return new Event(snapshot);
     }
 
     // Fetch all documents from the collection
