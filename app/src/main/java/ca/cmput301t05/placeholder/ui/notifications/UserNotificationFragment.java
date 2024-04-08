@@ -26,7 +26,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
-
+/**
+ * A DialogFragment subclass for displaying user notifications in a RecyclerView.
+ * This fragment presents a list of user notifications in a dialog window.
+ */
 public class UserNotificationFragment extends DialogFragment {
 
     TextView nameText;
@@ -36,18 +39,24 @@ public class UserNotificationFragment extends DialogFragment {
     Context context;
 
     PlaceholderApp app;
-
+    /**
+     * Constructs a new UserNotificationFragment.
+     */
     public UserNotificationFragment(){
         super(R.layout.recycler_with_back);
     }
-
+    /**
+     * Creates the view for the fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.recycler_with_back, container, false);
     }
-
+    /**
+     * Creates the dialog window for the fragment.
+     */
     @NonNull
     @NotNull
     @Override
@@ -59,7 +68,9 @@ public class UserNotificationFragment extends DialogFragment {
 
         return dialog;
     }
-
+    /**
+     * Initializes the views and sets up the RecyclerView adapter.
+     */
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

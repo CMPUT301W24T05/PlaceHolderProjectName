@@ -13,7 +13,6 @@ public class MilestoneTable extends Table<Milestone> {
     /**
      * Constructs a Table object with the given collection name.
      *
-//     * @param collection an enum which allows us to grab paths and such
      */
     public MilestoneTable() {
         super(COLLECTION);
