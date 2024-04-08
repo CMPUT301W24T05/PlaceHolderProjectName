@@ -22,7 +22,7 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Milestone;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.utils.holdNotiEvent;
+import ca.cmput301t05.placeholder.utils.HoldNotificationToEvent;
 import ca.cmput301t05.placeholder.utils.datafetchers.EventFetcher;
 import ca.cmput301t05.placeholder.utils.datafetchers.ProfileFetcher;
 
@@ -68,7 +68,7 @@ public class PlaceholderApp extends Application implements Serializable {
 
     private LocationManager locationManager;
 
-    private ArrayList<holdNotiEvent> notificationEventHolder;
+    private ArrayList<HoldNotificationToEvent> notificationEventHolder;
 
     /**
      * Called when the application is starting, before any activity, service, or receiver objects (excluding content providers) have been created.
@@ -226,11 +226,11 @@ public class PlaceholderApp extends Application implements Serializable {
         return eventFetcher;
     }
 
-    public ArrayList<holdNotiEvent> getNotificationEventHolder() {
+    public ArrayList<HoldNotificationToEvent> getNotificationEventHolder() {
         return notificationEventHolder;
     }
 
-    public void setNotificationEventHolder(ArrayList<holdNotiEvent> notificationEventHolder) {
+    public void setNotificationEventHolder(ArrayList<HoldNotificationToEvent> notificationEventHolder) {
         this.notificationEventHolder = notificationEventHolder;
     }
 
@@ -254,7 +254,7 @@ public class PlaceholderApp extends Application implements Serializable {
                         }
 
                         notificationEventHolder.clear();
-                        notificationEventHolder.addAll(holdNotiEvent.getQuickList(document, new ArrayList<>(joinedEvents.values())));
+                        notificationEventHolder.addAll(HoldNotificationToEvent.getQuickList(document, new ArrayList<>(joinedEvents.values())));
 
                         callback.onSuccess();
 

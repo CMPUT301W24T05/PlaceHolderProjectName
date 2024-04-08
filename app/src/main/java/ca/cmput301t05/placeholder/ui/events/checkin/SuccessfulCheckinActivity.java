@@ -21,16 +21,11 @@ import androidx.core.content.ContextCompat;
 import ca.cmput301t05.placeholder.Location.LocationManager;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
-import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
-import ca.cmput301t05.placeholder.database.utils.MilestoneConditions;
+import ca.cmput301t05.placeholder.milestones.MilestoneConditions;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.milestones.Milestone;
-import ca.cmput301t05.placeholder.milestones.MilestoneType;
-import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 
 import java.util.List;
 

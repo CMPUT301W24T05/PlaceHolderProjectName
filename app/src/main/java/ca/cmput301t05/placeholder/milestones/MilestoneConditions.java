@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.database.utils;
+package ca.cmput301t05.placeholder.milestones;
 
 import android.util.Log;
 
@@ -8,8 +8,6 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.milestones.Milestone;
-import ca.cmput301t05.placeholder.milestones.MilestoneType;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 
@@ -130,6 +128,7 @@ public class MilestoneConditions {
                                         public void onSuccess(Profile document) {
 
                                             Notification n = new Notification(milestone.getMessage(), document.getProfileID(), event.getEventID());
+                                            n.setPush(true);
 
                                             HttpNotificationHandler.sendNotificationToUser(n, document.getMessagingToken(), new HttpNotificationHandler.httpHandlercallback() {
                                                 @Override

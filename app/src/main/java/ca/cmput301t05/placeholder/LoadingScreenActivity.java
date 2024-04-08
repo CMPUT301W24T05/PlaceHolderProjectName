@@ -10,19 +10,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.*;
 
-import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
-import ca.cmput301t05.placeholder.database.utils.MilestoneConditions;
+import ca.cmput301t05.placeholder.milestones.MilestoneConditions;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Milestone;
-import ca.cmput301t05.placeholder.milestones.MilestoneType;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.utils.datafetchers.DataFetchCallback;
 import ca.cmput301t05.placeholder.utils.datafetchers.EventFetcher;
 import ca.cmput301t05.placeholder.utils.datafetchers.ProfileFetcher;
 
-import ca.cmput301t05.placeholder.utils.holdNotiEvent;
+import ca.cmput301t05.placeholder.utils.HoldNotificationToEvent;
 
 import java.util.ArrayList;
 
@@ -138,7 +136,7 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
                 app.getUserNotifications().addAll(document);
 
                 //this is for loading notifications easily for user notifications
-                app.setNotificationEventHolder(holdNotiEvent.hashQuickList(document, app.getJoinedEvents()));
+                app.setNotificationEventHolder(HoldNotificationToEvent.hashQuickList(document, app.getJoinedEvents()));
 
                 startMainActivity();
             }
