@@ -11,7 +11,9 @@ public enum Collections{
     NOTIFICATIONS("notifications", "notificationsID"),
     PROFILES("profiles", "profileID"),
 
-    IMAGEDETAILS("imageDetails", "id");
+    IMAGEDETAILS("imageDetails", "id"),
+
+    MILESTONES("milestones", "id");
 
     private final String path;
     private final String id;

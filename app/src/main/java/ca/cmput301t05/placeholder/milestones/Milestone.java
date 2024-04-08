@@ -1,6 +1,11 @@
 package ca.cmput301t05.placeholder.milestones;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.MilestoneType;
@@ -18,12 +23,19 @@ public class Milestone implements Serializable {
     private String eventID;
     private String eventName;
 
+    private String id;
+
+    Milestone(DocumentSnapshot snapshot){
+        this.fromDocument(snapshot);
+    }
+
 
     Milestone(MilestoneType type, Event event){
 
         this.mType = type;
         this.eventID = event.getEventID().toString();
         this.eventName = event.getEventName();
+        this.id = UUID.randomUUID().toString();
 
         this.message = generateMessage(this.mType, this.eventName);
 
@@ -45,6 +57,49 @@ public class Milestone implements Serializable {
             default:
                 return "Default message";
         }
+    }
+
+    public Map<String, Object> toDocument(){
+
+        Map<String, Object> document = new HashMap<>();
+
+        document.put("id", id);
+        document.put("type", mType.getId());
+        document.put("eventID", eventID);
+        document.put("message", message);
+        document.put("eventName", eventName);
+
+        return document;
+    }
+
+    public void fromDocument(DocumentSnapshot snapshot){
+
+        this.id = snapshot.getString("id");
+        this.mType = getType(snapshot.getDouble("type"));
+        this.eventID = snapshot.getString("eventID");
+        this.message = snapshot.getString("message");
+        this.eventName = snapshot.getString("eventName");
+
+    }
+
+    private MilestoneType getType(double d){
+
+        switch ((int) d) {
+            case 0:
+                return MilestoneType.FIRSTATTENDEE;
+            case 1:
+                return MilestoneType.FIRSTSIGNUP;
+            case 2:
+                return MilestoneType.EVENTSTART;
+            case 3:
+                return MilestoneType.EVENTEND;
+            case 4:
+                return MilestoneType.HALFWAY;
+            case 5:
+                return MilestoneType.FULLCAPACITY;
+        }
+
+        return null;
     }
 
 
