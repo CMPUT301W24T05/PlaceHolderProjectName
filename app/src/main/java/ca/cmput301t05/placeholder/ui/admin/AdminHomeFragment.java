@@ -19,7 +19,9 @@ import com.google.firebase.firestore.Query;
 
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.DatabaseManager;
-
+/**
+ * Admin home page, displays statistics like the number of profiles and events.
+ */
 public class AdminHomeFragment extends Fragment {
 
     public AdminHomeFragment(){super(R.layout.admin_mainpage_fragment);}

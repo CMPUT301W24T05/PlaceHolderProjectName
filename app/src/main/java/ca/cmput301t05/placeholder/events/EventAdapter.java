@@ -43,14 +43,27 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm a", Locale.CANADA);
 
-
+    /**
+     * Constructor for EventAdapter.
+     *
+     * @param context         The context of the calling activity or fragment.
+     * @param event           The list of events to be displayed.
+     * @param adapterType     The type of adapter.
+     */
     public EventAdapter(Context context, ArrayList<Event> event, adapterType adapterType) {
         this.eventList = event;
         this.context = context;
         this.type = adapterType;
         this.horizontalLayout = false;
     }
-
+    /**
+     * Constructor for EventAdapter with layout type.
+     *
+     * @param context         The context of the calling activity or fragment.
+     * @param event           The list of events to be displayed.
+     * @param adapterType     The type of adapter.
+     * @param isHorizontalList True if the layout is horizontal, false otherwise.
+     */
     public EventAdapter(Context context, ArrayList<Event> event, adapterType adapterType, boolean isHorizontalList) {
         this.eventList = event;
         this.context = context;
@@ -62,6 +75,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         this.listener = listener;
     }
 
+    /**
+     * Creates a new view holder instance.
+     *
+     * @param parent   The parent view group.
+     * @param viewType The view type.
+     * @return A new instance of EventCardViewHolder.
+     */
     @NonNull
     @Override
     public EventCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -89,18 +109,34 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         }
     }
 
+    /**
+     * Returns the number of items in the adapter.
+     *
+     * @return The number of items in the adapter.
+     */
     @Override
     public int getItemCount() {
         if (eventList == null) return 0;
         else return eventList.size();
     }
 
+
+    /**
+     * Sets the list of events for the adapter.
+     *
+     * @param events The list of events to set.
+     */
     @SuppressLint("NotifyDataSetChanged")
     public void setEvents(ArrayList<Event> events){
         this.eventList = events;
         notifyDataSetChanged();
     }
 
+    /**
+     * Adds or updates events in the adapter.
+     *
+     * @param newEvents The list of new events to add or update.
+     */
     public void addOrUpdateEvents(ArrayList<Event> newEvents) {
         for (Event newEvent: newEvents) {
             int existIndex = this.eventList.indexOf(newEvent);
@@ -116,11 +152,21 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         }
     }
 
+    /**
+     * Adds events to the adapter.
+     *
+     * @param newEvents The list of new events to add.
+     */
     public void addEvents(ArrayList<Event> newEvents) {
         this.eventList.addAll(newEvents);
         notifyItemRangeInserted(this.eventList.size() - newEvents.size(), newEvents.size());
     }
 
+    /**
+     * Removes an event from the adapter.
+     *
+     * @param eventToRemove The event to remove.
+     */
     public void removeEvent(Event eventToRemove) {
         int removeIndex = this.eventList.indexOf(eventToRemove);
         if (removeIndex != -1) {
@@ -140,7 +186,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
         this.eventList.clear();
         notifyItemRangeRemoved(0, sizeOfList);
     }
-
+    /**
+     * ViewHolder class for event cards.
+     */
     public class EventCardViewHolder extends RecyclerView.ViewHolder {
         TextView eventName, eventLocation, eventDate;
         ShapeableImageView posterView;
@@ -210,7 +258,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
             }
         }
     }
-
+    /**
+     * HostedEventCardViewHolder extending EventCardViewHolder with specialized behaviour
+     */
     public class HostedEventCardViewHolder extends EventCardViewHolder {
         TextView interested_number, attended_number;
 
@@ -239,7 +289,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventCardVie
             }
         }
     }
-
+    /**
+     * JoinedEventCardViewHolder extending EventCardViewHolder with specialized behaviour
+     */
     public class JoinedEventCardViewHolder extends EventCardViewHolder {
         TextView attending_number, interested_number;
         ImageView attendedIcon, interestedIcon;

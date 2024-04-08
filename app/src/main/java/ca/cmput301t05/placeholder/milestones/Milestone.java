@@ -23,12 +23,22 @@ public class Milestone extends DocumentSerializable{
     private String eventName;
 
     private String id;
+    /**
+     * Constructs a milestone object from a document snapshot retrieved from the database.
+     *
+     * @param snapshot The document snapshot containing milestone data.
+     */
 
     public Milestone(DocumentSnapshot snapshot){
         this.fromDocument(snapshot);
     }
 
-
+    /**
+     * Constructs a milestone object with the given type and event.
+     *
+     * @param type  The type of milestone.
+     * @param event The event associated with the milestone.
+     */
     public Milestone(MilestoneType type, Event event){
 
         this.mType = type;
@@ -39,7 +49,13 @@ public class Milestone extends DocumentSerializable{
         this.message = generateMessage(this.mType, this.eventName);
 
     }
-
+    /**
+     * Generates a message for the milestone based on its type and associated event name.
+     *
+     * @param mType     The type of milestone.
+     * @param eventName The name of the associated event.
+     * @return The generated milestone message.
+     */
     public String generateMessage(MilestoneType mType, String eventName) {
         // Generate message based on the milestone type
         switch (mType) {
@@ -58,6 +74,11 @@ public class Milestone extends DocumentSerializable{
         }
     }
 
+    /**
+     * Converts the milestone object to a map suitable for storing in the database.
+     *
+     * @return A map representing the milestone data.
+     */
     public Map<String, Object> toDocument(){
 
         Map<String, Object> document = new HashMap<>();
@@ -70,7 +91,11 @@ public class Milestone extends DocumentSerializable{
 
         return document;
     }
-
+    /**
+     * Populates the milestone object's fields from the given document snapshot retrieved from the database.
+     *
+     * @param snapshot The document snapshot containing milestone data.
+     */
     public void fromDocument(DocumentSnapshot snapshot){
 
         this.id = snapshot.getString("id");
@@ -80,7 +105,12 @@ public class Milestone extends DocumentSerializable{
         this.eventName = snapshot.getString("eventName");
 
     }
-
+    /**
+     * Retrieves the milestone type from the database representation.
+     *
+     * @param d The database representation of the milestone type.
+     * @return The corresponding milestone type.
+     */
     private MilestoneType getType(double d){
 
         switch ((int) d) {
@@ -100,23 +130,43 @@ public class Milestone extends DocumentSerializable{
 
         return null;
     }
-
+    /**
+     * Gets the message associated with the milestone.
+     *
+     * @return The milestone message.
+     */
     public String getMessage() {
         return message;
     }
-
+    /**
+     * Gets the type of the milestone.
+     *
+     * @return The milestone type.
+     */
     public MilestoneType getmType() {
         return mType;
     }
-
+    /**
+     * Gets the ID of the event associated with the milestone.
+     *
+     * @return The event ID.
+     */
     public String getEventID() {
         return eventID;
     }
-
+    /**
+     * Gets the ID of the milestone.
+     *
+     * @return The milestone ID.
+     */
     public String getId() {
         return id;
     }
-
+    /**
+     * Gets the name of the event associated with the milestone.
+     *
+     * @return The event name.
+     */
     public String getEventName() {
         return eventName;
     }

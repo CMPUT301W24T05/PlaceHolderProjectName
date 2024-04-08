@@ -206,7 +206,12 @@ public class Notification extends DocumentSerializable{
         }
 
     }
-
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     *
+     * @param o the reference object with which to compare.
+     * @return true if this object is the same as the obj argument; false otherwise.
+     */
     @Override
     public boolean equals(Object o){
 
@@ -222,12 +227,15 @@ public class Notification extends DocumentSerializable{
 
         return false;
     }
+    /**
+     * Returns a hash code value for the object.
+     *
+     * @return a hash code value for this object.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(notificationID);
     }
-
-
 
     //getters and setters
 

@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -70,6 +71,17 @@ public class MainUITest {
         // check go to scanning page
         onView(ViewMatchers.withId(R.id.scan_menu_item)).perform(click());
         onView(ViewMatchers.withId(R.id.scanner_view)).check(ViewAssertions.matches(isDisplayed()));
+    }
+    @Test
+    public void seeNotification(){
+        onView(withId(R.id.intro_name_edit)).perform(click());
+        onView(withId(R.id.intro_name_edit)).perform(ViewActions.typeText("Galvin Test"), closeSoftKeyboard()); // Entering name
+        // Will go to the main activity homepage
+        onView(withId(R.id.intro_submit_button)).perform(click());
+        SystemClock.sleep(2000);
+        //openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getTargetContext());
+        onView(withId(R.id.home_notification_item)).perform(click());
+        //onView(ViewMatchers.withId(R.id.recycler_page_name_text)).check(ViewAssertions.matches(isDisplayed()));
     }
 
     /**

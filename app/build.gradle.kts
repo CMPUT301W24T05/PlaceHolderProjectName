@@ -133,6 +133,8 @@ dependencies {
     androidTestImplementation("androidx.test:rules:1.5.0")
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
 
+    androidTestImplementation ("androidx.fragment:fragment-testing:1.6.2")
+
     //this is for image picker for uploading event poster
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.fragment:fragment-ktx:1.6.2")

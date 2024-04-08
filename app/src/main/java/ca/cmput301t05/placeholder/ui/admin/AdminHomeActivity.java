@@ -34,7 +34,12 @@ public class AdminHomeActivity extends AppCompatActivity {
     BottomNavigationView bottomBar;
     ImageView backButton;
 
-
+    /**
+     * Called when the activity is starting. This is where most initialization should go.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down
+     * then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     * Otherwise, it is null.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,8 +106,6 @@ public class AdminHomeActivity extends AppCompatActivity {
                 .setReorderingAllowed(true)
                 .add(R.id.admin_fragment_container, AdminHomeFragment.class, null)
                 .commit();
-
-
 
     }
 }
