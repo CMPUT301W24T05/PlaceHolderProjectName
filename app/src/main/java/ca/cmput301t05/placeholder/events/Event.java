@@ -45,7 +45,7 @@ public class Event extends DocumentSerializable implements Serializable {
 
     private ArrayList<String> notifications; //notifications that are sent for this specific event
 
-    private ArrayList<String> milestones; //This is for adding milestones
+    private HashMap<String, String> milestones; //type -> id
 
 
 
@@ -58,7 +58,7 @@ public class Event extends DocumentSerializable implements Serializable {
         this.attendees = new HashMap<>();
         this.notifications = new ArrayList<>();
         this.registeredUsers = new ArrayList<>();
-        this.milestones = new ArrayList<>();
+        this.milestones = new HashMap<>();
     }
 
     public Event(DocumentSnapshot snapshot){
@@ -78,7 +78,7 @@ public class Event extends DocumentSerializable implements Serializable {
         this.registeredUsers = new ArrayList<>();
         this.attendeesNum = 0L;
         this.registeredUsersNum = 0L;
-        this.milestones = new ArrayList<>();
+        this.milestones = new HashMap<>();
     }
 
     /**
@@ -99,7 +99,7 @@ public class Event extends DocumentSerializable implements Serializable {
         this.registeredUsers = new ArrayList<>();
         this.attendeesNum = 0L;
         this.registeredUsersNum = 0L;
-        this.milestones = new ArrayList<>();
+        this.milestones = new HashMap<>();
     }
 
     @Override
@@ -203,7 +203,7 @@ public class Event extends DocumentSerializable implements Serializable {
 
         if (document.get("milestones") != null){
 
-            this.milestones = (ArrayList<String>) document.get("milestones");
+            this.milestones = (HashMap<String, String>) document.get("milestones");
         }
 
 
@@ -478,7 +478,7 @@ public class Event extends DocumentSerializable implements Serializable {
         return registeredUsersNum;
     }
 
-    public ArrayList<String> getMilestones() {
+    public HashMap<String, String> getMilestones() {
         return milestones;
     }
 }

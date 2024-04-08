@@ -318,4 +318,13 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
     private void navigateToEventDetailsAfterDelay() {
         new Handler().postDelayed(this::navigateToEventDetails, SPLASH_DELAY);
     }
+
+    /**
+     * Handles checking the event to see if our milestone conditions have been met
+     */
+    private void MilestoneHandling(){
+
+
+
+    }
 }

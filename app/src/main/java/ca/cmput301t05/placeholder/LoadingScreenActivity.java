@@ -78,8 +78,6 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
     }
 
     private void startMainActivity() {
-        // sets milestones for each event
-        setMilestones();
         Log.i("Placeholder App", String.format("Profile with id %s and name %s has been loaded!",
                 app.getUserProfile().getProfileID(), app.getUserProfile().getName()));
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -151,90 +149,4 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
         });
     }
 
-    /**
-     * Sets the milestones for all the events in the application.
-     */
-    private void setMilestones() {
-        ArrayList<Event> allEvents = new ArrayList<>(app.getHostedEvents().values());
-
-        for (Event e : allEvents) {
-            checkMilestones(e);
-        }
-    }
-
-    /**
-     * Checks various milestones for a given event and adds them to the application if they are present.
-     *
-     * @param curEvent the event to check milestones for
-     */
-    private void checkMilestones(Event curEvent) {
-        numAttendees = curEvent.getAttendees().size();
-        capacity = curEvent.getMaxAttendees();
-        numRegistered = curEvent.getRegisteredUsers().size();
-        now = Calendar.getInstance();
-        cal = curEvent.getEventDate();
-
-        addMilestoneIfPresent(getMilestoneByCondition((double) numAttendees / capacity >= 0.5, MilestoneType.HALFWAY, curEvent));
-        addMilestoneIfPresent(getMilestoneByCondition(capacity == numAttendees, MilestoneType.FULLCAPACITY, curEvent));
-        addMilestoneIfPresent(getMilestoneByCondition(numAttendees >= 1, MilestoneType.FIRSTATTENDEE, curEvent));
-        addMilestoneIfPresent(getMilestoneByCondition(now.compareTo(cal) > 0, MilestoneType.EVENTSTART, curEvent));
-        addMilestoneIfPresent(getMilestoneByCondition(numRegistered >= 1, MilestoneType.FIRSTSIGNUP, curEvent));
-    }
-
-    /**
-     * Private method to get a milestone based on a condition, milestone type, and event.
-     *
-     * @param condition a boolean value representing the condition for the milestone
-     * @param type the milestone type
-     * @param curEvent the event object
-     * @return an Optional object containing the milestone if the condition is met and milestone type is not already present, otherwise an empty Optional object
-     */
-    private Optional<Milestone> getMilestoneByCondition(boolean condition, MilestoneType type, Event curEvent) {
-        return !containsMilestoneType(type) && condition ?
-                Optional.of(new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), type, curEvent.getEventName())) :
-                Optional.empty();
-    }
-
-    /**
-     * Adds a milestone to the application if it is present.
-     *
-     * @param milestone an Optional object that represents a milestone event
-     */
-    private void addMilestoneIfPresent(Optional<Milestone> milestone) {
-        milestone.ifPresent(this::addMilestone);
-    }
-
-
-    /**
-     * Checks if the given MilestoneType is present in the milestones list.
-     *
-     * @param type the MilestoneType to check
-     * @return true if the MilestoneType is present in the milestones list, false otherwise
-     */
-    public boolean containsMilestoneType(MilestoneType type) {
-        return milestones != null && milestones.stream().anyMatch(milestone -> milestone.getMType() == type);
-    }
-
-    /**
-     * Adds the milestone to the notification database
-     *
-     * @param milestone the Milestone to be added
-     */
-    public void addMilestone(Milestone milestone) {
-        //push to notification database
-        Profile profile = app.getUserProfile();
-        String token = profile.getMessagingToken();
-        HttpNotificationHandler.sendNotificationToUser(milestone, token, new HttpNotificationHandler.httpHandlercallback() {
-            @Override
-            public void onSuccess() {
-                app.getUserMilestones().add(milestone);
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
-
-    }
 }
