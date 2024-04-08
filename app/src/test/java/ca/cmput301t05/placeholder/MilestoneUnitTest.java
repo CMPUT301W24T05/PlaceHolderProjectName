@@ -83,5 +83,34 @@ public class MilestoneUnitTest {
         );
     }
 
+    /**
+     * Tests via comparison to ensure that each milestone object is recognized as a
+     * distinct milestone regardless of its attributes. E.g. check that two different types of
+     * milestones for the same event are recognized as separate milestone entities.
+     */
+    @Test
+    public void testCompareMilestones(){
+        UUID creatorID = UUID.randomUUID();
+        UUID eventID = UUID.randomUUID();
+        String eventName = "Test Event";
+        Milestone milestoneFirstAttendee = new Milestone(creatorID, eventID, FIRSTATTENDEE, eventName);
+        Milestone milestoneFirstSignUp = new Milestone(creatorID, eventID, FIRSTSIGNUP, eventName);
+        Milestone milestoneFirstAttendeeDiffEvent = new Milestone(creatorID,UUID.randomUUID(), FIRSTATTENDEE, eventName); // Same type of milestone type but for different event.
+        Milestone milestoneFirstSignUpDiffCreator = new Milestone(UUID.randomUUID(), eventID, FIRSTSIGNUP, eventName);
+        assertNotNull(milestoneFirstAttendee);
+        assertNotNull(milestoneFirstSignUp);
+        assertNotNull(milestoneFirstAttendeeDiffEvent);
+        assertNotNull(milestoneFirstSignUpDiffCreator);
+        assertNotEquals(milestoneFirstAttendee, milestoneFirstSignUp);
+        assertNotEquals(milestoneFirstAttendee, milestoneFirstAttendeeDiffEvent);
+        assertNotEquals(milestoneFirstSignUpDiffCreator, milestoneFirstSignUp);
+        assertEquals(milestoneFirstAttendeeDiffEvent.getMType(), milestoneFirstAttendee.getMType()); // Different milestones, but are same type of milestone i.e. milestone for event's first attendee
+        assertEquals(milestoneFirstSignUp.getMType(), milestoneFirstSignUpDiffCreator.getMType());
+        Milestone newMileStoneSameFields =new Milestone(creatorID, eventID, FIRSTATTENDEE, eventName);
+        assertNotSame(milestoneFirstAttendee, newMileStoneSameFields);
+
+    }
+
+
 
 }
