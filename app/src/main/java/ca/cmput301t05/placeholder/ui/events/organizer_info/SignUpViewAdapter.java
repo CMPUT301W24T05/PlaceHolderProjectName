@@ -18,6 +18,9 @@ import java.util.List;
 
 import ca.cmput301t05.placeholder.R;
 
+/**
+ * Custom adapter for displaying event sign-ups.
+ */
 public class SignUpViewAdapter extends RecyclerView.Adapter<SignUpViewAdapter.SignupCardViewHolder>{
 
     private ArrayList<String> signupNames;

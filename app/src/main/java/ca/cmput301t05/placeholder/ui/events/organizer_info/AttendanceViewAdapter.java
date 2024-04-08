@@ -27,6 +27,9 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
 
+/**
+ * Custom adapter for displaying event attendees.
+ */
 public class AttendanceViewAdapter extends RecyclerView.Adapter<AttendanceViewAdapter.AttendanceCardViewHolder>{
 
     private HashMap<String, Double> attendDisplayed;

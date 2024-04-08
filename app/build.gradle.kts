@@ -59,7 +59,8 @@ android {
 
 dependencies {
 
-
+    // For UI testing
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0")
     // For notifications
     implementation("com.google.code.gson:gson:2.10.1")
 

@@ -31,7 +31,10 @@ import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
-
+/**
+ * Activity for page containing a list of people who have checked into the event.
+ * @author Anthony
+ */
 public class ViewAttendeeCheckinActivity extends AppCompatActivity { // Organizer can view who has checked into their event and how many times they have.
 
     private PlaceholderApp app;
@@ -50,8 +53,13 @@ public class ViewAttendeeCheckinActivity extends AppCompatActivity { // Organize
     private Toolbar toolbar;
 
 
-
-
+    /**
+     * Creates the activity; sets up the UI, and retrieves event information from the database.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
