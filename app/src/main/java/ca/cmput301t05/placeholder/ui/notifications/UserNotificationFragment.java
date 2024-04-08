@@ -19,8 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.UserNotificationAdapter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserNotificationFragment extends DialogFragment {
 
@@ -69,15 +74,41 @@ public class UserNotificationFragment extends DialogFragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //hopefully this allows us to go back
+
+                //update the notifications to show they're read
+                for (Notification notification : app.getUserNotifications()){
+
+                    app.getNotificationTable().pushDocument(notification, notification.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
+                        @Override
+                        public void onSuccess(Notification document) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+
+                        }
+                    });
+
+                }
+
                 dismiss();
             }
         });
 
         nameText.setText("Notifications");
 
+        //Somehow duplicates are propping up, not enough time to find issue quick fix
 
-        UserNotificationAdapter adapter = new UserNotificationAdapter(context, app.getNotificationEventHolder());
+        Set<Notification> notificationSet = new HashSet<>();
+        for (Notification n : app.getUserNotifications()){
+            notificationSet.add(n);
+        }
+
+        app.getUserNotifications().clear();
+        app.getUserNotifications().addAll(notificationSet);
+
+        UserNotificationAdapter adapter = new UserNotificationAdapter(context, app.getUserNotifications());
 
         recyclerView.setAdapter(adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
@@ -98,6 +129,9 @@ public class UserNotificationFragment extends DialogFragment {
         app.refreshNotifications(new PlaceholderApp.appCallback() {
             @Override
             public void onSuccess() {
+
+
+                adapter.sortList();
                 adapter.notifyDataSetChanged();
             }
 
@@ -106,6 +140,7 @@ public class UserNotificationFragment extends DialogFragment {
 
             }
         });
+
 
     }
 }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
     }
 
 
-    private ArrayList<HoldNotificationToEvent> notiEvents;
+    private ArrayList<Notification> notifications;
 
     private final Context context;
 
@@ -44,12 +45,12 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
 
     private Map<Integer, Boolean> itemExpanded; //used to track which are expanded
 
-    public UserNotificationAdapter(Context context, ArrayList<HoldNotificationToEvent> notifiEvents){
+    public UserNotificationAdapter(Context context, ArrayList<Notification> notifications){
 
         this.context = context;
 
-        this.notiEvents = notifiEvents;
-        this.notiEvents.sort(new CompareByDate());
+        this.notifications = notifications;
+        this.notifications.sort(new CompareByDate());
 
         app = (PlaceholderApp) context.getApplicationContext();
         itemExpanded = new HashMap<>();
@@ -73,7 +74,7 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
 
     @Override
     public int getItemCount() {
-        return this.notiEvents.size();
+        return this.notifications.size();
     }
 
     public class UserNotificationHolder extends RecyclerView.ViewHolder{
@@ -95,7 +96,7 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
                 if (position != RecyclerView.NO_POSITION){
                     boolean isExpanded = itemExpanded.getOrDefault(position, false);
                     itemExpanded.put(position, !isExpanded);
-                    notiEvents.get(position).getN().setRead(true);
+                    notifications.get(position).setRead(true);
                     card.setCardBackgroundColor(context.getColor(R.color.md_theme_background_highContrast));
 
                     notifyItemChanged(position);
@@ -110,7 +111,7 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
 
         public void bindView(int position){
 
-            Notification n = notiEvents.get(position).getN();
+            Notification n = notifications.get(position);
             assert n != null;
 
             if (!n.isRead()){
@@ -120,11 +121,22 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
 
             }
 
-            eventName.setText(notiEvents.get(position).getE().getEventName());
+            app.getEventTable().fetchDocument(n.getFromEventID().toString(), new Table.DocumentCallback<Event>() {
+                @Override
+                public void onSuccess(Event document) {
+                    eventName.setText(document.getEventName());
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
+
 
             if (!itemExpanded.getOrDefault(position, false)){
                 //truncate message
-                notificationMessage.setText(StringManip.truncateString(n.getMessage(), 50));
+                notificationMessage.setText(StringManip.truncateString(n.getMessage(), 100));
             }   else {
                 notificationMessage.setText(n.getMessage());
             }
@@ -158,45 +170,14 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
                 app.getNotificationTable().fetchMultipleDocuments(document.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
                     @Override
                     public void onSuccess(ArrayList<Notification> document) {
-                        ArrayList<String> notificationStrings = new ArrayList<>();
-                        ArrayList<Notification> curNotifications = document;
-                        //grabbing event info
-                        for (Notification n : curNotifications){
-                            notificationStrings.add(n.getFromEventID().toString());
-//                            Log.d("NOTICHECK", n.getNotificationID().toString());
-                        }
-
-                        app.getEventTable().fetchMultipleDocuments(notificationStrings, new Table.DocumentCallback<ArrayList<Event>>() {
-                            @Override
-                            public void onSuccess(ArrayList<Event> document) {
-
-//                                Log.d("CHECK_SIZE", String.valueOf(document.size()));
-
-                                notiEvents.clear();
-                                notiEvents = HoldNotificationToEvent.getQuickList(curNotifications, document);
-                                notiEvents.sort(new CompareByDate());
-                                notifyDataSetChanged();
-
-//                                for (HoldNotificationToEvent ne : notiEvents){
-//                                    Log.d("TEST_ADAPTER", ne.getN().getNotificationID().toString());
-//                                }
-
-                                callback.onFinish();
-
-                            }
-
-                            @Override
-                            public void onFailure(Exception e) {
-
-                            }
-                        });
-
-
+                        notifications.clear();
+                        notifications.addAll(document);
+                        callback.onFinish();
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-
+                        callback.onError(e);
                     }
                 });
 
@@ -204,9 +185,17 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
 
             @Override
             public void onFailure(Exception e) {
-
+                callback.onError(e);
             }
         });
+
+    }
+
+    public void sortList(){
+
+        notifications.sort(new CompareByDate());
+        //comparison not working properly sooo..
+        Collections.reverse(notifications);
 
     }
 }
