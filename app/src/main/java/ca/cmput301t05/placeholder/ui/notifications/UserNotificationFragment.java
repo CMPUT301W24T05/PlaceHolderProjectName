@@ -129,6 +129,9 @@ public class UserNotificationFragment extends DialogFragment {
         app.refreshNotifications(new PlaceholderApp.appCallback() {
             @Override
             public void onSuccess() {
+
+
+                adapter.sortList();
                 adapter.notifyDataSetChanged();
             }
 
@@ -138,7 +141,6 @@ public class UserNotificationFragment extends DialogFragment {
             }
         });
 
-        adapter.sortList();
 
     }
 }
