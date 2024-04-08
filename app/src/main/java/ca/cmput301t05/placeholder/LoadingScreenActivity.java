@@ -177,7 +177,7 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
         now = Calendar.getInstance();
         cal = curEvent.getEventDate();
 
-        addMilestoneIfPresent(getMilestoneByCondition((double) numAttendees / capacity >= 3, MilestoneType.HALFWAY, curEvent));
+        addMilestoneIfPresent(getMilestoneByCondition((double) numAttendees / capacity >= 0.5, MilestoneType.HALFWAY, curEvent));
         addMilestoneIfPresent(getMilestoneByCondition(capacity == numAttendees, MilestoneType.FULLCAPACITY, curEvent));
         addMilestoneIfPresent(getMilestoneByCondition(numAttendees >= 1, MilestoneType.FIRSTATTENDEE, curEvent));
         addMilestoneIfPresent(getMilestoneByCondition(now.compareTo(cal) > 0, MilestoneType.EVENTSTART, curEvent));
