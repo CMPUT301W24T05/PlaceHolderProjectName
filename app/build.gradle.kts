@@ -59,8 +59,7 @@ android {
 
 dependencies {
 
-    // For UI testing
-    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0")
+
     // For notifications
     implementation("com.google.code.gson:gson:2.10.1")
 
@@ -109,7 +108,7 @@ dependencies {
     implementation("androidx.databinding:databinding-runtime:8.3.1")
 
     // This is a local solution to generate javadoc for the project- do not delete!
-    // implementation(fileTree(mapOf("dir" to "C:\\Users\\antho\\AppData\\Local\\Android\\Sdk\\platforms\\android-34", "include" to listOf("*.aar", "*.jar"))))
+//    implementation(fileTree(mapOf("dir" to "C:\\Users\\antho\\AppData\\Local\\Android\\Sdk\\platforms\\android-34", "include" to listOf("*.aar", "*.jar"))))
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
 
