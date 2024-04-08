@@ -1,5 +1,6 @@
 package ca.cmput301t05.placeholder.database.tables;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import ca.cmput301t05.placeholder.database.utils.Collections;
@@ -7,7 +8,7 @@ import ca.cmput301t05.placeholder.notifications.Milestone;
 
 public class MilestoneTable extends Table<Milestone> {
 
-    private final static Collections COLLECTION = Collections.IMAGEDETAILS;
+    private final static Collections COLLECTION = Collections.MILESTONES;
 
     /**
      * Constructs a Table object with the given collection name.
@@ -21,5 +22,9 @@ public class MilestoneTable extends Table<Milestone> {
     @Override
     protected Milestone documentFromSnapshot(DocumentSnapshot snapshot) {
         return null;
+    }
+
+    public CollectionReference getCollectionReference(){
+        return collectionReference;
     }
 }
