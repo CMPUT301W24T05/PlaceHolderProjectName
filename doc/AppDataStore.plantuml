@@ -1,0 +1,232 @@
+@startuml
+
+!theme toy
+left to right direction
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+class AbstractFetcher {
+  + AbstractFetcher(PlaceholderApp, Context):
+  + addCallback(DataFetchCallback): void
+  + removeCallback(DataFetchCallback): void
+}
+interface DataFetchCallback << interface >> {
+  + onProfileFetched(Profile): void
+  + onEventFetchError(Exception): void
+  + onPictureLoaded(Bitmap): void
+  + onProfileFetchFailure(Exception): void
+  + onNoIdFound(): void
+  + onEventFetched(Profile): void
+}
+class Event {
+  + Event():
+  + Event(String, String, int):
+  + Event(DocumentSnapshot):
+  + Event(UUID):
+  + userHasSignedUp(Profile): boolean
+  - getUUIDFromDocument(DocumentSnapshot, String): UUID?
+  + toDocument(): Map<String, Object>
+  + removeAttendee(Profile): void
+  + fromDocument(DocumentSnapshot): void
+  + checkIn(Profile, Double, Double): void
+  + addNotification(String): void
+  + reachMaxCapacity(): boolean
+  + setEventPosterFromUri(Uri, Context): void
+  + equals(Object): boolean
+  + removeNotification(String): void
+  + hashCode(): int
+  + userUnsignup(Profile): void
+  - getStringValueFromDocument(DocumentSnapshot, String): String
+  + userSignup(Profile): void
+  + hasEventPosterBitmap(): boolean
+   registeredUsersNum: Long
+   eventName: String
+   location: String
+   eventInfo: String
+   attendeesNum: Long
+   attendees: ArrayList<String>
+   registeredUsers: ArrayList<String>
+   eventCreator: UUID
+   map: HashMap<String, HashMap<String, Double>>
+   eventPosterID: UUID
+   infoQRCode: String
+   eventPosterBitmap: Bitmap
+   maxAttendees: int
+   notifications: ArrayList<String>
+   eventDate: Calendar
+   eventLocation: String
+   numAttendees: int
+   eventID: UUID
+   checkInQR: String
+}
+class EventFetcher {
+  + EventFetcher(PlaceholderApp, Context):
+  + fetchAllEvents(Profile): void
+  + fetchEventType(Profile, EventType): void
+  - fetchEventsOfType(Profile, List<String>, EventType, AtomicInteger): void
+  - fetchEventData(Profile, List<String>, EventType, AtomicInteger): void
+}
+class InitialSetupActivity {
+  + InitialSetupActivity():
+  # onCreate(Bundle?): void
+  - createNotificationChannel(): void
+  - submitName(View): void
+  - askNotificationPermission(): void
+}
+class LoadingScreenActivity {
+  + LoadingScreenActivity():
+  - startMainActivity(): void
+  # onDestroy(): void
+  + onProfileFetched(Profile): void
+  - getMilestoneByCondition(boolean, MilestoneType, Event): Optional<Milestone>
+  + onPictureLoaded(Bitmap): void
+  + addMilestone(Milestone): void
+  # onCreate(Bundle?): void
+  - setMilestones(): void
+  + onNoIdFound(): void
+  - fetchNotifications(Profile): void
+  + containsMilestoneType(MilestoneType): boolean
+  + onEventFetched(Profile): void
+  - addMilestoneIfPresent(Optional<Milestone>): void
+  + onProfileFetchFailure(Exception): void
+  + onEventFetchError(Exception): void
+  - checkMilestones(Event): void
+}
+class MainActivity {
+  + MainActivity():
+  # onCreate(Bundle): void
+  - setupBottomNavigationView(): void
+}
+class Milestone {
+  + Milestone(UUID, UUID, MilestoneType, String):
+  - generateMessage(MilestoneType, String): String
+   MType: MilestoneType
+}
+class Notification {
+  + Notification(Notification):
+  + Notification(String, UUID, UUID):
+  + Notification(DocumentSnapshot):
+  + Notification(Map<String, String>):
+  + toDocument(): Map<String, Object>
+  + isPinned(): Boolean
+  + fromDocument(DocumentSnapshot): void
+   fromEventID: UUID
+   isRead: boolean
+   isPinned: boolean
+   timeCreated: Calendar
+   message: String
+   isPush: boolean
+   notificationID: UUID
+   creatorID: UUID
+}
+class PlaceholderApp {
+  + PlaceholderApp():
+  + addMilestone(Milestone): void
+  + refreshNotifications(appCallback): void
+  + currentProfileExists(): boolean
+  + onCreate(): void
+   imageDetailTable: ImageDetailTable
+   profileFetcher: ProfileFetcher
+   posterImageHandler: EventPosterImageHandler
+   picCache: Uri
+   userNotifications: ArrayList<Notification>
+   cachedEvent: Event
+   notificationEventHolder: ArrayList<holdNotiEvent>
+   interestedEvents: HashMap<UUID, Event>
+   userMilestones: ArrayList<Milestone>
+   profileImageHandler: ProfileImageHandler
+   locationManager: LocationManager
+   userProfile: Profile
+   eventFetcher: EventFetcher
+   idManager: DeviceIDManager
+   notificationTable: NotificationTable
+   profileTable: ProfileTable
+   hostedEvents: HashMap<UUID, Event>
+   joinedEvents: HashMap<UUID, Event>
+   eventTable: EventTable
+}
+class Profile {
+  + Profile():
+  + Profile(String, UUID):
+  + Profile(DocumentSnapshot):
+  + removeNotification(String): void
+  + setProfilePictureFromUri(Uri, Context): void
+  + hasProfileBitmap(): boolean
+  + addNotification(String): void
+  + toDocument(): Map<String, Object>
+  + hostEvent(Event): void
+  + removeInterestedEvent(Event): void
+  + joinEvent(Event): void
+  + unHostEvent(Event): void
+  + leaveEvent(Event): void
+  + addInterestedEvent(Event): void
+  + fromDocument(DocumentSnapshot): void
+  + setProfilePictureToDefault(): void
+   name: String
+   messagingToken: String
+   interestedEvents: List<String>
+   notifications: ArrayList<String>
+   joinedEvents: List<String>
+   hostedEvents: List<String>
+   isAdmin: boolean
+   profileID: UUID
+   profilePictureID: UUID
+   profilePictureBitmap: Bitmap
+   homePage: String
+   contactInfo: String
+}
+class ProfileFetcher {
+  + ProfileFetcher(PlaceholderApp, Context):
+  + fetchProfileIfDeviceIdExists(): void
+  + fetchProfileImage(Profile): void
+  + fetchProfile(UUID): void
+}
+interface appCallback << interface >> {
+  + onFailure(): void
+  + onSuccess(): void
+}
+
+AbstractFetcher       "1" *-[#595959,plain]-> "callbacks\n*" DataFetchCallback
+AbstractFetcher       "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+DataFetchCallback      -[#595959,dashed]->  Profile
+Event                  -[#595959,dashed]->  Profile
+EventFetcher           -[#000082,plain]-^  AbstractFetcher
+EventFetcher           -[#595959,dashed]->  DataFetchCallback
+EventFetcher           -[#595959,dashed]->  Event
+EventFetcher           -[#595959,dashed]->  PlaceholderApp
+EventFetcher           -[#595959,dashed]->  Profile
+InitialSetupActivity   -[#595959,dashed]->  MainActivity
+InitialSetupActivity  "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+InitialSetupActivity   -[#595959,dashed]->  Profile               : "«create»"
+LoadingScreenActivity  -[#595959,dashed]->  AbstractFetcher
+LoadingScreenActivity  -[#008200,dashed]-^  DataFetchCallback
+LoadingScreenActivity  -[#595959,dashed]->  Event
+LoadingScreenActivity "1" *-[#595959,plain]-> "eventFetcher\n1" EventFetcher
+LoadingScreenActivity  -[#595959,dashed]->  InitialSetupActivity
+LoadingScreenActivity  -[#595959,dashed]->  MainActivity
+LoadingScreenActivity "1" *-[#595959,plain]-> "milestones\n*" Milestone
+LoadingScreenActivity  -[#595959,dashed]->  Milestone             : "«create»"
+LoadingScreenActivity "1" *-[#595959,plain]-> "notifications\n*" Notification
+LoadingScreenActivity "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+LoadingScreenActivity  -[#595959,dashed]->  Profile
+LoadingScreenActivity "1" *-[#595959,plain]-> "profileFetcher\n1" ProfileFetcher
+MainActivity          "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+MainActivity           -[#595959,dashed]->  Profile
+Milestone              -[#000082,plain]-^  Notification
+Milestone             "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+PlaceholderApp        "1" *-[#595959,plain]-> "joinedEvents\n*" Event
+PlaceholderApp        "1" *-[#595959,plain]-> "eventFetcher\n1" EventFetcher
+PlaceholderApp         -[#595959,dashed]->  EventFetcher          : "«create»"
+PlaceholderApp        "1" *-[#595959,plain]-> "userMilestones\n*" Milestone
+PlaceholderApp        "1" *-[#595959,plain]-> "userNotifications\n*" Notification
+PlaceholderApp        "1" *-[#595959,plain]-> "userProfile\n1" Profile
+PlaceholderApp         -[#595959,dashed]->  ProfileFetcher        : "«create»"
+PlaceholderApp        "1" *-[#595959,plain]-> "profileFetcher\n1" ProfileFetcher
+PlaceholderApp         -[#595959,dashed]->  appCallback
+Profile                -[#595959,dashed]->  Event
+ProfileFetcher         -[#000082,plain]-^  AbstractFetcher
+ProfileFetcher         -[#595959,dashed]->  DataFetchCallback
+ProfileFetcher         -[#595959,dashed]->  PlaceholderApp
+ProfileFetcher         -[#595959,dashed]->  Profile
+appCallback            +-[#820000,plain]-  PlaceholderApp
+@enduml
