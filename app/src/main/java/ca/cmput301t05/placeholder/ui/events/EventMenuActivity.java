@@ -83,8 +83,14 @@ public class EventMenuActivity extends AppCompatActivity  {
     @SuppressLint({"MissingInflatedId", "NonConstantResourceId"})
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (PlaceholderApp) getApplicationContext();
-        curEvent = app.getCachedEvent();
+        if (app == null) {
+            // If app is null, try to retrieve it from the application context
+            app = (PlaceholderApp) getApplicationContext();
+        }
+        //app = (PlaceholderApp) getApplicationContext();
+        if (curEvent == null){
+            curEvent = app.getCachedEvent();
+        }
         setContentView(R.layout.event_menu_updated);
         eventTable = app.getEventTable();
 
@@ -284,6 +290,20 @@ public class EventMenuActivity extends AppCompatActivity  {
                 startActivity(intentLoc);
             }
         });
+    }
+
+    public void setApp(PlaceholderApp app) {
+        this.app = app;
+    }
+    public void setEvent(Event event){
+        this.curEvent = event;
+    }
+    // for testing purpose,
+    public static EventMenuActivity createWithEventAndApp(PlaceholderApp app, Event event) {
+        EventMenuActivity activity = new EventMenuActivity();
+        activity.setApp(app);
+        activity.setEvent(event);
+        return activity;
     }
 
 }
