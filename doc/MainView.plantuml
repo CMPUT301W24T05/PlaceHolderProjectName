@@ -1,0 +1,190 @@
+@startuml
+
+!theme toy
+left to right direction
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+interface DataFetchCallback << interface >> {
+  + onProfileFetched(Profile): void
+  + onEventFetchError(Exception): void
+  + onPictureLoaded(Bitmap): void
+  + onProfileFetchFailure(Exception): void
+  + onNoIdFound(): void
+  + onEventFetched(Profile): void
+}
+class EventExploreFragment {
+  + EventExploreFragment():
+  - setupSwipeRefreshLayout(View): void
+  + onItemClick(Event, adapterType): void
+  - displayEvents(ArrayList<Event>): void
+  - initializeApp(): void
+  - setupEventList(View): void
+  - fetchAllEvents(): void
+  + onCreateView(LayoutInflater, ViewGroup, Bundle): View?
+}
+class EventOrganizedFragment {
+  + EventOrganizedFragment():
+  + onNoIdFound(): void
+  + refreshEventList(): void
+  + onProfileFetched(Profile): void
+  + onEventFetchError(Exception): void
+  + onEventFetched(Profile): void
+  + onDestroy(): void
+  + onProfileFetchFailure(Exception): void
+  + onResume(): void
+  + onItemClick(Event, adapterType): void
+  + onPictureLoaded(Bitmap): void
+  + onCreateView(LayoutInflater, ViewGroup, Bundle): View?
+}
+class MainActivity {
+  + MainActivity():
+  # onCreate(Bundle): void
+  - setupBottomNavigationView(): void
+}
+class NewHomeFragment {
+  + NewHomeFragment():
+  + onPictureLoaded(Bitmap): void
+  - initializeViews(View): void
+  + onItemClick(Event, adapterType): void
+  + onEventFetched(Profile): void
+  + onNoIdFound(): void
+  + onEventFetchError(Exception): void
+  + onProfileFetchFailure(Exception): void
+  + onProfileFetched(Profile): void
+  - populateLists(): void
+  + onCreateView(LayoutInflater, ViewGroup?, Bundle?): View?
+}
+class PlaceholderApp {
+  + PlaceholderApp():
+  + addMilestone(Milestone): void
+  + refreshNotifications(appCallback): void
+  + currentProfileExists(): boolean
+  + onCreate(): void
+   imageDetailTable: ImageDetailTable
+   profileFetcher: ProfileFetcher
+   posterImageHandler: EventPosterImageHandler
+   picCache: Uri
+   userNotifications: ArrayList<Notification>
+   cachedEvent: Event
+   notificationEventHolder: ArrayList<holdNotiEvent>
+   interestedEvents: HashMap<UUID, Event>
+   userMilestones: ArrayList<Milestone>
+   profileImageHandler: ProfileImageHandler
+   locationManager: LocationManager
+   userProfile: Profile
+   eventFetcher: EventFetcher
+   idManager: DeviceIDManager
+   notificationTable: NotificationTable
+   profileTable: ProfileTable
+   hostedEvents: HashMap<UUID, Event>
+   joinedEvents: HashMap<UUID, Event>
+   eventTable: EventTable
+}
+class ProfileViewFragment {
+  + ProfileViewFragment():
+  + onPictureLoaded(Bitmap): void
+  - setupListeners(): void
+  - setProfileUpdate(): void
+  + onCreateView(LayoutInflater, ViewGroup?, Bundle?): View?
+  + onProfileFetchFailure(Exception): void
+  + onResume(): void
+  + onEventFetchError(Exception): void
+  + onDestroy(): void
+  - updateEventsToUI(ArrayList<Event>): void
+  + onProfileFetched(Profile): void
+  + onEventFetched(Profile): void
+  - setUp(): void
+  + onItemClick(Event, adapterType): void
+  - initializeComponents(View): void
+  + onNoIdFound(): void
+}
+class QRCode {
+  + QRCode(Event, String):
+   rawText: String
+   type: QRCodeType
+   bitmap: Bitmap
+}
+class QRCodeManager {
+  + QRCodeManager():
+  + generateQRCode(Event, String): QRCode
+  + checkQRcodeType(String): QRCodeType
+  + getEventID(String): UUID
+}
+class QRCodeScannerActivity {
+  + QRCodeScannerActivity():
+  ~ initializePermissionLauncher(): void
+  - handleQRCodeScan(String): void
+  ~ dialogStatus(): boolean
+  # onCreate(Bundle): void
+  - handleQRCodeType(QRCodeType, Event): void
+  - setupDecodeCallback(): void
+  ~ checkCurrentPermission(): boolean
+  ~ showPermissionDeniedDialog(): void
+}
+enum QRCodeType << enumeration >> {
+  + QRCodeType():
+  + values(): QRCodeType[]
+  + valueOf(String): QRCodeType
+}
+class SuccessfulCheckinActivity {
+  + SuccessfulCheckinActivity():
+  - navigateToEventDetailsAfterDelay(): void
+  + onLocationPermissionDenied(): void
+  # onStart(): void
+  - updateProfile(): void
+  - handleButtonClick(): void
+  # onCreate(Bundle): void
+  - navigateToEventDetails(): void
+  - handleLocationReceived(Location): void
+  - initializeApp(): void
+  - imageViewAnimation(): void
+  - checkAndHandleEventMaxCapacity(): void
+  + onLocationPermissionGranted(): void
+  + onRequestPermissionsResult(int, String[], int[]): void
+  - setupButtonClickHandling(): void
+  - handleMaxCapacityReached(): void
+}
+class ViewEventDetailsFragment {
+  + ViewEventDetailsFragment():
+  - getOrganizerProfileImage(Profile): void
+  - updateInterestedState(boolean, Event): void
+  - retrieveEventOrganizerName(UUID): void
+  - retrieveAndSetPosterImage(Event): void
+  + onViewCreated(View, Bundle?): void
+  + onCreateView(LayoutInflater, ViewGroup?, Bundle?): View?
+  - updateInterestedButtonView(boolean): void
+  - initTextViews(View): void
+  - handleMarkInterestedAction(View, Event): void
+  - updateEventPoster(Event): void
+  - updateEventDetails(Event): void
+  - formatAndDisplayDate(Event): void
+}
+
+EventExploreFragment      "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+EventExploreFragment       -[#595959,dashed]->  ViewEventDetailsFragment  : "«create»"
+EventOrganizedFragment     -[#008200,dashed]-^  DataFetchCallback
+EventOrganizedFragment    "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+MainActivity               -[#595959,dashed]->  EventExploreFragment      : "«create»"
+MainActivity               -[#595959,dashed]->  EventOrganizedFragment    : "«create»"
+MainActivity               -[#595959,dashed]->  NewHomeFragment           : "«create»"
+MainActivity              "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+MainActivity               -[#595959,dashed]->  ProfileViewFragment       : "«create»"
+MainActivity               -[#595959,dashed]->  QRCodeScannerActivity
+MainActivity               -[#595959,dashed]->  SuccessfulCheckinActivity
+MainActivity               -[#595959,dashed]->  ViewEventDetailsFragment  : "«create»"
+NewHomeFragment            -[#008200,dashed]-^  DataFetchCallback
+NewHomeFragment           "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+NewHomeFragment            -[#595959,dashed]->  ViewEventDetailsFragment  : "«create»"
+ProfileViewFragment        -[#008200,dashed]-^  DataFetchCallback
+ProfileViewFragment       "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+ProfileViewFragment        -[#595959,dashed]->  ViewEventDetailsFragment  : "«create»"
+QRCode                    "1" *-[#595959,plain]-> "type\n1" QRCodeType
+QRCodeManager              -[#595959,dashed]->  QRCode                    : "«create»"
+QRCodeManager              -[#595959,dashed]->  QRCodeType
+QRCodeScannerActivity     "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+QRCodeScannerActivity      -[#595959,dashed]->  QRCodeManager             : "«create»"
+QRCodeScannerActivity      -[#595959,dashed]->  QRCodeType
+SuccessfulCheckinActivity "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+ViewEventDetailsFragment  "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+@enduml
