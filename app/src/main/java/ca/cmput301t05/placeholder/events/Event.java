@@ -134,12 +134,12 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("eventInfo", eventInfo);
         document.put("infoQRCode", infoQRCode);
         document.put("checkInQR", checkInQR);
-        document.put("eventID", eventID.toString());
+        document.put("eventID", eventID != null ? eventID.toString() : null);
         document.put("eventDate", eventDate != null ? new Timestamp(eventDate.getTime()) : null);
         document.put("maxAttendees", maxAttendees);
         document.put("attendees", attendees);
         document.put("eventLocation", eventLocation);
-        document.put("eventCreator", eventCreator.toString());
+        document.put("eventCreator", eventCreator != null ? eventCreator.toString() : null);
         document.put("notifications", this.notifications);
         document.put("registeredUsers", this.registeredUsers);
         document.put("milestones", this.milestones);

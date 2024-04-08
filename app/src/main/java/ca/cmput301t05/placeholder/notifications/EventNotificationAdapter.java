@@ -38,12 +38,14 @@ public class EventNotificationAdapter extends RecyclerView.Adapter<EventNotifica
 
     private final Context context;
 
+    private final EventAdapterType eventAdapterType;
+
     private Map<Integer, Boolean> itemExpanded; //used to track which are expanded
 
-    public EventNotificationAdapter(Context context, ArrayList<Notification> notifications){
+    public EventNotificationAdapter(Context context, ArrayList<Notification> notifications, EventAdapterType type){
 
         this.notificationList = notifications;
-
+        this.eventAdapterType = type;
         this.context = context;
 
         itemExpanded = new HashMap<>();
@@ -127,6 +129,12 @@ public class EventNotificationAdapter extends RecyclerView.Adapter<EventNotifica
         public void bindView(int position){
             Notification n = notificationList.get(position);
             assert n != null;
+
+            if(eventAdapterType == EventAdapterType.ATTENDEE){
+
+                menu.setVisibility(View.GONE);
+
+            }
 
             PlaceholderApp app = (PlaceholderApp) context.getApplicationContext();
 

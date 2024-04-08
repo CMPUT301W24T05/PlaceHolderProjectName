@@ -4,7 +4,9 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.events.Event;
@@ -13,6 +15,9 @@ import ca.cmput301t05.placeholder.notifications.Notification;
 /**
  * Just a way to hold both notifications and events for a user, so we can easily go to event
  * from user notifications
+ *
+ * @deprecated
+ * Didn't have enough time to get functionality to be working for this
  */
 public class HoldNotificationToEvent {
 
@@ -33,30 +38,23 @@ public class HoldNotificationToEvent {
     }
 
     /**
-     * Used on start up so we can get cached notifications -> events so we can load them later instead of loading on fragment opening
+     * Turns notification and Event array to an object whihc allows us to sync the two
      * @param ns
      * @param es
      * @return
      */
     public static ArrayList<HoldNotificationToEvent> getQuickList(ArrayList<Notification> ns, ArrayList<Event> es){
 
+        ArrayList<Notification> notifications = new ArrayList<>();
+        notifications.addAll(ns);
+
         ArrayList<HoldNotificationToEvent> quickList = new ArrayList<>();
-        HashMap<String, Notification> quickCheck = new HashMap<>();
 
-        for (Notification n : ns){
-            quickCheck.put(n.getFromEventID().toString(), n);
-        }
+        //so the idea here is that we map the notifications to their respective events
+        for (Notification n : notifications){
 
-        for (Event e : es){
-
-            if (quickCheck.get(e.getEventID().toString()) != null){
-
-                quickList.add(new HoldNotificationToEvent(quickCheck.get(e.getEventID().toString()),e));
-
-            }
 
         }
-
 
         return quickList;
     }

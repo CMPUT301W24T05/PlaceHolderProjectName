@@ -4,11 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
-import static ca.cmput301t05.placeholder.notifications.MilestoneType.EVENTSTART;
-import static ca.cmput301t05.placeholder.notifications.MilestoneType.FIRSTATTENDEE;
-import static ca.cmput301t05.placeholder.notifications.MilestoneType.FIRSTSIGNUP;
-import static ca.cmput301t05.placeholder.notifications.MilestoneType.FULLCAPACITY;
-import static ca.cmput301t05.placeholder.notifications.MilestoneType.HALFWAY;
+import static ca.cmput301t05.placeholder.milestones.MilestoneType.EVENTSTART;
+import static ca.cmput301t05.placeholder.milestones.MilestoneType.FIRSTATTENDEE;
+import static ca.cmput301t05.placeholder.milestones.MilestoneType.FIRSTSIGNUP;
+import static ca.cmput301t05.placeholder.milestones.MilestoneType.FULLCAPACITY;
+import static ca.cmput301t05.placeholder.milestones.MilestoneType.HALFWAY;
+
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -24,8 +25,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import ca.cmput301t05.placeholder.notifications.Milestone;
-import ca.cmput301t05.placeholder.notifications.MilestoneType;
+import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.milestones.Milestone;
+import ca.cmput301t05.placeholder.milestones.MilestoneType;
+
 
 /**
  * Unit test for the Milestone class.
@@ -38,17 +41,14 @@ public class MilestoneUnitTest {
      */
     @Test
     public void testMilestoneConstructor() {
-        UUID creatorID = UUID.randomUUID();
         UUID eventID = UUID.randomUUID();
-        MilestoneType milestoneType = MilestoneType.FIRSTATTENDEE;
+        Event testEvent  = new Event(eventID);
         String eventName = "Test Event";
-        Milestone milestone = new Milestone(creatorID, eventID, milestoneType, eventName);
-        assertEquals(creatorID, milestone.getCreatorID());
-        assertEquals(eventID, milestone.getFromEventID());
-        assertEquals(milestoneType, milestone.getMType());
-        assertNotNull(milestone.getTimeCreated());
-        assertNotNull(milestone.getNotificationID());
-        assertEquals("From " + eventName + ": YOU'VE GOT YOUR FIRST ATTENDEE!", milestone.getMessage());
+        ca.cmput301t05.placeholder.milestones.Milestone milestone = new ca.cmput301t05.placeholder.milestones.Milestone(FIRSTATTENDEE, testEvent);
+        assertEquals(eventID, UUID.fromString(milestone.getEventID()));
+        assertEquals(FIRSTATTENDEE, milestone.getmType());
+        assertNotNull(milestone.getEventID());
+        assertEquals("From " + eventName + ": YOU'VE GOT YOUR FIRST ATTENDEE!", milestone.generateMessage(FIRSTATTENDEE, eventName));
     }
 
     /**
@@ -57,15 +57,18 @@ public class MilestoneUnitTest {
     @ParameterizedTest
     @MethodSource("mileStoneConstructorDataProvider")
     public void testMsgGeneration4DiffMilestoneTypes(MilestoneType milestoneType, String expectedMessage) {
-        UUID creatorID = UUID.randomUUID();
+        // Setting up the event object
         UUID eventID = UUID.randomUUID();
         String eventName = "Test Event";
-        Milestone milestone = new Milestone(creatorID, eventID, milestoneType, eventName);
+        Event event = new Event(eventID);
+        event.setEventName(eventName);
+        // Initializing the milestone object to test
+        ca.cmput301t05.placeholder.milestones.Milestone milestone = new ca.cmput301t05.placeholder.milestones.Milestone(milestoneType, event);
         Assertions.assertNotNull(milestone);
-        Assertions.assertEquals(creatorID, milestone.getCreatorID());
-        Assertions.assertEquals(eventID, milestone.getFromEventID());
-        Assertions.assertEquals(milestoneType, milestone.getMType());
-        Assertions.assertEquals(expectedMessage, milestone.getMessage()); // Verify that message is generated correctly
+        Assertions.assertEquals("Test Event", milestone.getEventName());
+        Assertions.assertEquals(eventID, UUID.fromString(milestone.getEventID()));
+        Assertions.assertEquals(milestoneType, milestone.getmType());
+        Assertions.assertEquals(expectedMessage, milestone.generateMessage(milestoneType, eventName)); // Verify that message is generated correctly
     }
 
     /**
@@ -90,23 +93,26 @@ public class MilestoneUnitTest {
      */
     @Test
     public void testCompareMilestones(){
-        UUID creatorID = UUID.randomUUID();
         UUID eventID = UUID.randomUUID();
         String eventName = "Test Event";
-        Milestone milestoneFirstAttendee = new Milestone(creatorID, eventID, FIRSTATTENDEE, eventName);
-        Milestone milestoneFirstSignUp = new Milestone(creatorID, eventID, FIRSTSIGNUP, eventName);
-        Milestone milestoneFirstAttendeeDiffEvent = new Milestone(creatorID,UUID.randomUUID(), FIRSTATTENDEE, eventName); // Same type of milestone type but for different event.
-        Milestone milestoneFirstSignUpDiffCreator = new Milestone(UUID.randomUUID(), eventID, FIRSTSIGNUP, eventName);
+        Event event = new Event(eventID);
+        event.setEventName(eventName);
+        ca.cmput301t05.placeholder.milestones.Milestone milestoneFirstAttendee = new ca.cmput301t05.placeholder.milestones.Milestone(FIRSTATTENDEE, event);
+        ca.cmput301t05.placeholder.milestones.Milestone milestoneFirstSignUp = new ca.cmput301t05.placeholder.milestones.Milestone(FIRSTSIGNUP, event);
+        ca.cmput301t05.placeholder.milestones.Milestone milestoneFirstAttendeeDiffEvent = new ca.cmput301t05.placeholder.milestones.Milestone(FIRSTATTENDEE, new Event()); // Same type of milestone type but for different event.
+        ca.cmput301t05.placeholder.milestones.Milestone milestoneFirstSignUpDiffEvent = new ca.cmput301t05.placeholder.milestones.Milestone(FIRSTSIGNUP, new Event());
         assertNotNull(milestoneFirstAttendee);
         assertNotNull(milestoneFirstSignUp);
         assertNotNull(milestoneFirstAttendeeDiffEvent);
-        assertNotNull(milestoneFirstSignUpDiffCreator);
+        assertNotNull(milestoneFirstSignUpDiffEvent);
         assertNotEquals(milestoneFirstAttendee, milestoneFirstSignUp);
         assertNotEquals(milestoneFirstAttendee, milestoneFirstAttendeeDiffEvent);
-        assertNotEquals(milestoneFirstSignUpDiffCreator, milestoneFirstSignUp);
-        assertEquals(milestoneFirstAttendeeDiffEvent.getMType(), milestoneFirstAttendee.getMType()); // Different milestones, but are same type of milestone i.e. milestone for event's first attendee
-        assertEquals(milestoneFirstSignUp.getMType(), milestoneFirstSignUpDiffCreator.getMType());
-        Milestone newMileStoneSameFields =new Milestone(creatorID, eventID, FIRSTATTENDEE, eventName);
+        assertNotEquals(milestoneFirstSignUpDiffEvent, milestoneFirstSignUp);
+        assertEquals(milestoneFirstAttendeeDiffEvent.getmType(), milestoneFirstAttendee.getmType()); // Different milestones, but are same type of milestone i.e. milestone for event's first attendee
+        assertEquals(milestoneFirstSignUp.getmType(), milestoneFirstSignUpDiffEvent.getmType());
+        Event duplicateEvent =new Event(eventID);
+        duplicateEvent.setEventName(eventName);
+        ca.cmput301t05.placeholder.milestones.Milestone newMileStoneSameFields =new Milestone(FIRSTATTENDEE, duplicateEvent);
         assertNotSame(milestoneFirstAttendee, newMileStoneSameFields);
 
     }

@@ -98,9 +98,6 @@ public class EventMenuActivity extends AppCompatActivity  {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(EventMenuActivity.this, MainActivity.class);
-//                startActivity(i);
-
                 finish();
             }
         });

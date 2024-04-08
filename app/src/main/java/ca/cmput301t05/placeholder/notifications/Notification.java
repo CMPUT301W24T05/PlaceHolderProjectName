@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
@@ -28,7 +29,7 @@ import ca.cmput301t05.placeholder.utils.StringManip;
  * and the event it is associated with. Users will store references to these notifications,
  * and the profile class contains a list of all notifications.
  */
-public class Notification extends DocumentSerializable {
+public class Notification extends DocumentSerializable{
 
     /**
      * The unique identifier for this notification.
@@ -206,6 +207,28 @@ public class Notification extends DocumentSerializable {
 
     }
 
+    @Override
+    public boolean equals(Object o){
+
+        if (o instanceof Notification){
+
+            Notification n = (Notification) o;
+
+            if (n.getNotificationID().equals(this.notificationID)){
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(notificationID);
+    }
+
+
+
     //getters and setters
 
     public String getMessage() {
@@ -271,5 +294,6 @@ public class Notification extends DocumentSerializable {
     public boolean isPush() {
         return isPush;
     }
+
 
 }

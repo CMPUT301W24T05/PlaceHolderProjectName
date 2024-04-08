@@ -2,10 +2,12 @@ package ca.cmput301t05.placeholder.utils;
 
 import java.util.Comparator;
 
-public class CompareByDate implements Comparator<HoldNotificationToEvent> {
+import ca.cmput301t05.placeholder.notifications.Notification;
+
+public class CompareByDate implements Comparator<Notification> {
 
     @Override
-    public int compare(HoldNotificationToEvent o1, HoldNotificationToEvent o2) {
-        return o2.getN().getTimeCreated().compareTo(o1.getN().getTimeCreated());
+    public int compare(Notification o1, Notification o2) {
+        return o1.getTimeCreated().compareTo(o2.getTimeCreated());
     }
 }

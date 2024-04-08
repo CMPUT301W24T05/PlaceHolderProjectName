@@ -2,16 +2,20 @@ package ca.cmput301t05.placeholder.ui.events;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentTransaction;
+import ca.cmput301t05.placeholder.ui.notifications.EventAttendeeNotificationFragment;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -43,9 +47,12 @@ public class ViewEventDetailsFragment extends BottomSheetDialogFragment {
     private ShapeableImageView eventPosterImage;
     private ImageView eventOrganizerProfileImage;
     private ExtendedFloatingActionButton markInterestedButton;
+    private ImageButton notificationButton;
 
     private PlaceholderApp app;
     private boolean interestedMode;
+
+    private int bottomSheetHeightInDp; // Add this line to store bottom sheet height in dp
 
     @Nullable
     @Override
@@ -59,10 +66,16 @@ public class ViewEventDetailsFragment extends BottomSheetDialogFragment {
 
         app = (PlaceholderApp) getActivity().getApplicationContext();
         Event displayEvent = app.getCachedEvent();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenHeightInDp = Math.round(displayMetrics.heightPixels / displayMetrics.density);
+        bottomSheetHeightInDp = screenHeightInDp * 2;
+//        bottomSheetHeightInDp = view.getHeight(); // Calculate bottom sheet height in dp
 
         initTextViews(view);
         updateEventDetails(displayEvent);
         updateEventPoster(displayEvent);
+
 
         return view;
     }
@@ -88,6 +101,18 @@ public class ViewEventDetailsFragment extends BottomSheetDialogFragment {
         eventDescriptionView = view.findViewById(R.id.event_view_description);
         eventOrganizerProfileImage = view.findViewById(R.id.event_view_creator_image);
         markInterestedButton = view.findViewById(R.id.event_view_mark_interested);
+        notificationButton = view.findViewById(R.id.notificationButton);
+
+        if(interestedMode){
+            notificationButton.setVisibility(View.GONE);
+        } else {
+            notificationButton.setVisibility(View.VISIBLE);
+            notificationButton.setOnClickListener(v -> {
+                // Pass the bottom sheet height to the constructor
+                EventAttendeeNotificationFragment bottomSheet = new EventAttendeeNotificationFragment(bottomSheetHeightInDp);
+                bottomSheet.show(getChildFragmentManager(), "AttendeeNotificationBottomSheet");
+            });
+        }
     }
 
     private void updateEventDetails(Event displayEvent) {

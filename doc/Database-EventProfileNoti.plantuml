@@ -17,14 +17,6 @@ enum Collections << enumeration >> {
    id: String
    path: String
 }
-interface DataFetchCallback << interface >> {
-  + onProfileFetched(Profile): void
-  + onEventFetchError(Exception): void
-  + onPictureLoaded(Bitmap): void
-  + onProfileFetchFailure(Exception): void
-  + onNoIdFound(): void
-  + onEventFetched(Profile): void
-}
 class DatabaseManager {
   - DatabaseManager():
    storage: FirebaseStorage
@@ -36,10 +28,6 @@ class DeviceIDManager {
   + deleteDeviceID(): void
   + deviceHasIDStored(): boolean
    deviceID: UUID
-}
-interface DocumentCallback<T> << interface >> {
-  + onSuccess(T): void
-  + onFailure(Exception): void
 }
 class DocumentSerializable {
   + DocumentSerializable():
@@ -71,6 +59,7 @@ class Event {
    eventName: String
    location: String
    eventInfo: String
+   milestones: HashMap<String, String>
    attendeesNum: Long
    attendees: ArrayList<String>
    registeredUsers: ArrayList<String>
@@ -99,11 +88,6 @@ class EventTable {
   + fetchAllDocuments(DocumentCallback<ArrayList<Event>>): void
   # documentFromSnapshot(DocumentSnapshot): Event
    collectionReference: CollectionReference
-}
-enum EventType << enumeration >> {
-  + EventType():
-  + values(): EventType[]
-  + valueOf(String): EventType
 }
 class FirebaseMessaging {
   + FirebaseMessaging():
@@ -134,6 +118,43 @@ class ImageDetails {
    uploadTime: Calendar
    id: String
    objectID: String
+}
+enum ImageType << enumeration >> {
+  + ImageType():
+  + valueOf(String): ImageType
+  + values(): ImageType[]
+}
+class Milestone {
+  + Milestone(MilestoneType, Event):
+  + Milestone(DocumentSnapshot):
+  - getType(double): MilestoneType?
+  + generateMessage(MilestoneType, String): String
+  + fromDocument(DocumentSnapshot): void
+  + toDocument(): Map<String, Object>
+   eventID: String
+   eventName: String
+   mType: MilestoneType
+   id: String
+   message: String
+}
+class MilestoneConditions {
+  + MilestoneConditions():
+  + milestoneHandling(PlaceholderApp, Event, milestoneCallback): void
+  + alreadyContainsMilestone(Event, MilestoneType): boolean
+  + checkConditionsMet(Event, MilestoneType): Milestone?
+}
+class MilestoneTable {
+  + MilestoneTable():
+  # documentFromSnapshot(DocumentSnapshot): Milestone
+   collectionReference: CollectionReference
+}
+enum MilestoneType << enumeration >> {
+  - MilestoneType(String, int, String):
+  + values(): MilestoneType[]
+  + valueOf(String): MilestoneType
+   id: int
+   idString: String
+   message: String
 }
 class Notification {
   + Notification(Notification):
@@ -207,38 +228,43 @@ class Table<T> {
   # documentFromSnapshot(DocumentSnapshot): T
   + deleteDocument(String, DocumentCallback): void
 }
-interface httpHandlercallback << interface >> {
+interface milestoneCallback << interface >> {
+  + onFailure(Exception): void
   + onSuccess(): void
-  + onError(Exception): void
 }
 
-AbstractFetcher         "1" *-[#595959,plain]-> "callbacks\n*" DataFetchCallback
-DataFetchCallback        -[#595959,dashed]->  Profile
-DocumentCallback         +-[#820000,plain]-  Table
 Event                    -[#000082,plain]-^  DocumentSerializable
 Event                    -[#595959,dashed]->  Profile
 EventFetcher             -[#000082,plain]-^  AbstractFetcher
-EventFetcher             -[#595959,dashed]->  DataFetchCallback
 EventFetcher             -[#595959,dashed]->  Event
-EventFetcher             -[#595959,dashed]->  EventType
 EventFetcher             -[#595959,dashed]->  Profile
 EventFetcher             -[#595959,dashed]->  Table
 EventTable              "1" *-[#595959,plain]-> "COLLECTION\n1" Collections
-EventTable               -[#595959,dashed]->  DocumentCallback
 EventTable               -[#595959,dashed]->  Event                   : "«create»"
 EventTable               -[#000082,plain]-^  Table
-EventType                +-[#820000,plain]-  EventFetcher
 FirebaseMessaging        -[#595959,dashed]->  Notification            : "«create»"
 FirebaseMessaging        -[#595959,dashed]->  Profile
 FirebaseMessaging        -[#595959,dashed]->  Table
 HttpNotificationHandler  -[#595959,dashed]->  Notification
-HttpNotificationHandler  -[#595959,dashed]->  httpHandlercallback
 ImageDetailTable        "1" *-[#595959,plain]-> "COLLECTION\n1" Collections
 ImageDetailTable         -[#595959,dashed]->  DatabaseManager
-ImageDetailTable         -[#595959,dashed]->  DocumentCallback
 ImageDetailTable         -[#595959,dashed]->  ImageDetails            : "«create»"
 ImageDetailTable         -[#000082,plain]-^  Table
 ImageDetails             -[#000082,plain]-^  DocumentSerializable
+Milestone                -[#000082,plain]-^  DocumentSerializable
+Milestone                -[#595959,dashed]->  Event
+Milestone               "1" *-[#595959,plain]-> "mType\n1" MilestoneType
+MilestoneConditions      -[#595959,dashed]->  Event
+MilestoneConditions      -[#595959,dashed]->  HttpNotificationHandler
+MilestoneConditions      -[#595959,dashed]->  Milestone               : "«create»"
+MilestoneConditions      -[#595959,dashed]->  MilestoneType
+MilestoneConditions      -[#595959,dashed]->  Notification            : "«create»"
+MilestoneConditions      -[#595959,dashed]->  Profile
+MilestoneConditions      -[#595959,dashed]->  Table
+MilestoneConditions      -[#595959,dashed]->  milestoneCallback
+MilestoneTable          "1" *-[#595959,plain]-> "COLLECTION\n1" Collections
+MilestoneTable           -[#595959,dashed]->  Milestone               : "«create»"
+MilestoneTable           -[#000082,plain]-^  Table
 Notification             -[#000082,plain]-^  DocumentSerializable
 NotificationTable       "1" *-[#595959,plain]-> "COLLECTION\n1" Collections
 NotificationTable        -[#595959,dashed]->  Notification            : "«create»"
@@ -246,7 +272,6 @@ NotificationTable        -[#000082,plain]-^  Table
 Profile                  -[#000082,plain]-^  DocumentSerializable
 Profile                  -[#595959,dashed]->  Event
 ProfileFetcher           -[#000082,plain]-^  AbstractFetcher
-ProfileFetcher           -[#595959,dashed]->  DataFetchCallback
 ProfileFetcher           -[#595959,dashed]->  DeviceIDManager
 ProfileFetcher           -[#595959,dashed]->  Profile
 ProfileFetcher           -[#595959,dashed]->  Table
@@ -255,7 +280,6 @@ ProfileTable             -[#595959,dashed]->  Profile                 : "«creat
 ProfileTable             -[#000082,plain]-^  Table
 Table                   "1" *-[#595959,plain]-> "COLLECTION\n1" Collections
 Table                    -[#595959,dashed]->  DatabaseManager
-Table                    -[#595959,dashed]->  DocumentCallback
 Table                    -[#595959,dashed]->  DocumentSerializable
-httpHandlercallback      +-[#820000,plain]-  HttpNotificationHandler
+milestoneCallback        +-[#820000,plain]-  MilestoneConditions
 @enduml

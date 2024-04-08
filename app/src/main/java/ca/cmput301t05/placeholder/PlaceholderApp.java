@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder;
 
 import android.app.Application;
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -226,9 +227,6 @@ public class PlaceholderApp extends Application implements Serializable {
         return eventFetcher;
     }
 
-    public ArrayList<HoldNotificationToEvent> getNotificationEventHolder() {
-        return notificationEventHolder;
-    }
 
     public void setNotificationEventHolder(ArrayList<HoldNotificationToEvent> notificationEventHolder) {
         this.notificationEventHolder = notificationEventHolder;
@@ -252,9 +250,6 @@ public class PlaceholderApp extends Application implements Serializable {
                             userProfile.getNotifications().add(n.getNotificationID().toString());
 
                         }
-
-                        notificationEventHolder.clear();
-                        notificationEventHolder.addAll(HoldNotificationToEvent.getQuickList(document, new ArrayList<>(joinedEvents.values())));
 
                         callback.onSuccess();
 
