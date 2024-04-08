@@ -35,7 +35,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.stream.Collectors;
-
+/**
+ * Fragment for displaying the home screen with lists of current and future events.
+ * Also handles user interactions such as clicking on events.
+ */
 public class NewHomeFragment extends Fragment implements DataFetchCallback, EventAdapter.OnItemClickListener {
     private PlaceholderApp app;
     private RecyclerView futureEventsView;
@@ -69,7 +72,9 @@ public class NewHomeFragment extends Fragment implements DataFetchCallback, Even
 
         return view;
     }
-
+    /**
+     * Populates the lists of current and future events.
+     */
     private void populateLists() {
         ArrayList<Event> attendingEvents = new ArrayList<>(app.getJoinedEvents().values());
         app.getInterestedEvents().values().stream()
@@ -117,7 +122,10 @@ public class NewHomeFragment extends Fragment implements DataFetchCallback, Even
 
 
     }
-
+    /**
+     * Initializes the views and adapters.
+     * @param view The root view of the fragment.
+     */
     private void initializeViews(View view) {
         nestedScrollView = view.findViewById(R.id.nested_scroll_view);
         futureEventsView = view.findViewById(R.id.futureEvents);
@@ -166,7 +174,11 @@ public class NewHomeFragment extends Fragment implements DataFetchCallback, Even
             }
         });
     }
-
+    /**
+     * Handles item click events on the RecyclerView.
+     * @param event The event object clicked.
+     * @param type The type of adapter clicked.
+     */
     @Override
     public void onItemClick(Event event, EventAdapter.adapterType type) {
         if (type == EventAdapter.adapterType.HOSTED) {

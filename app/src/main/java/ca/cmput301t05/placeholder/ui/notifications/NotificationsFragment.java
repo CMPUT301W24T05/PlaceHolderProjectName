@@ -20,13 +20,19 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.databinding.FragmentNotificationsBinding;
 import ca.cmput301t05.placeholder.events.Event;
-
+/**
+ * An activity responsible for displaying notifications to the user.
+ * This activity presents the user with a list of notifications.
+ */
 public class NotificationsFragment extends AppCompatActivity {
 
     private FragmentNotificationsBinding binding;
 
     private PlaceholderApp app;
-
+    /**
+     * Called when the activity is starting. This is where most initialization should go.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

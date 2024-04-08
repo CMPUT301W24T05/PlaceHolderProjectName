@@ -36,7 +36,10 @@ import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewAttendeeCheckinAc
 import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewSignUpsActivity;
 import ca.cmput301t05.placeholder.ui.notifications.EventNotificationPageActivity;
 
-
+/**
+ * This activity displays the menu options for a specific event, such as viewing sign-ups, editing the event,
+ * viewing QR codes, viewing announcements, milestones, and locations associated with the event.
+ */
 public class EventMenuActivity extends AppCompatActivity  {
 
     private TextView eventName;
@@ -128,7 +131,10 @@ public class EventMenuActivity extends AppCompatActivity  {
 
         });
     }
-
+    /**
+     * Sets up the poster image for the event.
+     * @param event The event object containing information about the event, including the poster image.
+     */
     private void setUpPoster(Event event){
         Log.e("amirza2", "SET UP THIS METHOD");
         eventPoster = findViewById(R.id.imageView_event_menu);
@@ -199,8 +205,9 @@ public class EventMenuActivity extends AppCompatActivity  {
         });
         
     }
-
-
+    /**
+     * Sets up the buttons for various actions related to the event.
+     */
     private void setUpButtons(){
         signIns = findViewById(R.id.eventMCard1);
 

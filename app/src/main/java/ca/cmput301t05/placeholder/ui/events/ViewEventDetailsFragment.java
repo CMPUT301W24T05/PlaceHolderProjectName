@@ -34,7 +34,9 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.imageview.ShapeableImageView;
 
 import static ca.cmput301t05.placeholder.profile.ProfileImageGenerator.getCircularBitmap;
-
+/**
+ * A fragment for displaying detailed information about an event in a bottom sheet dialog.
+ */
 public class ViewEventDetailsFragment extends BottomSheetDialogFragment {
     private static final String LOG_TAG = "EventDetailsDialogFragment";
 

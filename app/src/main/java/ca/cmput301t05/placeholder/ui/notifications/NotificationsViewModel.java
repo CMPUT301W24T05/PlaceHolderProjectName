@@ -3,6 +3,10 @@ package ca.cmput301t05.placeholder.ui.notifications;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+/**
+ * ViewModel for the NotificationsFragment.
+ * This ViewModel provides data for the NotificationsFragment to display.
+ */
 
 public class NotificationsViewModel extends ViewModel {
 

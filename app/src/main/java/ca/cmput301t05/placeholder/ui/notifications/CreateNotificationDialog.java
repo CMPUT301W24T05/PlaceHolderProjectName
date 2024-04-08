@@ -16,7 +16,9 @@ import androidx.fragment.app.DialogFragment;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.notifications.Notification;
-
+/**
+ * Dialog fragment for creating and sending notifications.
+ */
 public class CreateNotificationDialog extends DialogFragment {
 
 
