@@ -90,9 +90,10 @@ public class HttpNotificationHandler {
     }
 
     /**
-     *
-     * @param notification
-     * @param token profile.getMessagingtoken
+     * Sends a notification to a specific user via an HTTP request to a Google Cloud Function.
+     * @param notification The notification to be sent.
+     * @param token The messaging token of the user.
+     * @param callback The callback to handle HTTP request responses.
      */
     public static void sendNotificationToUser(Notification notification, String token, httpHandlercallback callback){
 
