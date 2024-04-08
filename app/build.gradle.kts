@@ -62,7 +62,7 @@ dependencies {
 
     // For notifications
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation(fileTree(mapOf("dir" to "C:\\Users\\antho\\AppData\\Local\\Android\\Sdk\\platforms\\android-34", "include" to listOf("*.aar", "*.jar"))))
+//    implementation(fileTree(mapOf("dir" to "C:\\Users\\antho\\AppData\\Local\\Android\\Sdk\\platforms\\android-34", "include" to listOf("*.aar", "*.jar"))))
 
     // Junit 5
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
