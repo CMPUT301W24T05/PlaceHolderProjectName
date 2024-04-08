@@ -13,21 +13,21 @@
         android:text="You have successfully checked in!"
         android:textAlignment="center"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewSuccessCheckin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="196dp"
-        android:layout_height="125dp"
+        android:id="@+id/imageViewSuccessCheckin"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginBottom="124dp"
         app:layout_constraintBottom_toTopOf="@+id/checkbox_share_location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/checkbox_on_background" />
+        app:srcCompat="@drawable/anim_vector" />
 
     <Button
         android:id="@+id/go_to_event_button"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -22,6 +23,13 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
@@ -33,7 +41,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class QRCodeScannerActivity extends AppCompatActivity {
 
     public static final String QR_SCANNER_ID_KEY = "QRScannerActivityId";
-    public static final String QR_SCANNER_ID_VALUE = "QRScannerActivityEVENTINFO";
+    public static final String QRSCANNER_ACTIVITY_EVENTINFO = "QRScannerActivityEVENTINFO";
+    public static final String QRSCANNER_ACTIVITY_CHECKIN = "QRScannerActivityCHECKIN";
 
     CodeScanner mCodeScanner;
     ActivityResultLauncher<String> requestPermissionLauncher;
@@ -91,19 +100,41 @@ public class QRCodeScannerActivity extends AppCompatActivity {
 
         QRCodeManager manager = new QRCodeManager();
         QRCodeType type = manager.checkQRcodeType(rawText);
-        String qrEventID = manager.getEventID(rawText).toString();
 
-        app.getEventTable().fetchDocument(qrEventID, new Table.DocumentCallback<Event>() {
-            @Override
-            public void onSuccess(Event event) {
-                handleQRCodeType(type, event);
-            }
+        String field;
+        if(type == QRCodeType.CHECK_IN){
+            field = "checkInQR";
+        } else if (type == QRCodeType.INFO){
+            field = "infoQRCode";
+        } else {
+            // QRCodeType is ERROR, let's just finish and return for now
+            finish();
+            return;
+        }
 
-            @Override
-            public void onFailure(Exception e) {
-                // Failed to get fetch the event for eventId with exception e
-            }
-        });
+        app.getEventTable().getCollectionReference().whereEqualTo(field, rawText)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if(task.getResult().size() > 1){
+                            Toast.makeText(QRCodeScannerActivity.this, "Multiple events found with the same QR code", Toast.LENGTH_SHORT).show();
+                            finish();
+                            return;
+                        } else if (task.getResult().isEmpty()){
+                            Toast.makeText(QRCodeScannerActivity.this, "No event found with the scanned QR code", Toast.LENGTH_SHORT).show();
+                            finish();
+                            return;
+                        }
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("QR", document.getId() + " => " + document.getData());
+                            Event queryEvent = new Event();
+                            queryEvent.fromDocument(document);
+                            handleQRCodeType(type, queryEvent);
+                        }
+                    } else {
+                        Log.d("QR", "Error getting documents: ", task.getException());
+                    }
+                });
     }
 
     /**
@@ -118,7 +149,6 @@ public class QRCodeScannerActivity extends AppCompatActivity {
 
         Intent intent;
         if (type == QRCodeType.CHECK_IN) {
-
             //Add the user to the event cloud base messaging service, Events are stored according to their ID string
             FirebaseMessaging.getInstance().subscribeToTopic(event.getEventID().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -132,14 +162,12 @@ public class QRCodeScannerActivity extends AppCompatActivity {
 
                 }
             });
-
-            intent = new Intent(QRCodeScannerActivity.this, SuccessfulCheckinActivity.class);
-            startActivity(intent);
-            finish();
-        } else if (type == QRCodeType.INFO) {
-            app.setCachedEvent(event);
             Intent data = new Intent();
-            data.putExtra(QR_SCANNER_ID_KEY, QR_SCANNER_ID_VALUE);
+            data.putExtra(QR_SCANNER_ID_KEY, QRSCANNER_ACTIVITY_CHECKIN);
+            setResult(RESULT_OK, data);
+        } else if (type == QRCodeType.INFO) {
+            Intent data = new Intent();
+            data.putExtra(QR_SCANNER_ID_KEY, QRSCANNER_ACTIVITY_EVENTINFO);
             setResult(RESULT_OK, data);
         }
 

@@ -15,6 +15,7 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
@@ -26,6 +27,7 @@ import ca.cmput301t05.placeholder.qrcode.QRCode;
 import ca.cmput301t05.placeholder.qrcode.QRCodeManager;
 import ca.cmput301t05.placeholder.ui.events.ViewQRCodesActivity;
 import ca.cmput301t05.placeholder.utils.ImageViewHelper;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
@@ -41,6 +43,10 @@ import java.util.Locale;
  */
 public class EnterEventDetailsActivity extends AppCompatActivity {
 
+    private static int COMPRESSION_QUALITY = 1024;
+    private static int MAX_WIDTH = 2048;
+    private static int MAX_HEIGHT = 2048;
+
     private EditText eventName;
     private EditText eventLocation;
     private EditText eventDate;
@@ -55,7 +61,6 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     private Event newEvent;
     private Calendar cal;
     private Uri currentImage;
-    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
     // Declare instance variables to store the date and time from DatePicker and TimePicker
     private int selectedHour;
@@ -91,17 +96,6 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         // Handling the navigation icon click
         toolbar.setNavigationOnClickListener(v -> backAction());
 
-        pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-            if (uri == null) {
-                Log.d("PhotoPicker", "No media selected");
-            } else {
-                Log.d("PhotoPicker", "Selected URI: " + uri);
-                posterImage.setImageURI(uri);
-                ImageViewHelper.cropPosterToImage(posterImage);
-                currentImage = uri;
-            }
-        });
-
         eventTime.setOnClickListener(view -> openTimePickerDialog());
         eventDate.setOnClickListener(view -> openDatePickerDialog());
         openPosterDialog.setOnClickListener(view -> openPosterSelectSheet());
@@ -130,10 +124,14 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
             eventDescripiton.setText(newEvent.getEventInfo());
             if (newEvent.hasEventPosterBitmap()) {
                 posterImage.setImageBitmap(newEvent.getEventPosterBitmap());
-                ImageViewHelper.cropPosterToImage(posterImage);
+                ImageViewHelper.cropImageToAspectRatio(posterImage);
             }
+            nextButton.setText("Edit Event");
+            nextButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.check_icon, getTheme()));
         } else {
             newEvent = new Event();
+            nextButton.setText("Create Event");
+            nextButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.add_icon, getTheme()));
         }
     }
 
@@ -160,10 +158,35 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     }
 
     private void openPosterSelectSheet() {
-        PickVisualMediaRequest request = new PickVisualMediaRequest.Builder()
-                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                .build();
-        pickMedia.launch(request);
+        ImagePicker.with(this)
+                .crop()                                             // Crop the image
+                .compress(COMPRESSION_QUALITY)                      // Final image size will be less than COMPRESSION_QUALITY KB
+                .maxResultSize(MAX_WIDTH, MAX_HEIGHT)   // Final image resolution will be less than IMAGE_MAX_HEIGHT x IMAGE_MAX_WIDTH
+                .start();
+    }
+
+    /**
+     * Handles the result from the image picker activity, updating the profile picture view
+     * and storing the new picture's URI.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(),
+     *                    allowing you to identify who this result came from.
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("Activity Result", "IN FUNC");
+        Uri uri = data.getData();
+        //display the new picture and upload to the ImageTable
+        if (uri == null) {
+            Log.d("PhotoPicker", "No media selected");
+        } else {
+            Log.d("PhotoPicker", "Selected URI: " + uri);
+            posterImage.setImageURI(uri);
+            ImageViewHelper.cropImageToAspectRatio(posterImage);
+            currentImage = uri;
+        }
     }
 
     /**
@@ -285,7 +308,9 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 && validateEditTextNotEmpty(eventTime)
                 && validateEditTextNotEmpty(eventDescripiton)
                 && validateEditTextNotEmpty(eventCapacity)
+                && validateCapacityNonNegative(eventCapacity)
                 && cal != null
+                && validateEventNameLength(eventName)
                 && validateImageHasBeenChosen();
     }
 
@@ -309,6 +334,20 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     private boolean validateEditTextNotEmpty(EditText editText) {
         if (editText.getText().toString().trim().isEmpty()) {
             editText.setError("Field cannot be empty");
+            return false;
+        }
+        return true;
+    }
+    private boolean validateCapacityNonNegative(EditText editText) {
+        if (Integer.parseInt(editText.getText().toString()) < 0) {
+            editText.setError("Capacity cannot be negative!");
+            return false;
+        }
+        return true;
+    }
+    private boolean validateEventNameLength(EditText editText) {
+        if (editText.getText().toString().length() > 25) {
+            editText.setError("Event Name too long!");
             return false;
         }
         return true;
@@ -353,6 +392,7 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
         List<String> hostedEvents = app.getUserProfile().getHostedEvents();
         hostedEvents.add(currentEventId);
         app.getUserProfile().setHostedEvents(hostedEvents);
+        app.getHostedEvents().put(currentEvent.getEventID(), currentEvent);
 
         // Update or push profile document
         ProfileTable profileTable = app.getProfileTable();

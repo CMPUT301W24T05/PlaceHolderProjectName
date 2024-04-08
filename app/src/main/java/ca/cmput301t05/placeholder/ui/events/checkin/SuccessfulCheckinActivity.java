@@ -3,6 +3,7 @@ package ca.cmput301t05.placeholder.ui.events.checkin;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,8 @@ import java.util.List;
  * @see LocationManager.LocationPermissionListener
  */
 public class SuccessfulCheckinActivity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
+    public static final String SUCCESSFUL_CHECKIN_KEY = "SuccessfulCheckinKey";
+    public static final String SUCCESSFUL_CHECKIN_VALUE = "SUCCESS_CHECKIN";
     private static final int SPLASH_DELAY = 3000;
     private LocationManager locationManager;
     private PlaceholderApp app;
@@ -46,6 +50,7 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
     private double latitude;
     private double longitude;
     private EventTable eventTable;
+    private ImageView animated_checkmark;
     private static final String LOCATION_SHARED_TOAST = "Location Shared";
     private static final String LOCATION_NOT_SHARED_TOAST = "Location Not Shared";
 
@@ -61,6 +66,7 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         initializeApp();
         setupButtonClickHandling();
         checkAndHandleEventMaxCapacity();
+        imageViewAnimation(); // Check mark animation
     }
 
     /**
@@ -83,6 +89,15 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
                 }
             });
         }
+    }
+
+    /**
+     * Function handles the check mark animation.
+     */
+    private void imageViewAnimation(){
+        animated_checkmark = findViewById(R.id.imageViewSuccessCheckin);
+        AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) animated_checkmark.getDrawable();
+        animatedVectorDrawable.start();
     }
 
     /**
@@ -122,7 +137,7 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
      * method on the event object. If the maximum capacity has not been reached, it calls the handleMaxCapacityReached() method.
      */
     private void checkAndHandleEventMaxCapacity() {
-        if (!event.reachMaxCapacity()) {
+        if (event.reachMaxCapacity()) {
             handleMaxCapacityReached();
         }
     }
@@ -161,22 +176,33 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
      * </p>
      */
     private void updateProfile(){
-        List<String> joinedEvents = profile.getJoinedEvents();
-        joinedEvents.add(event.getEventID().toString());
-        profile.setJoinedEvents(joinedEvents);
-        app.getProfileTable().updateDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
-            @Override
-            public void onSuccess(Profile document) {
-                Log.e("amirza2","Will call navigate to eventDetails");
-                navigateToEventDetails();
-                finish();
-            }
+        //MAKE SURE NO DUPLICATES
+        if (!profile.getJoinedEvents().contains(event.getEventID().toString())){
+            List<String> joinedEvents = profile.getJoinedEvents();
+            joinedEvents.add(event.getEventID().toString());
+            app.getJoinedEvents().put(event.getEventID(), event);
+            app.getProfileTable().updateDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+                @Override
+                public void onSuccess(Profile document) {
+                    Log.e("amirza2","Will call navigate to eventDetails");
+                    navigateToEventDetails();
+                    finish();
+                }
 
-            @Override
-            public void onFailure(Exception e) {
-                // Profile update failure, handle failure
-            }
-        });
+                @Override
+                public void onFailure(Exception e) {
+                    // Profile update failure, handle failure
+                }
+            });
+
+        }   else {
+
+            navigateToEventDetails();
+            finish();
+        }
+
+
+
     }
 
     /**
@@ -193,9 +219,10 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         eventTable.pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
             @Override
             public void onSuccess(Event document) {
-//                Intent intent = new Intent(SuccessfulCheckinActivity.this, ViewEventDetailsFragment.class);
-//                startActivity(intent);
-                // FIX THIS!
+                app.setCachedEvent(event);
+                Intent data = new Intent();
+                data.putExtra(SUCCESSFUL_CHECKIN_KEY, SUCCESSFUL_CHECKIN_VALUE);
+                setResult(RESULT_OK, data);
                 finish();
             }
 

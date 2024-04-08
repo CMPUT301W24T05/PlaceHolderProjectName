@@ -14,11 +14,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Represents an event, including information about the event name, organizer, date,
@@ -74,8 +70,8 @@ public class Event extends DocumentSerializable implements Serializable {
         this.attendees = new HashMap<>();
         this.notifications = new ArrayList<>();
         this.registeredUsers = new ArrayList<>();
-        this.attendeesNum = new Long(0);
-        this.registeredUsersNum = new Long(0);
+        this.attendeesNum = 0L;
+        this.registeredUsersNum = 0L;
     }
 
     /**
@@ -94,8 +90,27 @@ public class Event extends DocumentSerializable implements Serializable {
         this.attendees = new HashMap<>();
         this.notifications = new ArrayList<>();
         this.registeredUsers = new ArrayList<>();
-        this.attendeesNum = new Long(0);
-        this.registeredUsersNum = new Long(0);
+        this.attendeesNum = 0L;
+        this.registeredUsersNum = 0L;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+
+        if (eventCreator != null) if (eventCreator.equals(event.eventCreator))
+            if (eventID != null) return eventID.equals(event.eventID);
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = eventCreator.hashCode();
+        result = 31 * result + eventID.hashCode();
+        return result;
     }
 
     /**
@@ -149,10 +164,10 @@ public class Event extends DocumentSerializable implements Serializable {
 
         if(document.getTimestamp("eventDate") != null) {
             eventDate = Calendar.getInstance();
-            eventDate.setTimeInMillis(document.getTimestamp("eventDate").toDate().getTime());
+            eventDate.setTimeInMillis(Objects.requireNonNull(document.getTimestamp("eventDate")).toDate().getTime());
         }
         if(document.getLong("maxAttendees") != null) {
-            maxAttendees = document.getLong("maxAttendees").intValue();
+            maxAttendees = Objects.requireNonNull(document.getLong("maxAttendees")).intValue();
         }
         if(document.get("attendees") != null) {
             attendees = (HashMap<String, HashMap<String, Double>>) document.get("attendees");
@@ -214,10 +229,7 @@ public class Event extends DocumentSerializable implements Serializable {
     }
     // Check if maximum capacity is reached
     public boolean reachMaxCapacity(){
-        if(attendees.size() == maxAttendees){
-            return false;
-        }
-        return true;
+        return (attendees.size() == maxAttendees);
     }
 
     /**
