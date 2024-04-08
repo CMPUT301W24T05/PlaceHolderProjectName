@@ -219,16 +219,12 @@ public class QRCodeScannerActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", (dialogInterface, i) -> {
             // You can add additional logic here if needed
             dialogInterface.dismiss();
+            finish(); // End the current activity once you click out of the dialog.
         });
         builder.show();
-        //        finish();
+
     }
 
-    boolean dialogStatus() { // To be used strictly for testing.
-        // Required as the code scanner is final and mockito states
-        // to not mock types you do not own.
 
-        return dialogBool;
-    }
 
 }
