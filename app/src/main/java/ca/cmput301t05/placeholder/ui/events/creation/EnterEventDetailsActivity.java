@@ -308,7 +308,9 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
                 && validateEditTextNotEmpty(eventTime)
                 && validateEditTextNotEmpty(eventDescripiton)
                 && validateEditTextNotEmpty(eventCapacity)
+                && validateCapacityNonNegative(eventCapacity)
                 && cal != null
+                && validateEventNameLength(eventName)
                 && validateImageHasBeenChosen();
     }
 
@@ -332,6 +334,20 @@ public class EnterEventDetailsActivity extends AppCompatActivity {
     private boolean validateEditTextNotEmpty(EditText editText) {
         if (editText.getText().toString().trim().isEmpty()) {
             editText.setError("Field cannot be empty");
+            return false;
+        }
+        return true;
+    }
+    private boolean validateCapacityNonNegative(EditText editText) {
+        if (Integer.parseInt(editText.getText().toString()) < 0) {
+            editText.setError("Capacity cannot be negative!");
+            return false;
+        }
+        return true;
+    }
+    private boolean validateEventNameLength(EditText editText) {
+        if (editText.getText().toString().length() > 25) {
+            editText.setError("Event Name too long!");
             return false;
         }
         return true;
