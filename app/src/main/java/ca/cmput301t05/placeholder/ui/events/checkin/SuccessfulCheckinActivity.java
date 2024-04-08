@@ -23,9 +23,9 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.milestones.MilestoneConditions;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 
 import java.util.List;
 
@@ -67,6 +67,8 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         setupButtonClickHandling();
         checkAndHandleEventMaxCapacity();
         imageViewAnimation(); // Check mark animation
+
+
     }
 
     /**
@@ -118,6 +120,19 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         eventTable = app.getEventTable();
         next_button = findViewById(R.id.go_to_event_button);
         shareLocation = findViewById(R.id.checkbox_share_location);
+
+        MilestoneConditions.milestoneHandling(app, app.getCachedEvent(), new MilestoneConditions.milestoneCallback() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.d("CHECKIN_MILETONE", e.getMessage());
+            }
+        });
+
     }
 
     /**
@@ -318,4 +333,6 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
     private void navigateToEventDetailsAfterDelay() {
         new Handler().postDelayed(this::navigateToEventDetails, SPLASH_DELAY);
     }
+
+
 }

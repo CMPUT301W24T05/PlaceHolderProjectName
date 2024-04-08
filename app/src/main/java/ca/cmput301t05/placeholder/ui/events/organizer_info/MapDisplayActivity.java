@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.Location;
+package ca.cmput301t05.placeholder.ui.events.organizer_info;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import ca.cmput301t05.placeholder.Location.LocationManager;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.library.BuildConfig;
@@ -29,7 +30,7 @@ import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 
-public class MapDisplay_activity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
+public class MapDisplayActivity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map = null;
     private PlaceholderApp app;
@@ -102,7 +103,7 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
                     String message = "Latitude: "+latitude + " Longitude: " + longitude;
-                    Toast.makeText(MapDisplay_activity.this, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapDisplayActivity.this, message, Toast.LENGTH_SHORT).show();
 
                     //move the map on a default view point (where the organizer are)
                     IMapController mapController = map.getController();
@@ -149,14 +150,14 @@ public class MapDisplay_activity extends AppCompatActivity implements LocationMa
                         public void onSuccess(Profile document) {
                             String attendeeName = document.getName();
                             markers.add(createMarker(latitude, longitude, attendeeName));
-                            Toast.makeText(MapDisplay_activity.this, "onSuccess", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MapDisplayActivity.this, "onSuccess", Toast.LENGTH_SHORT).show();
                             map.getOverlays().addAll(markers);
                             map.invalidate();
                         }
                         @Override
                         public void onFailure(Exception e) {
                             markers.add(createMarker(latitude, longitude, attendeeID));
-                            Toast.makeText(MapDisplay_activity.this, "onFailure", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MapDisplayActivity.this, "onFailure", Toast.LENGTH_SHORT).show();
                             map.getOverlays().addAll(markers);
                             map.invalidate();
                         }

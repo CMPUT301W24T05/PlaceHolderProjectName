@@ -1,0 +1,238 @@
+@startuml
+
+!theme toy
+left to right direction
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+interface DataFetchCallback << interface >> {
+  + onProfileFetched(Profile): void
+  + onEventFetchError(Exception): void
+  + onPictureLoaded(Bitmap): void
+  + onProfileFetchFailure(Exception): void
+  + onNoIdFound(): void
+  + onEventFetched(Profile): void
+}
+class EventAdapter {
+  + EventAdapter(Context, ArrayList<Event>, adapterType, boolean):
+  + EventAdapter(Context, ArrayList<Event>, adapterType):
+  + removeEvents(ArrayList<Event>): void
+  + removeEvent(Event): void
+  + onBindViewHolder(EventCardViewHolder, int): void
+  + addOrUpdateEvents(ArrayList<Event>): void
+  + onCreateViewHolder(ViewGroup, int): EventCardViewHolder
+  + addEvents(ArrayList<Event>): void
+  + deleteAllEvents(): void
+   events: ArrayList<Event>
+   listener: OnItemClickListener
+   itemCount: int
+}
+class EventCardViewHolder {
+  + EventCardViewHolder(View):
+  + bindBasicViews(Event): void
+  + handleOnClick(Event): void
+  + bindView(int): void
+  + handlePosterLoad(Event): void
+}
+class EventExploreFragment {
+  + EventExploreFragment():
+  - setupSwipeRefreshLayout(View): void
+  + onItemClick(Event, adapterType): void
+  - displayEvents(ArrayList<Event>): void
+  - initializeApp(): void
+  - setupEventList(View): void
+  - fetchAllEvents(): void
+  + onCreateView(LayoutInflater, ViewGroup, Bundle): View?
+}
+class EventOrganizedFragment {
+  + EventOrganizedFragment():
+  + onNoIdFound(): void
+  + refreshEventList(): void
+  + onProfileFetched(Profile): void
+  + onEventFetchError(Exception): void
+  + onEventFetched(Profile): void
+  + onDestroy(): void
+  + onProfileFetchFailure(Exception): void
+  + onResume(): void
+  + onItemClick(Event, adapterType): void
+  + onPictureLoaded(Bitmap): void
+  + onCreateView(LayoutInflater, ViewGroup, Bundle): View?
+}
+class HostedEventCardViewHolder {
+  + HostedEventCardViewHolder(View):
+  + bindView(int): void
+}
+class JoinedEventCardViewHolder {
+  + JoinedEventCardViewHolder(View):
+  + bindView(int): void
+}
+class MainActivity {
+  + MainActivity():
+  # onCreate(Bundle): void
+  - setupBottomNavigationView(): void
+}
+class NewHomeFragment {
+  + NewHomeFragment():
+  + onPictureLoaded(Bitmap): void
+  - initializeViews(View): void
+  + onItemClick(Event, adapterType): void
+  + onEventFetched(Profile): void
+  + onNoIdFound(): void
+  + onEventFetchError(Exception): void
+  + onProfileFetchFailure(Exception): void
+  + onProfileFetched(Profile): void
+  - populateLists(): void
+  + onCreateView(LayoutInflater, ViewGroup?, Bundle?): View?
+}
+interface OnItemClickListener << interface >> {
+  + onItemClick(Event, adapterType): void
+}
+class PlaceholderApp {
+  + PlaceholderApp():
+  + addMilestone(Milestone): void
+  + refreshNotifications(appCallback): void
+  + currentProfileExists(): boolean
+  + onCreate(): void
+   imageDetailTable: ImageDetailTable
+   profileFetcher: ProfileFetcher
+   posterImageHandler: EventPosterImageHandler
+   picCache: Uri
+   userNotifications: ArrayList<Notification>
+   cachedEvent: Event
+   notificationEventHolder: ArrayList<holdNotiEvent>
+   interestedEvents: HashMap<UUID, Event>
+   userMilestones: ArrayList<Milestone>
+   profileImageHandler: ProfileImageHandler
+   locationManager: LocationManager
+   userProfile: Profile
+   eventFetcher: EventFetcher
+   idManager: DeviceIDManager
+   notificationTable: NotificationTable
+   profileTable: ProfileTable
+   hostedEvents: HashMap<UUID, Event>
+   joinedEvents: HashMap<UUID, Event>
+   eventTable: EventTable
+}
+class ProfileViewFragment {
+  + ProfileViewFragment():
+  + onPictureLoaded(Bitmap): void
+  - setupListeners(): void
+  - setProfileUpdate(): void
+  + onCreateView(LayoutInflater, ViewGroup?, Bundle?): View?
+  + onProfileFetchFailure(Exception): void
+  + onResume(): void
+  + onEventFetchError(Exception): void
+  + onDestroy(): void
+  - updateEventsToUI(ArrayList<Event>): void
+  + onProfileFetched(Profile): void
+  + onEventFetched(Profile): void
+  - setUp(): void
+  + onItemClick(Event, adapterType): void
+  - initializeComponents(View): void
+  + onNoIdFound(): void
+}
+class QRCode {
+  + QRCode(Event, String):
+   rawText: String
+   type: QRCodeType
+   bitmap: Bitmap
+}
+class QRCodeManager {
+  + QRCodeManager():
+  + generateQRCode(Event, String): QRCode
+  + checkQRcodeType(String): QRCodeType
+  + getEventID(String): UUID
+}
+class QRCodeScannerActivity {
+  + QRCodeScannerActivity():
+  ~ initializePermissionLauncher(): void
+  - handleQRCodeScan(String): void
+  ~ dialogStatus(): boolean
+  # onCreate(Bundle): void
+  - handleQRCodeType(QRCodeType, Event): void
+  - setupDecodeCallback(): void
+  ~ checkCurrentPermission(): boolean
+  ~ showPermissionDeniedDialog(): void
+}
+enum QRCodeType << enumeration >> {
+  + QRCodeType():
+  + values(): QRCodeType[]
+  + valueOf(String): QRCodeType
+}
+class SuccessfulCheckinActivity {
+  + SuccessfulCheckinActivity():
+  - navigateToEventDetailsAfterDelay(): void
+  + onLocationPermissionDenied(): void
+  # onStart(): void
+  - updateProfile(): void
+  - handleButtonClick(): void
+  # onCreate(Bundle): void
+  - navigateToEventDetails(): void
+  - handleLocationReceived(Location): void
+  - initializeApp(): void
+  - imageViewAnimation(): void
+  - checkAndHandleEventMaxCapacity(): void
+  + onLocationPermissionGranted(): void
+  + onRequestPermissionsResult(int, String[], int[]): void
+  - setupButtonClickHandling(): void
+  - handleMaxCapacityReached(): void
+}
+enum adapterType << enumeration >> {
+  + adapterType():
+  + values(): adapterType[]
+  + valueOf(String): adapterType
+}
+
+EventAdapter               -[#595959,dashed]->  EventCardViewHolder
+EventAdapter               -[#595959,dashed]->  HostedEventCardViewHolder : "«create»"
+EventAdapter               -[#595959,dashed]->  JoinedEventCardViewHolder : "«create»"
+EventAdapter              "1" *-[#595959,plain]-> "listener\n1" OnItemClickListener
+EventAdapter              "1" *-[#595959,plain]-> "type\n1" adapterType
+EventCardViewHolder        +-[#820000,plain]-  EventAdapter
+EventCardViewHolder        -[#595959,dashed]->  OnItemClickListener
+EventCardViewHolder       "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+EventExploreFragment       -[#595959,dashed]->  EventAdapter              : "«create»"
+EventExploreFragment      "1" *-[#595959,plain]-> "allEventsAdapter\n1" EventAdapter
+EventExploreFragment       -[#008200,dashed]-^  OnItemClickListener
+EventExploreFragment      "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+EventExploreFragment       -[#595959,dashed]->  adapterType
+EventOrganizedFragment     -[#008200,dashed]-^  DataFetchCallback
+EventOrganizedFragment     -[#595959,dashed]->  EventAdapter              : "«create»"
+EventOrganizedFragment    "1" *-[#595959,plain]-> "organizedEventsAdapter\n1" EventAdapter
+EventOrganizedFragment     -[#008200,dashed]-^  OnItemClickListener
+EventOrganizedFragment    "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+EventOrganizedFragment     -[#595959,dashed]->  adapterType
+HostedEventCardViewHolder  +-[#820000,plain]-  EventAdapter
+HostedEventCardViewHolder  -[#000082,plain]-^  EventCardViewHolder
+JoinedEventCardViewHolder  +-[#820000,plain]-  EventAdapter
+JoinedEventCardViewHolder  -[#000082,plain]-^  EventCardViewHolder
+MainActivity               -[#595959,dashed]->  EventExploreFragment      : "«create»"
+MainActivity               -[#595959,dashed]->  EventOrganizedFragment    : "«create»"
+MainActivity               -[#595959,dashed]->  NewHomeFragment           : "«create»"
+MainActivity              "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+MainActivity               -[#595959,dashed]->  ProfileViewFragment       : "«create»"
+MainActivity               -[#595959,dashed]->  QRCodeScannerActivity
+MainActivity               -[#595959,dashed]->  SuccessfulCheckinActivity
+NewHomeFragment            -[#008200,dashed]-^  DataFetchCallback
+NewHomeFragment           "1" *-[#595959,plain]-> "futureEventsAdapter\n1" EventAdapter
+NewHomeFragment            -[#595959,dashed]->  EventAdapter              : "«create»"
+NewHomeFragment            -[#008200,dashed]-^  OnItemClickListener
+NewHomeFragment           "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+NewHomeFragment            -[#595959,dashed]->  adapterType
+OnItemClickListener        +-[#820000,plain]-  EventAdapter
+OnItemClickListener        -[#595959,dashed]->  adapterType
+ProfileViewFragment        -[#008200,dashed]-^  DataFetchCallback
+ProfileViewFragment        -[#595959,dashed]->  EventAdapter              : "«create»"
+ProfileViewFragment       "1" *-[#595959,plain]-> "joinedEventsAdapter\n1" EventAdapter
+ProfileViewFragment        -[#008200,dashed]-^  OnItemClickListener
+ProfileViewFragment       "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+ProfileViewFragment        -[#595959,dashed]->  adapterType
+QRCode                    "1" *-[#595959,plain]-> "type\n1" QRCodeType
+QRCodeManager              -[#595959,dashed]->  QRCode                    : "«create»"
+QRCodeManager              -[#595959,dashed]->  QRCodeType
+QRCodeScannerActivity     "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+QRCodeScannerActivity      -[#595959,dashed]->  QRCodeManager             : "«create»"
+QRCodeScannerActivity      -[#595959,dashed]->  QRCodeType
+SuccessfulCheckinActivity "1" *-[#595959,plain]-> "app\n1" PlaceholderApp
+adapterType                +-[#820000,plain]-  EventAdapter
+@enduml

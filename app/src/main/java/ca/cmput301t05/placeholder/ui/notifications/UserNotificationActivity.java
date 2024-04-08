@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder.ui.notifications;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import androidx.annotation.Nullable;
@@ -72,6 +73,10 @@ public class UserNotificationActivity extends AppCompatActivity {
                 app.getUserNotifications().clear();
                 app.getUserNotifications().addAll(document);
                 eventNotificationAdapter.notifyDataSetChanged();
+
+                for (Notification notification : document){
+                    Log.d("NOTIFICATION_CHECK", notification.getNotificationID().toString());
+                }
             }
 
             @Override
