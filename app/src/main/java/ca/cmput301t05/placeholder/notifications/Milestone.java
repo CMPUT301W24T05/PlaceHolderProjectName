@@ -7,10 +7,16 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.milestones.MilestoneType;
 
 /**
+ *
+ *
  * Represents a milestone event in the context of an event notification.
  * A milestone marks a significant achievement or progress point in an event.
  * It inherits properties and behavior from the Notification class.
+ *
+ * @Deprecated
+ * Please use Milestones in the milestone folder instead, this class causes lots of bugs
  */
+@Deprecated
 public class Milestone extends Notification {
 
     /**
