@@ -2,7 +2,7 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/linearLayout"
+                                                   xmlns:tools="http://schemas.android.com/tools" android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -157,5 +157,12 @@
             app:icon="@drawable/check_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+    <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp" app:srcCompat="@drawable/baseline_notifications_24"
+            android:id="@+id/notificationButton"
+            app:layout_constraintTop_toBottomOf="@+id/event_view_title" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp" android:background="@android:color/transparent" android:scaleX="1.50"
+            android:scaleY="1.50"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

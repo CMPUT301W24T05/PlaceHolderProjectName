@@ -1,0 +1,285 @@
+@startuml
+
+!theme toy
+left to right direction
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+class AbstractFetcher {
+  + AbstractFetcher(PlaceholderApp, Context):
+  + addCallback(DataFetchCallback): void
+  + removeCallback(DataFetchCallback): void
+}
+enum Collections << enumeration >> {
+  - Collections(String, String):
+  + values(): Collections[]
+  + valueOf(String): Collections
+   id: String
+   path: String
+}
+class DatabaseManager {
+  - DatabaseManager():
+   storage: FirebaseStorage
+   db: FirebaseFirestore
+   instance: DatabaseManager
+}
+class DeviceIDManager {
+  + DeviceIDManager(Context):
+  + deleteDeviceID(): void
+  + deviceHasIDStored(): boolean
+   deviceID: UUID
+}
+class DocumentSerializable {
+  + DocumentSerializable():
+  + toDocument(): Map<String, Object>
+  + fromDocument(DocumentSnapshot): void
+}
+class Event {
+  + Event():
+  + Event(String, String, int):
+  + Event(DocumentSnapshot):
+  + Event(UUID):
+  + userHasSignedUp(Profile): boolean
+  - getUUIDFromDocument(DocumentSnapshot, String): UUID?
+  + toDocument(): Map<String, Object>
+  + removeAttendee(Profile): void
+  + fromDocument(DocumentSnapshot): void
+  + checkIn(Profile, Double, Double): void
+  + addNotification(String): void
+  + reachMaxCapacity(): boolean
+  + setEventPosterFromUri(Uri, Context): void
+  + equals(Object): boolean
+  + removeNotification(String): void
+  + hashCode(): int
+  + userUnsignup(Profile): void
+  - getStringValueFromDocument(DocumentSnapshot, String): String
+  + userSignup(Profile): void
+  + hasEventPosterBitmap(): boolean
+   registeredUsersNum: Long
+   eventName: String
+   location: String
+   eventInfo: String
+   milestones: HashMap<String, String>
+   attendeesNum: Long
+   attendees: ArrayList<String>
+   registeredUsers: ArrayList<String>
+   eventCreator: UUID
+   map: HashMap<String, HashMap<String, Double>>
+   eventPosterID: UUID
+   infoQRCode: String
+   eventPosterBitmap: Bitmap
+   maxAttendees: int
+   notifications: ArrayList<String>
+   eventDate: Calendar
+   eventLocation: String
+   numAttendees: int
+   eventID: UUID
+   checkInQR: String
+}
+class EventFetcher {
+  + EventFetcher(PlaceholderApp, Context):
+  + fetchAllEvents(Profile): void
+  + fetchEventType(Profile, EventType): void
+  - fetchEventsOfType(Profile, List<String>, EventType, AtomicInteger): void
+  - fetchEventData(Profile, List<String>, EventType, AtomicInteger): void
+}
+class EventTable {
+  + EventTable():
+  + fetchAllDocuments(DocumentCallback<ArrayList<Event>>): void
+  # documentFromSnapshot(DocumentSnapshot): Event
+   collectionReference: CollectionReference
+}
+class FirebaseMessaging {
+  + FirebaseMessaging():
+  + onNewToken(String): void
+  + onMessageReceived(RemoteMessage): void
+}
+class HttpNotificationHandler {
+  + HttpNotificationHandler():
+  + sendNotificationTopicToServer(Notification, httpHandlercallback): void
+  + sendNotificationToUser(Notification, String, httpHandlercallback): void
+}
+class ImageDetailTable {
+  + ImageDetailTable():
+  + deleteImage(ImageDetails, DocumentCallback): void
+  # documentFromSnapshot(DocumentSnapshot): ImageDetails
+   collectionReference: CollectionReference
+}
+class ImageDetails {
+  + ImageDetails(Uri, String):
+  + ImageDetails():
+  + ImageDetails(DocumentSnapshot):
+  + fromDocument(DocumentSnapshot): void
+  + toDocument(): Map<String, Object>
+  + addMetadata(String): void
+   ImagePath: String
+   metadata: ArrayList<String>
+   imageUri: Uri
+   uploadTime: Calendar
+   id: String
+   objectID: String
+}
+enum ImageType << enumeration >> {
+  + ImageType():
+  + valueOf(String): ImageType
+  + values(): ImageType[]
+}
+class Milestone {
+  + Milestone(MilestoneType, Event):
+  + Milestone(DocumentSnapshot):
+  - getType(double): MilestoneType?
+  + generateMessage(MilestoneType, String): String
+  + fromDocument(DocumentSnapshot): void
+  + toDocument(): Map<String, Object>
+   eventID: String
+   eventName: String
+   mType: MilestoneType
+   id: String
+   message: String
+}
+class MilestoneConditions {
+  + MilestoneConditions():
+  + milestoneHandling(PlaceholderApp, Event, milestoneCallback): void
+  + alreadyContainsMilestone(Event, MilestoneType): boolean
+  + checkConditionsMet(Event, MilestoneType): Milestone?
+}
+class MilestoneTable {
+  + MilestoneTable():
+  # documentFromSnapshot(DocumentSnapshot): Milestone
+   collectionReference: CollectionReference
+}
+enum MilestoneType << enumeration >> {
+  - MilestoneType(String, int, String):
+  + values(): MilestoneType[]
+  + valueOf(String): MilestoneType
+   id: int
+   idString: String
+   message: String
+}
+class Notification {
+  + Notification(Notification):
+  + Notification(String, UUID, UUID):
+  + Notification(DocumentSnapshot):
+  + Notification(Map<String, String>):
+  + toDocument(): Map<String, Object>
+  + isPinned(): Boolean
+  + fromDocument(DocumentSnapshot): void
+   fromEventID: UUID
+   isRead: boolean
+   isPinned: boolean
+   timeCreated: Calendar
+   message: String
+   isPush: boolean
+   notificationID: UUID
+   creatorID: UUID
+}
+class NotificationTable {
+  + NotificationTable():
+  # documentFromSnapshot(DocumentSnapshot): Notification
+}
+class Profile {
+  + Profile():
+  + Profile(String, UUID):
+  + Profile(DocumentSnapshot):
+  + removeNotification(String): void
+  + setProfilePictureFromUri(Uri, Context): void
+  + hasProfileBitmap(): boolean
+  + addNotification(String): void
+  + toDocument(): Map<String, Object>
+  + hostEvent(Event): void
+  + removeInterestedEvent(Event): void
+  + joinEvent(Event): void
+  + unHostEvent(Event): void
+  + leaveEvent(Event): void
+  + addInterestedEvent(Event): void
+  + fromDocument(DocumentSnapshot): void
+  + setProfilePictureToDefault(): void
+   name: String
+   messagingToken: String
+   interestedEvents: List<String>
+   notifications: ArrayList<String>
+   joinedEvents: List<String>
+   hostedEvents: List<String>
+   isAdmin: boolean
+   profileID: UUID
+   profilePictureID: UUID
+   profilePictureBitmap: Bitmap
+   homePage: String
+   contactInfo: String
+}
+class ProfileFetcher {
+  + ProfileFetcher(PlaceholderApp, Context):
+  + fetchProfileIfDeviceIdExists(): void
+  + fetchProfileImage(Profile): void
+  + fetchProfile(UUID): void
+}
+class ProfileTable {
+  + ProfileTable():
+  # documentFromSnapshot(DocumentSnapshot): Profile
+   collectionReference: CollectionReference
+}
+class Table<T> {
+  + Table(Collections):
+  + fetchMultipleDocuments(ArrayList<String>, DocumentCallback<ArrayList<T>>): void
+  + pushMultipleDocuments(ArrayList<T>, ArrayList<String>, DocumentCallback<ArrayList<T>>): void
+  + updateDocument(T, String, DocumentCallback<T>): void
+  + fetchDocument(String, DocumentCallback<T>): void
+  + pushDocument(T, String, DocumentCallback<T>): void
+  # documentFromSnapshot(DocumentSnapshot): T
+  + deleteDocument(String, DocumentCallback): void
+}
+interface milestoneCallback << interface >> {
+  + onFailure(Exception): void
+  + onSuccess(): void
+}
+
+Event                    -[#000082,plain]-^  DocumentSerializable
+Event                    -[#595959,dashed]->  Profile
+EventFetcher             -[#000082,plain]-^  AbstractFetcher
+EventFetcher             -[#595959,dashed]->  Event
+EventFetcher             -[#595959,dashed]->  Profile
+EventFetcher             -[#595959,dashed]->  Table
+EventTable              "1" *-[#595959,plain]-> "COLLECTION\n1" Collections
+EventTable               -[#595959,dashed]->  Event                   : "«create»"
+EventTable               -[#000082,plain]-^  Table
+FirebaseMessaging        -[#595959,dashed]->  Notification            : "«create»"
+FirebaseMessaging        -[#595959,dashed]->  Profile
+FirebaseMessaging        -[#595959,dashed]->  Table
+HttpNotificationHandler  -[#595959,dashed]->  Notification
+ImageDetailTable        "1" *-[#595959,plain]-> "COLLECTION\n1" Collections
+ImageDetailTable         -[#595959,dashed]->  DatabaseManager
+ImageDetailTable         -[#595959,dashed]->  ImageDetails            : "«create»"
+ImageDetailTable         -[#000082,plain]-^  Table
+ImageDetails             -[#000082,plain]-^  DocumentSerializable
+Milestone                -[#000082,plain]-^  DocumentSerializable
+Milestone                -[#595959,dashed]->  Event
+Milestone               "1" *-[#595959,plain]-> "mType\n1" MilestoneType
+MilestoneConditions      -[#595959,dashed]->  Event
+MilestoneConditions      -[#595959,dashed]->  HttpNotificationHandler
+MilestoneConditions      -[#595959,dashed]->  Milestone               : "«create»"
+MilestoneConditions      -[#595959,dashed]->  MilestoneType
+MilestoneConditions      -[#595959,dashed]->  Notification            : "«create»"
+MilestoneConditions      -[#595959,dashed]->  Profile
+MilestoneConditions      -[#595959,dashed]->  Table
+MilestoneConditions      -[#595959,dashed]->  milestoneCallback
+MilestoneTable          "1" *-[#595959,plain]-> "COLLECTION\n1" Collections
+MilestoneTable           -[#595959,dashed]->  Milestone               : "«create»"
+MilestoneTable           -[#000082,plain]-^  Table
+Notification             -[#000082,plain]-^  DocumentSerializable
+NotificationTable       "1" *-[#595959,plain]-> "COLLECTION\n1" Collections
+NotificationTable        -[#595959,dashed]->  Notification            : "«create»"
+NotificationTable        -[#000082,plain]-^  Table
+Profile                  -[#000082,plain]-^  DocumentSerializable
+Profile                  -[#595959,dashed]->  Event
+ProfileFetcher           -[#000082,plain]-^  AbstractFetcher
+ProfileFetcher           -[#595959,dashed]->  DeviceIDManager
+ProfileFetcher           -[#595959,dashed]->  Profile
+ProfileFetcher           -[#595959,dashed]->  Table
+ProfileTable            "1" *-[#595959,plain]-> "COLLECTION\n1" Collections
+ProfileTable             -[#595959,dashed]->  Profile                 : "«create»"
+ProfileTable             -[#000082,plain]-^  Table
+Table                   "1" *-[#595959,plain]-> "COLLECTION\n1" Collections
+Table                    -[#595959,dashed]->  DatabaseManager
+Table                    -[#595959,dashed]->  DocumentSerializable
+milestoneCallback        +-[#820000,plain]-  MilestoneConditions
+@enduml

@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder;
 
 import android.app.Application;
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import ca.cmput301t05.placeholder.database.images.EventPosterImageHandler;
 import ca.cmput301t05.placeholder.database.images.ProfileImageHandler;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.ImageDetailTable;
+import ca.cmput301t05.placeholder.database.tables.MilestoneTable;
 import ca.cmput301t05.placeholder.database.tables.NotificationTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
@@ -21,7 +23,7 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Milestone;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
-import ca.cmput301t05.placeholder.utils.holdNotiEvent;
+import ca.cmput301t05.placeholder.utils.HoldNotificationToEvent;
 import ca.cmput301t05.placeholder.utils.datafetchers.EventFetcher;
 import ca.cmput301t05.placeholder.utils.datafetchers.ProfileFetcher;
 
@@ -48,6 +50,7 @@ public class PlaceholderApp extends Application implements Serializable {
     private EventFetcher eventFetcher;
 
     private ImageDetailTable imageDetailTable;
+    private MilestoneTable milestoneTable;
 
     private NotificationTable notificationTable;
     private DeviceIDManager idManager;
@@ -66,7 +69,7 @@ public class PlaceholderApp extends Application implements Serializable {
 
     private LocationManager locationManager;
 
-    private ArrayList<holdNotiEvent> notificationEventHolder;
+    private ArrayList<HoldNotificationToEvent> notificationEventHolder;
 
     /**
      * Called when the application is starting, before any activity, service, or receiver objects (excluding content providers) have been created.
@@ -79,6 +82,7 @@ public class PlaceholderApp extends Application implements Serializable {
         eventTable = new EventTable();
         notificationTable = new NotificationTable();
         imageDetailTable = new ImageDetailTable();
+        milestoneTable = new MilestoneTable();
 
         idManager = new DeviceIDManager(this);
 
@@ -94,6 +98,7 @@ public class PlaceholderApp extends Application implements Serializable {
         userNotifications = new ArrayList<>();
         locationManager = new LocationManager(this);
         notificationEventHolder = new ArrayList<>();
+
 
         userMilestones = new ArrayList<>();
     }
@@ -222,11 +227,8 @@ public class PlaceholderApp extends Application implements Serializable {
         return eventFetcher;
     }
 
-    public ArrayList<holdNotiEvent> getNotificationEventHolder() {
-        return notificationEventHolder;
-    }
 
-    public void setNotificationEventHolder(ArrayList<holdNotiEvent> notificationEventHolder) {
+    public void setNotificationEventHolder(ArrayList<HoldNotificationToEvent> notificationEventHolder) {
         this.notificationEventHolder = notificationEventHolder;
     }
 
@@ -248,9 +250,6 @@ public class PlaceholderApp extends Application implements Serializable {
                             userProfile.getNotifications().add(n.getNotificationID().toString());
 
                         }
-
-                        notificationEventHolder.clear();
-                        notificationEventHolder.addAll(holdNotiEvent.getQuickList(document, new ArrayList<>(joinedEvents.values())));
 
                         callback.onSuccess();
 
@@ -277,5 +276,9 @@ public class PlaceholderApp extends Application implements Serializable {
 
     public void addMilestone(Milestone milestone){
         userMilestones.add(milestone);
+    }
+
+    public MilestoneTable getMilestoneTable() {
+        return milestoneTable;
     }
 }

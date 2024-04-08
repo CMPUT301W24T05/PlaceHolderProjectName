@@ -14,6 +14,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -42,7 +43,11 @@ public class Event extends DocumentSerializable implements Serializable {
 
     private Long attendeesNum, registeredUsersNum; //used so we can show how many people are attending / registered
 
-    ArrayList<String> notifications; //notifications that are sent for this specific event
+    private ArrayList<String> notifications; //notifications that are sent for this specific event
+
+    private HashMap<String, String> milestones; //type -> id
+
+
 
 
     /**
@@ -53,6 +58,8 @@ public class Event extends DocumentSerializable implements Serializable {
         this.attendees = new HashMap<>();
         this.notifications = new ArrayList<>();
         this.registeredUsers = new ArrayList<>();
+        this.milestones = new HashMap<>();
+        this.eventDate = Calendar.getInstance();
     }
 
     public Event(DocumentSnapshot snapshot){
@@ -72,6 +79,7 @@ public class Event extends DocumentSerializable implements Serializable {
         this.registeredUsers = new ArrayList<>();
         this.attendeesNum = 0L;
         this.registeredUsersNum = 0L;
+        this.milestones = new HashMap<>();
     }
 
     /**
@@ -92,6 +100,7 @@ public class Event extends DocumentSerializable implements Serializable {
         this.registeredUsers = new ArrayList<>();
         this.attendeesNum = 0L;
         this.registeredUsersNum = 0L;
+        this.milestones = new HashMap<>();
     }
 
     @Override
@@ -126,14 +135,15 @@ public class Event extends DocumentSerializable implements Serializable {
         document.put("eventInfo", eventInfo);
         document.put("infoQRCode", infoQRCode);
         document.put("checkInQR", checkInQR);
-        document.put("eventID", eventID.toString());
+        document.put("eventID", eventID != null ? eventID.toString() : null);
         document.put("eventDate", eventDate != null ? new Timestamp(eventDate.getTime()) : null);
         document.put("maxAttendees", maxAttendees);
         document.put("attendees", attendees);
         document.put("eventLocation", eventLocation);
-        document.put("eventCreator", eventCreator.toString());
+        document.put("eventCreator", eventCreator != null ? eventCreator.toString() : null);
         document.put("notifications", this.notifications);
         document.put("registeredUsers", this.registeredUsers);
+        document.put("milestones", this.milestones);
         return document;
     }
 
@@ -190,6 +200,11 @@ public class Event extends DocumentSerializable implements Serializable {
             this.attendeesNum = (long) attendees.size();
         }   else {
             this.attendeesNum = 0L;
+        }
+
+        if (document.get("milestones") != null){
+
+            this.milestones = (HashMap<String, String>) document.get("milestones");
         }
 
 
@@ -462,6 +477,10 @@ public class Event extends DocumentSerializable implements Serializable {
 
     public Long getRegisteredUsersNum() {
         return registeredUsersNum;
+    }
+
+    public HashMap<String, String> getMilestones() {
+        return milestones;
     }
 }
 

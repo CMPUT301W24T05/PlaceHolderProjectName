@@ -1,0 +1,76 @@
+@startuml
+
+!theme toy
+left to right direction
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+class BaseImageHandler {
+  + BaseImageHandler():
+  # uploadImage(Uri, String, String, String, String, Context): void
+  # getFileMimeType(Uri): String
+  # getImage(String, String, Context, ImageCallback): void
+  # removeImage(String, String, Context, ImageDeletionCallback): void
+  + uriToBitmap(Context, Uri): Bitmap?
+}
+class DatabaseManager {
+  - DatabaseManager():
+   storage: FirebaseStorage
+   db: FirebaseFirestore
+   instance: DatabaseManager
+}
+class EventPosterImageHandler {
+  + EventPosterImageHandler():
+  + uploadPoster(Uri, Event, Context): void
+  + getPosterPicture(Event, Context, ImageCallback): void
+  + removeEventPoster(Event, Context, ImageDeletionCallback): void
+}
+interface ImageCallback << interface >> {
+  + onImageLoaded(Bitmap): void
+  + onError(Exception): void
+}
+interface ImageDeletionCallback << interface >> {
+  + onImageDeleted(): void
+  + onError(Exception): void
+}
+class ImageDetails {
+  + ImageDetails(Uri, String):
+  + ImageDetails():
+  + ImageDetails(DocumentSnapshot):
+  + fromDocument(DocumentSnapshot): void
+  + toDocument(): Map<String, Object>
+  + addMetadata(String): void
+   ImagePath: String
+   metadata: ArrayList<String>
+   imageUri: Uri
+   uploadTime: Calendar
+   id: String
+   objectID: String
+}
+enum ImageType << enumeration >> {
+  + ImageType():
+  + valueOf(String): ImageType
+  + values(): ImageType[]
+}
+class ProfileImageHandler {
+  + ProfileImageHandler():
+  + uploadProfilePicture(Uri, Profile, Context): void
+  + getProfilePicture(Profile, Context, ImageCallback): void
+  + removeProfilePic(Profile, Context, ImageDeletionCallback): void
+}
+
+BaseImageHandler         -[#595959,dashed]->  DatabaseManager
+BaseImageHandler         -[#595959,dashed]->  ImageCallback
+BaseImageHandler         -[#595959,dashed]->  ImageDeletionCallback
+BaseImageHandler         -[#595959,dashed]->  ImageDetails            : "«create»"
+EventPosterImageHandler  -[#000082,plain]-^  BaseImageHandler
+EventPosterImageHandler  -[#595959,dashed]->  DatabaseManager
+EventPosterImageHandler  -[#595959,dashed]->  ImageCallback
+EventPosterImageHandler  -[#595959,dashed]->  ImageDeletionCallback
+ImageCallback            +-[#820000,plain]-  BaseImageHandler
+ImageDeletionCallback    +-[#820000,plain]-  BaseImageHandler
+ProfileImageHandler      -[#000082,plain]-^  BaseImageHandler
+ProfileImageHandler      -[#595959,dashed]->  DatabaseManager
+ProfileImageHandler      -[#595959,dashed]->  ImageCallback
+ProfileImageHandler      -[#595959,dashed]->  ImageDeletionCallback
+@enduml

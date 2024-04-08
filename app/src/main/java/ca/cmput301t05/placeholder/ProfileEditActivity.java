@@ -21,8 +21,6 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.UUID;
-
 import ca.cmput301t05.placeholder.profile.Profile;
 
 /**
@@ -58,6 +56,8 @@ public class ProfileEditActivity extends AppCompatActivity {
         initializeComponents();
         setUp();
         setupListeners();
+
+
     }
 
     private void initializeComponents() {

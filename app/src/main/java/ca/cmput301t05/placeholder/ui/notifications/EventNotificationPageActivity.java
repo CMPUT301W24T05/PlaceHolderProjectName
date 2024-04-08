@@ -22,6 +22,7 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.notifications.EventAdapterType;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.EventNotificationAdapter;
 
@@ -159,7 +160,7 @@ public class EventNotificationPageActivity extends AppCompatActivity implements 
 
 
         notificationList = findViewById(R.id.event_notification_page_recyclerview);
-        eventNotificationAdapter = new EventNotificationAdapter(this, notifications);
+        eventNotificationAdapter = new EventNotificationAdapter(this, notifications, EventAdapterType.ORGANIZER);
         notificationList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         notificationList.setAdapter(eventNotificationAdapter);
 

@@ -1,44 +1,31 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView mlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"
+    app:cardUseCompatPadding="true"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    layout_width="wrap_content"
+    layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mlns="http://schemas.android.com/tools">
 
-    <View
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/baseline_check_box_outline_blank_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/cardView"
-        android:elevation="8dp"/>
 
+            <TextView
+                android:id="@+id/miles_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gradient"
+                android:padding="16dp"
+                android:text="milestone"
+                android:textColor="#000000"
+                android:textSize="20sp" />
 
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="415dp"
-        android:layout_height="76dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-
-        <TextView
-            android:id="@+id/miles_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/gradient"
-            android:padding="16dp"
-            android:text="example"
-            android:textColor="#000000"
-            android:textSize="20sp" />
 
     </androidx.cardview.widget.CardView>
 
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>

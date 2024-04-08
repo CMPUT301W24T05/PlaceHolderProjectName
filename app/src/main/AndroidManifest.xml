@@ -92,14 +92,13 @@
         <activity android:name=".ui.admin.AdminHomeActivity"/>
         <activity android:name=".ui.notifications.NotificationsFragment"/>
         <activity android:name=".ui.notifications.EventNotificationPageActivity"/>
-        <activity android:name=".ui.notifications.UserNotificationActivity"/>
         <activity android:name=".ui.events.ViewQRCodesActivity"/>
         <activity android:name=".ui.events.EventMenuActivity"/>
         <activity android:name=".ui.events.checkin.SuccessfulCheckinActivity"/>
 
         <activity android:name=".ui.events.ViewMilestonesActivity" />
 
-        <activity android:name=".Location.MapDisplay_activity"/>
+        <activity android:name=".ui.events.organizer_info.MapDisplayActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"

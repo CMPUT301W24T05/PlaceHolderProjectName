@@ -24,7 +24,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
-import ca.cmput301t05.placeholder.Location.MapDisplay_activity;
+import ca.cmput301t05.placeholder.ui.events.organizer_info.MapDisplayActivity;
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
@@ -92,9 +92,6 @@ public class EventMenuActivity extends AppCompatActivity  {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(EventMenuActivity.this, MainActivity.class);
-//                startActivity(i);
-
                 finish();
             }
         });
@@ -280,7 +277,7 @@ public class EventMenuActivity extends AppCompatActivity  {
         viewLocations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentLoc = new Intent(EventMenuActivity.this, MapDisplay_activity.class);
+                Intent intentLoc = new Intent(EventMenuActivity.this, MapDisplayActivity.class);
                 startActivity(intentLoc);
             }
         });
