@@ -18,15 +18,21 @@ import java.util.List;
 
 import ca.cmput301t05.placeholder.R;
 
+
+
 /**
- * Custom adapter for displaying event sign-ups.
+ * Adapter for displaying sign-up information in a RecyclerView.
  */
 public class SignUpViewAdapter extends RecyclerView.Adapter<SignUpViewAdapter.SignupCardViewHolder>{
 
     private ArrayList<String> signupNames;
 
     private final Context context;
-
+    /**
+     * Constructs a SignUpViewAdapter with the provided context and list of sign-up names.
+     * @param context The context in which the adapter will be used.
+     * @param signupNames A list containing the names of users who signed up for the event.
+     */
     public SignUpViewAdapter(Context context, ArrayList<String> signupNames){
         Log.e("amirza2","IM IN ADAPTER!!");
         this.signupNames = signupNames;

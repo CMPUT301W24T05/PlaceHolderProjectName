@@ -16,7 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-
+/**
+ * A RecyclerView adapter for displaying ViewPager items.
+ * This adapter is responsible for inflating the layout for each ViewPager item
+ * and binding the data to the corresponding views.
+ */
 public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.Pager2ViewHolder> {
     private List<String> title;
     private List<Bitmap> qrImage;

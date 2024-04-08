@@ -34,7 +34,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * An activity for displaying milestones achieved by an event.
+ */
 public class ViewMilestonesActivity extends AppCompatActivity {
 
 

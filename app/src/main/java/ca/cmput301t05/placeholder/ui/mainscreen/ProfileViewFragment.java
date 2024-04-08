@@ -30,7 +30,9 @@ import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
-
+/**
+ * Fragment for displaying the user's profile information and joined events.
+ */
 public class ProfileViewFragment extends Fragment implements DataFetchCallback, EventAdapter.OnItemClickListener {
     private PlaceholderApp app;
     private Profile profile;
@@ -46,7 +48,13 @@ public class ProfileViewFragment extends Fragment implements DataFetchCallback, 
 
     private ProfileFetcher profileFetcher;
     private EventFetcher eventFetcher;
-
+    /**
+     * Creates the view for the fragment.
+     * @param inflater The layout inflater object.
+     * @param container The view container.
+     * @param savedInstanceState The saved instance state bundle.
+     * @return The inflated view for the fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile_page_updated, container, false);
@@ -77,7 +85,10 @@ public class ProfileViewFragment extends Fragment implements DataFetchCallback, 
         eventFetcher.removeCallback(this);
         super.onDestroy();
     }
-
+    /**
+     * Initializes the view components.
+     * @param view The root view of the fragment.
+     */
     private void initializeComponents(View view) {
         app = (PlaceholderApp) requireActivity().getApplicationContext();
         profile = app.getUserProfile();

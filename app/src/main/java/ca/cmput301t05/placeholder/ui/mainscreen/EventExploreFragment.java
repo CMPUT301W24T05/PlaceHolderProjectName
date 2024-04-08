@@ -19,14 +19,22 @@ import ca.cmput301t05.placeholder.ui.events.ViewEventDetailsFragment;
 
 import java.util.ArrayList;
 
-
+/**
+ * A fragment for exploring and displaying events.
+ */
 public class EventExploreFragment extends Fragment implements EventAdapter.OnItemClickListener{
 
     private PlaceholderApp app;
     private RecyclerView allEventsList;
     private EventAdapter allEventsAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-
+    /**
+     * Initializes the fragment's view.
+     * @param inflater The layout inflater object.
+     * @param container The view container.
+     * @param savedInstanceState The saved instance state bundle.
+     * @return The inflated view for the fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.event_explore, container, false);
@@ -36,11 +44,16 @@ public class EventExploreFragment extends Fragment implements EventAdapter.OnIte
         fetchAllEvents(); // Fetch events after initializing the adapter
         return view;
     }
-
+    /**
+     * Initializes the PlaceholderApp instance.
+     */
     private void initializeApp() {
         app = (PlaceholderApp) requireActivity().getApplicationContext();
     }
-
+    /**
+     * Sets up the swipe refresh layout for updating events.
+     * @param view The view associated with the fragment.
+     */
     private void setupSwipeRefreshLayout(View view) {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -48,7 +61,10 @@ public class EventExploreFragment extends Fragment implements EventAdapter.OnIte
             swipeRefreshLayout.setRefreshing(false);
         });
     }
-
+    /**
+     * Sets up the RecyclerView for displaying events.
+     * @param view The view associated with the fragment.
+     */
     private void setupEventList(View view) {
         allEventsList = view.findViewById(R.id.listAllEvents);
         allEventsAdapter = new EventAdapter(getContext(), new ArrayList<>(), EventAdapter.adapterType.ATTENDING); // Use getContext() here
@@ -56,7 +72,9 @@ public class EventExploreFragment extends Fragment implements EventAdapter.OnIte
         allEventsList.setAdapter(allEventsAdapter);
         allEventsAdapter.setListener(this);
     }
-
+    /**
+     * Fetches all events from the database.
+     */
     private void fetchAllEvents() {
         // Fetch all events from Firebase
         app.getEventTable().fetchAllDocuments(new Table.DocumentCallback<ArrayList<Event>>() {
@@ -73,11 +91,19 @@ public class EventExploreFragment extends Fragment implements EventAdapter.OnIte
         });
     }
 
+    /**
+     * Displays the fetched events in the RecyclerView.
+     * @param events The list of events to display.
+     */
     private void displayEvents(ArrayList<Event> events) {
         // Update the RecyclerView with fetched events
         allEventsAdapter.addOrUpdateEvents(events);
     }
-
+    /**
+     * Handles item click events on the RecyclerView.
+     * @param event The event object clicked.
+     * @param type The type of adapter clicked.
+     */
     @Override
     public void onItemClick(Event event, EventAdapter.adapterType type) {
         app.setCachedEvent(event);
