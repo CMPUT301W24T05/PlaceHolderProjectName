@@ -127,8 +127,7 @@ public class QRCodeScannerActivity extends AppCompatActivity {
                         }
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d("QR", document.getId() + " => " + document.getData());
-                            Event queryEvent = new Event();
-                            queryEvent.fromDocument(document);
+                            Event queryEvent = new Event(document);
                             handleQRCodeType(type, queryEvent);
                         }
                     } else {
