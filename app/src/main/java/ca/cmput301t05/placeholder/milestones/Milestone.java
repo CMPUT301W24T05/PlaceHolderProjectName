@@ -40,7 +40,7 @@ public class Milestone extends DocumentSerializable{
 
     }
 
-    private String generateMessage(MilestoneType mType, String eventName) {
+    public String generateMessage(MilestoneType mType, String eventName) {
         // Generate message based on the milestone type
         switch (mType) {
             case FIRSTATTENDEE:
