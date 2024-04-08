@@ -20,7 +20,7 @@ import com.google.firebase.firestore.Query;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.DatabaseManager;
 /**
- * Default constructor for the AdminHomeFragment class.
+ * Admin home page, displays statistics like the number of profiles and events.
  */
 public class AdminHomeFragment extends Fragment {
 

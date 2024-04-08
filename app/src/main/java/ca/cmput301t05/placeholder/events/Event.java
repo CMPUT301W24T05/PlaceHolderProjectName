@@ -59,6 +59,7 @@ public class Event extends DocumentSerializable implements Serializable {
         this.notifications = new ArrayList<>();
         this.registeredUsers = new ArrayList<>();
         this.milestones = new HashMap<>();
+        this.eventDate = Calendar.getInstance();
     }
 
     public Event(DocumentSnapshot snapshot){
