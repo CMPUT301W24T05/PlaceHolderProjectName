@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
-import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.milestones.MilestoneType;
 
 /**
  * Represents a milestone event in the context of an event notification.

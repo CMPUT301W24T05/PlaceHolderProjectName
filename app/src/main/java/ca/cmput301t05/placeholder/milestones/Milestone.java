@@ -2,14 +2,12 @@ package ca.cmput301t05.placeholder.milestones;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.notifications.MilestoneType;
 
 /**
  * Milestone class which we can call to the database and allow us to grab events milestones

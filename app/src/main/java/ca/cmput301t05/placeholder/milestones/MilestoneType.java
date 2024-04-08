@@ -1,4 +1,4 @@
-package ca.cmput301t05.placeholder.notifications;
+package ca.cmput301t05.placeholder.milestones;
 
 public enum MilestoneType {
     FIRSTATTENDEE("First Check In", 0),
