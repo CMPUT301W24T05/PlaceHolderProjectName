@@ -383,26 +383,45 @@ public class Profile extends DocumentSerializable {
         }
 
     }
-
+    /**
+     * Retrieves the profile picture bitmap.
+     *
+     * @return The profile picture bitmap.
+     */
     public Bitmap getProfilePictureBitmap() {
         return profilePictureBitmap;
     }
-
+    /**
+     * Sets the profile picture bitmap.
+     *
+     * @param profilePictureBitmap The profile picture bitmap to set.
+     */
     public void setProfilePictureBitmap(Bitmap profilePictureBitmap) {
         this.profilePictureBitmap = profilePictureBitmap;
     }
-
+    /**
+     * Sets the profile picture to the default image.
+     */
     public void setProfilePictureToDefault() {
         this.profilePictureBitmap = ProfileImageGenerator.defaultProfileImage(this.name);
     }
-
+    /**
+     * Sets the profile picture from a URI.
+     *
+     * @param imageFromUri The URI of the image.
+     * @param context      The context of the application.
+     */
     public void setProfilePictureFromUri(Uri imageFromUri, Context context){
         Bitmap bmp = BaseImageHandler.uriToBitmap(context, imageFromUri);
         if(bmp != null) {
             setProfilePictureBitmap(bmp);
         }
     }
-
+    /**
+     * Checks if the profile has a profile bitmap.
+     *
+     * @return True if the profile has a profile bitmap, otherwise false.
+     */
     public boolean hasProfileBitmap(){
         return profilePictureBitmap != null;
     }

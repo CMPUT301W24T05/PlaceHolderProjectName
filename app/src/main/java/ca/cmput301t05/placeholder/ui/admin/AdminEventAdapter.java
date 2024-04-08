@@ -36,7 +36,11 @@ import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.utils.DateStrings;
 import ca.cmput301t05.placeholder.utils.StringManip;
-
+/**
+ * Adapter class for displaying events in an administrative view using a RecyclerView.
+ * This adapter provides functionality for displaying event details and performing administrative actions,
+ * such as deleting events.
+ */
 public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.EventHolder> {
 
     private ArrayList<Event> events;
@@ -46,15 +50,24 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
     private boolean isLoading = false;
 
     private Context context;
-
+    /**
+     * Interface definition for a callback to be invoked when an event item is clicked.
+     */
     public interface OnItemClickListener{
         void onItemClick(Event event);
     }
     private OnItemClickListener listener;
+    /**
+     * Sets the listener for event item clicks.
+     * @param listener The listener to set.
+     */
     public void setListener(OnItemClickListener listener) {
         this.listener = listener;
     }
-
+    /**
+     * Constructs a new AdminEventAdapter.
+     * @param context The context of the calling activity or fragment.
+     */
     public AdminEventAdapter(Context context){
         this.context = context;
         this.app = (PlaceholderApp) this.context.getApplicationContext();
@@ -87,7 +100,11 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
 
         private ImageView poster, menu;
         private TextView name, id, date, location, registeredNumber, attendingNumber, description, organizer;
-
+        /**
+         * Constructor for the EventHolder class.
+         * Initializes UI elements by finding their respective views in the item layout.
+         * @param itemView The view representing an individual item in the RecyclerView.
+         */
         public EventHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -104,7 +121,11 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
 
 
         }
-
+        /**
+         * Binds event data to the UI elements within the ViewHolder.
+         * This method sets text and click listeners for various UI elements.
+         * @param position The position of the event item within the RecyclerView.
+         */
         public void bindView(int position){
 
             Event event = events.get(position);
@@ -278,7 +299,10 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
 
         }
     }
-
+    /**
+     * Loads events from the database and populates the adapter's data list.
+     * This method is used for initial loading of events and for loading more events as the user scrolls.
+     */
     private void loadEvents(){
 
         if (isLoading){
@@ -328,7 +352,10 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
         });
 
     }
-
+    /**
+     * Sets up a scroll listener on the provided RecyclerView to trigger event loading when nearing the end of the list.
+     * @param recyclerView The RecyclerView to which the scroll listener will be attached.
+     */
     public void setEventRefresh(RecyclerView recyclerView) {
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

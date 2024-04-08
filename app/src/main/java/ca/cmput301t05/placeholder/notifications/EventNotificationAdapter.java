@@ -41,7 +41,13 @@ public class EventNotificationAdapter extends RecyclerView.Adapter<EventNotifica
     private final EventAdapterType eventAdapterType;
 
     private Map<Integer, Boolean> itemExpanded; //used to track which are expanded
-
+    /**
+     * Constructs a new EventNotificationAdapter with the given context, list of notifications, and adapter type.
+     *
+     * @param context             The context of the application or activity.
+     * @param notifications       The list of notifications to be displayed.
+     * @param type                The adapter type (HOST or ATTENDEE).
+     */
     public EventNotificationAdapter(Context context, ArrayList<Notification> notifications, EventAdapterType type){
 
         this.notificationList = notifications;
@@ -59,7 +65,13 @@ public class EventNotificationAdapter extends RecyclerView.Adapter<EventNotifica
 
 
     }
-
+    /**
+     * Inflates the layout for a notification card and returns a new ViewHolder.
+     *
+     * @param parent   The ViewGroup into which the new View will be added.
+     * @param viewType The type of the new View.
+     * @return A new ViewHolder that holds a View representing a notification card.
+     */
     @NonNull
     @Override
     public NotificationCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -68,7 +80,12 @@ public class EventNotificationAdapter extends RecyclerView.Adapter<EventNotifica
 
         return new NotificationCardViewHolder(v);
     }
-
+    /**
+     * Binds data to the ViewHolder at the specified position.
+     *
+     * @param holder   The ViewHolder to bind data to.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull NotificationCardViewHolder holder, int position) {
 
@@ -78,14 +95,19 @@ public class EventNotificationAdapter extends RecyclerView.Adapter<EventNotifica
             e.printStackTrace();
         }
     }
-
+    /**
+     * Returns the total number of notifications in the data set held by the adapter.
+     *
+     * @return The total number of notifications.
+     */
     @Override
     public int getItemCount() {
         return notificationList.size();
     }
 
-
-
+    /**
+     * ViewHolder class for notification cards.
+     */
     public class NotificationCardViewHolder extends RecyclerView.ViewHolder {
 
         TextView notification_time, notification_message;
@@ -93,7 +115,11 @@ public class EventNotificationAdapter extends RecyclerView.Adapter<EventNotifica
         CardView notification_card;
         ImageView menu, pin; //this will be used to pin
 
-
+        /**
+         * Constructs a new NotificationCardViewHolder.
+         *
+         * @param itemView The View object corresponding to the notification card layout.
+         */
         public NotificationCardViewHolder(@NonNull View itemView) {
             super(itemView);
 

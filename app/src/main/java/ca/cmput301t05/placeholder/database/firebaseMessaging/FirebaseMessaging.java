@@ -26,7 +26,11 @@ import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 
 public class FirebaseMessaging extends FirebaseMessagingService {
-
+    /**
+     * Called when a new FCM message is received.
+     * This method processes the received message and performs necessary actions, such as displaying notifications.
+     * @param remoteMessage The received FCM message.
+     */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -121,6 +125,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
      * A) App is restored to a new device
      * B) User uninstalls/reinstalls the app
      * C) User clears app data
+     * @param token
      */
     @Override
     public void onNewToken(String token) {

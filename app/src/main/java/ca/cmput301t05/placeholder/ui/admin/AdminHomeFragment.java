@@ -19,7 +19,9 @@ import com.google.firebase.firestore.Query;
 
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.DatabaseManager;
-
+/**
+ * Default constructor for the AdminHomeFragment class.
+ */
 public class AdminHomeFragment extends Fragment {
 
     public AdminHomeFragment(){super(R.layout.admin_mainpage_fragment);}

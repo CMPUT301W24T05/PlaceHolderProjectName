@@ -26,7 +26,11 @@ public class ImageDetails extends DocumentSerializable {
     private String ImagePath;
     private String objectID; //EVENT:ID or PROFILE:ID
 
-
+    /**
+     * Constructs an ImageDetails object with the specified image URI and picture path.
+     * @param uploadedImageUri The URI of the uploaded image.
+     * @param picturePath The path of the image.
+     */
     public ImageDetails(Uri uploadedImageUri, String picturePath){
         this.id = UUID.randomUUID().toString();
         this.imageUri = uploadedImageUri;
@@ -35,17 +39,21 @@ public class ImageDetails extends DocumentSerializable {
         this.ImagePath = picturePath;
 
     }
-
+    /**
+     * Constructs an empty ImageDetails object.
+     */
     public ImageDetails(){
         this.id = UUID.randomUUID().toString();
         this.uploadTime = Calendar.getInstance();
         this.metadata = new ArrayList<>();
     }
-
+    /**
+     * Constructs an ImageDetails object from a DocumentSnapshot.
+     * @param documentSnapshot The DocumentSnapshot containing image details.
+     */
     public ImageDetails(DocumentSnapshot documentSnapshot){
         this.uploadTime = Calendar.getInstance();
         fromDocument(documentSnapshot);
-
     }
 
     public void addMetadata(String value){
