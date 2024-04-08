@@ -32,7 +32,9 @@ public class MilestoneConditions {
      */
 
     public static Milestone checkConditionsMet(Event event, MilestoneType type){
+        Log.e("amirza2", "checking the milestone type: " +String.valueOf(type) );
 
+        Log.e("amirza2",String.valueOf(event.getMilestones()));
         switch (type) {
             case FIRSTATTENDEE:
                 if(!event.getAttendees().isEmpty()){
@@ -59,6 +61,7 @@ public class MilestoneConditions {
                     return null;
                 }
             case EVENTSTART:
+                Log.e("amirza2","inside the event start milestone checker");
                 Calendar c = Calendar.getInstance();
 
                 if (c.after(event.getEventDate())){
@@ -103,7 +106,6 @@ public class MilestoneConditions {
         for (MilestoneType type : MilestoneType.values()){
 
             if (!MilestoneConditions.alreadyContainsMilestone(event, type)){
-
                 //generate the new milestones if the condition is met (NULL IF NOTHING GENERATED)
                 Milestone milestone = MilestoneConditions.checkConditionsMet(event, type);
 

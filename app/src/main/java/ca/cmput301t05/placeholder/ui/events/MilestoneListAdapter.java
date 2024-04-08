@@ -35,7 +35,7 @@ public class MilestoneListAdapter extends RecyclerView.Adapter<MilestoneListAdap
     @NonNull
     @Override
     public MilestoneListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.milestone_card, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.milestone_card, parent, false);
         return new MilestoneListAdapter.ViewHolder(v);
     }
 

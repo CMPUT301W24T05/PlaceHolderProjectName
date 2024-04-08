@@ -18,6 +18,7 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.milestones.MilestoneConditions;
 import ca.cmput301t05.placeholder.notifications.Milestone;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.ui.events.organizer_info.ViewAttendeeCheckinActivity;
@@ -46,6 +47,10 @@ public class ViewMilestonesActivity extends AppCompatActivity {
     private EventTable eventTable;
     private MilestoneListAdapter milestoneListAdapter;
 
+    RecyclerView recyclerView;
+    ArrayList<String> data;
+    TextView textView;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +61,7 @@ public class ViewMilestonesActivity extends AppCompatActivity {
         eventID = event.getEventID();
         eventTable = app.getEventTable();
         toolbar = findViewById(R.id.toolbar4Milestone);
-        Log.e("amirza2", "GOT HERE");
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,43 +69,54 @@ public class ViewMilestonesActivity extends AppCompatActivity {
             }
         });
 
-        Log.e("amirza2", "GOT HERE too");
+        RecyclerView recyclerView = findViewById(R.id.recycler4Milestone);
+        TextView textView = findViewById(R.id.emptyTextView4MileStone);
         eventTable.fetchDocument(String.valueOf(eventID),  new Table.DocumentCallback<Event>() {
+
             @Override
             public void onSuccess(Event document) {
-                Log.e("amirza2", "inside on success");
-                mileStones = new ArrayList<>(document.getMilestones().keySet());
-                Log.e("amirza2", String.valueOf(mileStones.size()));
-                RecyclerView recyclerView = findViewById(R.id.recycler4Milestone);
-                TextView textView = findViewById(R.id.emptyTextView4MileStone);
-                if (mileStones.size() <= 0){ // No mile stones achieved. Nothing to display.
+
+                MilestoneConditions.milestoneHandling(app, document, new MilestoneConditions.milestoneCallback() { // Before setting up UI update the event in db to retrieve new milestones.
+                    @Override
+                    public void onSuccess() { // Get the list of milestones
+                        // updates the event in the db
+                        Log.e("amirza2", "GOT TO ON SUCCESS IN MILESTONE HANDELING");
+                    }
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e("MILESTONE_HANDLING", String.valueOf(e));
+                    }
+                });
+
+                // Handle UI here
+
+                if (document.getMilestones() != null){
+                    mileStones = new ArrayList<>(document.getMilestones().keySet());
+                    data = new ArrayList<>(); // Not necessary but I'll refactor it later if I have time.
+                    for (int i = 0; i < mileStones.size(); i++){
+                        data.add(generateMilestoneString(mileStones.get(i)));
+                    }
+                }
+
+                if (data == null || data.size() == 0){ // No mile stones achieved. Nothing to display.
                     textView.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }
                 else { // our event achieved some milestones.
-                    ArrayList<String> data = new ArrayList<>();
-                    for (int i = 0; i < mileStones.size(); i++){
-                        Log.e("amirza2", mileStones.get(i));
-                        data.add(generateMilestoneString(mileStones.get(i)));
-                    }
 
                     recyclerView.setVisibility(View.VISIBLE);
-                    Log.e("amirza2","recylcer view set to visible");
                     textView.setVisibility(View.GONE);
-                    Log.e("amirza2","textview view set to gone");
                     milestoneListAdapter = new MilestoneListAdapter(ViewMilestonesActivity.this, data); // Setting the adapter
-                    Log.e("amirza2","Created the the adapter");
                     recyclerView.setAdapter(milestoneListAdapter);
-                    Log.e("amirza2","set the adapter");
                     recyclerView.setLayoutManager(new LinearLayoutManager(ViewMilestonesActivity.this));
                 }
+
             }
 
             @Override
             public void onFailure(Exception e) {
                 Log.e("FAIL", "Failure to fetch event from firebase in ViewMileStonesActivity class.");
             }
-
 
         });
 
@@ -125,10 +141,12 @@ public class ViewMilestonesActivity extends AppCompatActivity {
         } else if (milestone.contains("HALFWAY")) {
             return ("Your event is halfway done.");
         } else{ // milestone == "FULLCAPACITY"
-            Log.e("amirza", String.valueOf((milestone.contains("EVENTSTART"))));
             return ("Event has reached max capacity.");
         }
     }
+
+
+
 
 
 }
