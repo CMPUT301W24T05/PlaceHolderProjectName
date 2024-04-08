@@ -23,8 +23,11 @@ import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
+
 /**
- * This activity displays the list of users who have signed up for an event.
+ * Activity for viewing a page containing a list of people who have
+ * signed up to attend the event.
+ * @author Anthony
  */
 public class ViewSignUpsActivity extends AppCompatActivity {
 
@@ -47,6 +50,13 @@ public class ViewSignUpsActivity extends AppCompatActivity {
 
     private TextView emptyTextView;
 
+    /**
+     * Creates the activity, sets up the UI, and accesses the database to retrieve event info.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

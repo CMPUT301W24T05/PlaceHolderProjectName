@@ -12,6 +12,7 @@ import androidx.test.espresso.assertion.ViewAssertions;
 
 import static org.mockito.AdditionalMatchers.not;
 
+import android.Manifest;
 import android.os.SystemClock;
 
 import androidx.test.espresso.action.ViewActions;
@@ -22,10 +23,14 @@ import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Intent tests for app's main UI.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class MainUITest {
@@ -36,14 +41,14 @@ public class MainUITest {
             ActivityScenarioRule<InitialSetupActivity>(InitialSetupActivity.class);
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.CAMERA,
-            android.Manifest.permission.READ_MEDIA_IMAGES,
-            android.Manifest.permission.INTERNET,
-            android.Manifest.permission.ACCESS_NETWORK_STATE,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-            android.Manifest.permission.POST_NOTIFICATIONS
+            android.Manifest.permission.CAMERA
+//            Manifest.permission.POST_NOTIFICATIONS
     );
+
+
+    /**
+     * Tests that the UI bottom navigation bar directs you different pages as expected.
+     */
     @Test
     public void navigateBottomBar(){
         onView(withId(R.id.intro_name_edit)).perform(click());
@@ -79,6 +84,10 @@ public class MainUITest {
         //onView(ViewMatchers.withId(R.id.recycler_page_name_text)).check(ViewAssertions.matches(isDisplayed()));
     }
 
+    /**
+     * Tests the individual UI components behave properly
+     * during the event creation process.
+     */
     @Test
     public void createEventUI() {
         onView(withId(R.id.intro_name_edit)).perform(click());
@@ -93,12 +102,16 @@ public class MainUITest {
         onView(ViewMatchers.withId(R.id.OrganizerEventButton)).perform(click());
         onView(ViewMatchers.withText("Select Poster")).check(ViewAssertions.matches(isDisplayed()));
         // choose to enter event details
+        onView(ViewMatchers.withId(R.id.enterEventName)).perform(click());
         onView(ViewMatchers.withId(R.id.enterEventName)).perform(ViewActions.typeText("Galvin Test Event"), closeSoftKeyboard());
-        onView(ViewMatchers.withId(R.id.enterLocation)).perform(ViewActions.typeText("CCIS 1-140"));
-        onView(ViewMatchers.withId(R.id.enterTime)).perform(ViewActions.typeText("OK"));
+        onView(ViewMatchers.withId(R.id.enterLocation)).perform(click());
+        onView(ViewMatchers.withId(R.id.enterLocation)).perform(ViewActions.typeText("CCIS 1-140"), closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.enterTime)).perform(click());
+        onView(ViewMatchers.withId(R.id.enterTime)).perform(ViewActions.typeText("OK"), closeSoftKeyboard());
         // Confirm the selected time
-        onView(ViewMatchers.withId(R.id.enterEventCapacity)).perform(ViewActions.typeText("20"));
-        onView(ViewMatchers.withId(R.id.enterEventDescription)).perform(ViewActions.typeText("CMPUT 301 is so Hard!!"));
+        onView(ViewMatchers.withId(R.id.enterEventCapacity)).perform(ViewActions.typeText("20"), closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.enterEventDescription)).perform(ViewActions.typeText("CMPUT 301 is so Hard!!"), closeSoftKeyboard());
         onView(ViewMatchers.withId(R.id.eventDetailNextPage)).perform(click());
+
     }
 }

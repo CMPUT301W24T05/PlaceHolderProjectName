@@ -13,7 +13,6 @@ import ca.cmput301t05.placeholder.milestones.MilestoneType;
  * A milestone marks a significant achievement or progress point in an event.
  * It inherits properties and behavior from the Notification class.
  *
- * @Deprecated
  * Please use Milestones in the milestone folder instead, this class causes lots of bugs
  */
 @Deprecated

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ca.cmput301t05.placeholder.R;
+
 /**
  * Adapter for displaying sign-up information in a RecyclerView.
  */

@@ -7,6 +7,9 @@ import java.lang.reflect.Method;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test for profile image generation.
+ */
 public class ProfileImageGeneratorTest {
 
     @Test
