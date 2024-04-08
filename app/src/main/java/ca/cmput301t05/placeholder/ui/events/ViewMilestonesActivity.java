@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,12 +14,16 @@ import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Milestone;
-import ca.cmput301t05.placeholder.notifications.MilestoneType;
 import ca.cmput301t05.placeholder.notifications.Notification;
+
+
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 public class ViewMilestonesActivity extends AppCompatActivity {
 
@@ -33,33 +36,37 @@ public class ViewMilestonesActivity extends AppCompatActivity {
     private int numAttendees;
     private Button back;
 
-    private CheckBox checkBoxFirstAttendee;
-    private CheckBox checkBoxFirstSignup;
-    private CheckBox checkBoxHalfway;
-    private CheckBox checkBoxFullCapacity;
-
+    private TextView signee1_text, attendee1_text, halfway_text, full_text, start_text;
+    private ImageView signee1_im, attendee1_im, halfway_im, full_im, start_im;
     private int numRegistered;
 
     private Calendar cal, now;
-    private TextView check;
+    private int progress;
+    private ProgressBar milestoneBar;
+
 
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_milestones);
+        setContentView(R.layout.view_milestones);
         app = (PlaceholderApp) getApplicationContext();
         curEvent = app.getCachedEvent();
 
-        checkBoxFirstAttendee = findViewById(R.id.checkBox_first_attendee);
-        checkBoxFirstSignup = findViewById(R.id.checkBox_first_signup);
-        checkBoxHalfway = findViewById(R.id.checkBox_halfway);
-        checkBoxFullCapacity = findViewById(R.id.checkBox_full_capacity);
-        back = findViewById(R.id.back_milestones);
-        notifications = app.getUserNotifications();
-        milestones = getMilestones(notifications);
-
+        signee1_text = findViewById(R.id.mile_signup);
+        signee1_im  = findViewById(R.id.sign_up_icon);
+        attendee1_text = findViewById(R.id.mile_attendee);
+        attendee1_im = findViewById(R.id.attendee_icon);
+        halfway_text = findViewById(R.id.mile_halfway);
+        halfway_im = findViewById(R.id.halfway_icon);
+        full_text = findViewById(R.id.mile_full);
+        full_im  = findViewById(R.id.full_icon);
+        start_text = findViewById(R.id.mile_start);
+        start_im = findViewById(R.id.start_icon);
+        milestones = getMilestones(curEvent);
+        milestoneBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
+        progress = 0;
 
 
 
@@ -74,11 +81,10 @@ public class ViewMilestonesActivity extends AppCompatActivity {
 
         Log.d("Test", "num of attendees is " + String.valueOf(numAttendees));
 
-        check.setText(numAttendees +" / "+ capacity);
 
 
         //setMilestones();
-        setCheckBoxes();
+        //setCheckBoxes();
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,86 +99,39 @@ public class ViewMilestonesActivity extends AppCompatActivity {
 
     }
 
-    public void setMilestones(){
-        //needs to auto push notifications
-        if ((double) numAttendees / capacity >= 0.5 && !containsMilestoneType(MilestoneType.HALFWAY)) {
-            int result = numAttendees / capacity;
-            Milestone mHalfway = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.HALFWAY, curEvent.getEventName());
-            milestones.add(mHalfway); // Add the milestone to the milestones array
-            notifications.add(mHalfway); // Add the milestone to the notifications array
-            Log.d("isHalfway?: ", String.valueOf(result));
+    public ArrayList<Milestone> getMilestones(Event event){
+        ArrayList<Milestone> Miles = new ArrayList<Milestone>();
+        UUID eventID = event.getEventID();
+        for(Milestone mile : app.getUserMilestones()){
+            if (mile.getFromEventID().compareTo(eventID) == 0){
+                Miles.add(mile);
+            }
         }
+        return Miles;
 
-        if (capacity == numAttendees && !containsMilestoneType(MilestoneType.FULLCAPACITY)) {
-            Milestone mFull = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FULLCAPACITY, curEvent.getEventName());
-            milestones.add(mFull); // Add the milestone to the milestones array
-            notifications.add(mFull); // Add the milestone to the notifications array
-        }
-
-        if (numAttendees >= 1 && !containsMilestoneType(MilestoneType.FIRSTATTENDEE)) {
-            Milestone mFirstAttendee = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTATTENDEE, curEvent.getEventName());
-            milestones.add(mFirstAttendee); // Add the milestone to the milestones array
-            notifications.add(mFirstAttendee); // Add the milestone to the notifications array
-        }
-        // change to cal validation
-        if (now.compareTo(cal) > 0 && !containsMilestoneType(MilestoneType.EVENTSTART)) {
-            Milestone mEventStart = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP, curEvent.getEventName());
-            milestones.add(mEventStart); // Add the milestone to the milestones array
-            notifications.add(mEventStart); // Add the milestone to the notifications array
-        }
-
-        if (numRegistered >= 1 && !containsMilestoneType(MilestoneType.EVENTEND)) {
-            Milestone mEventEnd = new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), MilestoneType.FIRSTSIGNUP, curEvent.getEventName());
-            milestones.add(mEventEnd); // Add the milestone to the milestones array
-            notifications.add(mEventEnd); // Add the milestone to the notifications array
-        }
     }
 
-    public void setCheckBoxes(){
+    public void setMilestonesBar(){
         if (milestones != null) {
             for (Milestone milestone : milestones) {
                 switch (milestone.getMType()) {
                     case FIRSTATTENDEE:
-                        checkBoxFirstAttendee.setChecked(true);
+                        progress = progress +10;
                         break;
                     case FIRSTSIGNUP:
-                        checkBoxFirstSignup.setChecked(true);
+                        progress += 10;
                         break;
                     case HALFWAY:
-                        checkBoxHalfway.setChecked(true);
+                        progress += 10;
                         break;
                     case FULLCAPACITY:
-                        checkBoxFullCapacity.setChecked(true);
+                        progress += 10;
                         break;
                         //add checkbox for event start
                 }
             }
+            milestoneBar.setProgress(progress);
+
         }
     }
-
-    public ArrayList<Milestone> getMilestones(ArrayList<Notification> notifications){
-        ArrayList<Milestone> milestones = new ArrayList<>();
-        for (Notification notification : notifications) {
-            if (notification instanceof Milestone) {
-                milestones.add((Milestone) notification);
-            }
-        }
-        return milestones;
-    }
-
-    public boolean containsMilestoneType(MilestoneType type) {
-        if (milestones == null) {
-            return false; // If milestones array is null, return false
-        }
-
-        for (Milestone milestone : milestones) {
-            if (milestone.getMType() == type) {
-                return true; // If milestone of specified type found, return true
-            }
-        }
-
-        return false; // If no milestone of specified type found, return false
-    }
-
-
 }

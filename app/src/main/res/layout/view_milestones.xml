@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <TextView
+        android:id="@+id/header_milestone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="70dp"
+        android:text="My Milestones"
+        android:textAlignment="center"
+        android:textSize="60sp" />
+
+    <TextView
+        android:id="@+id/mile_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="Someone is \nInterested"
+        android:textAlignment="center"
+        android:layout_above="@id/sign_up_icon"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/sign_up_icon"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/sign_up_mile"
+        android:layout_above="@id/simpleProgressBar"
+        />
+
+    <TextView
+        android:id="@+id/mile_attendee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="First Check In"
+        android:textAlignment="center"
+        android:layout_below="@id/attendee_icon"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/attendee_icon"
+        android:layout_width="90dp"
+        android:layout_height="112dp"
+        android:layout_below="@id/simpleProgressBar"
+        android:src="@drawable/attendee_mile" />
+
+    <TextView
+        android:id="@+id/mile_halfway"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="Halfway Checkpoint"
+        android:textAlignment="center"
+        android:layout_above="@id/halfway_icon"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/halfway_icon"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/halfway_mile"
+        android:layout_above="@id/simpleProgressBar"
+        />
+
+    <TextView
+        android:id="@+id/mile_full"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="Full Capacity"
+        android:textAlignment="center"
+        android:layout_below="@id/full_icon"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/full_icon"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/full_mile"
+        android:layout_below="@id/simpleProgressBar"
+        />
+
+    <TextView
+        android:id="@+id/mile_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="Your Event Has Begun"
+        android:textAlignment="center"
+        android:layout_above="@id/start_icon"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/start_icon"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/event_mile"
+        android:layout_above="@id/simpleProgressBar"
+        />
+    <ProgressBar
+        android:id="@+id/simpleProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="-15dp"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/path" />
+
+
+</RelativeLayout>

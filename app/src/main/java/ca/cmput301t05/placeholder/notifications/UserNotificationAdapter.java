@@ -1,6 +1,7 @@
 package ca.cmput301t05.placeholder.notifications;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.utils.CompareByDate;
 import ca.cmput301t05.placeholder.utils.DateStrings;
 import ca.cmput301t05.placeholder.utils.StringManip;
-import ca.cmput301t05.placeholder.utils.holdNotiEvent;
+import ca.cmput301t05.placeholder.utils.HoldNotificationToEvent;
 
 public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificationAdapter.UserNotificationHolder> {
 
@@ -36,7 +36,7 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
     }
 
 
-    private ArrayList<holdNotiEvent> notiEvents;
+    private ArrayList<HoldNotificationToEvent> notiEvents;
 
     private final Context context;
 
@@ -44,7 +44,7 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
 
     private Map<Integer, Boolean> itemExpanded; //used to track which are expanded
 
-    public UserNotificationAdapter(Context context, ArrayList<holdNotiEvent> notifiEvents){
+    public UserNotificationAdapter(Context context, ArrayList<HoldNotificationToEvent> notifiEvents){
 
         this.context = context;
 
@@ -53,6 +53,7 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
 
         app = (PlaceholderApp) context.getApplicationContext();
         itemExpanded = new HashMap<>();
+
 
     }
 
@@ -162,16 +163,24 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
                         //grabbing event info
                         for (Notification n : curNotifications){
                             notificationStrings.add(n.getFromEventID().toString());
+//                            Log.d("NOTICHECK", n.getNotificationID().toString());
                         }
 
                         app.getEventTable().fetchMultipleDocuments(notificationStrings, new Table.DocumentCallback<ArrayList<Event>>() {
                             @Override
                             public void onSuccess(ArrayList<Event> document) {
 
+//                                Log.d("CHECK_SIZE", String.valueOf(document.size()));
+
                                 notiEvents.clear();
-                                notiEvents = holdNotiEvent.getQuickList(curNotifications, document);
+                                notiEvents = HoldNotificationToEvent.getQuickList(curNotifications, document);
                                 notiEvents.sort(new CompareByDate());
                                 notifyDataSetChanged();
+
+//                                for (HoldNotificationToEvent ne : notiEvents){
+//                                    Log.d("TEST_ADAPTER", ne.getN().getNotificationID().toString());
+//                                }
+
                                 callback.onFinish();
 
                             }
