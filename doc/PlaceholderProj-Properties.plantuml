@@ -1,0 +1,866 @@
+@startuml
+
+!theme toy
+top to bottom direction
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+class AbstractFetcher {
+  + AbstractFetcher(PlaceholderApp, Context): 
+  # app: PlaceholderApp
+  # context: Context
+  # callbacks: List<DataFetchCallback>
+  + addCallback(DataFetchCallback): void
+  + removeCallback(DataFetchCallback): void
+}
+class BaseImageHandler {
+  + BaseImageHandler(): 
+  # rootStorageRef: StorageReference
+  # getImage(String, String, Context, ImageCallback): void
+  # removeImage(String, String, Context, ImageDeletionCallback): void
+  # getFileMimeType(Uri): String
+  # uploadImage(Uri, String, String, String, String, Context): void
+  + uriToBitmap(Context, Uri): Bitmap?
+}
+enum Collections << enumeration >> {
+  - Collections(String, String): 
+  + EVENTS: 
+  + NOTIFICATIONS: 
+  + PROFILES: 
+  + IMAGEDETAILS: 
+  - id: String
+  - path: String
+  + getId(): String
+  + values(): Collections[]
+  + valueOf(String): Collections
+  + getPath(): String
+}
+interface DataFetchCallback << interface >> {
+  + onProfileFetched(Profile): void
+  + onPictureLoaded(Bitmap): void
+  + onProfileFetchFailure(Exception): void
+  + onNoIdFound(): void
+  + onEventFetchError(Exception): void
+  + onEventFetched(Profile): void
+}
+class DatabaseManager {
+  - DatabaseManager(): 
+  - instance: DatabaseManager
+  ~ storage: FirebaseStorage
+  + db: FirebaseFirestore
+  + getInstance(): DatabaseManager
+  + getDb(): FirebaseFirestore
+  + getStorage(): FirebaseStorage
+}
+class DeviceIDManager {
+  + DeviceIDManager(Context): 
+  - DEV_ID_KEY: String
+  - SHARED_PREFS_FILE_NAME: String
+  - context: Context
+  + deviceHasIDStored(): boolean
+  + deleteDeviceID(): void
+  + getDeviceID(): UUID
+}
+interface DocumentCallback<T> << interface >> {
+  + onFailure(Exception): void
+  + onSuccess(T): void
+}
+class DocumentSerializable {
+  + DocumentSerializable(): 
+  + toDocument(): Map<String, Object>
+  + fromDocument(DocumentSnapshot): void
+}
+class Event {
+  + Event(UUID): 
+  + Event(DocumentSnapshot): 
+  + Event(): 
+  + Event(String, String, int): 
+  - maxAttendees: int
+  - registeredUsers: ArrayList<String>
+  - eventID: UUID
+  - eventDate: Calendar
+  - attendees: HashMap<String, HashMap<String, Double>>
+  ~ notifications: ArrayList<String>
+  - eventCreator: UUID
+  - eventInfo: String
+  - checkInQR: String
+  - eventPosterID: UUID
+  - eventName: String
+  - attendeesNum: Long
+  - eventLocation: String
+  - registeredUsersNum: Long
+  - eventPosterBitmap: Bitmap
+  - infoQRCode: String
+  + reachMaxCapacity(): boolean
+  + getMap(): HashMap<String, HashMap<String, Double>>
+  + fromDocument(DocumentSnapshot): void
+  + userUnsignup(Profile): void
+  + equals(Object): boolean
+  + removeAttendee(Profile): void
+  + checkIn(Profile, Double, Double): void
+  + addNotification(String): void
+  + toDocument(): Map<String, Object>
+  - getStringValueFromDocument(DocumentSnapshot, String): String
+  + removeNotification(String): void
+  + userSignup(Profile): void
+  + hasEventPosterBitmap(): boolean
+  + hashCode(): int
+  + userHasSignedUp(Profile): boolean
+}
+class EventAdapter {
+  + EventAdapter(Context, ArrayList<Event>, adapterType, boolean): 
+  + EventAdapter(Context, ArrayList<Event>, adapterType): 
+  - listener: OnItemClickListener
+  - context: Context
+  - eventList: ArrayList<Event>
+  - horizontalLayout: boolean
+  - DATE_FORMAT: SimpleDateFormat
+  - type: adapterType
+  + setListener(OnItemClickListener): void
+  + addEvents(ArrayList<Event>): void
+  + removeEvents(ArrayList<Event>): void
+  + getItemCount(): int
+  + removeEvent(Event): void
+  + deleteAllEvents(): void
+  + onBindViewHolder(EventCardViewHolder, int): void
+  + onCreateViewHolder(ViewGroup, int): EventCardViewHolder
+  + setEvents(ArrayList<Event>): void
+  + addOrUpdateEvents(ArrayList<Event>): void
+}
+class EventCardViewHolder {
+  + EventCardViewHolder(View): 
+  ~ posterView: ShapeableImageView
+  ~ app: PlaceholderApp
+  ~ eventDate: TextView
+  ~ eventLocation: TextView
+  ~ eventName: TextView
+  ~ cardView: CardView
+  + bindView(int): void
+  + handlePosterLoad(Event): void
+  + handleOnClick(Event): void
+  + bindBasicViews(Event): void
+}
+class EventExploreFragment {
+  + EventExploreFragment(): 
+  - app: PlaceholderApp
+  - allEventsAdapter: EventAdapter
+  - swipeRefreshLayout: SwipeRefreshLayout
+  - allEventsList: RecyclerView
+  - setupSwipeRefreshLayout(View): void
+  - fetchAllEvents(): void
+  - initializeApp(): void
+  - setupEventList(View): void
+  - displayEvents(ArrayList<Event>): void
+  + onItemClick(Event, adapterType): void
+  + onCreateView(LayoutInflater, ViewGroup, Bundle): View?
+}
+class EventFetcher {
+  + EventFetcher(PlaceholderApp, Context): 
+  - fetchEventData(Profile, List<String>, EventType, AtomicInteger): void
+  + fetchAllEvents(Profile): void
+  + fetchEventType(Profile, EventType): void
+  - fetchEventsOfType(Profile, List<String>, EventType, AtomicInteger): void
+}
+class EventMenuActivity {
+  + EventMenuActivity(): 
+  ~ toolbar: Toolbar
+  ~ drawerLayout: DrawerLayout
+  - totalProgress: int
+  - textViewEventLocation: TextView
+  - eventName: TextView
+  - viewAnnouncments: CardView
+  - viewQRCodes: CardView
+  - mileStones: CardView
+  - viewAttendanceButton: Button
+  - textViewEventAuthor: TextView
+  ~ navigationView: NavigationView
+  - eventTable: EventTable
+  - signIns: CardView
+  - viewLocations: CardView
+  - circularProgressBar: CircularProgressIndicator
+  ~ curEvent: Event
+  ~ fromIntent: Intent
+  ~ toggle: ActionBarDrawerToggle
+  - editEvent: CardView
+  - currentProgress: int
+  - attendeeCount: TextView
+  - attendeeFraction: TextView
+  - textViewEventDetails: TextView
+  - buttonBack: Button
+  - textViewEventDate: TextView
+  - eventPoster: ImageView
+  ~ app: PlaceholderApp
+  # onCreate(Bundle?): void
+  - animateProgress(int, int): void
+  - setUpButtons(): void
+  - setUpPoster(Event): void
+  - setUpText(): void
+}
+class EventOrganizedFragment {
+  + EventOrganizedFragment(): 
+  - app: PlaceholderApp
+  - organizedEventsAdapter: EventAdapter
+  - eventFetcher: EventFetcher
+  - organizeEventButton: ExtendedFloatingActionButton
+  - swipeRefreshLayout: SwipeRefreshLayout
+  + onResume(): void
+  + onDestroy(): void
+  + onItemClick(Event, adapterType): void
+  + onCreateView(LayoutInflater, ViewGroup, Bundle): View?
+  + onEventFetchError(Exception): void
+  + onProfileFetchFailure(Exception): void
+  + onNoIdFound(): void
+  + refreshEventList(): void
+  + onEventFetched(Profile): void
+  + onProfileFetched(Profile): void
+  + onPictureLoaded(Bitmap): void
+}
+class EventPosterImageHandler {
+  + EventPosterImageHandler(): 
+  + uploadPoster(Uri, Event, Context): void
+  + getPosterPicture(Event, Context, ImageCallback): void
+  + removeEventPoster(Event, Context, ImageDeletionCallback): void
+}
+class EventTable {
+  + EventTable(): 
+  - COLLECTION: Collections
+  + fetchAllDocuments(DocumentCallback<ArrayList<Event>>): void
+  + getCollectionReference(): CollectionReference
+  # documentFromSnapshot(DocumentSnapshot): Event
+}
+enum EventType << enumeration >> {
+  + EventType(): 
+  + HOSTED_EVENTS: 
+  + INTERESTED_EVENTS: 
+  + JOINED_EVENTS: 
+  + valueOf(String): EventType
+  + values(): EventType[]
+}
+class FirebaseMessaging {
+  + FirebaseMessaging(): 
+  + onNewToken(String): void
+  + onMessageReceived(RemoteMessage): void
+}
+class HostedEventCardViewHolder {
+  + HostedEventCardViewHolder(View): 
+  ~ interested_number: TextView
+  ~ attended_number: TextView
+  + bindView(int): void
+}
+class HttpNotificationHandler {
+  + HttpNotificationHandler(): 
+  + sendNotificationToUser(Notification, String, httpHandlercallback): void
+  + sendNotificationTopicToServer(Notification, httpHandlercallback): void
+}
+interface ImageCallback << interface >> {
+  + onImageLoaded(Bitmap): void
+  + onError(Exception): void
+}
+interface ImageDeletionCallback << interface >> {
+  + onImageDeleted(): void
+  + onError(Exception): void
+}
+class ImageDetailTable {
+  + ImageDetailTable(): 
+  - PATHTODETAILS: String
+  - COLLECTION: Collections
+  - HIGHESTIDNAME: String
+  + getCollectionReference(): CollectionReference
+  + deleteImage(ImageDetails, DocumentCallback): void
+  # documentFromSnapshot(DocumentSnapshot): ImageDetails
+}
+class ImageDetails {
+  + ImageDetails(): 
+  + ImageDetails(DocumentSnapshot): 
+  + ImageDetails(Uri, String): 
+  - ImagePath: String
+  - uploadTime: Calendar
+  - objectID: String
+  - imageUri: Uri
+  - id: String
+  - metadata: ArrayList<String>
+  + fromDocument(DocumentSnapshot): void
+  + toDocument(): Map<String, Object>
+  + addMetadata(String): void
+}
+enum ImageType << enumeration >> {
+  + ImageType(): 
+  + POSTER: 
+  + PROFILE: 
+  + values(): ImageType[]
+  + valueOf(String): ImageType
+}
+class JoinedEventCardViewHolder {
+  + JoinedEventCardViewHolder(View): 
+  ~ interested_number: TextView
+  ~ attending_number: TextView
+  ~ attendedIcon: ImageView
+  ~ interestedIcon: ImageView
+  + bindView(int): void
+}
+class LoadingScreenActivity {
+  + LoadingScreenActivity(): 
+  - eventFetcher: EventFetcher
+  ~ notifications: ArrayList<Notification>
+  ~ milestones: ArrayList<Milestone>
+  - TAG: String
+  ~ now: Calendar
+  ~ app: PlaceholderApp
+  ~ numAttendees: int
+  ~ numRegistered: int
+  ~ capacity: int
+  - profileFetcher: ProfileFetcher
+  ~ cal: Calendar
+  # onCreate(Bundle?): void
+  + onProfileFetched(Profile): void
+  - startMainActivity(): void
+  - checkMilestones(Event): void
+  + onProfileFetchFailure(Exception): void
+  - fetchNotifications(Profile): void
+  + containsMilestoneType(MilestoneType): boolean
+  - getMilestoneByCondition(boolean, MilestoneType, Event): Optional<Milestone>
+  + addMilestone(Milestone): void
+  + onEventFetchError(Exception): void
+  # onDestroy(): void
+  - setMilestones(): void
+  + onNoIdFound(): void
+  - addMilestoneIfPresent(Optional<Milestone>): void
+  + onPictureLoaded(Bitmap): void
+  + onEventFetched(Profile): void
+}
+class MainActivity {
+  + MainActivity(): 
+  - app: PlaceholderApp
+  - eventInfoSheetLauncher: ActivityResultLauncher<Intent>
+  - setupBottomNavigationView(): void
+  # onCreate(Bundle): void
+}
+class Milestone {
+  + Milestone(UUID, UUID, MilestoneType, String): 
+  - expectedDate: Calendar
+  - mType: MilestoneType
+  - app: PlaceholderApp
+  - eventName: String
+  + getMType(): MilestoneType
+  + setMType(MilestoneType): void
+  - generateMessage(MilestoneType, String): String
+}
+enum MilestoneType << enumeration >> {
+  + MilestoneType(): 
+  + FULLCAPACITY: 
+  + EVENTSTART: 
+  + HALFWAY: 
+  + FIRSTATTENDEE: 
+  + FIRSTSIGNUP: 
+  + EVENTEND: 
+  + values(): MilestoneType[]
+  + valueOf(String): MilestoneType
+}
+class NewHomeFragment {
+  + NewHomeFragment(): 
+  - currentEventsHeader: TextView
+  - swipeRefreshLayout: SwipeRefreshLayout
+  - futureEventsView: RecyclerView
+  - currentEventsView: RecyclerView
+  - nestedScrollView: CustomNestedScrollView
+  - app: PlaceholderApp
+  - eventFetcher: EventFetcher
+  - futureEventsHeader: TextView
+  - currentEventsAdapter: EventAdapter
+  - topBar: MaterialToolbar
+  - futureEventsAdapter: EventAdapter
+  - initializeViews(View): void
+  - populateLists(): void
+  + onProfileFetchFailure(Exception): void
+  + onNoIdFound(): void
+  + onProfileFetched(Profile): void
+  + onEventFetched(Profile): void
+  + onItemClick(Event, adapterType): void
+  + onCreateView(LayoutInflater, ViewGroup?, Bundle?): View?
+  + onPictureLoaded(Bitmap): void
+  + onEventFetchError(Exception): void
+}
+class Notification {
+  + Notification(String, UUID, UUID): 
+  + Notification(DocumentSnapshot): 
+  + Notification(Map<String, String>): 
+  + Notification(Notification): 
+  - notificationID: UUID
+  - timeCreated: Calendar
+  - creatorID: UUID
+  - fromEventID: UUID
+  - isPinned: boolean
+  - isRead: boolean
+  - isPush: boolean
+  - message: String
+  + fromDocument(DocumentSnapshot): void
+  + toDocument(): Map<String, Object>
+  + isPinned(): Boolean
+  + isPush(): boolean
+  + getMessage(): String
+  + isRead(): boolean
+}
+class NotificationTable {
+  + NotificationTable(): 
+  - COLLECTION: Collections
+  # documentFromSnapshot(DocumentSnapshot): Notification
+}
+interface OnItemClickListener << interface >> {
+  + onItemClick(Event, adapterType): void
+}
+class PlaceholderApp {
+  + PlaceholderApp(): 
+  - eventTable: EventTable
+  - locationManager: LocationManager
+  - imageDetailTable: ImageDetailTable
+  - notificationTable: NotificationTable
+  - cachedEvent: Event
+  - userProfile: Profile
+  - hostedEvents: HashMap<UUID, Event>
+  - userNotifications: ArrayList<Notification>
+  - eventFetcher: EventFetcher
+  - idManager: DeviceIDManager
+  - posterImageHandler: EventPosterImageHandler
+  - userMilestones: ArrayList<Milestone>
+  - profileTable: ProfileTable
+  - profileFetcher: ProfileFetcher
+  - picCache: Uri
+  - notificationEventHolder: ArrayList<holdNotiEvent>
+  - profileImageHandler: ProfileImageHandler
+  - interestedEvents: HashMap<UUID, Event>
+  - joinedEvents: HashMap<UUID, Event>
+  + refreshNotifications(appCallback): void
+  + getCachedEvent(): Event
+  + onCreate(): void
+  + setCachedEvent(Event): void
+  + currentProfileExists(): boolean
+  + addMilestone(Milestone): void
+}
+class Profile {
+  + Profile(DocumentSnapshot): 
+  + Profile(): 
+  + Profile(String, UUID): 
+  - profileID: UUID
+  - name: String
+  - joinedEvents: List<String>
+  - profilePictureID: UUID
+  - hostedEvents: List<String>
+  - notifications: ArrayList<String>
+  - messagingToken: String
+  - profilePictureBitmap: Bitmap
+  - homePage: String
+  - contactInfo: String
+  - interestedEvents: List<String>
+  ~ isAdmin: boolean
+  + setProfilePictureFromUri(Uri, Context): void
+  + fromDocument(DocumentSnapshot): void
+  + joinEvent(Event): void
+  + setProfilePictureToDefault(): void
+  + hasProfileBitmap(): boolean
+  + removeNotification(String): void
+  + isAdmin(): boolean
+  + hostEvent(Event): void
+  + leaveEvent(Event): void
+  + unHostEvent(Event): void
+  + removeInterestedEvent(Event): void
+  + toDocument(): Map<String, Object>
+  + addInterestedEvent(Event): void
+  + setHostedEvents(List<String>): void
+}
+class ProfileFetcher {
+  + ProfileFetcher(PlaceholderApp, Context): 
+  + fetchProfileIfDeviceIdExists(): void
+  + fetchProfile(UUID): void
+  + fetchProfileImage(Profile): void
+}
+class ProfileImageHandler {
+  + ProfileImageHandler(): 
+  + getProfilePicture(Profile, Context, ImageCallback): void
+  + removeProfilePic(Profile, Context, ImageDeletionCallback): void
+  + uploadProfilePicture(Uri, Profile, Context): void
+}
+class ProfileTable {
+  + ProfileTable(): 
+  + COLLECTION: Collections
+  # documentFromSnapshot(DocumentSnapshot): Profile
+  + getCollectionReference(): CollectionReference
+}
+class ProfileViewFragment {
+  + ProfileViewFragment(): 
+  - contact: TextView
+  - joinedEventsAdapter: EventAdapter
+  - homepage: TextView
+  - edit: FloatingActionButton
+  - app: PlaceholderApp
+  - swipeRefreshLayout: SwipeRefreshLayout
+  - profile: Profile
+  - profileFetcher: ProfileFetcher
+  - profilePic: ImageView
+  - name: TextView
+  - middleSeparator: TextView
+  - eventFetcher: EventFetcher
+  - joinedEventsList: RecyclerView
+  + onCreateView(LayoutInflater, ViewGroup?, Bundle?): View?
+  + onEventFetchError(Exception): void
+  - setUp(): void
+  + onProfileFetchFailure(Exception): void
+  + onResume(): void
+  + onItemClick(Event, adapterType): void
+  + onEventFetched(Profile): void
+  - setProfileUpdate(): void
+  + onProfileFetched(Profile): void
+  - updateEventsToUI(ArrayList<Event>): void
+  + onDestroy(): void
+  - initializeComponents(View): void
+  - setupListeners(): void
+  + onNoIdFound(): void
+  + onPictureLoaded(Bitmap): void
+}
+class PushNotificationManager {
+  + PushNotificationManager(): 
+  + fbm: FirebaseMessaging
+  - instance: PushNotificationManager
+}
+class QRCode {
+  + QRCode(Event, String): 
+  - eventID: UUID
+  - type: QRCodeType
+  - bitmap: Bitmap
+  - rawText: String
+}
+class QRCodeManager {
+  + QRCodeManager(): 
+  + generateQRCode(Event, String): QRCode
+  + getEventID(String): UUID
+  + checkQRcodeType(String): QRCodeType
+}
+class QRCodeScannerActivity {
+  + QRCodeScannerActivity(): 
+  - app: PlaceholderApp
+  + QR_SCANNER_ID_KEY: String
+  + QRSCANNER_ACTIVITY_EVENTINFO: String
+  ~ mCodeScanner: CodeScanner
+  + QRSCANNER_ACTIVITY_CHECKIN: String
+  ~ requestPermissionLauncher: ActivityResultLauncher<String>
+  ~ dialogBool: boolean
+  - handleQRCodeType(QRCodeType, Event): void
+  ~ dialogStatus(): boolean
+  - setupDecodeCallback(): void
+  ~ initializePermissionLauncher(): void
+  ~ showPermissionDeniedDialog(): void
+  ~ checkCurrentPermission(): boolean
+  - handleQRCodeScan(String): void
+  # onCreate(Bundle): void
+}
+enum QRCodeType << enumeration >> {
+  + QRCodeType(): 
+  + ERROR: 
+  + INFO: 
+  + CHECK_IN: 
+  + valueOf(String): QRCodeType
+  + values(): QRCodeType[]
+}
+class Table<T> {
+  + Table(Collections): 
+  # collectionReference: CollectionReference
+  ~ COLLECTION: Collections
+  + fetchDocument(String, DocumentCallback<T>): void
+  + updateDocument(T, String, DocumentCallback<T>): void
+  + pushDocument(T, String, DocumentCallback<T>): void
+  + deleteDocument(String, DocumentCallback): void
+  # documentFromSnapshot(DocumentSnapshot): T
+  + fetchMultipleDocuments(ArrayList<String>, DocumentCallback<ArrayList<T>>): void
+  + pushMultipleDocuments(ArrayList<T>, ArrayList<String>, DocumentCallback<ArrayList<T>>): void
+}
+class UserNotificationAdapter {
+  + UserNotificationAdapter(Context, ArrayList<holdNotiEvent>): 
+  - itemExpanded: Map<Integer, Boolean>
+  - notiEvents: ArrayList<holdNotiEvent>
+  - app: PlaceholderApp
+  - context: Context
+  + getItemCount(): int
+  + onCreateViewHolder(ViewGroup, int): UserNotificationHolder
+  + updateList(UserNotificationCallback): void
+  + onBindViewHolder(UserNotificationHolder, int): void
+}
+interface UserNotificationCallback << interface >> {
+  + onError(Exception): void
+  + onFinish(): void
+}
+class UserNotificationHolder {
+  + UserNotificationHolder(View): 
+  ~ eventName: TextView
+  ~ notificationMessage: TextView
+  ~ notificationTime: TextView
+  ~ card: CardView
+  + bindView(int): void
+}
+class ViewEventDetailsFragment {
+  + ViewEventDetailsFragment(): 
+  - eventInterestCountView: TextView
+  - interestedMode: boolean
+  - eventTitleView: TextView
+  - eventLocationView: TextView
+  - eventPosterImage: ShapeableImageView
+  - eventOrganizerProfileImage: ImageView
+  - eventDateView: TextView
+  - eventDescriptionView: TextView
+  - LOG_TAG: String
+  - markInterestedButton: ExtendedFloatingActionButton
+  - eventOrganizerView: TextView
+  - app: PlaceholderApp
+  - formatAndDisplayDate(Event): void
+  - handleMarkInterestedAction(View, Event): void
+  - updateInterestedState(boolean, Event): void
+  - retrieveEventOrganizerName(UUID): void
+  + onCreateView(LayoutInflater, ViewGroup?, Bundle?): View?
+  - getOrganizerProfileImage(Profile): void
+  - updateInterestedButtonView(boolean): void
+  - updateEventPoster(Event): void
+  - retrieveAndSetPosterImage(Event): void
+  - initTextViews(View): void
+  - updateEventDetails(Event): void
+  + onViewCreated(View, Bundle?): void
+}
+enum adapterType << enumeration >> {
+  + adapterType(): 
+  + HOSTED: 
+  + ATTENDING: 
+  + values(): adapterType[]
+  + valueOf(String): adapterType
+}
+interface appCallback << interface >> {
+  + onFailure(): void
+  + onSuccess(): void
+}
+interface httpHandlercallback << interface >> {
+  + onError(Exception): void
+  + onSuccess(): void
+}
+
+AbstractFetcher           "1" *-[#595959,plain]-> "callbacks\n*" DataFetchCallback         
+AbstractFetcher           "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+BaseImageHandler           -[#595959,dashed]->  DatabaseManager           
+BaseImageHandler           -[#595959,dashed]->  ImageCallback             
+BaseImageHandler           -[#595959,dashed]->  ImageDeletionCallback     
+BaseImageHandler           -[#595959,dashed]->  ImageDetails              : "«create»"
+BaseImageHandler           -[#595959,dashed]->  PlaceholderApp            
+BaseImageHandler           -[#595959,dashed]->  Table                     
+DataFetchCallback          -[#595959,dashed]->  Profile                   
+DocumentCallback           +-[#820000,plain]-  Table                     
+Event                      -[#595959,dashed]->  BaseImageHandler          
+Event                      -[#000082,plain]-^  DocumentSerializable      
+Event                      -[#595959,dashed]->  Profile                   
+EventAdapter              "1" *-[#595959,plain]-> "eventList\n*" Event                     
+EventAdapter               -[#595959,dashed]->  EventCardViewHolder       
+EventAdapter               -[#595959,dashed]->  HostedEventCardViewHolder : "«create»"
+EventAdapter               -[#595959,dashed]->  JoinedEventCardViewHolder : "«create»"
+EventAdapter              "1" *-[#595959,plain]-> "listener\n1" OnItemClickListener       
+EventAdapter              "1" *-[#595959,plain]-> "type\n1" adapterType               
+EventCardViewHolder        -[#595959,dashed]->  BaseImageHandler          
+EventCardViewHolder        -[#595959,dashed]->  Event                     
+EventCardViewHolder        +-[#820000,plain]-  EventAdapter              
+EventCardViewHolder        -[#595959,dashed]->  EventPosterImageHandler   
+EventCardViewHolder        -[#595959,dashed]->  OnItemClickListener       
+EventCardViewHolder       "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+EventExploreFragment       -[#595959,dashed]->  Event                     
+EventExploreFragment      "1" *-[#595959,plain]-> "allEventsAdapter\n1" EventAdapter              
+EventExploreFragment       -[#595959,dashed]->  EventAdapter              : "«create»"
+EventExploreFragment       -[#595959,dashed]->  EventMenuActivity         
+EventExploreFragment       -[#595959,dashed]->  EventTable                
+EventExploreFragment       -[#008200,dashed]-^  OnItemClickListener       
+EventExploreFragment      "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+EventExploreFragment       -[#595959,dashed]->  Table                     
+EventExploreFragment       -[#595959,dashed]->  ViewEventDetailsFragment  : "«create»"
+EventExploreFragment       -[#595959,dashed]->  adapterType               
+EventFetcher               -[#000082,plain]-^  AbstractFetcher           
+EventFetcher               -[#595959,dashed]->  DataFetchCallback         
+EventFetcher               -[#595959,dashed]->  Event                     
+EventFetcher               -[#595959,dashed]->  EventType                 
+EventFetcher               -[#595959,dashed]->  PlaceholderApp            
+EventFetcher               -[#595959,dashed]->  Profile                   
+EventFetcher               -[#595959,dashed]->  Table                     
+EventMenuActivity          -[#595959,dashed]->  BaseImageHandler          
+EventMenuActivity         "1" *-[#595959,plain]-> "curEvent\n1" Event                     
+EventMenuActivity          -[#595959,dashed]->  EventPosterImageHandler   
+EventMenuActivity         "1" *-[#595959,plain]-> "eventTable\n1" EventTable                
+EventMenuActivity         "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+EventMenuActivity          -[#595959,dashed]->  Table                     
+EventOrganizedFragment     -[#595959,dashed]->  AbstractFetcher           
+EventOrganizedFragment     -[#008200,dashed]-^  DataFetchCallback         
+EventOrganizedFragment     -[#595959,dashed]->  Event                     
+EventOrganizedFragment     -[#595959,dashed]->  EventAdapter              : "«create»"
+EventOrganizedFragment    "1" *-[#595959,plain]-> "organizedEventsAdapter\n1" EventAdapter              
+EventOrganizedFragment    "1" *-[#595959,plain]-> "eventFetcher\n1" EventFetcher              
+EventOrganizedFragment     -[#595959,dashed]->  EventMenuActivity         
+EventOrganizedFragment     -[#008200,dashed]-^  OnItemClickListener       
+EventOrganizedFragment    "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+EventOrganizedFragment     -[#595959,dashed]->  Profile                   
+EventOrganizedFragment     -[#595959,dashed]->  adapterType               
+EventPosterImageHandler    -[#000082,plain]-^  BaseImageHandler          
+EventPosterImageHandler    -[#595959,dashed]->  DatabaseManager           
+EventPosterImageHandler    -[#595959,dashed]->  Event                     
+EventPosterImageHandler    -[#595959,dashed]->  ImageCallback             
+EventPosterImageHandler    -[#595959,dashed]->  ImageDeletionCallback     
+EventTable                "1" *-[#595959,plain]-> "COLLECTION\n1" Collections               
+EventTable                 -[#595959,dashed]->  DocumentCallback          
+EventTable                 -[#595959,dashed]->  Event                     : "«create»"
+EventTable                 -[#000082,plain]-^  Table                     
+EventType                  +-[#820000,plain]-  EventFetcher              
+FirebaseMessaging          -[#595959,dashed]->  MainActivity              
+FirebaseMessaging          -[#595959,dashed]->  Notification              : "«create»"
+FirebaseMessaging          -[#595959,dashed]->  PlaceholderApp            
+FirebaseMessaging          -[#595959,dashed]->  Profile                   
+FirebaseMessaging          -[#595959,dashed]->  Table                     
+HostedEventCardViewHolder  -[#595959,dashed]->  Event                     
+HostedEventCardViewHolder  +-[#820000,plain]-  EventAdapter              
+HostedEventCardViewHolder  -[#000082,plain]-^  EventCardViewHolder       
+HttpNotificationHandler    -[#595959,dashed]->  Notification              
+HttpNotificationHandler    -[#595959,dashed]->  httpHandlercallback       
+ImageCallback              +-[#820000,plain]-  BaseImageHandler          
+ImageDeletionCallback      +-[#820000,plain]-  BaseImageHandler          
+ImageDetailTable          "1" *-[#595959,plain]-> "COLLECTION\n1" Collections               
+ImageDetailTable           -[#595959,dashed]->  DatabaseManager           
+ImageDetailTable           -[#595959,dashed]->  DocumentCallback          
+ImageDetailTable           -[#595959,dashed]->  ImageDetails              : "«create»"
+ImageDetailTable           -[#000082,plain]-^  Table                     
+ImageDetails               -[#000082,plain]-^  DocumentSerializable      
+JoinedEventCardViewHolder  -[#595959,dashed]->  Event                     
+JoinedEventCardViewHolder  +-[#820000,plain]-  EventAdapter              
+JoinedEventCardViewHolder  -[#000082,plain]-^  EventCardViewHolder       
+LoadingScreenActivity      -[#595959,dashed]->  AbstractFetcher           
+LoadingScreenActivity      -[#008200,dashed]-^  DataFetchCallback         
+LoadingScreenActivity      -[#595959,dashed]->  Event                     
+LoadingScreenActivity     "1" *-[#595959,plain]-> "eventFetcher\n1" EventFetcher              
+LoadingScreenActivity      -[#595959,dashed]->  HttpNotificationHandler   
+LoadingScreenActivity      -[#595959,dashed]->  MainActivity              
+LoadingScreenActivity      -[#595959,dashed]->  Milestone                 : "«create»"
+LoadingScreenActivity     "1" *-[#595959,plain]-> "milestones\n*" Milestone                 
+LoadingScreenActivity      -[#595959,dashed]->  MilestoneType             
+LoadingScreenActivity     "1" *-[#595959,plain]-> "notifications\n*" Notification              
+LoadingScreenActivity     "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+LoadingScreenActivity      -[#595959,dashed]->  Profile                   
+LoadingScreenActivity     "1" *-[#595959,plain]-> "profileFetcher\n1" ProfileFetcher            
+LoadingScreenActivity      -[#595959,dashed]->  Table                     
+MainActivity               -[#595959,dashed]->  EventExploreFragment      : "«create»"
+MainActivity               -[#595959,dashed]->  EventOrganizedFragment    : "«create»"
+MainActivity               -[#595959,dashed]->  NewHomeFragment           : "«create»"
+MainActivity              "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+MainActivity               -[#595959,dashed]->  Profile                   
+MainActivity               -[#595959,dashed]->  ProfileViewFragment       : "«create»"
+MainActivity               -[#595959,dashed]->  QRCodeScannerActivity     
+MainActivity               -[#595959,dashed]->  ViewEventDetailsFragment  : "«create»"
+Milestone                 "1" *-[#595959,plain]-> "mType\n1" MilestoneType             
+Milestone                  -[#000082,plain]-^  Notification              
+Milestone                 "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+NewHomeFragment            -[#595959,dashed]->  AbstractFetcher           
+NewHomeFragment            -[#008200,dashed]-^  DataFetchCallback         
+NewHomeFragment            -[#595959,dashed]->  Event                     
+NewHomeFragment           "1" *-[#595959,plain]-> "futureEventsAdapter\n1" EventAdapter              
+NewHomeFragment            -[#595959,dashed]->  EventAdapter              : "«create»"
+NewHomeFragment           "1" *-[#595959,plain]-> "eventFetcher\n1" EventFetcher              
+NewHomeFragment            -[#595959,dashed]->  EventMenuActivity         
+NewHomeFragment            -[#008200,dashed]-^  OnItemClickListener       
+NewHomeFragment           "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+NewHomeFragment            -[#595959,dashed]->  Profile                   
+NewHomeFragment            -[#595959,dashed]->  ViewEventDetailsFragment  : "«create»"
+NewHomeFragment            -[#595959,dashed]->  adapterType               
+Notification               -[#000082,plain]-^  DocumentSerializable      
+NotificationTable         "1" *-[#595959,plain]-> "COLLECTION\n1" Collections               
+NotificationTable          -[#595959,dashed]->  Notification              : "«create»"
+NotificationTable          -[#000082,plain]-^  Table                     
+OnItemClickListener        -[#595959,dashed]->  Event                     
+OnItemClickListener        +-[#820000,plain]-  EventAdapter              
+OnItemClickListener        -[#595959,dashed]->  adapterType               
+PlaceholderApp             -[#595959,dashed]->  DeviceIDManager           : "«create»"
+PlaceholderApp            "1" *-[#595959,plain]-> "idManager\n1" DeviceIDManager           
+PlaceholderApp            "1" *-[#595959,plain]-> "joinedEvents\n*" Event                     
+PlaceholderApp            "1" *-[#595959,plain]-> "eventFetcher\n1" EventFetcher              
+PlaceholderApp             -[#595959,dashed]->  EventFetcher              : "«create»"
+PlaceholderApp             -[#595959,dashed]->  EventPosterImageHandler   : "«create»"
+PlaceholderApp            "1" *-[#595959,plain]-> "posterImageHandler\n1" EventPosterImageHandler   
+PlaceholderApp            "1" *-[#595959,plain]-> "eventTable\n1" EventTable                
+PlaceholderApp             -[#595959,dashed]->  EventTable                : "«create»"
+PlaceholderApp             -[#595959,dashed]->  ImageDetailTable          : "«create»"
+PlaceholderApp            "1" *-[#595959,plain]-> "imageDetailTable\n1" ImageDetailTable          
+PlaceholderApp            "1" *-[#595959,plain]-> "userMilestones\n*" Milestone                 
+PlaceholderApp            "1" *-[#595959,plain]-> "userNotifications\n*" Notification              
+PlaceholderApp            "1" *-[#595959,plain]-> "notificationTable\n1" NotificationTable         
+PlaceholderApp             -[#595959,dashed]->  NotificationTable         : "«create»"
+PlaceholderApp            "1" *-[#595959,plain]-> "userProfile\n1" Profile                   
+PlaceholderApp             -[#595959,dashed]->  ProfileFetcher            : "«create»"
+PlaceholderApp            "1" *-[#595959,plain]-> "profileFetcher\n1" ProfileFetcher            
+PlaceholderApp             -[#595959,dashed]->  ProfileImageHandler       : "«create»"
+PlaceholderApp            "1" *-[#595959,plain]-> "profileImageHandler\n1" ProfileImageHandler       
+PlaceholderApp             -[#595959,dashed]->  ProfileTable              : "«create»"
+PlaceholderApp            "1" *-[#595959,plain]-> "profileTable\n1" ProfileTable              
+PlaceholderApp             -[#595959,dashed]->  Table                     
+PlaceholderApp             -[#595959,dashed]->  appCallback               
+Profile                    -[#595959,dashed]->  BaseImageHandler          
+Profile                    -[#000082,plain]-^  DocumentSerializable      
+Profile                    -[#595959,dashed]->  Event                     
+ProfileFetcher             -[#000082,plain]-^  AbstractFetcher           
+ProfileFetcher             -[#595959,dashed]->  BaseImageHandler          
+ProfileFetcher             -[#595959,dashed]->  DataFetchCallback         
+ProfileFetcher             -[#595959,dashed]->  DeviceIDManager           
+ProfileFetcher             -[#595959,dashed]->  PlaceholderApp            
+ProfileFetcher             -[#595959,dashed]->  Profile                   
+ProfileFetcher             -[#595959,dashed]->  ProfileImageHandler       
+ProfileFetcher             -[#595959,dashed]->  Table                     
+ProfileImageHandler        -[#000082,plain]-^  BaseImageHandler          
+ProfileImageHandler        -[#595959,dashed]->  DatabaseManager           
+ProfileImageHandler        -[#595959,dashed]->  ImageCallback             
+ProfileImageHandler        -[#595959,dashed]->  ImageDeletionCallback     
+ProfileImageHandler        -[#595959,dashed]->  Profile                   
+ProfileTable              "1" *-[#595959,plain]-> "COLLECTION\n1" Collections               
+ProfileTable               -[#595959,dashed]->  Profile                   : "«create»"
+ProfileTable               -[#000082,plain]-^  Table                     
+ProfileViewFragment        -[#595959,dashed]->  AbstractFetcher           
+ProfileViewFragment        -[#008200,dashed]-^  DataFetchCallback         
+ProfileViewFragment        -[#595959,dashed]->  Event                     
+ProfileViewFragment       "1" *-[#595959,plain]-> "joinedEventsAdapter\n1" EventAdapter              
+ProfileViewFragment        -[#595959,dashed]->  EventAdapter              : "«create»"
+ProfileViewFragment       "1" *-[#595959,plain]-> "eventFetcher\n1" EventFetcher              
+ProfileViewFragment        -[#595959,dashed]->  EventMenuActivity         
+ProfileViewFragment        -[#008200,dashed]-^  OnItemClickListener       
+ProfileViewFragment       "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+ProfileViewFragment       "1" *-[#595959,plain]-> "profile\n1" Profile                   
+ProfileViewFragment       "1" *-[#595959,plain]-> "profileFetcher\n1" ProfileFetcher            
+ProfileViewFragment        -[#595959,dashed]->  ViewEventDetailsFragment  : "«create»"
+ProfileViewFragment        -[#595959,dashed]->  adapterType               
+QRCode                     -[#595959,dashed]->  Event                     
+QRCode                    "1" *-[#595959,plain]-> "type\n1" QRCodeType                
+QRCodeManager              -[#595959,dashed]->  Event                     
+QRCodeManager              -[#595959,dashed]->  QRCode                    : "«create»"
+QRCodeManager              -[#595959,dashed]->  QRCodeType                
+QRCodeScannerActivity      -[#595959,dashed]->  Event                     : "«create»"
+QRCodeScannerActivity      -[#595959,dashed]->  EventTable                
+QRCodeScannerActivity     "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+QRCodeScannerActivity      -[#595959,dashed]->  QRCodeManager             : "«create»"
+QRCodeScannerActivity      -[#595959,dashed]->  QRCodeType                
+Table                     "1" *-[#595959,plain]-> "COLLECTION\n1" Collections               
+Table                      -[#595959,dashed]->  DatabaseManager           
+Table                      -[#595959,dashed]->  DocumentCallback          
+Table                      -[#595959,dashed]->  DocumentSerializable      
+UserNotificationAdapter    -[#595959,dashed]->  Event                     
+UserNotificationAdapter    -[#595959,dashed]->  Notification              
+UserNotificationAdapter   "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+UserNotificationAdapter    -[#595959,dashed]->  Profile                   
+UserNotificationAdapter    -[#595959,dashed]->  Table                     
+UserNotificationAdapter    -[#595959,dashed]->  UserNotificationCallback  
+UserNotificationAdapter    -[#595959,dashed]->  UserNotificationHolder    : "«create»"
+UserNotificationCallback   +-[#820000,plain]-  UserNotificationAdapter   
+UserNotificationHolder     -[#595959,dashed]->  Event                     
+UserNotificationHolder     -[#595959,dashed]->  Notification              
+UserNotificationHolder     +-[#820000,plain]-  UserNotificationAdapter   
+ViewEventDetailsFragment   -[#595959,dashed]->  BaseImageHandler          
+ViewEventDetailsFragment   -[#595959,dashed]->  Event                     
+ViewEventDetailsFragment   -[#595959,dashed]->  EventPosterImageHandler   
+ViewEventDetailsFragment  "1" *-[#595959,plain]-> "app\n1" PlaceholderApp            
+ViewEventDetailsFragment   -[#595959,dashed]->  Profile                   
+ViewEventDetailsFragment   -[#595959,dashed]->  ProfileImageHandler       
+ViewEventDetailsFragment   -[#595959,dashed]->  Table                     
+adapterType                +-[#820000,plain]-  EventAdapter              
+appCallback                +-[#820000,plain]-  PlaceholderApp            
+httpHandlercallback        +-[#820000,plain]-  HttpNotificationHandler   
+@enduml
