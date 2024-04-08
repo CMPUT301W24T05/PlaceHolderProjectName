@@ -4,7 +4,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import ca.cmput301t05.placeholder.database.utils.Collections;
-import ca.cmput301t05.placeholder.notifications.Milestone;
+import ca.cmput301t05.placeholder.milestones.Milestone;
 
 public class MilestoneTable extends Table<Milestone> {
 
@@ -15,13 +15,13 @@ public class MilestoneTable extends Table<Milestone> {
      *
      * @param collection an enum which allows us to grab paths and such
      */
-    public MilestoneTable(Collections collection) {
-        super(collection);
+    public MilestoneTable() {
+        super(COLLECTION);
     }
 
     @Override
     protected Milestone documentFromSnapshot(DocumentSnapshot snapshot) {
-        return null;
+        return new Milestone(snapshot);
     }
 
     public CollectionReference getCollectionReference(){

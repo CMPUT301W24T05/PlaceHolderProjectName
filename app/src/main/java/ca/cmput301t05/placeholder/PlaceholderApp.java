@@ -13,6 +13,7 @@ import ca.cmput301t05.placeholder.database.images.EventPosterImageHandler;
 import ca.cmput301t05.placeholder.database.images.ProfileImageHandler;
 import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.ImageDetailTable;
+import ca.cmput301t05.placeholder.database.tables.MilestoneTable;
 import ca.cmput301t05.placeholder.database.tables.NotificationTable;
 import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
@@ -48,6 +49,7 @@ public class PlaceholderApp extends Application implements Serializable {
     private EventFetcher eventFetcher;
 
     private ImageDetailTable imageDetailTable;
+    private MilestoneTable milestoneTable;
 
     private NotificationTable notificationTable;
     private DeviceIDManager idManager;
@@ -79,6 +81,7 @@ public class PlaceholderApp extends Application implements Serializable {
         eventTable = new EventTable();
         notificationTable = new NotificationTable();
         imageDetailTable = new ImageDetailTable();
+        milestoneTable = new MilestoneTable();
 
         idManager = new DeviceIDManager(this);
 
@@ -94,6 +97,7 @@ public class PlaceholderApp extends Application implements Serializable {
         userNotifications = new ArrayList<>();
         locationManager = new LocationManager(this);
         notificationEventHolder = new ArrayList<>();
+
 
         userMilestones = new ArrayList<>();
     }
@@ -277,5 +281,9 @@ public class PlaceholderApp extends Application implements Serializable {
 
     public void addMilestone(Milestone milestone){
         userMilestones.add(milestone);
+    }
+
+    public MilestoneTable getMilestoneTable() {
+        return milestoneTable;
     }
 }

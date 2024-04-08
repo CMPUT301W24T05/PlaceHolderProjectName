@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import ca.cmput301t05.placeholder.database.utils.DocumentSerializable;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.MilestoneType;
 
@@ -14,7 +15,7 @@ import ca.cmput301t05.placeholder.notifications.MilestoneType;
  * Milestone class which we can call to the database and allow us to grab events milestones
  *
  */
-public class Milestone implements Serializable {
+public class Milestone extends DocumentSerializable{
 
     private MilestoneType mType;
 
@@ -25,12 +26,12 @@ public class Milestone implements Serializable {
 
     private String id;
 
-    Milestone(DocumentSnapshot snapshot){
+    public Milestone(DocumentSnapshot snapshot){
         this.fromDocument(snapshot);
     }
 
 
-    Milestone(MilestoneType type, Event event){
+    public Milestone(MilestoneType type, Event event){
 
         this.mType = type;
         this.eventID = event.getEventID().toString();
