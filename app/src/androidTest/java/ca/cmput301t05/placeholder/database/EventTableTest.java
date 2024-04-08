@@ -1,38 +1,34 @@
 package ca.cmput301t05.placeholder.database;
 
 import androidx.test.core.app.ApplicationProvider;
-import ca.cmput301t05.placeholder.database.tables.ProfileTable;
+import ca.cmput301t05.placeholder.database.tables.EventTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
-import ca.cmput301t05.placeholder.profile.Profile;
+import ca.cmput301t05.placeholder.events.Event;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Order;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
-/**
- * This class is used for testing the ProfileTable class.
- */
-@RunWith(MockitoJUnitRunner.class)
-public class ProfileTableTest {
+public class EventTableTest {
 
-    private ProfileTable profileTable;
+    private EventTable eventTable;
 
     @Mock
     FirebaseFirestore firestore;
@@ -46,12 +42,6 @@ public class ProfileTableTest {
     @Mock
     CollectionReference collectionReference;
 
-    /**
-     * Sets up the necessary configurations and mock objects for testing the ProfileTable class.
-     * Initializes the Mockito annotations and bypasses the singleton nature of DatabaseManager.
-     * Mocks the DatabaseManager to use the mocked FirebaseFirestore instance.
-     * Creates an instance of ProfileTable for testing.
-     */
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -61,32 +51,37 @@ public class ProfileTableTest {
 
         // Mock DatabaseManager to use the mocked FirebaseFirestore instance
         Mockito.when(databaseManager.getDb()).thenReturn(firestore);
-        // Mock Firestore to use the mocked CollectionReference instance
-        //Mockito.when(firestore.collection(ProfileTable.COLLECTION_NAME)).thenReturn(collectionReference);
-        profileTable = new ProfileTable();
+        eventTable = new EventTable();
     }
 
     /**
-     * Tests the successful retrieval of a profile from the database.
+     * Tests the successful retrieval of an event from the database.
      * A mock DocumentReference is created to simulate the return of an existing profile.
      * Success is confirmed with the callback's onSuccess method where the returned profile's data is validated.
      */
     @Test
-    public void fetchProfile_success() {
+    @Order(1)
+    public void fetchEvent_success() {
         DocumentReference documentReference = Mockito.mock(DocumentReference.class);
         Mockito.when(collectionReference.document(ArgumentMatchers.anyString()))
                 .thenReturn(documentReference);
         Mockito.when(doc.exists()).thenReturn(true);
 
-        // Mock document to return some expected profile data
-        Mockito.when(doc.getString("name")).thenReturn("John Doe");
-        Mockito.when(doc.getString("profileID")).thenReturn("testID");
+        UUID eventId = UUID.randomUUID();
+        UUID eventCreatorId = UUID.randomUUID();
 
-        profileTable.fetchDocument("testID", new Table.DocumentCallback<Profile>() {
+        // Mock document to return some expected profile data
+        Mockito.when(doc.getString("eventName")).thenReturn("Test Event Name");
+        Mockito.when(doc.getString("eventID")).thenReturn(eventId.toString());
+        Mockito.when(doc.getString("eventCreator")).thenReturn(eventCreatorId.toString());
+
+        eventTable.fetchDocument("testID", new Table.DocumentCallback<Event>() {
             @Override
-            public void onSuccess(Profile profile) {
-                assertNotNull(profile);
-                assertEquals("John Doe", profile.getName());
+            public void onSuccess(Event result) {
+                assertNotNull(result);
+                assertEquals("Test Event Name", result.getEventName());
+                assertEquals(eventId, result.getEventID());
+                assertEquals(eventCreatorId, result.getEventCreator());
             }
 
             @Override
@@ -97,22 +92,23 @@ public class ProfileTableTest {
     }
 
     /**
-     * Tests the scenario where a profile is not found in the database.
+     * Tests the scenario where an event is not found in the database.
      * A mock DocumentReference is created and its get method return is simulated with a document that doesn't exist.
      * The failure is confirmed if the onFailure method is invoked in the callback.
      */
     @Test
-    public void fetchProfile_noProfileFound() {
+    @Order(2)
+    public void fetchEvent_noEventFound() {
         DocumentReference documentReference = Mockito.mock(DocumentReference.class);
         Mockito.when(collectionReference.document(ArgumentMatchers.anyString()))
-            .thenReturn(documentReference);
+                .thenReturn(documentReference);
         Mockito.when(documentReference.get()).thenReturn(Tasks.forResult(doc));
         Mockito.when(doc.exists()).thenReturn(false);
 
-        profileTable.fetchDocument("testID", new Table.DocumentCallback<Profile>() {
+        eventTable.fetchDocument("testID", new Table.DocumentCallback<Event>() {
             @Override
-            public void onSuccess(Profile profile) {
-                fail("Should not succeed when profile not found.");
+            public void onSuccess(Event result) {
+                fail("Should not succeed when event not found.");
             }
 
             @Override
@@ -123,21 +119,22 @@ public class ProfileTableTest {
     }
 
     /**
-     * Tests the failure scenario when fetching a profile from the database.
+     * Tests the failure scenario when fetching an event from the database.
      * The get method of the document reference is mocked to throw an exception.
      * Failure is confirmed in the callback's onFailure method with a non-null exception.
      */
     @Test
-    public void fetchProfile_failure() {
+    @Order(3)
+    public void fetchEvent_failure() {
         DocumentReference documentReference = Mockito.mock(DocumentReference.class);
         Mockito.when(collectionReference.document(ArgumentMatchers.anyString()))
                 .thenReturn(documentReference);
         Mockito.when(documentReference.get())
                 .thenReturn(Tasks.forException(new Exception("Test Exception")));
 
-        profileTable.fetchDocument("testID", new Table.DocumentCallback<Profile>() {
+        eventTable.fetchDocument("testID", new Table.DocumentCallback<Event>() {
             @Override
-            public void onSuccess(Profile profile) {
+            public void onSuccess(Event result) {
                 fail("Should not succeed when there is an exception.");
             }
 
@@ -149,26 +146,29 @@ public class ProfileTableTest {
     }
 
     /**
-     * Tests the successful addition of a profile to the database.
+     * Tests the successful addition of an event to the database.
      * The addition is mocked to return a successful Task.
      * Success is confirmed if a non-null profile is received in the callback's onSuccess method.
      */
     @Test
-    public void addProfile_success() {
-        Profile testProfile = new Profile("Test User", UUID.randomUUID());
+    @Order(4)
+    public void addEvent_success() {
+        Event testEvent = new Event(UUID.randomUUID());
+        testEvent.setEventName("Test Event Name");
+        testEvent.setEventCreator(UUID.randomUUID());
 
         // Simulate successful addition to Firestore
-        Mockito.when(collectionReference.add(testProfile.toDocument())).thenReturn(Tasks.forResult(Mockito.mock(DocumentReference.class)));
+        Mockito.when(collectionReference.add(testEvent.toDocument())).thenReturn(Tasks.forResult(Mockito.mock(DocumentReference.class)));
 
-        profileTable.pushDocument(testProfile, testProfile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+        eventTable.pushDocument(testEvent, testEvent.getEventID().toString(), new Table.DocumentCallback<Event>() {
             @Override
-            public void onSuccess(Profile profile) {
-                assertNotNull(profile);
+            public void onSuccess(Event result) {
+                assertNotNull(result);
             }
 
             @Override
             public void onFailure(Exception e) {
-                fail("Expected profile to be added successfully, but it failed.");
+                fail("Expected event to be added successfully, but it failed.");
             }
         });
     }
@@ -179,115 +179,121 @@ public class ProfileTableTest {
      * The test successfully deletes the profile if the callback's onSuccess method is invoked.
      */
     @Test
+    @Order(5)
     public void deleteProfile_success() {
-        String testProfileId = "uniqueProfileId";
+        String testEventId = "uniqueEventId";
 
         // Assume the profile exists and simulate successful deletion
         DocumentReference documentReference = Mockito.mock(DocumentReference.class);
-        Mockito.when(collectionReference.document(testProfileId)).thenReturn(documentReference);
+        Mockito.when(collectionReference.document(testEventId)).thenReturn(documentReference);
         Mockito.when(documentReference.delete()).thenReturn(Tasks.forResult(null));
 
-        profileTable.deleteDocument(testProfileId, new Table.DocumentCallback<Void>() {
+        eventTable.deleteDocument(testEventId, new Table.DocumentCallback<Void>() {
             @Override
             public void onSuccess(Void result) {
-                // This block being called already indicates success
+                assertTrue(true);
             }
 
             @Override
             public void onFailure(Exception e) {
-                fail("Expected profile to be deleted successfully, but it failed.");
+                fail("Expected event to be deleted successfully, but it failed.");
             }
         });
     }
 
     /**
-     * Tests the successful update of a profile in the database.
+     * Tests the successful update of an event in the database.
      * A mock profile and DocumentReference are created. The document's set method is mocked to return a successful Task.
      * The test then attempts to update the document and confirms success by checking that the result is non-null.
      */
     @Test
-    public void updateProfile_success() {
+    @Order(6)
+    public void testUpdateEvent_success() {
         UUID testProfileUUID = UUID.randomUUID();
         String testProfileId = testProfileUUID.toString();
-        Profile updatedProfile = new Profile("Updated Name", testProfileUUID);
-        updatedProfile.setName("Updated Name");
+        Event updatedEvent = new Event(testProfileUUID);
+        updatedEvent.setEventName("Updated Name");
+        updatedEvent.setEventCreator(UUID.randomUUID());
 
         // Simulate successful update
         DocumentReference documentReference = Mockito.mock(DocumentReference.class);
         Mockito.when(collectionReference.document(testProfileId)).thenReturn(documentReference);
-        Mockito.when(documentReference.set(updatedProfile.toDocument())).thenReturn(Tasks.forResult(null));
+        Mockito.when(documentReference.set(updatedEvent.toDocument())).thenReturn(Tasks.forResult(null));
 
-        profileTable.updateDocument(updatedProfile, testProfileId, new Table.DocumentCallback<Profile>() {
+        eventTable.updateDocument(updatedEvent, testProfileId, new Table.DocumentCallback<Event>() {
             @Override
-            public void onSuccess(Profile result) {
+            public void onSuccess(Event result) {
                 assertNotNull(result);
             }
 
             @Override
             public void onFailure(Exception e) {
-                fail("Expected profile to be updated successfully, but it failed.");
+                fail("Expected event to be updated successfully, but it failed.");
             }
         });
     }
 
     /**
-     * This test is an integration test to verify a profile's lifecycle in the LIVE(!) database.
+     * This test is an integration test to verify an event's lifecycle in the LIVE(!) database.
      * It executes the following steps:
      * <p>
-     * Step 1: Create a new profile and add it to the database. The generated ID of the
-     * newly added profile is captured.
+     * Step 1: Create a new event and add it to the database. The generated ID of the
+     * newly added event is captured.
      * <p>
-     * Step 2: Update the profile's name and save the update to the database.
+     * Step 2: Update the event's name and save the update to the database.
      * <p>
-     * Step 3: Fetch the updated profile from the database and verify if the name was successfully updated.
+     * Step 3: Fetch the updated event from the database and verify if the name was successfully updated.
      * <p>
-     * Step 4: Delete the profile from the database.
+     * Step 4: Delete the event from the database.
      * <p>
-     * Step 5: Attempt to fetch the deleted profile from the database. This should return null
-     * since the profile has been deleted.
+     * Step 5: Attempt to fetch the deleted event from the database. This should return null
+     * since the event has been deleted.
      *
      * @throws InterruptedException if any of the database operations are interrupted
      */
     @Test
+    @Order(7)
     public void profileLifecycle_integration() throws InterruptedException {
-        // Step 1: Add a new profile
-        Profile testProfile = new Profile("Integration Test User", UUID.randomUUID());
+        // Step 1: Add a new event
+        Event testEvent = new Event(UUID.randomUUID());
+        testEvent.setEventName("Integration Test User");
+        testEvent.setEventCreator(UUID.randomUUID());
 
-        // Add the profile to the database and capture the generated ID
-        String generatedId = addProfileToDatabase(testProfile);
+        // Add the event to the database and capture the generated ID
+        String generatedId = addEventToDatabase(testEvent);
 
-        // Step 2: Update the profile
-        testProfile.setName("Updated Name");
-        updateProfileInDatabase(generatedId, testProfile);
+        // Step 2: Update the event
+        testEvent.setEventName("Updated Name");
+        updateEventInDatabase(generatedId, testEvent);
 
         // Step 3: Fetch and verify the update
-        Profile fetchedProfile = fetchProfileFromDatabase(generatedId);
-        assertEquals("Updated Name", fetchedProfile.getName());
+        Event fetchedEvent = fetchEventFromDatabase(generatedId);
+        assertEquals("Updated Name", fetchedEvent.getEventName());
 
-        // Step 4: Delete the profile
-        deleteProfileFromDatabase(generatedId);
+        // Step 4: Delete the event
+        deleteEventFromDatabase(generatedId);
 
-        // Step 5: Try to fetch the deleted profile
-        Profile deletedProfile = fetchProfileFromDatabase(generatedId);
-        assertNull(deletedProfile);
+        // Step 5: Try to fetch the deleted event
+        Event deletedEvent = fetchEventFromDatabase(generatedId);
+        assertNull(deletedEvent);
     }
 
     /**
-     * Adds a profile to the database and returns its document ID.
+     * Adds an event to the database and returns its document ID.
      *
-     * @param profile The profile to add to the database.
-     * @return The document ID of the added profile.
+     * @param event The event to add to the database.
+     * @return The document ID of the added event.
      * @throws InterruptedException If the thread is interrupted while waiting for the operation to complete.
      */
-    private String addProfileToDatabase(Profile profile) throws InterruptedException {
+    private String addEventToDatabase(Event event) throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
         final AtomicReference<String> documentIdRef = new AtomicReference<>();
 
-        // Simulate adding a profile to the database and obtaining its document ID
-        profileTable.pushDocument(profile, profile.getProfileID().toString(), new Table.DocumentCallback<Profile>() {
+        // Simulate adding an event to the database and obtaining its document ID
+        eventTable.pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
             @Override
-            public void onSuccess(Profile profile) {
-                documentIdRef.set(profile.getProfileID().toString());
+            public void onSuccess(Event profile) {
+                documentIdRef.set(profile.getEventID().toString());
                 latch.countDown(); // Signal completion
             }
 
@@ -302,18 +308,18 @@ public class ProfileTableTest {
     }
 
     /**
-     * Updates a profile in the database with the given document ID.
+     * Updates an event in the database with the given document ID.
      *
-     * @param documentId The ID of the profile document to update.
-     * @param profile The updated profile information.
+     * @param documentId The ID of the event document to update.
+     * @param event The updated event information.
      * @throws InterruptedException If the thread is interrupted while waiting for the operation to complete.
      */
-    private void updateProfileInDatabase(String documentId, Profile profile) throws InterruptedException {
+    private void updateEventInDatabase(String documentId, Event event) throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
 
-        profileTable.updateDocument(profile, documentId, new Table.DocumentCallback<Profile>() {
+        eventTable.updateDocument(event, documentId, new Table.DocumentCallback<Event>() {
             @Override
-            public void onSuccess(Profile result) {
+            public void onSuccess(Event result) {
                 latch.countDown(); // Signal completion
             }
 
@@ -327,20 +333,20 @@ public class ProfileTableTest {
     }
 
     /**
-     * Fetches a profile from the database based on the document ID.
+     * Fetches an event from the database based on the document ID.
      *
-     * @param documentId The ID of the profile document.
-     * @return The profile fetched from the database.
+     * @param documentId The ID of the event document.
+     * @return The event fetched from the database.
      * @throws InterruptedException If the thread is interrupted while waiting for the operation to complete.
      */
-    private Profile fetchProfileFromDatabase(String documentId) throws InterruptedException {
+    private Event fetchEventFromDatabase(String documentId) throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
-        final AtomicReference<Profile> profileRef = new AtomicReference<>();
+        final AtomicReference<Event> eventResult = new AtomicReference<>();
 
-        profileTable.fetchDocument(documentId, new Table.DocumentCallback<Profile>() {
+        eventTable.fetchDocument(documentId, new Table.DocumentCallback<Event>() {
             @Override
-            public void onSuccess(Profile profile) {
-                profileRef.set(profile);
+            public void onSuccess(Event event) {
+                eventResult.set(event);
                 latch.countDown(); // Signal completion
             }
 
@@ -351,19 +357,19 @@ public class ProfileTableTest {
         });
 
         latch.await(); // Wait for the operation to complete
-        return profileRef.get();
+        return eventResult.get();
     }
 
     /**
-     * Deletes a profile from the database.
+     * Deletes an event from the database.
      *
-     * @param documentId The ID of the profile document to delete.
+     * @param documentId The ID of the event document to delete.
      * @throws InterruptedException If the thread is interrupted while waiting for the operation to complete.
      */
-    private void deleteProfileFromDatabase(String documentId) throws InterruptedException {
+    private void deleteEventFromDatabase(String documentId) throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
 
-        profileTable.deleteDocument(documentId, new Table.DocumentCallback<Void>() {
+        eventTable.deleteDocument(documentId, new Table.DocumentCallback<Void>() {
             @Override
             public void onSuccess(Void result) {
                 latch.countDown(); // Signal completion
@@ -377,7 +383,4 @@ public class ProfileTableTest {
 
         latch.await(); // Wait for the operation to complete
     }
-
-
-
 }
