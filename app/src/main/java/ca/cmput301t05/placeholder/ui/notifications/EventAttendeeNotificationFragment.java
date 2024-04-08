@@ -27,7 +27,10 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.EventAdapterType;
 import ca.cmput301t05.placeholder.notifications.EventNotificationAdapter;
 import ca.cmput301t05.placeholder.notifications.Notification;
-
+/**
+ * A bottom sheet dialog fragment for displaying event attendee notifications.
+ * This fragment displays a list of notifications related to event attendees.
+ */
 public class EventAttendeeNotificationFragment extends BottomSheetDialogFragment {
 
     private int heightInDp;
@@ -35,7 +38,13 @@ public class EventAttendeeNotificationFragment extends BottomSheetDialogFragment
     public EventAttendeeNotificationFragment(int heightInDp){
         this.heightInDp = heightInDp;
     }
-
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,7 +66,11 @@ public class EventAttendeeNotificationFragment extends BottomSheetDialogFragment
     private ArrayList<Notification> notifications;
 
     private EventNotificationAdapter eventNotificationAdapter;
-
+    /**
+     * Called to create the dialog shown by this fragment.
+     * @param savedInstanceState The last saved instance state of the Fragment, or null if this is a freshly created Fragment.
+     * @return The Dialog to be displayed.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

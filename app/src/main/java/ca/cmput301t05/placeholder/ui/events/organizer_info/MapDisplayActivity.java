@@ -29,7 +29,10 @@ import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
-
+/**
+ * An activity for displaying a map with attendee locations for an event.
+ * This activity utilizes the osmdroid library to display a map and markers for attendees' locations.
+ */
 public class MapDisplayActivity extends AppCompatActivity implements LocationManager.LocationPermissionListener {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map = null;
@@ -41,6 +44,12 @@ public class MapDisplayActivity extends AppCompatActivity implements LocationMan
     private Event event;
     private FloatingActionButton closeMap;
     private static final long SPLASH_DELAY = 3000; // 3 seconds d
+    /**
+     * Called when the activity is starting. This is where most initialization should go.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Otherwise, it is null.
+     */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (PlaceholderApp) getApplicationContext();
@@ -85,14 +94,22 @@ public class MapDisplayActivity extends AppCompatActivity implements LocationMan
         super.onPause();
         map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
     }
-
+    /**
+     * Callback for the result from requesting permissions.
+     * This method is invoked for every call on requestPermissions(android.app.Activity, String[], int).
+     * @param requestCode The request code passed in requestPermissions(android.app.Activity, String[], int).
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions. Never null.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // Forward the permission request results to the LocationManager
         locationManager.onRequestPermissionsResult(requestCode, grantResults);
     }
-
+    /**
+     * Called when location permission is Granted.
+     */
     public void onLocationPermissionGranted(){
         Toast.makeText(this, "onLocationPermissionGranted", Toast.LENGTH_SHORT).show();
         locationManager.getLastLocation(new LocationManager.LocationCallback() {
@@ -120,7 +137,9 @@ public class MapDisplayActivity extends AppCompatActivity implements LocationMan
             }
         });
     };
-
+    /**
+     * Called when location permission is denied.
+     */
     public void onLocationPermissionDenied(){
         Toast.makeText(this, "onLocationPermissionDenied", Toast.LENGTH_SHORT).show();
         // when location is denied, set a default center point (UA area)
@@ -133,7 +152,9 @@ public class MapDisplayActivity extends AppCompatActivity implements LocationMan
         showAttendees();
         map.invalidate();
     }
-
+    /**
+     * Displays markers for attendees' locations on the map.
+     */
     public void showAttendees() {
         HashMap<String, HashMap<String, Double>> attendees = event.getMap();
         ArrayList<Marker> markers = new ArrayList<>();
@@ -166,6 +187,13 @@ public class MapDisplayActivity extends AppCompatActivity implements LocationMan
             });
         }
     }
+    /**
+     * Creates a marker for the given latitude, longitude, and title.
+     * @param latitude The latitude of the marker.
+     * @param longitude The longitude of the marker.
+     * @param title The title of the marker.
+     * @return The marker object.
+     */
     private Marker createMarker(double latitude, double longitude, String title) {
         Marker marker = new Marker(map);
         marker.setPosition(new GeoPoint(latitude, longitude));

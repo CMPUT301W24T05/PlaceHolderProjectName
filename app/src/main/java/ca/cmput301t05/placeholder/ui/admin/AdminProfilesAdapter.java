@@ -37,7 +37,10 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
     private boolean isLoading = false;
 
     private Context context;
-
+    /**
+     * Constructs a new AdminProfilesAdapter with the given context.
+     * @param context The context in which the adapter is being used.
+     */
     public AdminProfilesAdapter(Context context){
         this.context = context;
         this.app = (PlaceholderApp) this.context.getApplicationContext();
@@ -46,7 +49,12 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
 
         loadProfiles();
     }
-
+    /**
+     * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
+     * @param parent The ViewGroup into which the new View will be added after it is bound to an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ProfileHolder that holds a View with the profile information.
+     */
     @NonNull
     @Override
     public ProfileHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -66,7 +74,10 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
     }
 
 
-
+    /**
+     * Returns the total number of profiles in the data set held by the adapter.
+     * @return The total number of profiles in the data set.
+     */
     @Override
     public int getItemCount() {
         return profiles.size();
@@ -204,7 +215,9 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
 
 
     }
-
+    /**
+     * Loads profiles from Firestore database.
+     */
     private void loadProfiles(){
 
         if (isLoading){
@@ -253,7 +266,10 @@ public class AdminProfilesAdapter extends RecyclerView.Adapter<AdminProfilesAdap
 
 
     }
-
+    /**
+     * Sets up a scroll listener for the RecyclerView to trigger profile data refresh when scrolling near the end of the list.
+     * @param recyclerView The RecyclerView to which the scroll listener will be attached.
+     */
     public void setProfileRefresh(RecyclerView recyclerView){
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

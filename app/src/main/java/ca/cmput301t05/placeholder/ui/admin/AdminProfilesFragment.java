@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ca.cmput301t05.placeholder.R;
-
+/**
+ * A fragment for displaying profiles in the admin view, providing functionality to manage user profiles.
+ */
 public class AdminProfilesFragment extends Fragment {
 
 
