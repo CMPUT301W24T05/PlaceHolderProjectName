@@ -1,0 +1,160 @@
+@startuml
+
+!theme toy
+left to right direction
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+class AttendanceCardViewHolder {
+  + AttendanceCardViewHolder(View):
+  + bindView(int): void
+}
+class AttendanceViewAdapter {
+  + AttendanceViewAdapter(Context, HashMap<String, Double>):
+  + onCreateViewHolder(ViewGroup, int): AttendanceCardViewHolder
+  + onBindViewHolder(AttendanceCardViewHolder, int): void
+   itemCount: int
+}
+class CreateNotificationDialog {
+  + CreateNotificationDialog():
+  + onCreateDialog(Bundle): Dialog
+  + onAttach(Context): void
+}
+class EnterEventDetailsActivity {
+  + EnterEventDetailsActivity():
+  - setupNextButtonClick(): void
+  - openPosterSelectSheet(): void
+  - validateImageHasBeenChosen(): boolean
+  + onActivityResult(int, int, Intent): void
+  - checkAndSetDateAndTime(): void
+  - backAction(): void
+  - loadCachedEvent(): void
+  - hasValidEventDetails(): boolean
+  - validateEventNameLength(EditText): boolean
+  - validateEditTextNotEmpty(EditText): boolean
+  - openDatePickerDialog(): void
+  - handleEventCreation(): void
+  - openTimePickerDialog(): void
+  - initializeEventDetails(): void
+  - AddHostedEventToProfile(Event): void
+  # onCreate(Bundle?): void
+  - validateCapacityNonNegative(EditText): boolean
+}
+class EventMenuActivity {
+  + EventMenuActivity():
+  # onCreate(Bundle?): void
+  - animateProgress(int, int): void
+  - setUpText(): void
+  - setUpButtons(): void
+   upPoster: Event
+}
+class EventNotificationPageActivity {
+  + EventNotificationPageActivity():
+  + refresh(): void
+  # onCreate(Bundle?): void
+  + onNotificationCreated(Notification, Boolean): void
+}
+class EventOrganizedFragment {
+  + EventOrganizedFragment():
+  + onNoIdFound(): void
+  + refreshEventList(): void
+  + onProfileFetched(Profile): void
+  + onEventFetchError(Exception): void
+  + onEventFetched(Profile): void
+  + onDestroy(): void
+  + onProfileFetchFailure(Exception): void
+  + onResume(): void
+  + onItemClick(Event, adapterType): void
+  + onPictureLoaded(Bitmap): void
+  + onCreateView(LayoutInflater, ViewGroup, Bundle): View?
+}
+class MainActivity {
+  + MainActivity():
+  # onCreate(Bundle): void
+  - setupBottomNavigationView(): void
+}
+class MapDisplayActivity {
+  + MapDisplayActivity():
+  + onRequestPermissionsResult(int, String[], int[]): void
+  - createMarker(double, double, String): Marker
+  + showAttendees(): void
+  + onPause(): void
+  + onLocationPermissionGranted(): void
+  + onCreate(Bundle): void
+  + onResume(): void
+  + onLocationPermissionDenied(): void
+}
+interface NotificationListener << interface >> {
+  + onNotificationCreated(Notification, Boolean): void
+}
+class ReuseQRCodeScannerActivity {
+  + ReuseQRCodeScannerActivity():
+  # onCreate(Bundle): void
+  + onRequestPermissionsResult(int, String[], int[]): void
+}
+class SignUpViewAdapter {
+  + SignUpViewAdapter(Context, ArrayList<String>):
+  + onCreateViewHolder(ViewGroup, int): SignupCardViewHolder
+  + onBindViewHolder(SignupCardViewHolder, int): void
+   itemCount: int
+}
+class SignupCardViewHolder {
+  + SignupCardViewHolder(View):
+  + bindView(int): void
+}
+class ViewAttendeeCheckinActivity {
+  + ViewAttendeeCheckinActivity():
+  # onCreate(Bundle?): void
+}
+class ViewMilestonesActivity {
+  + ViewMilestonesActivity():
+  + getMilestones(ArrayList<Notification>): ArrayList<Milestone>
+  # onCreate(Bundle?): void
+  + setMilestones(): void
+  + containsMilestoneType(MilestoneType): boolean
+  + setCheckBoxes(): void
+}
+class ViewQRCodesActivity {
+  + ViewQRCodesActivity():
+  - validateQRString(String, QRCodeType): boolean
+  - shareQRCode(QRCode): void
+  - updateScannedQRCode(String): void
+  - initializeViews(): void
+  - setupShareButtonClickListener(): void
+  # onCreate(Bundle?): void
+  - populatePages(): void
+  - handleQRCodeScanResult(ActivityResult): void
+  - setupToolbarClickListener(): void
+  - setupReuseQRButtonClickListener(): void
+}
+class ViewSignUpsActivity {
+  + ViewSignUpsActivity():
+  # onCreate(Bundle?): void
+}
+
+AttendanceCardViewHolder       +-[#820000,plain]-  AttendanceViewAdapter
+AttendanceViewAdapter          -[#595959,dashed]->  AttendanceCardViewHolder      : "«create»"
+CreateNotificationDialog      "1" *-[#595959,plain]-> "notificationListener\n1" NotificationListener
+EnterEventDetailsActivity      -[#595959,dashed]->  ViewQRCodesActivity
+EventMenuActivity              -[#595959,dashed]->  EnterEventDetailsActivity
+EventMenuActivity              -[#595959,dashed]->  EventNotificationPageActivity
+EventMenuActivity              -[#595959,dashed]->  MapDisplayActivity
+EventMenuActivity              -[#595959,dashed]->  ViewAttendeeCheckinActivity
+EventMenuActivity              -[#595959,dashed]->  ViewMilestonesActivity
+EventMenuActivity              -[#595959,dashed]->  ViewQRCodesActivity
+EventMenuActivity              -[#595959,dashed]->  ViewSignUpsActivity
+EventNotificationPageActivity  -[#595959,dashed]->  CreateNotificationDialog      : "«create»"
+EventNotificationPageActivity  -[#008200,dashed]-^  NotificationListener
+EventOrganizedFragment         -[#595959,dashed]->  EnterEventDetailsActivity
+EventOrganizedFragment         -[#595959,dashed]->  EventMenuActivity
+MainActivity                   -[#595959,dashed]->  EventOrganizedFragment        : "«create»"
+NotificationListener           +-[#820000,plain]-  CreateNotificationDialog
+SignUpViewAdapter              -[#595959,dashed]->  SignupCardViewHolder          : "«create»"
+SignupCardViewHolder           +-[#820000,plain]-  SignUpViewAdapter
+ViewAttendeeCheckinActivity   "1" *-[#595959,plain]-> "attendanceViewAdapter\n1" AttendanceViewAdapter
+ViewAttendeeCheckinActivity    -[#595959,dashed]->  AttendanceViewAdapter         : "«create»"
+ViewQRCodesActivity            -[#595959,dashed]->  EventMenuActivity
+ViewQRCodesActivity            -[#595959,dashed]->  ReuseQRCodeScannerActivity
+ViewSignUpsActivity           "1" *-[#595959,plain]-> "signUpViewAdapter\n1" SignUpViewAdapter
+ViewSignUpsActivity            -[#595959,dashed]->  SignUpViewAdapter             : "«create»"
+@enduml
