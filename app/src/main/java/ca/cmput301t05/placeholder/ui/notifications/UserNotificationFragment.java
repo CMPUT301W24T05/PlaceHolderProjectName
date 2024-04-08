@@ -24,6 +24,9 @@ import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.UserNotificationAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class UserNotificationFragment extends DialogFragment {
 
     TextView nameText;
@@ -95,6 +98,15 @@ public class UserNotificationFragment extends DialogFragment {
 
         nameText.setText("Notifications");
 
+        //Somehow duplicates are propping up, not enough time to find issue quick fix
+
+        Set<Notification> notificationSet = new HashSet<>();
+        for (Notification n : app.getUserNotifications()){
+            notificationSet.add(n);
+        }
+
+        app.getUserNotifications().clear();
+        app.getUserNotifications().addAll(notificationSet);
 
         UserNotificationAdapter adapter = new UserNotificationAdapter(context, app.getUserNotifications());
 
@@ -117,6 +129,9 @@ public class UserNotificationFragment extends DialogFragment {
         app.refreshNotifications(new PlaceholderApp.appCallback() {
             @Override
             public void onSuccess() {
+
+
+                adapter.sortList();
                 adapter.notifyDataSetChanged();
             }
 
@@ -125,6 +140,7 @@ public class UserNotificationFragment extends DialogFragment {
 
             }
         });
+
 
     }
 }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -187,6 +188,14 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
                 callback.onError(e);
             }
         });
+
+    }
+
+    public void sortList(){
+
+        notifications.sort(new CompareByDate());
+        //comparison not working properly sooo..
+        Collections.reverse(notifications);
 
     }
 }

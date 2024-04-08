@@ -8,6 +8,6 @@ public class CompareByDate implements Comparator<Notification> {
 
     @Override
     public int compare(Notification o1, Notification o2) {
-        return o2.getTimeCreated().compareTo(o1.getTimeCreated());
+        return o1.getTimeCreated().compareTo(o2.getTimeCreated());
     }
 }
