@@ -3,6 +3,7 @@ package ca.cmput301t05.placeholder.ui.notifications;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,17 +28,17 @@ import ca.cmput301t05.placeholder.notifications.EventAdapterType;
 import ca.cmput301t05.placeholder.notifications.EventNotificationAdapter;
 import ca.cmput301t05.placeholder.notifications.Notification;
 
-public class EventAttendeeNotificationFragment extends DialogFragment {
+public class EventAttendeeNotificationFragment extends BottomSheetDialogFragment {
 
-    public EventAttendeeNotificationFragment(){
+    private int heightInDp;
 
-        super(R.layout.recycler_with_back);
-
+    public EventAttendeeNotificationFragment(int heightInDp){
+        this.heightInDp = heightInDp;
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState){
-
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.recycler_with_back, container, false);
     }
 
@@ -56,18 +58,28 @@ public class EventAttendeeNotificationFragment extends DialogFragment {
 
     private EventNotificationAdapter eventNotificationAdapter;
 
-    public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
 
-        curEvent = app.getCachedEvent();
+        dialog.setOnShowListener(dialog1 -> {
+            BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog1;
+            View bottomSheetInternal = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
 
-        //Disable the dialog to be dismissed when touched outside
-        dialog.setCanceledOnTouchOutside(false);
+            if(bottomSheetInternal != null) {
+                ViewGroup.LayoutParams layoutParams = bottomSheetInternal.getLayoutParams();
+
+                layoutParams.height = heightInDp;
+                bottomSheetInternal.setLayoutParams(layoutParams);
+            }
+        });
 
         return dialog;
     }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         nameText = view.findViewById(R.id.recycler_page_name_text);
         back = view.findViewById(R.id.recycler_page_back);
@@ -76,36 +88,33 @@ public class EventAttendeeNotificationFragment extends DialogFragment {
 
         app = (PlaceholderApp) getContext().getApplicationContext();
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        nameText.setText("Notifications");
 
-                //update the notifications to show they're read
-                for (Notification notification : app.getUserNotifications()){
+        back.setOnClickListener(v -> {
 
-                    app.getNotificationTable().pushDocument(notification, notification.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
-                        @Override
-                        public void onSuccess(Notification document) {
+            //update the notifications to show they're read
+            for (Notification notification : app.getUserNotifications()){
 
-                        }
+                app.getNotificationTable().pushDocument(notification, notification.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
+                    @Override
+                    public void onSuccess(Notification document) {
 
-                        @Override
-                        public void onFailure(Exception e) {
+                    }
 
-                        }
-                    });
+                    @Override
+                    public void onFailure(Exception e) {
 
-                }
+                    }
+                });
 
-                dismiss();
             }
+
+            dismiss();
         });
 
         notifications = new ArrayList<>();
         eventNotificationAdapter = new EventNotificationAdapter(context, notifications, EventAdapterType.ATTENDEE);
         recyclerView.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
         recyclerView.setAdapter(eventNotificationAdapter);
-
-
     }
 }
