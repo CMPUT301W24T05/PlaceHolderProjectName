@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import ca.cmput301t05.placeholder.PlaceholderApp;
 import ca.cmput301t05.placeholder.R;
+import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.notifications.UserNotificationAdapter;
 import org.jetbrains.annotations.NotNull;
 
@@ -69,7 +71,24 @@ public class UserNotificationFragment extends DialogFragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //hopefully this allows us to go back
+
+                //update the notifications to show they're read
+                for (Notification notification : app.getUserNotifications()){
+
+                    app.getNotificationTable().pushDocument(notification, notification.getNotificationID().toString(), new Table.DocumentCallback<Notification>() {
+                        @Override
+                        public void onSuccess(Notification document) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+
+                        }
+                    });
+
+                }
+
                 dismiss();
             }
         });
@@ -77,7 +96,7 @@ public class UserNotificationFragment extends DialogFragment {
         nameText.setText("Notifications");
 
 
-        UserNotificationAdapter adapter = new UserNotificationAdapter(context, app.getNotificationEventHolder());
+        UserNotificationAdapter adapter = new UserNotificationAdapter(context, app.getUserNotifications());
 
         recyclerView.setAdapter(adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);

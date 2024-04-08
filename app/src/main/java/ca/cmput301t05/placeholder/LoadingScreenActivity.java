@@ -133,12 +133,34 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
         app.getNotificationTable().fetchMultipleDocuments(profile.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
             @Override
             public void onSuccess(ArrayList<Notification> document) {
+                app.getUserNotifications().clear();
                 app.getUserNotifications().addAll(document);
 
                 //this is for loading notifications easily for user notifications
-                app.setNotificationEventHolder(HoldNotificationToEvent.hashQuickList(document, app.getJoinedEvents()));
+                ArrayList<String> eventS = new ArrayList<>();
+                for (Notification curN : document){
 
-                startMainActivity();
+                    eventS.add(curN.getFromEventID().toString());
+
+                }
+
+                app.getEventTable().fetchMultipleDocuments(eventS, new Table.DocumentCallback<ArrayList<Event>>() {
+                    @Override
+                    public void onSuccess(ArrayList<Event> document) {
+                        app.setNotificationEventHolder(HoldNotificationToEvent.getQuickList(app.getUserNotifications(), document));
+
+
+
+                        startMainActivity();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+
+
             }
 
             @Override
