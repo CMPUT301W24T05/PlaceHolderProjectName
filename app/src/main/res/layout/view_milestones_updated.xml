@@ -5,22 +5,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarCheckIn"
+        android:id="@+id/toolbar4Milestone"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:titleTextColor="@android:color/white"
-        app:titleMarginStart="40dp"
+        app:titleMarginStart="50dp"
         app:titleMarginEnd="32dp"
         app:navigationIcon="@drawable/back"
-        app:title="Checkins for your event"
-
+        app:title="Milestones Achieved"
         android:layout_alignParentTop="true"
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@id/toolbarCheckIn"
-        android:id="@+id/attendee_checkin_"
+        android:layout_below="@id/toolbar4Milestone"
+        android:id="@+id/recycler4Milestone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@android:color/transparent"
@@ -29,13 +28,13 @@
         android:visibility="visible"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="16dp"
-        tools:listitem="@layout/attendee_checkin_item" />
+        tools:listitem="@layout/milestone_card" />
 
     <TextView
-        android:id="@+id/emptyTextView"
+        android:id="@+id/emptyTextView4MileStone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No data available"
+        android:text="No milestones achieved yet."
         android:layout_centerInParent="true"
         android:visibility="gone" />
 

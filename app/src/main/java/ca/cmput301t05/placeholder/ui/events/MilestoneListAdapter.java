@@ -1,50 +1,67 @@
 package ca.cmput301t05.placeholder.ui.events;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.notifications.Milestone;
+import ca.cmput301t05.placeholder.ui.events.organizer_info.AttendanceViewAdapter;
 
 public class MilestoneListAdapter extends RecyclerView.Adapter<MilestoneListAdapter.ViewHolder> {
 
-    private List<Milestone> mData;
+    private ArrayList<String> mData;
     private LayoutInflater mInflater;
 
-    // Data is passed into the constructor
-    MilestoneListAdapter(Context context, List<Milestone> data) {
-        this.mInflater = LayoutInflater.from(context);
+    private final Context context;
+
+
+    MilestoneListAdapter(Context context, ArrayList<String> data) {
+        this.context = context;
         this.mData = data;
     }
 
-    // Inflates the row layout from xml when needed
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.milestone_card, parent, false);
-        return new ViewHolder(view);
+    public MilestoneListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(context).inflate(R.layout.milestone_card, parent, false);
+        return new MilestoneListAdapter.ViewHolder(v);
     }
 
-    // Binds the data to the TextView in each row
+
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Milestone milestone = mData.get(position);
-        holder.milestoneName.setText(milestone.getMessage());
+    public void onBindViewHolder(@NonNull MilestoneListAdapter.ViewHolder holder, int position) {
+        try {
+            holder.bindView(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
-    // Total number of rows
+
     @Override
     public int getItemCount() {
-        return mData.size();
+
+        if (mData== null)
+            return 0;
+        else{
+            return mData.size();
+        }
     }
 
-    // Stores and recycles views as they are scrolled off screen
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView milestoneName;
 
@@ -52,5 +69,16 @@ public class MilestoneListAdapter extends RecyclerView.Adapter<MilestoneListAdap
             super(itemView);
             milestoneName = itemView.findViewById(R.id.miles_text);
         }
+
+
+        public void bindView(int position){
+            String milestoneText = mData.get(position);
+
+            milestoneName.setText(mData.get(position));
+
+
+        }
+
+
     }
 }
