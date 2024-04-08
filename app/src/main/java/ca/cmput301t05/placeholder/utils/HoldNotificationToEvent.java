@@ -40,10 +40,13 @@ public class HoldNotificationToEvent {
      */
     public static ArrayList<HoldNotificationToEvent> getQuickList(ArrayList<Notification> ns, ArrayList<Event> es){
 
+        ArrayList<Notification> notifications = new ArrayList<>();
+        notifications.addAll(ns);
+
         ArrayList<HoldNotificationToEvent> quickList = new ArrayList<>();
         HashMap<String, Notification> quickCheck = new HashMap<>();
 
-        for (Notification n : ns){
+        for (Notification n : notifications){
             quickCheck.put(n.getFromEventID().toString(), n);
         }
 
@@ -52,6 +55,8 @@ public class HoldNotificationToEvent {
             if (quickCheck.get(e.getEventID().toString()) != null){
 
                 quickList.add(new HoldNotificationToEvent(quickCheck.get(e.getEventID().toString()),e));
+                //remove notification from  list incase notis come from same event
+                quickCheck.remove(e.getEventID().toString());
 
             }
 

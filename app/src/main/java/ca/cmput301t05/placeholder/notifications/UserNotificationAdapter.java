@@ -163,23 +163,19 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
                         //grabbing event info
                         for (Notification n : curNotifications){
                             notificationStrings.add(n.getFromEventID().toString());
-//                            Log.d("NOTICHECK", n.getNotificationID().toString());
                         }
 
                         app.getEventTable().fetchMultipleDocuments(notificationStrings, new Table.DocumentCallback<ArrayList<Event>>() {
                             @Override
                             public void onSuccess(ArrayList<Event> document) {
 
-//                                Log.d("CHECK_SIZE", String.valueOf(document.size()));
 
-                                notiEvents.clear();
                                 notiEvents = HoldNotificationToEvent.getQuickList(curNotifications, document);
+
+
                                 notiEvents.sort(new CompareByDate());
                                 notifyDataSetChanged();
 
-//                                for (HoldNotificationToEvent ne : notiEvents){
-//                                    Log.d("TEST_ADAPTER", ne.getN().getNotificationID().toString());
-//                                }
 
                                 callback.onFinish();
 
