@@ -55,6 +55,9 @@ public class ImageDetails extends DocumentSerializable {
     public Calendar getUploadTime() {
         return uploadTime;
     }
+    public void setUploadTime(Calendar uploadTime) {
+        this.uploadTime = uploadTime;
+    }
 
     public ArrayList<String> getMetadata() {
         return metadata;
