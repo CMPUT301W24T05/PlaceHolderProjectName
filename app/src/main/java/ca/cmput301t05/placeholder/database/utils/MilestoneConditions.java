@@ -1,16 +1,30 @@
 package ca.cmput301t05.placeholder.database.utils;
 
+import android.util.Log;
+
 import java.util.Calendar;
 
+import ca.cmput301t05.placeholder.PlaceholderApp;
+import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
+import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.milestones.Milestone;
 import ca.cmput301t05.placeholder.milestones.MilestoneType;
+import ca.cmput301t05.placeholder.notifications.Notification;
+import ca.cmput301t05.placeholder.profile.Profile;
 
 /**
  * Checks to make sure conditions have been met
  *
  */
 public class MilestoneConditions {
+
+    public interface milestoneCallback{
+
+        void onSuccess();
+        void onFailure(Exception e);
+
+    }
 
     /**
      *  Makes a milestone according to the type, if the event satisfies the conditions
@@ -75,6 +89,92 @@ public class MilestoneConditions {
         }
 
         return false;
+
+    }
+
+    /**
+     * ASSUMES EVENT IS UPDATED TO THE DATABASE
+     * HANDLES ALL MILESTONES AND SENDS TO DB
+     * @param app
+     * @param event
+     */
+
+    public static void milestoneHandling(PlaceholderApp app, Event event, milestoneCallback callback){
+
+
+        for (MilestoneType type : MilestoneType.values()){
+
+            if (!MilestoneConditions.alreadyContainsMilestone(event, type)){
+
+                //generate the new milestones if the condition is met (NULL IF NOTHING GENERATED)
+                Milestone milestone = MilestoneConditions.checkConditionsMet(event, type);
+
+                if (milestone != null){
+
+                    app.getMilestoneTable().pushDocument(milestone, milestone.getId(), new Table.DocumentCallback<Milestone>() {
+                        @Override
+                        public void onSuccess(Milestone document) {
+
+                            event.getMilestones().put(type.getIdString(), milestone.getId());
+
+                            //now update event with database then send the notification to the event organizer
+
+                            app.getEventTable().pushDocument(event, event.getEventID().toString(), new Table.DocumentCallback<Event>() {
+                                @Override
+                                public void onSuccess(Event document) {
+
+                                    //get ORGANIZER
+
+                                    app.getProfileTable().fetchDocument(event.getEventCreator().toString(), new Table.DocumentCallback<Profile>() {
+                                        @Override
+                                        public void onSuccess(Profile document) {
+
+                                            Notification n = new Notification(milestone.getMessage(), document.getProfileID(), event.getEventID());
+
+                                            HttpNotificationHandler.sendNotificationToUser(n, document.getMessagingToken(), new HttpNotificationHandler.httpHandlercallback() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    Log.d("MILESTONE", "SENT MILESTONE TO ORGANIZER");
+                                                    callback.onSuccess();
+                                                }
+
+                                                @Override
+                                                public void onError(Exception e) {
+                                                    callback.onFailure(e);
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onFailure(Exception e) {
+                                            callback.onFailure(e);
+                                        }
+                                    });
+
+
+                                }
+
+                                @Override
+                                public void onFailure(Exception e) {
+                                    callback.onFailure(e);
+                                }
+                            });
+
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            callback.onFailure(e);
+                        }
+                    });
+
+
+                }
+
+            }
+
+        }
+
 
     }
 

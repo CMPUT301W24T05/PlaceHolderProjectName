@@ -12,6 +12,7 @@ import java.util.*;
 
 import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.database.utils.MilestoneConditions;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.notifications.Milestone;
 import ca.cmput301t05.placeholder.milestones.MilestoneType;
@@ -117,6 +118,7 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
     @Override
     public void onEventFetched(Profile profile) {
         // Events fetched successfully. Navigate to MainActivity
+        milestoneHandling();
         fetchNotifications(profile);
     }
 
@@ -147,6 +149,29 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
                 startMainActivity();
             }
         });
+    }
+
+
+    private void milestoneHandling(){
+
+        HashMap<UUID, Event> hostedEvents = app.getHostedEvents(); //called after hosted events are updated
+
+        for (Event e : hostedEvents.values()){
+
+            MilestoneConditions.milestoneHandling(app, e, new MilestoneConditions.milestoneCallback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Log.e("MILESTONE_HANDLING", e.getMessage());
+                }
+            });
+
+        }
+
     }
 
 }

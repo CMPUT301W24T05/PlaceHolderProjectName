@@ -74,7 +74,6 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         imageViewAnimation(); // Check mark animation
 
 
-        milestoneHandling(); //sends notifications to organizer if milestone is met
     }
 
     /**
@@ -126,6 +125,19 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         eventTable = app.getEventTable();
         next_button = findViewById(R.id.go_to_event_button);
         shareLocation = findViewById(R.id.checkbox_share_location);
+
+        MilestoneConditions.milestoneHandling(app, app.getCachedEvent(), new MilestoneConditions.milestoneCallback() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.d("CHECKIN_MILETONE", e.getMessage());
+            }
+        });
+
     }
 
     /**
@@ -327,83 +339,5 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         new Handler().postDelayed(this::navigateToEventDetails, SPLASH_DELAY);
     }
 
-    /**
-     * Handles checking the event to see if our milestone conditions have been met
-     */
-    private void milestoneHandling(){
 
-        for (MilestoneType type : MilestoneType.values()){
-
-            if (!MilestoneConditions.alreadyContainsMilestone(app.getCachedEvent(), type)){
-
-                //generate the new milestones if the condition is met (NULL IF NOTHING GENERATED)
-                Milestone milestone = MilestoneConditions.checkConditionsMet(app.getCachedEvent(), type);
-
-                if (milestone != null){
-
-                    app.getMilestoneTable().pushDocument(milestone, milestone.getId(), new Table.DocumentCallback<Milestone>() {
-                        @Override
-                        public void onSuccess(Milestone document) {
-
-                            app.getCachedEvent().getMilestones().put(type.getIdString(), milestone.getId());
-
-                            //now update event with database then send the notification to the event organizer
-
-                            app.getEventTable().pushDocument(app.getCachedEvent(), app.getCachedEvent().getEventID().toString(), new Table.DocumentCallback<Event>() {
-                                @Override
-                                public void onSuccess(Event document) {
-
-                                    //get ORGANIZER
-
-                                    app.getProfileTable().fetchDocument(document.getEventCreator().toString(), new Table.DocumentCallback<Profile>() {
-                                        @Override
-                                        public void onSuccess(Profile document) {
-
-                                            Notification n = new Notification(milestone.getMessage(), document.getProfileID(), app.getCachedEvent().getEventID());
-
-                                            HttpNotificationHandler.sendNotificationToUser(n, document.getMessagingToken(), new HttpNotificationHandler.httpHandlercallback() {
-                                                @Override
-                                                public void onSuccess() {
-                                                    Log.d("MILESTONE", "SENT MILESTONE TO ORGANIZER");
-                                                }
-
-                                                @Override
-                                                public void onError(Exception e) {
-
-                                                }
-                                            });
-                                        }
-
-                                        @Override
-                                        public void onFailure(Exception e) {
-
-                                        }
-                                    });
-
-
-                                }
-
-                                @Override
-                                public void onFailure(Exception e) {
-
-                                }
-                            });
-
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-
-                        }
-                    });
-
-
-                }
-
-            }
-
-        }
-
-
-    }
 }
