@@ -15,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
+import ca.cmput301t05.placeholder.events.Event;
+import ca.cmput301t05.placeholder.milestones.Milestone;
+import ca.cmput301t05.placeholder.notifications.MilestoneType;
 import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 import ca.cmput301t05.placeholder.ui.admin.AdminHomeActivity;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -58,6 +61,8 @@ public class ProfileEditActivity extends AppCompatActivity {
         initializeComponents();
         setUp();
         setupListeners();
+        
+
     }
 
     private void initializeComponents() {

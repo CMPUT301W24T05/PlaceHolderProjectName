@@ -103,7 +103,23 @@ public class Milestone extends DocumentSerializable{
         return null;
     }
 
+    public String getMessage() {
+        return message;
+    }
 
+    public MilestoneType getmType() {
+        return mType;
+    }
 
+    public String getEventID() {
+        return eventID;
+    }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
 }
