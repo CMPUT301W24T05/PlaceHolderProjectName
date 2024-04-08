@@ -274,7 +274,6 @@ public class Event extends DocumentSerializable implements Serializable {
     /**
      * put user ID to a list of registered users of an event in eventTable
      *
-     * @return boolean (true if succesful sign up, false if the user have already signed up
      */
     public void userSignup(Profile user){
         this.registeredUsers.add(user.getProfileID().toString());
