@@ -218,9 +218,9 @@ public class LoadingScreenActivity extends AppCompatActivity {
      * Sets the milestones for all the events in the application.
      */
     private void setMilestones() {
-        ArrayList<Event> myEvents = new ArrayList<>(app.getHostedEvents().values());
+        ArrayList<Event> allEvents = new ArrayList<>(app.getHostedEvents().values());
 
-        for (Event e : myEvents) {
+        for (Event e : allEvents) {
             checkMilestones(e);
         }
     }
@@ -237,7 +237,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
         now = Calendar.getInstance();
         cal = curEvent.getEventDate();
 
-        addMilestoneIfPresent(getMilestoneByCondition((double) numAttendees / capacity >= 0.5, MilestoneType.HALFWAY, curEvent));
+        addMilestoneIfPresent(getMilestoneByCondition((double) numAttendees / capacity >= 3, MilestoneType.HALFWAY, curEvent));
         addMilestoneIfPresent(getMilestoneByCondition(capacity == numAttendees, MilestoneType.FULLCAPACITY, curEvent));
         addMilestoneIfPresent(getMilestoneByCondition(numAttendees >= 1, MilestoneType.FIRSTATTENDEE, curEvent));
         addMilestoneIfPresent(getMilestoneByCondition(now.compareTo(cal) > 0, MilestoneType.EVENTSTART, curEvent));
@@ -278,6 +278,11 @@ public class LoadingScreenActivity extends AppCompatActivity {
         return milestones != null && milestones.stream().anyMatch(milestone -> milestone.getMType() == type);
     }
 
+    /**
+     * Adds the milestone to the notification database
+     *
+     * @param milestone the Milestone to be added
+     */
     public void addMilestone(Milestone milestone) {
         //push to notification database
         Profile profile = app.getUserProfile();
