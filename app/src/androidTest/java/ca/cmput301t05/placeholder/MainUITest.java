@@ -11,6 +11,7 @@ import androidx.test.espresso.assertion.ViewAssertions;
 
 import static org.mockito.AdditionalMatchers.not;
 
+import android.Manifest;
 import android.os.SystemClock;
 
 import androidx.test.espresso.action.ViewActions;
@@ -34,13 +35,10 @@ public class MainUITest {
             ActivityScenarioRule<InitialSetupActivity>(InitialSetupActivity.class);
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.CAMERA,
-            android.Manifest.permission.READ_MEDIA_IMAGES,
-            android.Manifest.permission.INTERNET,
-            android.Manifest.permission.ACCESS_NETWORK_STATE,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-            android.Manifest.permission.POST_NOTIFICATIONS
+            // should not grant permission to Internet, because Anthony said you cannot
+            // access the netWork in intent testing
+            android.Manifest.permission.POST_NOTIFICATIONS,
+            android.Manifest.permission.CAMERA
     );
     @Test
     public void navigateBottomBar(){
@@ -80,12 +78,13 @@ public class MainUITest {
         onView(ViewMatchers.withId(R.id.OrganizerEventButton)).perform(click());
         onView(ViewMatchers.withText("Select Poster")).check(ViewAssertions.matches(isDisplayed()));
         // choose to enter event details
-        onView(ViewMatchers.withId(R.id.enterEventName)).perform(ViewActions.typeText("Galvin Test Event"), closeSoftKeyboard());
-        onView(ViewMatchers.withId(R.id.enterLocation)).perform(ViewActions.typeText("CCIS 1-140"));
-        onView(ViewMatchers.withId(R.id.enterTime)).perform(ViewActions.typeText("OK"));
+
+        onView(ViewMatchers.withId(R.id.enterEventName)).perform(click()).perform(ViewActions.typeText("Galvin Test Event"), closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.enterLocation)).perform(click()).perform(ViewActions.typeText("CCIS 1-140"));
+        onView(ViewMatchers.withId(R.id.enterTime)).perform(click()).perform(ViewActions.typeText("OK"));
         // Confirm the selected time
-        onView(ViewMatchers.withId(R.id.enterEventCapacity)).perform(ViewActions.typeText("20"));
-        onView(ViewMatchers.withId(R.id.enterEventDescription)).perform(ViewActions.typeText("CMPUT 301 is so Hard!!"));
+        onView(ViewMatchers.withId(R.id.enterEventCapacity)).perform(click()).perform(ViewActions.typeText("20"));
+        onView(ViewMatchers.withId(R.id.enterEventDescription)).perform(click()).perform(ViewActions.typeText("CMPUT 301 is so Hard!!"));
         onView(ViewMatchers.withId(R.id.eventDetailNextPage)).perform(click());
     }
 }

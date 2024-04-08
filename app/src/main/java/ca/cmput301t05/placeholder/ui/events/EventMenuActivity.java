@@ -289,18 +289,4 @@ public class EventMenuActivity extends AppCompatActivity  {
         });
     }
 
-    public void setApp(PlaceholderApp app) {
-        this.app = app;
-    }
-    public void setEvent(Event event){
-        this.curEvent = event;
-    }
-    // for testing purpose,
-    public static EventMenuActivity createWithEventAndApp(PlaceholderApp app, Event event) {
-        EventMenuActivity activity = new EventMenuActivity();
-        activity.setApp(app);
-        activity.setEvent(event);
-        return activity;
-    }
-
 }

@@ -3,7 +3,13 @@ package ca.cmput301t05.placeholder;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -25,6 +31,7 @@ import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
 public class EventMenuTest {
     PlaceholderApp app;
     Event event;
+    EventMenuActivity main;
     @Before
     public void setUp(){
         app = new PlaceholderApp();
@@ -32,17 +39,11 @@ public class EventMenuTest {
         event.setEventName("Galvin Test Event");
         event.setEventID(UUID.randomUUID());
         app.setCachedEvent(event);
-        //EventMenuActivity.setApp(app);
-        //EventMenuActivity.setEvent(event);
-        // Launch the EventMenuActivity with the created Event object
-        ActivityScenario.launch(EventMenuActivity.class)
-                .onActivity(activity -> {
-                    activity.setApp(app); // Set PlaceholderApp if needed
-                    activity.setEvent(event);
-                });
+        main = EventMenuActivity.createWithEventAndApp(app, event);
     }
     @Test
     public void testButton(){
+        ActivityScenario.launch(main.getClass());
         // check if the event Menu is displayed or not
         onView(ViewMatchers.withId(R.id.attendanceFraction)).check(ViewAssertions.matches(isDisplayed()));
     }
