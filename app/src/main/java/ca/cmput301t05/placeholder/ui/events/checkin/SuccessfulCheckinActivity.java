@@ -72,6 +72,9 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
         setupButtonClickHandling();
         checkAndHandleEventMaxCapacity();
         imageViewAnimation(); // Check mark animation
+
+
+        milestoneHandling(); //sends notifications to organizer if milestone is met
     }
 
     /**
@@ -327,7 +330,7 @@ public class SuccessfulCheckinActivity extends AppCompatActivity implements Loca
     /**
      * Handles checking the event to see if our milestone conditions have been met
      */
-    private void MilestoneHandling(){
+    private void milestoneHandling(){
 
         for (MilestoneType type : MilestoneType.values()){
 
