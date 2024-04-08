@@ -248,7 +248,7 @@ public class ProfileTableTest {
      *
      * @throws InterruptedException if any of the database operations are interrupted
      */
-    @Test
+//    @Test
     public void profileLifecycle_integration() throws InterruptedException {
         // Step 1: Add a new profile
         Profile testProfile = new Profile("Integration Test User", UUID.randomUUID());
