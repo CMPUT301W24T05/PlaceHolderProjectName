@@ -18,7 +18,7 @@ import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.database.utils.DeviceIDManager;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.notifications.Milestone;
+import ca.cmput301t05.placeholder.milestones.Milestone;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.utils.holdNotiEvent;

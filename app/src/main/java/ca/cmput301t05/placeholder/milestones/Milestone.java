@@ -71,7 +71,12 @@ public class Milestone implements Serializable {
         }
     }
 
-
+    public String getEventID() {
+        return eventID;
+    }
+    public MilestoneType getMType() {
+        return mType;
+    }
 
 
 

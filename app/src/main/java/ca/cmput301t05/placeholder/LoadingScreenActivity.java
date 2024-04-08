@@ -9,20 +9,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import ca.cmput301t05.placeholder.database.firebaseMessaging.notificationHandler.HttpNotificationHandler;
-import ca.cmput301t05.placeholder.database.images.BaseImageHandler;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
-import ca.cmput301t05.placeholder.notifications.Milestone;
+import ca.cmput301t05.placeholder.milestones.Milestone;
 import ca.cmput301t05.placeholder.notifications.MilestoneType;
 import ca.cmput301t05.placeholder.notifications.Notification;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.utils.datafetchers.DataFetchCallback;
 import ca.cmput301t05.placeholder.utils.datafetchers.EventFetcher;
 import ca.cmput301t05.placeholder.utils.datafetchers.ProfileFetcher;
-import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 
 import ca.cmput301t05.placeholder.utils.holdNotiEvent;
 
@@ -192,8 +189,10 @@ public class LoadingScreenActivity extends AppCompatActivity implements DataFetc
      * @param curEvent the event object
      * @return an Optional object containing the milestone if the condition is met and milestone type is not already present, otherwise an empty Optional object
      */
+
     private Optional<Milestone> getMilestoneByCondition(boolean condition, MilestoneType type, Event curEvent) {
         return !containsMilestoneType(type) && condition ?
+                //change to new milestone constructor
                 Optional.of(new Milestone(app.getUserProfile().getProfileID(), curEvent.getEventID(), type, curEvent.getEventName())) :
                 Optional.empty();
     }
