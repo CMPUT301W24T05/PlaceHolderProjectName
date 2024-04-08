@@ -10,8 +10,8 @@ import java.util.UUID;
  */
 public class DeviceIDManager {
 
-    private static final String SHARED_PREFS_FILE_NAME = "PlaceholderAppPrefs";
-    private static final String DEV_ID_KEY = "deviceID";
+    protected static final String SHARED_PREFS_FILE_NAME = "PlaceholderAppPrefs";
+    protected static final String DEV_ID_KEY = "deviceID";
     private Context context;
 
     /**
