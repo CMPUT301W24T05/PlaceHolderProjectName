@@ -2,6 +2,7 @@ package ca.cmput301t05.placeholder;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,17 +21,18 @@ import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
 import org.mockito.Mockito;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for the Event class.
- * @author Anthony
  */
 
 public class EventUnitTest {
 
     /**
      * Test the event constructor with no parameters provided.
+     * @author Anthony
      */
     @Test
     public void testEventConstructorNoParam(){
@@ -43,6 +45,7 @@ public class EventUnitTest {
 
     /**
      * Test the event constructor with only the event ID provided.
+     * @author Anthony
      */
     @Test
     public void testEventConstructorUuidProvided(){
@@ -59,6 +62,7 @@ public class EventUnitTest {
 
     /**
      * Test the event constructor with the event name, event description, and event capacity limit provided.
+     * @author Anthony
      */
     @Test
     public void testEventConstructorMultipleParamProvided(){
@@ -75,6 +79,7 @@ public class EventUnitTest {
 
     /**
      * Tests the getMaxAttendee method for the Event class.
+     * @author Anthony
      */
     @Test
     public void testMaxAttendeeCount(){
@@ -93,6 +98,7 @@ public class EventUnitTest {
      * @param profiles ArrayList of profiles.
      * @param expectedCount The expected count of attendees for the event.
      * @param maxCap The expected boolean for whether max capacity has been reached.
+     * @author Anthony
      */
     @ParameterizedTest
     @MethodSource("attendeeDataProvider")
@@ -110,6 +116,7 @@ public class EventUnitTest {
     /**
      * Provides data for parameterized test method {@code testCheckInAttendees}.
      * @return Stream of arguments to be used.
+     * @author Anthony
      */
     private static Stream<Arguments> attendeeDataProvider(){
         return Stream.of(
@@ -126,6 +133,7 @@ public class EventUnitTest {
      * Generates the data to be be used for testing.
      * @param count The size of the ArrayList returned; the number of profiles to be generated.
      * @return ArrayList<Profile>
+     * @author Anthony
      */
     private static ArrayList<Profile> generateProfilesForTesting(int count){
         ArrayList<Profile> arrayList = new ArrayList<>();
@@ -139,6 +147,7 @@ public class EventUnitTest {
     /**
      * Tests the checkIn method for the Event class when the same profile
      * but with different geolocation checks in multiple times.
+     * @author Anthony
      */
     @Test
     public void testDuplicateAttendeeCheckIn(){
@@ -153,6 +162,26 @@ public class EventUnitTest {
         event.checkIn(profile2, 823123d, 42222213d); // Same profile checking in just different geolocation.
         assertEquals(event.getNumAttendees(), 2); // Assert that attendee count has remained the same.
 
+    }
+
+    /**
+     * Test event creation.
+     * @author Tolu
+     */
+    @Test
+    public void testEventCreation(){
+        Event eventEmpty = new Event();
+        assertNotNull(eventEmpty.getEventID());
+        assertTrue(eventEmpty.getAttendees().isEmpty());
+        assertTrue(eventEmpty.getNotifications().isEmpty());
+        assertTrue(eventEmpty.getRegisteredUsers().isEmpty());
+        String eventName = "eventTest";
+        String eventInfo = "testing";
+        int maxAttendees = 1;
+        Event event = new Event(eventName, eventInfo, maxAttendees);
+        Assert.assertEquals(eventName, event.getEventName());
+        Assert.assertEquals(eventInfo, event.getEventInfo());
+        Assert.assertEquals(maxAttendees, event.getMaxAttendees());
     }
 
 }
