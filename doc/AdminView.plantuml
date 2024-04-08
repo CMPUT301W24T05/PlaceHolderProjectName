@@ -1,0 +1,91 @@
+@startuml
+
+!theme toy
+left to right direction
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+class AdminEventAdapter {
+  + AdminEventAdapter(Context):
+  - loadEvents(): void
+  + onBindViewHolder(EventHolder, int): void
+  + onCreateViewHolder(ViewGroup, int): EventHolder
+   eventRefresh: RecyclerView
+   listener: OnItemClickListener
+   itemCount: int
+}
+class AdminEventFragment {
+  + AdminEventFragment():
+  + onCreateView(LayoutInflater, ViewGroup, Bundle): View?
+  + onItemClick(Event): void
+  + onViewCreated(View, Bundle): void
+}
+class AdminHomeActivity {
+  + AdminHomeActivity():
+  # onCreate(Bundle?): void
+}
+class AdminHomeFragment {
+  + AdminHomeFragment():
+  + onCreateView(LayoutInflater, ViewGroup, Bundle): View?
+  + onViewCreated(View, Bundle): void
+}
+class AdminImagesFragment {
+  + AdminImagesFragment():
+  + onCreateView(LayoutInflater, ViewGroup, Bundle): View?
+  + onViewCreated(View, Bundle): void
+}
+class AdminProfilesAdapter {
+  + AdminProfilesAdapter(Context):
+  + onCreateViewHolder(ViewGroup, int): ProfileHolder
+  - loadProfiles(): void
+  + onBindViewHolder(ProfileHolder, int): void
+   profileRefresh: RecyclerView
+   itemCount: int
+}
+class AdminProfilesFragment {
+  + AdminProfilesFragment():
+  + onViewCreated(View, Bundle): void
+  + onCreateView(LayoutInflater, ViewGroup, Bundle): View?
+}
+class EventHolder {
+  + EventHolder(View):
+  + bindView(int): void
+}
+interface OnItemClickListener << interface >> {
+  + onItemClick(Event): void
+}
+class ProfileHolder {
+  + ProfileHolder(View):
+  + bindView(int): void
+}
+class ViewAllImagesAdapter {
+  + ViewAllImagesAdapter(Context):
+  - loadImages(): void
+  + onCreateViewHolder(ViewGroup, int): ViewAllImagesHolder
+  + onBindViewHolder(ViewAllImagesHolder, int): void
+   imageRefresh: RecyclerView
+   itemCount: int
+}
+class ViewAllImagesHolder {
+  + ViewAllImagesHolder(View):
+  + bindView(int): void
+}
+
+AdminEventAdapter      -[#595959,dashed]->  EventHolder           : "«create»"
+AdminEventAdapter     "1" *-[#595959,plain]-> "listener\n1" OnItemClickListener
+AdminEventFragment     -[#595959,dashed]->  AdminEventAdapter     : "«create»"
+AdminEventFragment     -[#008200,dashed]-^  OnItemClickListener
+AdminHomeActivity      -[#595959,dashed]->  AdminEventFragment    : "«create»"
+AdminHomeActivity      -[#595959,dashed]->  AdminHomeFragment     : "«create»"
+AdminHomeActivity      -[#595959,dashed]->  AdminImagesFragment   : "«create»"
+AdminHomeActivity      -[#595959,dashed]->  AdminProfilesFragment : "«create»"
+AdminImagesFragment    -[#595959,dashed]->  ViewAllImagesAdapter  : "«create»"
+AdminProfilesAdapter   -[#595959,dashed]->  ProfileHolder         : "«create»"
+AdminProfilesFragment  -[#595959,dashed]->  AdminProfilesAdapter  : "«create»"
+EventHolder            +-[#820000,plain]-  AdminEventAdapter
+EventHolder            -[#595959,dashed]->  OnItemClickListener
+OnItemClickListener    +-[#820000,plain]-  AdminEventAdapter
+ProfileHolder          +-[#820000,plain]-  AdminProfilesAdapter
+ViewAllImagesAdapter   -[#595959,dashed]->  ViewAllImagesHolder   : "«create»"
+ViewAllImagesHolder    +-[#820000,plain]-  ViewAllImagesAdapter
+@enduml
