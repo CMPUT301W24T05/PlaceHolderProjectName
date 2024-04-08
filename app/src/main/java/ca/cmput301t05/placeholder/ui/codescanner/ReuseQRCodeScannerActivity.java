@@ -14,11 +14,19 @@ import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 
 import ca.cmput301t05.placeholder.R;
-
+/**
+ * Activity for scanning QR codes and returning the scanned result to the calling activity.
+ * This activity utilizes the CodeScanner library to scan QR codes using the device's camera.
+ */
 public class ReuseQRCodeScannerActivity extends AppCompatActivity {
 
     private CodeScanner mCodeScanner;
-
+    /**
+     * Called when the activity is starting. This is where most initialization should go.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +67,13 @@ public class ReuseQRCodeScannerActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 1);
         }
     }
-
+    /**
+     * Callback for the result from requesting permissions.
+     * This method is invoked for Camera Permission
+     * @param requestCode The request code passed in requestPermissions(android.app.Activity, String[], int).
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions. Never null.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

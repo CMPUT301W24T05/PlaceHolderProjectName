@@ -17,7 +17,9 @@ import java.util.List;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.notifications.Milestone;
 import ca.cmput301t05.placeholder.ui.events.organizer_info.AttendanceViewAdapter;
-
+/**
+ * Adapter for populating a RecyclerView with milestone data.
+ */
 public class MilestoneListAdapter extends RecyclerView.Adapter<MilestoneListAdapter.ViewHolder> {
 
     private ArrayList<String> mData;
@@ -25,7 +27,11 @@ public class MilestoneListAdapter extends RecyclerView.Adapter<MilestoneListAdap
 
     private final Context context;
 
-
+    /**
+     * Constructor for MilestoneListAdapter.
+     * @param context The context of the activity or fragment.
+     * @param data List of milestone data to be displayed.
+     */
     MilestoneListAdapter(Context context, ArrayList<String> data) {
         this.context = context;
         this.mData = data;

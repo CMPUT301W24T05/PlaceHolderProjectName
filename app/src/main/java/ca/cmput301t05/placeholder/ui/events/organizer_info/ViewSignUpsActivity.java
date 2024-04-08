@@ -23,7 +23,9 @@ import ca.cmput301t05.placeholder.database.tables.ProfileTable;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.profile.Profile;
-
+/**
+ * This activity displays the list of users who have signed up for an event.
+ */
 public class ViewSignUpsActivity extends AppCompatActivity {
 
     private PlaceholderApp app;

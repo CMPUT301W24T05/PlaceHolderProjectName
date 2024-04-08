@@ -25,7 +25,10 @@ import ca.cmput301t05.placeholder.events.EventAdapter;
 import ca.cmput301t05.placeholder.profile.Profile;
 import ca.cmput301t05.placeholder.ui.events.EventMenuActivity;
 import ca.cmput301t05.placeholder.ui.events.creation.EnterEventDetailsActivity;
-
+/**
+ * A fragment for displaying events organized by the user.
+ * Allows users to view and manage events they have organized.
+ */
 public class EventOrganizedFragment extends Fragment implements EventAdapter.OnItemClickListener, DataFetchCallback {
 
     private PlaceholderApp app;
@@ -34,7 +37,13 @@ public class EventOrganizedFragment extends Fragment implements EventAdapter.OnI
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private EventFetcher eventFetcher;
-
+    /**
+     * Creates the view for the fragment.
+     * @param inflater The layout inflater object.
+     * @param container The view container.
+     * @param savedInstanceState The saved instance state bundle.
+     * @return The inflated view for the fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.event_organized, container, false);
@@ -86,7 +95,9 @@ public class EventOrganizedFragment extends Fragment implements EventAdapter.OnI
             startActivity(i);
         }
     }
-
+    /**
+     * Refreshes the event list displayed in the RecyclerView.
+     */
     public void refreshEventList(){
         ArrayList<Event> hostedEvents = new ArrayList<>(app.getHostedEvents().values());
         organizedEventsAdapter.addOrUpdateEvents(hostedEvents);

@@ -26,7 +26,9 @@ import java.util.Locale;
 import ca.cmput301t05.placeholder.R;
 import ca.cmput301t05.placeholder.events.Event;
 import ca.cmput301t05.placeholder.events.EventAdapter;
-
+/**
+ * Adapter for displaying attendee check-in information in a RecyclerView.
+ */
 public class AttendanceViewAdapter extends RecyclerView.Adapter<AttendanceViewAdapter.AttendanceCardViewHolder>{
 
     private HashMap<String, Double> attendDisplayed;

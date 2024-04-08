@@ -25,7 +25,10 @@ import ca.cmput301t05.placeholder.profile.ProfileImageGenerator;
 import ca.cmput301t05.placeholder.ui.admin.AdminHomeActivity;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
+/**
+ * Fragment for displaying and editing user profile information, including name, contact information,
+ * homepage, and profile picture.
+ */
 public class ProfileFragment extends Fragment {
     private static final int COMPRESSION_QUALITY = 1024;
     private static final int IMAGE_MAX_HEIGHT = 1080;
@@ -44,7 +47,13 @@ public class ProfileFragment extends Fragment {
     private FloatingActionButton cameraButton;
     private FloatingActionButton removeProfilePicButton;
     private boolean removePic = false;
-
+    /**
+     * Inflates the layout and initializes the view components.
+     * @param inflater The layout inflater object.
+     * @param container The view container.
+     * @param savedInstanceState The saved instance state bundle.
+     * @return The inflated view for the fragment.
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

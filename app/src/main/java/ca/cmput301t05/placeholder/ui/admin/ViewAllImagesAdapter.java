@@ -28,7 +28,10 @@ import ca.cmput301t05.placeholder.database.ImageDetails.ImageDetails;
 import ca.cmput301t05.placeholder.database.tables.Table;
 import ca.cmput301t05.placeholder.utils.DateStrings;
 
-
+/**
+ * Adapter for displaying a list of images in the admin view.
+ * This adapter is responsible for populating RecyclerView with images and handling user interactions, such as deletion of images.
+ */
 //TODO maybe add a feature to refresh the page
 public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdapter.ViewAllImagesHolder> {
 
@@ -39,7 +42,10 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
     private Context context;
 
     private PlaceholderApp app;
-
+    /**
+     * Constructor for the ViewAllImagesAdapter.
+     * @param context The context from which the adapter is created.
+     */
     public ViewAllImagesAdapter(Context context){
         this.context = context;
         this.app = (PlaceholderApp) this.context.getApplicationContext();
@@ -47,7 +53,12 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
         loadImages();
 
     }
-
+    /**
+     * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
+     * @param parent The ViewGroup into which the new View will be added after it is bound to an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public ViewAllImagesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -70,7 +81,9 @@ public class ViewAllImagesAdapter extends RecyclerView.Adapter<ViewAllImagesAdap
     public int getItemCount() {
         return imageDetails.size();
     }
-
+    /**
+     * ViewHolder class for holding the views of individual image cards.
+     */
     public class ViewAllImagesHolder extends RecyclerView.ViewHolder{
 
          private TextView date;
