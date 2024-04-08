@@ -189,4 +189,10 @@ public class UserNotificationAdapter extends RecyclerView.Adapter<UserNotificati
         });
 
     }
+
+    public void sortList(){
+
+        notifications.sort(new CompareByDate());
+
+    }
 }

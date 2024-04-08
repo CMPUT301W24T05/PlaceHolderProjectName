@@ -106,6 +106,6 @@ public class EventAttendeeNotificationFragment extends DialogFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
         recyclerView.setAdapter(eventNotificationAdapter);
 
-        
+
     }
 }
