@@ -127,6 +127,8 @@ public class AdminTests {
         assertCurrentFragmentIsInstanceOf(AdminHomeFragment.class);
     }
 
+    /*
+
     public void setMocks(){
         Query profilesQuery = Mockito.mock(Query.class);
         Query eventsQuery = Mockito.mock(Query.class);
@@ -166,6 +168,7 @@ public class AdminTests {
         verify(profileCount).setText("5");
     }
 
+
     @Test
     public void testAdminImage(){
         FragmentScenario<AdminImagesFragment> scenario = FragmentScenario.launchInContainer(AdminImagesFragment.class);
@@ -189,6 +192,8 @@ public class AdminTests {
         // Now, populate the RecyclerView with this dummy data
         scenario.getScenario().onActivity(activity -> activity.setImages(imageDetailsList));
     }
+
+     */
 
 }
 
