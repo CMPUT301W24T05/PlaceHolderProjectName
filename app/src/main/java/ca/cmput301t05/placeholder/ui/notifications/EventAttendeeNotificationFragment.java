@@ -103,6 +103,25 @@ public class EventAttendeeNotificationFragment extends BottomSheetDialogFragment
 
         nameText.setText("Notifications");
 
+        Event curEvent = app.getCachedEvent();
+
+        notifications = new ArrayList<>();
+
+        app.getNotificationTable().fetchMultipleDocuments(curEvent.getNotifications(), new Table.DocumentCallback<ArrayList<Notification>>() {
+            @Override
+            public void onSuccess(ArrayList<Notification> document) {
+                notifications.addAll(document);
+                eventNotificationAdapter = new EventNotificationAdapter(context, notifications, EventAdapterType.ATTENDEE);
+                recyclerView.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
+                recyclerView.setAdapter(eventNotificationAdapter);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
         back.setOnClickListener(v -> {
 
             //update the notifications to show they're read
@@ -125,9 +144,6 @@ public class EventAttendeeNotificationFragment extends BottomSheetDialogFragment
             dismiss();
         });
 
-        notifications = new ArrayList<>();
-        eventNotificationAdapter = new EventNotificationAdapter(context, notifications, EventAdapterType.ATTENDEE);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
-        recyclerView.setAdapter(eventNotificationAdapter);
+
     }
 }
