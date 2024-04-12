@@ -1,5 +1,6 @@
 
-![appcion (1)](https://github.com/CMPUT301W24T05/PlaceHolderProjectName/assets/132036962/7e74b446-72dd-4d58-ab4b-3850db094adf)
+![appicon (1)](https://github.com/CMPUT301W24T05/PlaceHolderProjectName/assets/132036962/f9ca15e4-abd5-40ed-a43d-2031477a17dc)
+
 
 # PlaceHolderProjectName 
 
