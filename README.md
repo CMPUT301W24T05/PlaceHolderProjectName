@@ -1,11 +1,9 @@
 
-### PlaceHolderProjectName
+![appcion (1)](https://github.com/CMPUT301W24T05/PlaceHolderProjectName/assets/132036962/7e74b446-72dd-4d58-ab4b-3850db094adf)
 
-Please refer to [wiki](https://github.com/CMPUT301W24T05/PlaceHolderProjectName/wiki) for more information.
+# PlaceHolderProjectName 
 
+PlaceHolderProjectName is a user-friendly Android application designed for efficient event management. It enables seamless attendee check-ins through QR code scanning and supports event organizers with tools for tracking attendance, managing event details, and communicating via push notifications. Additionally, the app leverages Firebase for reliable data storage and real-time updates, enabling reliable management of event details, attendee lists, check-in statuses and more. 
 
-PlaceHolderProjectName is an event management app, created in winter 2024 for CMPUT301 at the [University of Alberta](https://www.ualberta.ca/index.html). 
-The app handles event creation for organizers as well as joining for attendees.
+For more information on how our app streamlines the event managment process, please refer to [wiki](https://github.com/CMPUT301W24T05/PlaceHolderProjectName/wiki).
 
-Users are able to check in to events and view announcements for the specific app, events are kept in a [firebase](https://firebase.google.com/) database, and are automatically refreshed on app startup.
-Users are also able to Organize events, these organized events can upload a profile picture whcih are also uploaded to the database
