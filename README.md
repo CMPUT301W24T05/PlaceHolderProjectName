@@ -1,8 +1,6 @@
-![appcion (1)](https://github.com/CMPUT301W24T05/PlaceHolderProjectName/assets/132036962/b677a8cd-ac2d-4bb3-9897-e9e8e2760535)
+![appcion (1)](https://github.com/CMPUT301W24T05/PlaceHolderProjectName/assets/132036962/b677a8cd-ac2d-4bb3-9897-e9e8e2760535)     
 
-![download](https://github.com/user-attachments/assets/70b8af26-0411-4516-9dfe-c2d129f5f275)
-
-
+![images](https://github.com/user-attachments/assets/f318fb63-7dd7-46a0-a13c-ad06ddfcfd7c)
 
 
 # App Description
