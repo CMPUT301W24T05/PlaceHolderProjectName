@@ -32,7 +32,7 @@ Browse events that are happening around and sign up for ones that interest you. 
 
 ![checkin_event_gif](https://github.com/user-attachments/assets/33d27029-3598-43b7-af5f-73c30e380b8a)
 
-Checking into an event is different from signing up for an event. By checking into an event yow have access to all the event details which includes receiving push notifications from the event organizer regarding event announcements. You can checkin into events by scanning the event's checkin QR code.
+Checking into an event is different from signing up for an event. By checking into an event yow have access to all the event details which includes receiving push notifications from the event organizer regarding event announcements. You can check into events by scanning the event's checkin QR code.
 
 ---
 
