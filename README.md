@@ -49,7 +49,7 @@ Want to create your own event? Simply click on "Create New Event" and fill out t
 ![manage_event_info](https://github.com/user-attachments/assets/ba098c0a-3998-44c4-b291-744df926e106)
 
 
-Once your event has commenced, you can verify the participants that have checked into your event, view on a map where each participant checked into the event, notify all pariticpants of event announcements, and much more. Organizing your event has never been easier! 
+Once your event has commenced, you can verify the participants that have checked into your event, view on a map where each participant checked into the event, receive event milestones, and much more. Organizing your event has never been easier! 
 
 ---
 
