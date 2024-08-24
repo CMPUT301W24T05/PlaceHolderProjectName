@@ -43,12 +43,21 @@ Checking into an event is different from signing up for an event. By checking in
 Want to create your own event? Simply click on "Create New Event" and fill out the details of your event. Event details include the event name, number of participants in your event, the event date and time, etc. 
 
 ---
+### Monitor your event using helpful features!
+
+Once your event has commenced, you can verify the participants that have checked into your event, view on a map where each participant checked into the event, notify all pariticpants of event announcements, and much more. Organizing your event has never been easier! 
+
+![manage_event_info](https://github.com/user-attachments/assets/ba098c0a-3998-44c4-b291-744df926e106)
+
+
+
+---
 
 ### Customize your profile!
 
 ![profile_pic_change_gif](https://github.com/user-attachments/assets/9fc39830-0735-423b-9f89-f1d41864a657)
 
-The default profile picture's colour is deterministically generated based on the user's name. The same name will always produce the same color, ensuring both uniqueness and consistency for each user.
+The default profile picture's colour is deterministically generated based on the user's name. The same name will always produce the same color, ensuring both uniqueness and consistency for each user. You can also upload your own profile picture too.
 
 ---
 
